@@ -262,7 +262,9 @@ export interface GameSettings {
   musicVolume: number
   sfxVolume: number
   notificationsEnabled: boolean
-  theme: string
+  theme: string    // 'default' | 'gold' | 'warroom' | 'void' | 'terminal'
+  adsRemoved: boolean
+  timeSkipTokens: number
 }
 
 // ── Upgrade Data (config, not state) ──

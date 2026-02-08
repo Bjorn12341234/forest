@@ -1,13 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { useGameStore } from '../store/gameStore'
-import { calculateOfflineProgress, applyOfflineProgress } from '../engine/offline'
+import { applyOfflineProgress } from '../engine/offline'
+import type { OfflineResult } from '../engine/offline'
+import type { GameEvent } from '../store/types'
 
-export interface OfflineReport {
-  elapsedSeconds: number
-  greatnessGained: number
-}
+export type { OfflineResult }
 
-export function useOfflineCalc(onReport?: (report: OfflineReport) => void) {
+export function useOfflineCalc(
+  eventPool: GameEvent[],
+  onReport?: (report: OfflineResult) => void,
+) {
   const hasRun = useRef(false)
 
   useEffect(() => {
@@ -15,16 +17,11 @@ export function useOfflineCalc(onReport?: (report: OfflineReport) => void) {
     hasRun.current = true
 
     const state = useGameStore.getState()
-    const result = calculateOfflineProgress(state)
+    const { updates, result } = applyOfflineProgress(state, eventPool)
 
     if (result.elapsedSeconds >= 60) {
-      const updates = applyOfflineProgress(state)
       useGameStore.setState(updates)
-
-      onReport?.({
-        elapsedSeconds: result.elapsedSeconds,
-        greatnessGained: result.greatnessGained,
-      })
+      onReport?.(result)
     }
-  }, [onReport])
+  }, [eventPool, onReport])
 }

@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from './store/gameStore'
+import { ALL_EVENTS } from './store/gameStore'
 import { useGameLoop } from './hooks/useGameLoop'
 import { useAutoSave } from './hooks/useAutoSave'
 import { useOfflineCalc } from './hooks/useOfflineCalc'
+import type { OfflineResult } from './hooks/useOfflineCalc'
 import { useAchievements } from './hooks/useAchievements'
 import { useAudioSync } from './hooks/useAudioSync'
 import { Dashboard } from './components/Dashboard'
@@ -14,11 +16,13 @@ import { AchievementToastManager, useAchievementToasts } from './components/Achi
 import { AchievementPanel } from './components/AchievementPanel'
 import { Ticker } from './components/Ticker'
 import { EventModal } from './components/EventModal'
+import { OfflineReturnModal } from './components/OfflineReturnModal'
 import { WorldDashboard } from './components/WorldDashboard'
 import { SpaceView } from './components/SpaceView'
 import { UniverseView } from './components/UniverseView'
 import { EndingSequence } from './components/EndingSequence'
 import { PrestigePanel } from './components/PrestigePanel'
+import { SettingsPanel, useThemeSync } from './components/SettingsPanel'
 import { TabNav, type Tab } from './components/TabNav'
 import { useRealityDrift } from './hooks/useRealityDrift'
 
@@ -26,6 +30,8 @@ function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
   const [showAchievements, setShowAchievements] = useState(false)
   const [showPrestige, setShowPrestige] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [offlineReport, setOfflineReport] = useState<OfflineResult | null>(null)
   const currentPhase = useGameStore(state => state.phase)
   const prestigeLevel = useGameStore(state => state.prestigeLevel)
   const pendingTransition = useGameStore(state => state.pendingTransition)
@@ -41,12 +47,37 @@ function App() {
     load()
   }, [load])
 
+  // Offline report callback — queue events into the store for the player to resolve
+  const handleOfflineReport = useCallback((report: OfflineResult) => {
+    setOfflineReport(report)
+
+    // Queue offline events into the store so EventModal picks them up sequentially
+    if (report.offlineEvents.length > 0) {
+      useGameStore.setState({ eventQueue: report.offlineEvents })
+    }
+  }, [])
+
+  const handleDismissOffline = useCallback(() => {
+    setOfflineReport(null)
+
+    // Trigger the first queued event immediately
+    const state = useGameStore.getState()
+    if (state.eventQueue.length > 0 && !state.activeEvent) {
+      const [next, ...rest] = state.eventQueue
+      useGameStore.setState({ activeEvent: next, eventQueue: rest })
+    }
+  }, [])
+
+  // Stable event pool reference
+  const eventPool = useMemo(() => ALL_EVENTS, [])
+
   // Start engine hooks
   useGameLoop()
   useAutoSave()
-  useOfflineCalc()
+  useOfflineCalc(eventPool, handleOfflineReport)
   useAudioSync()
   useRealityDrift()
+  useThemeSync()
 
   return (
     <div className="flex flex-col min-h-dvh bg-bg-primary">
@@ -58,6 +89,9 @@ function App() {
 
       {/* Event Modal */}
       <EventModal />
+
+      {/* Offline Return Modal */}
+      <OfflineReturnModal report={offlineReport} onDismiss={handleDismissOffline} />
 
       {/* Ending Sequence (Phase 5 endgame) */}
       <EndingSequence />
@@ -85,6 +119,13 @@ function App() {
         )}
       </AnimatePresence>
 
+      {/* Settings Panel */}
+      <AnimatePresence>
+        {showSettings && (
+          <SettingsPanel onClose={() => setShowSettings(false)} />
+        )}
+      </AnimatePresence>
+
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto pb-20">
         <AnimatePresence mode="wait">
@@ -108,6 +149,13 @@ function App() {
 
       {/* Top-right action buttons */}
       <div className="fixed top-12 right-3 z-40 flex flex-col gap-2">
+        <button
+          onClick={() => setShowSettings(true)}
+          className="w-9 h-9 rounded-full glass-card flex items-center justify-center text-base cursor-pointer border-none hover:scale-110 transition-transform"
+          title="Settings"
+        >
+          &#9881;
+        </button>
         <button
           onClick={() => setShowAchievements(true)}
           className="w-9 h-9 rounded-full glass-card flex items-center justify-center text-base cursor-pointer border-none hover:scale-110 transition-transform"

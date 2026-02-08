@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import type { GameEvent } from '../store/types'
-import { playEvent } from '../engine/audio'
+import { playEventByCategory } from '../engine/audio'
 
 const CATEGORY_COLORS: Record<string, string> = {
   scandal: '#FF3333',
@@ -48,8 +48,8 @@ function EventModalContent({
   onChoice: (index: number) => void
 }) {
   useEffect(() => {
-    playEvent()
-  }, [])
+    playEventByCategory(event.category)
+  }, [event.category])
 
   const color = CATEGORY_COLORS[event.category] ?? '#FF6600'
   const label = CATEGORY_LABELS[event.category] ?? 'EVENT'

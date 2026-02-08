@@ -32,7 +32,7 @@ import { getBridgeUpgradeDef } from '../data/phase4/bridgeUpgrades'
 import { calculateDriftRate, calculateDriftReduction, getDriftCap } from '../engine/realityDrift'
 import { getPrestigeUpgradeDef, calculatePrestigePoints, PRESTIGE_UPGRADES } from '../data/prestige'
 
-const ALL_EVENTS = [...PHASE1_EVENTS, ...PHASE2_EVENTS, ...PHASE3_EVENTS, ...PHASE4_EVENTS, ...PHASE5_EVENTS]
+export const ALL_EVENTS = [...PHASE1_EVENTS, ...PHASE2_EVENTS, ...PHASE3_EVENTS, ...PHASE4_EVENTS, ...PHASE5_EVENTS]
 
 // ── Initial State ──
 // Phase 1 starting values. Later phases initialize their state on transition.
@@ -163,6 +163,8 @@ export const INITIAL_STATE: GameState = {
     sfxVolume: 0.7,
     notificationsEnabled: true,
     theme: 'default',
+    adsRemoved: false,
+    timeSkipTokens: 0,
   },
 }
 
@@ -375,14 +377,25 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       get().applyEffect(effect)
     }
 
-    set(state => ({
-      eventHistory: [...state.eventHistory, state.activeEvent!.id],
-      activeEvent: null,
-    }))
+    set(state => {
+      // Pop next event from offline queue if available
+      const [next, ...rest] = state.eventQueue
+      return {
+        eventHistory: [...state.eventHistory, state.activeEvent!.id],
+        activeEvent: next ?? null,
+        eventQueue: next ? rest : state.eventQueue,
+      }
+    })
   },
 
   dismissEvent: () => {
-    set({ activeEvent: null })
+    set(state => {
+      const [next, ...rest] = state.eventQueue
+      return {
+        activeEvent: next ?? null,
+        eventQueue: next ? rest : state.eventQueue,
+      }
+    })
   },
 
   save: () => {
