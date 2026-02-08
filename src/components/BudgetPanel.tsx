@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { calculateBudgetEffects } from '../engine/formulas'
@@ -30,7 +30,7 @@ const BUDGET_CATEGORIES: BudgetCategoryDef[] = [
 export function BudgetPanel() {
   const budget = useGameStore(s => s.budget)
   const setBudget = useGameStore(s => s.setBudget)
-  const budgetEffects = useGameStore(s => calculateBudgetEffects(s))
+  const budgetEffects = useMemo(() => calculateBudgetEffects({ budget } as Parameters<typeof calculateBudgetEffects>[0]), [budget])
 
   const totalAllocated = Object.values(budget).reduce((sum, v) => sum + v, 0)
 

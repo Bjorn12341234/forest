@@ -40,7 +40,7 @@ export function ControlDashboard() {
       </div>
 
       {/* Content */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={view}
           initial={{ opacity: 0, y: 6 }}
