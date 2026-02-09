@@ -5,6 +5,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_whistleblower_slu',
     phase: 3,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Visselblåsare på SLU avslöjar datamanipulation',
     context: 'En forskare på Sveriges Lantbruksuniversitet visar att skogsbolagens tillväxtdata har överskattats med 30% i tio år. Er egen statistik är inblandad.',
@@ -41,6 +42,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_nastle_avtal',
     phase: 3,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Nastl\u00e9 vill k\u00f6pa ert pappersbruk',
     context: 'Nastl\u00e9 International \u2014 f\u00f6retaget som s\u00e5lde vattenr\u00e4ttigheter till torkel\u00e4nder \u2014 erbjuder sig att k\u00f6pa ert pappersbruk f\u00f6r "synergier inom f\u00f6rpackning".',
@@ -76,6 +78,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_sami_hogsta_domstolen',
     phase: 3,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'H\u00f6gsta domstolen: Samisk mark\u00e4gandedom',
     context: 'HD fastsl\u00e5r att samebyar har r\u00e4tt till traditionell mark. Er avverkningsplan f\u00f6r Norrbotten bevakas av internationella medier.',
@@ -105,6 +108,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_rapport_biologisk_mangfald',
     phase: 3,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Egen rapport visar kollapsat ekosystem',
     context: 'Er milj\u00f6avdelning (en person) har av misstag publicerat den interna rapporten. Biologisk m\u00e5ngfald i era skogar: "kritiskt l\u00e5g". Rapporten togs bort efter 47 minuter. Twitter var snabbare.',
@@ -139,6 +143,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_nca_lobbyist',
     phase: 3,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'NCA anst\u00e4ller ex-milj\u00f6minister',
     context: 'Nordiska Cellulosa Alliansen har rekryterat den f\u00f6rra milj\u00f6ministern som "senior r\u00e5dgivare". Hon k\u00e4nner alla p\u00e5 departementet. Hon tycker om skog nu.',
@@ -167,6 +172,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_media_gravserie',
     phase: 3,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'DN Granskar: "Skogens Tystnadskultur"',
     context: 'Dagens Nyheter publicerar en sex delar l\u00e5ng serie om skogsindustrins systematiska p\u00e5verkan p\u00e5 forskning, politik och media. Del 4 handlar om er.',
@@ -203,6 +209,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_skolmaterial_skandal',
     phase: 3,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Skolmaterial: "Kalhygge \u00e4r solbad f\u00f6r marken"',
     context: 'Ert utbildningsmaterial f\u00f6r \u00e5rskurs 5 har blivit viralt. Formuleringen "tr\u00e4den beh\u00f6ver vila ibland, precis som du" har 2 miljoner visningar.',
@@ -230,6 +237,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_barn_brev',
     phase: 3,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Barnklass skriver brev till VD:n',
     context: '27 \u00e5ttio\u00e5ringar har skrivit brev till er VD. "Varf\u00f6r d\u00f6dar ni ekorrarnas hem?" Breven \u00e4r illustrerade. En har ritat VD:n som en motorsåg med slips.',
@@ -265,6 +273,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_guardian_expose',
     phase: 4,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'The Guardian: "Swedens Green Lie"',
     context: 'Internationell press avsl\u00f6jar att Sveriges "h\u00e5llbara skogsbruk" \u00e4r en marknadsf\u00f6ringsprodukt. Artikeln har \u00f6versatts till 14 spr\u00e5k. Ambassad\u00f6ren ber om talking points.',
@@ -299,6 +308,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_eu_deforestation_regulation',
     phase: 4,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'EU:s avskogningsf\u00f6rordning: Sverige undantas inte',
     context: 'Trots intensiv lobbying klassas svenskt kalhyggesbruk som "avskogning" enligt EU. Er exportlicens \u00e4r hotad.',
@@ -328,6 +338,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_dokumentarfilm_oscar',
     phase: 4,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Dokumentärfilm om er nomineras till Oscar',
     context: '"Silent Forest" \u2014 en dokumentär om er påverkan på biologisk mångfald \u2014 nomineras till bästa dokumentär. Regissören tackar er i sitt tal: "Utan dem hade filmen inte funnits."',
@@ -354,6 +365,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_professor_avgar',
     phase: 4,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Professor avgår i protest',
     context: 'Sveriges mest citerade skogsforskare avgår från SLU. Avgångsbrevet: "Jag kan inte längre stödja ett system designat att legitimera industriell exploatering." Det läses i riksdagen.',
@@ -382,6 +394,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_mammazanas_lador',
     phase: 4,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Mammazånas: "Vi behöver fler lådor"',
     context: 'Mammazånas e-handel expanderar. De behöver 500 miljoner kartonger per år. Er wellpapp duger. Villkoret: ingen certifiering behövs. Mammazånas har "egen standard".',
@@ -409,6 +422,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_intern_mejl_lacka',
     phase: 3,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Internt mejl läcker: "Biodiversitet är en kostnad"',
     context: 'Ett internt mejl från er ekonomichef har läckt. Citatet: "Varje krona till biodiversitet är en krona från aktieägarna." Mejlet var skickat till alla chefer.',
@@ -444,6 +458,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_klimatkompensation_bluff',
     phase: 4,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Klimatkompensation: Samma skog såld tre gånger',
     context: 'Revision avslöjar att er "klimatskog" i Norrland har sålts som koldioxidkredit till tre olika företag. Samma träd kompenserar för en flygresa, en SUV och en cementfabrik. Samtidigt.',
@@ -472,6 +487,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p3_vargjakten',
     phase: 3,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Vargjakten: Skogsbolag sponsrar',
     context: 'Ert sponsoravtal med jägarförbundet avslöjas. Ni finansierar "skyddsjakt" på varg i era skogsområden. Vargen stör produktionen. Vargen måste bort.',
@@ -499,6 +515,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_influencer_kampanj',
     phase: 4,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Influencer-kampanj: #SkogsLiv',
     context: 'Er PR-byrå har betalat 15 influencers att posta bilder från "riktig svensk skog". Alla foton är tagna i en stadspark i Malmö. Ingen märkte det förrän nu.',
@@ -532,6 +549,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_bjorn_hjort_debatt',
     phase: 4,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Björn Hjort kallar er "Europas farligaste företag"',
     context: 'Miljöaktivisten Björn Hjort har blivit viral med sitt TED-talk. 50 miljoner visningar. Han visar satellitbilder av era kalhyggen bredvid reklamen "Vi älskar skogen".',
@@ -568,6 +586,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_riksdagsdebatt',
     phase: 4,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Riksdagsdebatt: "Skogsnationen Sverige"',
     context: 'Skogsutskottet debatterar ny skogspolitik. Er lobbyist har skrivit tre av fyra partiers debattinlägg. Det fjärde partiet vet inte att deras tal också skrevs av er.',
@@ -596,6 +615,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
   {
     id: 'p4_skogsstyrelsen_budget',
     phase: 4,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Skogsstyrelsens budget halveras',
     context: 'Regeringen sk\u00e4r Skogsstyrelsens budget med 50%. Myndigheten kan inte l\u00e4ngre utf\u00f6ra tillsyn. Er avdelning f\u00f6r "compliance" jublar tyst.',

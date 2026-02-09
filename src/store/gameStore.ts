@@ -10,6 +10,7 @@ import { PHASE2_NEW_EVENTS } from '../data/phase2/newEvents'
 import { PHASE3_EVENTS } from '../data/phase3/events'
 import { PHASE5_EVENTS } from '../data/phase5/events'
 import { PHASE5_NEW_EVENTS } from '../data/phase5/newEvents'
+import { PHASE7_EVENTS } from '../data/phase7/events'
 import { PHASE8_EVENTS } from '../data/phase8/events'
 import { getGeneratorData, getGeneratorCost } from '../data/generators'
 import { getClickUpgrade, CLICK_UPGRADES } from '../data/clickUpgrades'
@@ -19,6 +20,8 @@ import { getOwnerAction } from '../data/ownerActions'
 import { getPRCampaign } from '../data/ownerActions'
 import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist } from '../data/antagonists'
 import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
+import { calculateWarningLevel, getWarningPenalty } from '../engine/warnings'
+import { getCountry } from '../data/countries'
 
 export const ALL_EVENTS = [
   ...PHASE1_EVENTS,
@@ -27,6 +30,7 @@ export const ALL_EVENTS = [
   ...PHASE3_EVENTS,
   ...PHASE5_EVENTS,
   ...PHASE5_NEW_EVENTS,
+  ...PHASE7_EVENTS,
   ...PHASE8_EVENTS,
 ]
 
@@ -68,6 +72,8 @@ export const INITIAL_STATE: GameState = {
   expansionTargets: {},
 
   ownerActionCooldowns: {},
+  countries: {},
+  warningLevel: 0,
 
   eventQueue: [],
   eventHistory: [],
@@ -222,10 +228,14 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     const newTotalPlayTime = state.totalPlayTime + dt
 
-    // Calculate stammar from generators with lobby boost
+    // Calculate warning level and apply penalties
+    const warningLevel = calculateWarningLevel(state)
+    const warningPenalty = getWarningPenalty(warningLevel)
+
+    // Calculate stammar from generators with lobby boost and warning penalty
     const baseStammarPS = computeBaseStammarPerSecond(state.generators)
     const lobbyBoost = getLobbyGeneratorBoost(state.lobbyProjects)
-    const stammarPS = baseStammarPS * lobbyBoost
+    const stammarPS = baseStammarPS * lobbyBoost * warningPenalty
 
     // Add expansion target production
     let expansionStammarPS = 0
@@ -241,27 +251,50 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       }
     }
 
+    // Add country production and maintenance
+    let countryStammarPS = 0
+    let countryKapitalPS = 0
+    let countryBiodivLoss = 0
+    let countryCO2 = 0
+    let countryKapitalCost = 0
+    let countryLobbyCost = 0
+    for (const [countryId, cs] of Object.entries(state.countries)) {
+      if (cs.status === 'controlled') {
+        const def = getCountry(countryId)
+        if (def) {
+          countryStammarPS += def.production.stammarPerSecond
+          countryKapitalPS += def.production.kapitalPerSecond
+          countryBiodivLoss += def.hiddenCosts.biodiversityLoss
+          countryCO2 += def.hiddenCosts.co2Gain
+          countryKapitalCost += def.maintenanceCost.kapitalPerSecond
+          countryLobbyCost += def.maintenanceCost.lobbyPerSecond
+        }
+      }
+    }
+
     // Calculate kapital conversion with ownerTrust modifier + lobby kapital boost
     const conversionRate = getKapitalConversionRate(state.phase)
     const trustModifier = getOwnerTrustModifier(state.ownerTrust)
     const kapitalBoost = getLobbyKapitalBoost(state.lobbyProjects)
-    const totalStammarPS = stammarPS + expansionStammarPS
-    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS
+    const totalStammarPS = stammarPS + expansionStammarPS + countryStammarPS
+    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS + countryKapitalPS - countryKapitalCost
 
     const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
 
-    // Update hidden variables (include expansion hidden costs)
-    const co2Gain = stammarGained * 0.05 + expansionCO2 * dt
+    // Update hidden variables (include expansion + country hidden costs)
+    const co2Gain = stammarGained * 0.05 + expansionCO2 * dt + countryCO2 * dt
     const ownerShare = kapitalGained * 0.08
     const industryShare = kapitalGained * 0.92
-    const biodivLoss = stammarGained * 0.0001 + expansionBiodivLoss * dt
+    const biodivLoss = stammarGained * 0.0001 + expansionBiodivLoss * dt + countryBiodivLoss * dt
 
     const updates: Partial<GameState> = {
       stammar: state.stammar + stammarGained,
       stammarPerSecond: totalStammarPS,
       totalStammar: state.totalStammar + stammarGained,
       kapital: state.kapital + kapitalGained,
+      lobby: Math.max(0, state.lobby - countryLobbyCost * dt),
+      warningLevel,
       realCO2: state.realCO2 + co2Gain,
       ownerProfit: state.ownerProfit + ownerShare,
       industryProfit: state.industryProfit + industryShare,
@@ -317,6 +350,38 @@ export const useGameStore = create<GameStore>()((set, get) => ({
           updates.kapital = Math.max(0, (updates.kapital ?? state.kapital) + amount)
         }
       }
+    }
+
+    // ── Country invasion tick ──
+    // Reduce resistance based on pressure allocation
+    let countriesChanged = false
+    const newCountries = { ...state.countries }
+    for (const [countryId, cs] of Object.entries(newCountries)) {
+      if (cs.status !== 'invading') continue
+      const def = getCountry(countryId)
+      if (!def) continue
+
+      const pa = cs.pressureAllocation ?? { kapital: 0, lobby: 0, stammar: 0 }
+      // Each vector has a type modifier: 2x if it matches the weakness
+      const kapitalMod = def.defenseType === 'political' ? 2 : 1
+      const lobbyMod = def.defenseType === 'environmental' ? 2 : 1
+      const stammarMod = def.defenseType === 'economic' ? 2 : 1
+
+      const totalPressure = (pa.kapital * kapitalMod + pa.lobby * lobbyMod + pa.stammar * stammarMod) / def.defenseStrength
+      const resistanceReduction = totalPressure * dt * 0.1
+
+      if (resistanceReduction > 0) {
+        const newResistance = Math.max(0, cs.resistance - resistanceReduction)
+        if (newResistance <= 0) {
+          newCountries[countryId] = { ...cs, status: 'controlled', resistance: 0, controlProgress: 100 }
+        } else {
+          newCountries[countryId] = { ...cs, resistance: newResistance, controlProgress: ((def.resistance - newResistance) / def.resistance) * 100 }
+        }
+        countriesChanged = true
+      }
+    }
+    if (countriesChanged) {
+      updates.countries = newCountries
     }
 
     // Species counting: lose species when biodiversity drops past thresholds
@@ -594,6 +659,52 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
+  invadeCountry: (id: string) => {
+    const state = get()
+    const def = getCountry(id)
+    if (!def) return
+    if (def.unlockPhase > state.phase) return
+    if (state.countries[id]) return // already invading/controlled
+
+    if (state.stammar < def.invasionCost.stammar) return
+    if (state.kapital < def.invasionCost.kapital) return
+    if (state.lobby < def.invasionCost.lobby) return
+
+    set({
+      stammar: state.stammar - def.invasionCost.stammar,
+      kapital: state.kapital - def.invasionCost.kapital,
+      lobby: state.lobby - def.invasionCost.lobby,
+      countries: {
+        ...state.countries,
+        [id]: {
+          status: 'invading',
+          resistance: def.resistance,
+          controlProgress: 0,
+          pressureAllocation: { kapital: 0, lobby: 0, stammar: 0 },
+        },
+      },
+    } as Partial<GameStore>)
+  },
+
+  allocatePressure: (id: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => {
+    const state = get()
+    const cs = state.countries[id]
+    if (!cs || cs.status !== 'invading') return
+
+    set({
+      countries: {
+        ...state.countries,
+        [id]: {
+          ...cs,
+          pressureAllocation: {
+            ...cs.pressureAllocation,
+            [vector]: Math.max(0, amount),
+          },
+        },
+      },
+    } as Partial<GameStore>)
+  },
+
   resolveEvent: (choiceIndex: number) => {
     const state = get()
     if (!state.activeEvent) return
@@ -661,6 +772,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       nextEventAt: now + 120_000,
       pendingTransition: null,
       expansionTargets: {},
+      countries: {},
+      warningLevel: 0,
     })
   },
 

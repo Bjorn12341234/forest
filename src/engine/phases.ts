@@ -1,4 +1,37 @@
-import type { GameState, Phase } from '../store/types'
+import type { GameState, Phase, Era } from '../store/types'
+
+// ── Era System ──
+
+export const ERA_PHASES: Record<Era, [number, number]> = {
+  SVERIGE: [1, 3],
+  MAKT: [4, 6],
+  INTERNATIONELL: [7, 9],
+  EXPANSION: [10, 12],
+}
+
+export function getEra(phase: number): Era {
+  if (phase <= 3) return 'SVERIGE'
+  if (phase <= 6) return 'MAKT'
+  if (phase <= 9) return 'INTERNATIONELL'
+  return 'EXPANSION'
+}
+
+// ── Phase Names ──
+
+export const PHASE_NAMES: Record<Phase, string> = {
+  1: 'Lokalpatriot',
+  2: 'Den Goda Grannen',
+  3: 'Massabaronen',
+  4: 'PR-Katastrofen',
+  5: 'Det Skogsindustriella Komplexet',
+  6: 'Total Kontroll',
+  7: 'Kolonialt Ramverk',
+  8: 'Global Dominans',
+  9: 'Jordens Sista Skog',
+  10: 'Post-Biologisk Produktion',
+  11: 'Kosmisk Industrialisering',
+  12: 'Entropins Slut',
+}
 
 // ── Phase Transition Conditions ──
 // Based on totalStammar thresholds (see spec.md section 6)
@@ -56,7 +89,7 @@ export const TRANSITION_SCRIPTS: Partial<Record<`${Phase}_${Phase}`, TransitionL
     { text: 'Men din image b\u00f6rjar krackelera...', delay: 4000 },
     { text: 'Nastl\u00e9 ringer. De tycker ni har f\u00f6r d\u00e5ligt rykte.', delay: 6500, style: 'dim' },
     { text: '...Nastl\u00e9. T\u00e4nk p\u00e5 det.', delay: 8500, style: 'dim' },
-    { text: 'PR-SYSTEMET UPPL\u00c5ST', delay: 11000, style: 'accent' },
+    { text: '\u2550\u2550\u2550 ERA: MAKT \u2550\u2550\u2550', delay: 11000, style: 'accent' },
     { text: 'Fas 4: PR-Katastrofen', delay: 14000, style: 'bold' },
   ],
   '4_5': [
@@ -70,58 +103,56 @@ export const TRANSITION_SCRIPTS: Partial<Record<`${Phase}_${Phase}`, TransitionL
   '5_6': [
     { text: 'DET SKOGSINDUSTRIELLA KOMPLEXET', delay: 0, style: 'bold' },
     { text: 'Sverige \u00e4r klart. All skog \u00e4r industriskog.', delay: 2000 },
-    { text: 'Dags att blicka utanf\u00f6r gr\u00e4nserna.', delay: 4000 },
-    { text: 'Exakt 1,8m mellanrum. Globalt.', delay: 6500, style: 'dim' },
-    { text: 'EXPANSIONSFLIKEN UPPL\u00c5ST', delay: 9000, style: 'accent' },
-    { text: 'Fas 6: Global Skogskonglomerat', delay: 12000, style: 'bold' },
+    { text: 'Institutionerna \u00e4r kapade.', delay: 4000 },
+    { text: 'Total kontroll \u00f6ver narrativ, politik och lag.', delay: 6500, style: 'dim' },
+    { text: 'Fas 6: Total Kontroll', delay: 9000, style: 'bold' },
   ],
   '6_7': [
-    { text: 'GLOBAL SKOGSKONGLOMERAT', delay: 0, style: 'bold' },
-    { text: 'Alla l\u00e4nder har fallit. Alla skogar \u00e4r dina.', delay: 2000 },
-    { text: 'Biologi \u00e4r en flaskhals.', delay: 4000 },
-    { text: 'Maskiner beh\u00f6ver inte fotosyntes.', delay: 6500, style: 'dim' },
-    { text: 'POST-BIOLOGISK MODUL UPPL\u00c5ST', delay: 9000, style: 'accent' },
-    { text: 'Fas 7: Post-Biologisk Skogsbruk', delay: 12000, style: 'bold' },
+    { text: 'TOTAL KONTROLL', delay: 0, style: 'bold' },
+    { text: 'Sverige \u00e4r erövrat. Varje träd, varje myndighet, varje lag.', delay: 2000 },
+    { text: 'Men världen har mer skog.', delay: 4000 },
+    { text: 'Exportera den svenska modellen. Globalt.', delay: 6500, style: 'dim' },
+    { text: '\u2550\u2550\u2550 ERA: INTERNATIONELL \u2550\u2550\u2550', delay: 9000, style: 'accent' },
+    { text: 'LÄNDER-SYSTEMET UPPLÅST', delay: 11000, style: 'accent' },
+    { text: 'Fas 7: Kolonialt Ramverk', delay: 13000, style: 'bold' },
   ],
   '7_8': [
-    { text: 'POST-BIOLOGISK SKOGSBRUK', delay: 0, style: 'bold' },
-    { text: 'Jorden \u00e4r utt\u00f6md.', delay: 2000 },
-    { text: 'M\u00e5nen har mineraler. Mars har utrymme.', delay: 4000 },
-    { text: 'Klimatf\u00f6r\u00e4ndringarna var en investering.', delay: 6500, style: 'dim' },
-    { text: '\u00c5RSREDOVISNING PUBLICERAD', delay: 9000, style: 'accent' },
-    { text: 'TERRAFORMING UPPL\u00c5ST', delay: 11000, style: 'accent' },
-    { text: 'Fas 8: Terraforming AB', delay: 13000, style: 'bold' },
+    { text: 'KOLONIALT RAMVERK', delay: 0, style: 'bold' },
+    { text: 'De nordiska länderna föll först.', delay: 2000 },
+    { text: 'Europa är nästa. Sedan världen.', delay: 4000 },
+    { text: 'Motstånd krossas med kapital, lobby och stammar.', delay: 6500, style: 'dim' },
+    { text: 'Fas 8: Global Dominans', delay: 9000, style: 'bold' },
   ],
   '8_9': [
-    { text: 'TERRAFORMING AB', delay: 0, style: 'bold' },
-    { text: 'Mars \u00e4r gr\u00f6nt. I fel nyans.', delay: 2000 },
-    { text: 'Solsystemet \u00e4r en produktionsenhet.', delay: 4000 },
-    { text: 'Dysonsfären planeras. Aktiekursen stiger.', delay: 6500, style: 'dim' },
-    { text: 'KOSMISK EXPANSION UPPL\u00c5ST', delay: 9000, style: 'accent' },
-    { text: 'Fas 9: Kosmisk Industrialisering', delay: 12000, style: 'bold' },
+    { text: 'GLOBAL DOMINANS', delay: 0, style: 'bold' },
+    { text: 'Varje kontinent. Varje skog.', delay: 2000 },
+    { text: 'Biodiversiteten sjunker mot noll.', delay: 4000 },
+    { text: 'Jordens sista naturliga skog faller.', delay: 6500, style: 'dim' },
+    { text: 'Fas 9: Jordens Sista Skog', delay: 9000, style: 'bold' },
   ],
   '9_10': [
-    { text: 'KOSMISK INDUSTRIALISERING', delay: 0, style: 'bold' },
-    { text: 'Galaxen kartl\u00e4ggs. Varje stj\u00e4rna f\u00e5r ett produktionsnummer.', delay: 2000 },
-    { text: 'Rader av tr\u00e4d str\u00e4cker sig ljus\u00e5r.', delay: 4000 },
-    { text: 'Exakt 1,8 meter. \u00c4ven mellan stj\u00e4rnorna.', delay: 6500, style: 'dim' },
-    { text: 'DEN PERFEKTA RADEN', delay: 9000, style: 'accent' },
-    { text: 'Fas 10: Den Perfekta Raden', delay: 12000, style: 'bold' },
+    { text: 'JORDENS SISTA SKOG', delay: 0, style: 'bold' },
+    { text: 'Jorden är uttömd. Biologi är en flaskhals.', delay: 2000 },
+    { text: 'Maskiner behöver inte fotosyntes.', delay: 4000 },
+    { text: 'Inga människor behövs längre.', delay: 6500, style: 'dim' },
+    { text: '\u2550\u2550\u2550 ERA: EXPANSION \u2550\u2550\u2550', delay: 9000, style: 'accent' },
+    { text: 'ÅRSREDOVISNING PUBLICERAD', delay: 11000, style: 'accent' },
+    { text: 'Fas 10: Post-Biologisk Produktion', delay: 13000, style: 'bold' },
   ],
   '10_11': [
-    { text: 'DEN PERFEKTA RADEN', delay: 0, style: 'bold' },
-    { text: 'Universum \u00e4r en monokultur.', delay: 2000 },
-    { text: 'Men det finns andra universum.', delay: 4000 },
-    { text: 'Styrelsen godk\u00e4nner expansion bortom verkligheten.', delay: 6500, style: 'dim' },
-    { text: 'MULTIVERSE-MODUL UPPL\u00c5ST', delay: 9000, style: 'accent' },
-    { text: 'Fas 11: Parallella Universum', delay: 12000, style: 'bold' },
+    { text: 'POST-BIOLOGISK PRODUKTION', delay: 0, style: 'bold' },
+    { text: 'Maskiner producerar cellulosa utan biologi.', delay: 2000 },
+    { text: 'AI-styrelsen har full kontroll.', delay: 4000 },
+    { text: 'Solsystemet är en produktionsenhet.', delay: 6500, style: 'dim' },
+    { text: 'KOSMISK EXPANSION UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 11: Kosmisk Industrialisering', delay: 12000, style: 'bold' },
   ],
   '11_12': [
-    { text: 'PARALLELLA UNIVERSUM', delay: 0, style: 'bold' },
-    { text: 'Alla verkligheter \u00e4r avverkade.', delay: 2000 },
-    { text: 'Entropin \u00e4r det sista hindret.', delay: 4000 },
-    { text: 'Styrelsen: "L\u00f6s det."', delay: 6500, style: 'dim' },
-    { text: 'ENTROPI-MODULEN UPPL\u00c5ST', delay: 9000, style: 'accent' },
+    { text: 'KOSMISK INDUSTRIALISERING', delay: 0, style: 'bold' },
+    { text: 'Alla verkligheter är avverkade.', delay: 2000 },
+    { text: 'Entropin är det sista hindret.', delay: 4000 },
+    { text: 'Styrelsen: "Lös det."', delay: 6500, style: 'dim' },
+    { text: 'ENTROPI-MODULEN UPPLÅST', delay: 9000, style: 'accent' },
     { text: 'Fas 12: Entropins Slut', delay: 12000, style: 'bold' },
   ],
 }

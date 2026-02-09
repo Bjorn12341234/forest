@@ -5,6 +5,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_scandal_kalhygge',
     phase: 1,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Kalhygge invid populär vandringsled',
     context: 'Foton sprids på sociala medier. Turister är upprörda. Aktien darrar.',
@@ -30,6 +31,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_scandal_dike',
     phase: 1,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Dikning förstör våtmark',
     context: 'Länsstyrelsen har upptäckt att ert dikningsarbete dränerat en skyddad våtmark.',
@@ -55,6 +57,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_scandal_fsc_brott',
     phase: 1,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'FSC-certifiering ifrågasatt',
     context: 'Granskare visar att certifierat skogsbruk knappt skiljer sig från vanligt.',
@@ -83,6 +86,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_opp_massaorder',
     phase: 1,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Stor massaorder från pappersbruk',
     context: 'Ett stort pappersbruk vill köpa allt ni kan leverera. Priset är bra.',
@@ -108,6 +112,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_opp_markskop',
     phase: 1,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Skogsmark till salu',
     context: 'En grannfastighet säljs. 500 hektar produktiv skogsmark.',
@@ -142,6 +147,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_opp_bioenergi',
     phase: 1,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Kommunen vill ha bioenergi',
     context: 'Lokalt värmeverk vill byta till träflis. Långsiktigt avtal erbjuds.',
@@ -167,6 +173,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_opp_stormfallning',
     phase: 1,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Storm har fällt grannens skog',
     context: 'Stormfälld skog till vrakpris. Snabb volym om ni agerar nu.',
@@ -194,6 +201,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_absurd_alg',
     phase: 1,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Älg äter nyplantering',
     context: 'En ensam älg har ätit 2000 granplantor. Skogsvårdsstyrelsen skyller på er.',
@@ -219,6 +227,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_absurd_svamp',
     phase: 1,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Svampplockare blockerar avverkning',
     context: 'En grupp svampentusiaster har kedjar fast sig vid skördaren.',
@@ -244,6 +253,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_absurd_renskotsel',
     phase: 1,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Renar på planteringen',
     context: 'Samisk renskötsel och er plantering överlappar. Igen.',
@@ -272,6 +282,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_crisis_bark',
     phase: 1,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Barkborreangrepp',
     context: 'Granbarkborren har angripit era bestånd. Tusentals kubikmeter hotas.',
@@ -307,6 +318,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
   {
     id: 'p1_crisis_brand',
     phase: 1,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Skogsbrand!',
     context: 'Torr sommar + blixtnedslag = katastrof. 200 hektar brinner.',

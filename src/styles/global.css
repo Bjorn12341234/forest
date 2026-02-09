@@ -150,6 +150,31 @@ body::before {
   animation: ticker-scroll 20s linear infinite;
 }
 
+/* ── Era-specific themes ── */
+[data-era="INTERNATIONELL"] {
+  --color-bg-primary: #1A1A1A;
+  --color-bg-secondary: #252525;
+  --color-bg-tertiary: #333333;
+  --color-text-primary: #D0D0D0;
+  --color-text-secondary: #888888;
+  --color-text-muted: #606060;
+  --color-accent: #C06A0A;
+}
+
+[data-era="EXPANSION"] {
+  --color-bg-primary: #0A0A0A;
+  --color-bg-secondary: #141414;
+  --color-bg-tertiary: #1E1E1E;
+  --color-text-primary: #A0A0A0;
+  --color-text-secondary: #606060;
+  --color-text-muted: #404040;
+  --color-accent: #8B3A0A;
+  --color-accent-dark: #6B2A06;
+  --color-accent-glow: rgba(139, 58, 10, 0.3);
+  --color-accent-green: #4A7A20;
+  --color-danger: #881111;
+}
+
 /* ── Endgame Theme (clinical white) ── */
 .theme-endgame {
   --color-bg-primary: #FFFFFF;

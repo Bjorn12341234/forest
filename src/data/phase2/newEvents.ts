@@ -5,6 +5,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_kommunfullmaktige',
     phase: 2,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Kommunfullmäktige: Skogsbruksplan godkänd',
     context: 'Kommunen har godkänt er nya skogsbruksplan utan ändringar. Ingen läste den. 347 sidor. Perfekt.',
@@ -31,6 +32,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_skogskonsult_bluff',
     phase: 2,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Skogskonsulten hade fejkad examen',
     context: 'Er anlitade skogskonsult hade en utskrift från en webbsida som examen. Alla skötselplaner de senaste tre åren är baserade på gissningar.',
@@ -66,6 +68,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_branschkonferens',
     phase: 2,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Branschkonferens: "Framtidens Skog"',
     context: 'Årets stora skogskonferens i Sundsvall. 400 deltagare. Buffé. Mingel. Ingen talar om biologisk mångfald. Traditionen lever.',
@@ -93,6 +96,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_certifieringsfusk',
     phase: 2,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Dubbelcertifiering upptäckt',
     context: 'Samma bestånd är certifierat av både FSC och PEFC med motstridiga skötselkrav. Revisorer från båda systemen bokas in samma vecka.',
@@ -129,6 +133,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_skogsagarforening_revolt',
     phase: 2,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Skogsägarföreningen kräver bättre virkespriser',
     context: 'Arga skogsägare i Dalarna hotar med leveransstopp. De har räknat ut att ni tar 68% av virkespriset i mellanhänder.',
@@ -163,6 +168,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_inventering_oops',
     phase: 2,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Inventering visar att 90% av nyckelbiotoper är felregistrerade',
     context: 'Skogsstyrelsen publicerar ny data. Ert system har systematiskt missat skyddsvärda biotoper. Eller som ni kallar det: "effektiv registrering".',
@@ -190,6 +196,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_pensionsfond_koper',
     phase: 2,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Pensionsfond vill investera i skogsmark',
     context: 'Fjärde AP-fonden söker "gröna tillgångar". Er skogsmark kvalificerar sig som ESG-investering. Ingen verkar ha läst rapporten om nyckelbiotoperna.',
@@ -217,6 +224,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p2_lokal_tidning',
     phase: 2,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Lokaltidningen gräver: "Skogskungen"',
     context: 'Norrländska Tidningen publicerar en artikelserie om er VD:s sommarhus vid avverkningsgränsen. Huset har utsikt över kalhygget han beställde.',
@@ -252,6 +260,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p3_landshövding_middag',
     phase: 3,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Middag med Landshövdingen',
     context: 'Landshövdingen vill diskutera "regionalt samarbete" över en trebarmiddag. Menyn: hjortfilé, skogssvamp och era avverkningsplaner.',
@@ -280,6 +289,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p3_skogsdag_skolbarn',
     phase: 3,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Skogsdag för skolbarn avbruten',
     context: 'Er PR-avdelning arrangerade "Upplev Skogen" för lokala skolor. Barnen hittade en död berguv och en GPS-märkt varg som försvunnit. Obekväma frågor ställdes.',

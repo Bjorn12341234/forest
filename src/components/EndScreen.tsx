@@ -44,6 +44,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
   const totalPlayTime = useGameStore(s => s.totalPlayTime)
   const lobbyProjects = useGameStore(s => s.lobbyProjects)
   const antagonists = useGameStore(s => s.antagonists)
+  const countries = useGameStore(s => s.countries)
 
   // Mark endgame as seen
   useEffect(() => {
@@ -55,7 +56,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
   // Reveal steps sequentially
   useEffect(() => {
     if (stage !== 'reveal') return
-    const totalSteps = 9
+    const totalSteps = 10
     const timers: ReturnType<typeof setTimeout>[] = []
 
     for (let i = 1; i <= totalSteps; i++) {
@@ -80,6 +81,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
   const fsc = lobbyProjects['lobby_buy_certifiering']?.purchased
   const omnibus = lobbyProjects['lobby_buy_omnibus']?.purchased
   const antagonistsCountered = Object.values(antagonists).filter(a => a.countered).length
+  const countriesControlled = Object.values(countries).filter(c => c.status === 'controlled').length
 
   if (stage === 'reality') {
     return <RealityPage onContinue={onContinue} onReset={onReset} />
@@ -206,11 +208,17 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
           <RevealRow
             step={7} current={revealStep}
             label="Samebyars betesmark"
-            value={`${samiLand.toFixed(1)} km\u00B2 förlorad`}
+            value={`${samiLand.toFixed(1)} km\u00B2 f\u00f6rlorad`}
+          />
+          <RevealRow
+            step={8} current={revealStep}
+            label="L\u00e4nder er\u00f6vrade"
+            value={`${countriesControlled} nationer`}
+            subtext="Den svenska modellen exporterad globalt"
           />
 
           {/* Institutional capture */}
-          {revealStep >= 8 && (
+          {revealStep >= 9 && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -219,15 +227,15 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             >
               <p className="text-[0.55rem] tracking-wider text-gray-400 mb-2">INSTITUTIONELL KAPNING</p>
               <div className="flex flex-col gap-1">
-                <StatusLine label="Skogsstyrelsen" status={skogsstyrelsen ? 'KÖPT' : 'OBEROENDE'} bought={!!skogsstyrelsen} />
-                <StatusLine label="FSC-certifiering" status={fsc ? 'KÖPT' : 'AKTIV'} bought={!!fsc} />
-                <StatusLine label="EU:s miljölagstiftning" status={omnibus ? 'URVATTNAD' : 'INTAKT'} bought={!!omnibus} />
+                <StatusLine label="Skogsstyrelsen" status={skogsstyrelsen ? 'K\u00d6PT' : 'OBEROENDE'} bought={!!skogsstyrelsen} />
+                <StatusLine label="FSC-certifiering" status={fsc ? 'K\u00d6PT' : 'AKTIV'} bought={!!fsc} />
+                <StatusLine label="EU:s milj\u00f6lagstiftning" status={omnibus ? 'URVATTNAD' : 'INTAKT'} bought={!!omnibus} />
               </div>
             </motion.div>
           )}
 
           {/* Antagonists summary */}
-          {revealStep >= 9 && (
+          {revealStep >= 10 && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}

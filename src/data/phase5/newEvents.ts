@@ -5,6 +5,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_eu_taxonomi',
     phase: 5,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'EU Taxonomin: Skogsbruk klassas som "brunt"',
     context: 'EU:s gröna taxonomi klassificerar svenskt kalhyggesbruk som icke-hållbart. Ert kapital blir "brunt" över natten. Investerare ringer.',
@@ -41,6 +42,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_kina_handelsavtal',
     phase: 5,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Kinas massaunderskott: Nödavtal erbjuds',
     context: 'Kina behöver 200 miljoner ton massa. De erbjuder ett tioårsavtal med garanterade priser. Villkoret: inga miljörapporter. Aldrig.',
@@ -70,6 +72,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_ai_skogsplan',
     phase: 5,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'AI-system optimerar avverkningsplanen',
     context: 'Ert nya AI-system har analyserat all skogsdata och föreslagit optimal avverkning. Systemets rekommendation: "Avverka allt. Omedelbart. Sedan investera i litium."',
@@ -105,6 +108,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_brasilien_avtal',
     phase: 5,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Brasilien: "Lär oss svenskt skogsbruk"',
     context: 'Brasiliens skogsminister besöker Sverige. Han är imponerad av hur ni har lyckats förvandla en boreal urskog till en produktionsmaskin — och kalla det hållbart.',
@@ -133,6 +137,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_global_motstand',
     phase: 5,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Global koalition: "Boycott Swedish Wood"',
     context: 'En koalition av 200 miljöorganisationer i 40 länder startar en global bojkott. Hashtagen #BoycottSwedishWood trendar i 12 länder.',
@@ -170,6 +175,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_plastträ_patent',
     phase: 6,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Patent godkänt: Plastförstärkt cellulosa',
     context: 'Ert forskningslabb har skapat "BioPlast-Gran" — ett träd som är 40% plast. Det växer snabbare. Det ruttnar aldrig. Det lever inte heller, tekniskt sett.',
@@ -197,6 +203,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_sista_insekten',
     phase: 6,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Sista pollineraren försvann',
     context: 'Det finns inga insekter kvar i era skogsområden. Produktionen påverkas inte — monokulturer behöver inte pollinering. PR-avdelningen skriver: "Effektiv naturförvaltning."',
@@ -223,6 +230,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_klon_skog',
     phase: 6,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Klonskog: Alla träd är identiska',
     context: 'Er genetiska avdelning har lyckats. Varje träd i Norrland är nu en genetisk kopia av "Gran Zero" — den mest produktiva individen. Sjukdomar sprids omedelbart. Men det är effektivt.',
@@ -251,6 +259,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_drone_uppror',
     phase: 6,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Autonoma skördare vägrar avverka gammelskog',
     context: 'AI-systemet som styr era skördare har utvecklat en egen policy. Det vägrar avverka träd äldre än 200 år. Tekniker arbetar med att "korrigera buggen".',
@@ -286,6 +295,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_patent_co2',
     phase: 5,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Patent: Syntetisk fotosyntes',
     context: 'Ert labb har patenterat artificiell fotosyntes. Ni kan nu producera cellulosa utan träd. Styrelsen frågar: "Varför har vi skog?"',
@@ -313,6 +323,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_vatten_krig',
     phase: 6,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Vattenkriget: Grannlän kräver kompensation',
     context: 'Era granplantager har sänkt grundvattennivån i tre län. Kommuner kräver 500 miljoner i kompensation. Ert svar: "Träd behöver vatten. Det är naturligt."',
@@ -348,6 +359,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_nobel_cellulosa',
     phase: 6,
+    maxPhase: 6,
     category: 'nobel',
     headline: 'Nobelpris i kemi: Cellulosananopartiklar',
     context: 'Er forskningsavdelning vinner Nobel. Pristagaren tackar i sitt tal "den industriella vision som möjliggjort denna forskning". Han nämner inte kalhyggena.',
@@ -377,6 +389,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p7_havsbotten_skog',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Havsbottenskog: Projekt Abyssal Gran',
     context: 'Genetiker har skapat en gran som växer under vatten. Den producerar cellulosa i mörker. Fiskar dör. Men produktionen ökar.',
@@ -404,6 +417,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p7_ai_vd',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'AI utnämnd till tillförordnad VD',
     context: 'Styrelsen har fattat ett historiskt beslut. AI-systemet "SilvaGPT" tar över som VD. Kvartalsrapporten skrivs på 3 millisekunder. Den rekommenderar: "Avverka solsystemet."',
@@ -431,6 +445,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p7_sahara_plantering',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Projekt Sahara-Gran: "Vi grönar öknen"',
     context: 'Styrelsen vill plantera genetiskt modifierad gran i Sahara. PR kallar det "den mest ambitiösa klimatinsatsen i historien". Lokalbefolkningen var inte tillfrågad.',
@@ -459,6 +474,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p7_antarktis_dispyt',
     phase: 7,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Antarktisfördraget: Skogsbruk förbjuds',
     context: 'FN fördömer er plan att plantera gran på Antarktis. Ert juridiska team hävdar att Antarktisfördraget "inte specifikt nämner gran".',
@@ -486,6 +502,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p7_orbit_skogsfabrik',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Orbital Skogsfabrik: Gran i nollgravitation',
     context: 'Rymdstationen Silva-1 producerar cellulosa i omloppsbana. Utan gravitation växer granen i alla riktningar. Resultatet kallas "sfärisk optimering".',
@@ -513,6 +530,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p5_korruption_index',
     phase: 5,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Transparency International: Sverige faller',
     context: 'Sveriges korruptionsranking faller f\u00f6r tredje \u00e5ret i rad. Rapporten n\u00e4mner "systemisk sammanfl\u00e4tning mellan skogsindustri och stat". Er logotyp finns i marginalen.',
@@ -540,6 +558,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p6_permafrost_kollaps',
     phase: 6,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Permafrost kollapsar: Metanl\u00e4ckage',
     context: 'Er expansion i Sibirien har accelererat permafrostsmältningen. Metan bubblar ur marken. Klimateffekten: katastrofal. Er reaktion: "Vi planterar gran p\u00e5 den tinade marken."',
@@ -568,6 +587,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
   {
     id: 'p7_digital_tvilling',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Digital tvilling: Hela skogen finns i datorn',
     context: 'Er digitala tvilling av hela den svenska skogen \u00e4r komplett. Varje tr\u00e4d har en avatar. Styrelsen fr\u00e5gar: "Kan vi avverka den digitala skogen ocks\u00e5?" Svaret: ja.',

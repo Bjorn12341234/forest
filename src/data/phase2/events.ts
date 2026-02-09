@@ -5,6 +5,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p2_ryssland_embargo',
     phase: 2,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Rysslands-embargo!',
     context: 'Kriget i Ukraina stoppar rysk virkesexport. Europeisk efterfrågan exploderar. Ditt virke är guld värt.',
@@ -33,6 +34,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p2_pension_skogsagare',
     phase: 2,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Pensionerad skogsägare säljer 800 hektar',
     context: 'Barnen vill inte ha skogen. Perfekt tillfälle att expandera \u2014 och skriva en "generös" plan.',
@@ -61,6 +63,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p2_fsc_revision',
     phase: 2,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'FSC-revision: Avvikelser hittade',
     context: 'Revisorn har hittat "mindre avvikelser" i 23 av 25 granskade bestånd. Pressen vill ha kommentarer.',
@@ -96,6 +99,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p3_kinesisk_prisras',
     phase: 3,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Kinesisk massa-dumpning!',
     context: 'Kina översvämmar marknaden med billig massa. Dina marginaler krymper. Dags att hugga snabbare \u2014 eller smartare.',
@@ -123,6 +127,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p3_plockhugget',
     phase: 3,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Plockhugget-problemet',
     context: 'Skogsvispen AB visar att alternativt skogsbruk ger högre avkastning än kalavverkning. Deras rapport får uppmärksamhet.',
@@ -151,6 +156,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p3_sameby_protest',
     phase: 3,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Samebyns protest',
     context: 'Samebyns renskötsel har drabbats av era avverkningar. De kräver samråd \u2014 och hotar med juridik.',
@@ -187,6 +193,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p3_wellpapp_boom',
     phase: 3,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Wellpapp-boomen',
     context: 'Mammazånas beställer 10 miljoner lådor. Nästa-dags-leverans kräver nästa-dags-avverkning. Chefen behöver lådor.',
@@ -215,6 +222,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p4_svt_dokumentar',
     phase: 4,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'SVT-dokumentär: Slaget om Skogen',
     context: 'Statliga Dokumentärkanalen sänder en granskning av skogsindustrin. GD Tallström raderade mejlen \u2014 men SVT hittade kopior.',
@@ -248,6 +256,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p4_nestle_retratten',
     phase: 4,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Choco-Corp Reträtten',
     context: 'Choco-Corp International \u2014 företaget som sålde bröstmjölksersättning till fattiga mödrar \u2014 tycker att DU har etikproblem. De bryter alla avtal.',
@@ -283,6 +292,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p4_greta_effekten',
     phase: 4,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'Greta-effekten',
     context: 'En tonåring med plakat står utanför ert huvudkontor. Global uppmärksamhet. Ert anseende är under attack.',
@@ -309,6 +319,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p3_kyrkan_saljer',
     phase: 3,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Svenska Kyrkan säljer',
     context: 'Kyrkan gör sig av med 3 000 hektar gammelskog. 150-årig tall till danska börshuset \u2014 "Det är cirkulärt."',
@@ -335,6 +346,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
   {
     id: 'p3_nyckelbiotop',
     phase: 2,
+    maxPhase: 6,
     category: 'contradiction',
     headline: 'Ideell förening hittar nyckelbiotop',
     context: 'En pensionär med GPS och artkunskap har hittat en nyckelbiotop i ditt avverkningsområde. Foton publiceras på sociala medier.',

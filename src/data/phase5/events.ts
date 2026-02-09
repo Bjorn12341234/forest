@@ -5,6 +5,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p5_maktutredning',
     phase: 5,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Maktutredningen publiceras',
     context: 'Riksskogsnämnden publicerar sin rapport "Makten Över Skogen". Den visar hur lobbyister styrt skogspolitiken i 30 år. Pressen är intresserad.',
@@ -41,6 +42,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p5_eu_inspektion',
     phase: 5,
+    maxPhase: 6,
     category: 'crisis',
     headline: 'EU-inspektion: Avskogningsförordningen',
     context: 'EU skickar inspektörer för att granska er compliance. De har satellitbilder.',
@@ -68,6 +70,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p5_svangdorr_skandal',
     phase: 5,
+    maxPhase: 6,
     category: 'scandal',
     headline: 'Svängdörrsskandalen',
     context: 'Tre ex-ministrar jobbar nu för din koncern. Media börjar granska "den svenska modellen".',
@@ -94,6 +97,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p5_klimattoppmote',
     phase: 5,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'Klimattoppmöte: Sverige talar',
     context: 'Sverige presenterar sin skogspolitik som klimatlösning på internationell scen. Du skriver talet.',
@@ -123,6 +127,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p6_sista_blandskogen',
     phase: 6,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Sista blandskogen identifierad',
     context: 'I nordvästra Jämtland finns Sveriges sista orörda blandskog. 400 år gammal. Unik biologisk mångfald. Din skördare är 3 km bort.',
@@ -151,6 +156,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p6_genetisk_gran',
     phase: 6,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Genetiskt Optimerad Gran v3.0',
     context: 'Forskarteamet har skapat en gran som växer 5x snabbare. Den har inga grenar. Inga barr. Inget liv lever i den. Men den är mycket effektiv.',
@@ -178,6 +184,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p6_tyst_var',
     phase: 6,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Den sista fågeln tystnar',
     context: 'Ornitologer rapporterar att den sista havsörnspopulationen i Norrland har försvunnit. Skogen är tyst. Dina maskiner är inte det.',
@@ -204,6 +211,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p6_ai_skordare',
     phase: 6,
+    maxPhase: 6,
     category: 'opportunity',
     headline: 'AI-skördarnätverk live',
     context: 'Dina autonoma skördare opererar nu nattetid. GPS-styrda. Tysta. Effektiva. Ingen ser dem. Ingen hör dem. Skogen hör dem.',
@@ -232,6 +240,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p7_lunar_silva',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Projekt Lunar Silva godkänt',
     context: 'Styrelsen har beslutat: Månen ska terraformas för skogsbruk. CO2 som atmosfär-investering. Genetiskt modifierade träd i 0.6% atmosfärstryck.',
@@ -259,6 +268,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p7_mars_massafabrik',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Mars Massafabrik produktionsstart',
     context: 'Den första massafabriken på Mars är online. Kvaliteten är låg. Men ingen klagar \u2014 det finns inga människor där.',
@@ -285,6 +295,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p7_sista_manniskan',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Sista mänskliga anställda avgår',
     context: 'Din sista mänskliga medarbetare går i pension. Från och med nu drivs hela koncernen av AI. Styrelsemötena hålls mellan serverhallar.',
@@ -310,6 +321,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
   {
     id: 'p7_universum_kvitto',
     phase: 7,
+    maxPhase: 6,
     category: 'absurd',
     headline: 'Aktieägarna kräver årsredovisning',
     context: 'Det är dags. Siffrorna måste fram. Allt du byggt \u2014 och allt du förstörde \u2014 sammanfattas i ett kvitto.',

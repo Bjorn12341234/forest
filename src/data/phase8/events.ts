@@ -4,7 +4,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   // ── Phase 8: Rymdterraformning ──
   {
     id: 'p8_venus_terraforming',
-    phase: 8,
+    phase: 10,
     category: 'absurd',
     headline: 'Venus Terraforming: "Syran är en utmaning"',
     context: 'Styrelsen vill terraforma Venus. Atmosfären är 96% koldioxid och 470°C. Ingenjörerna säger "omöjligt". Styrelsen svarar: "Omöjligt är inte ett finansiellt begrepp."',
@@ -39,7 +39,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p8_mars_kolonister_revolt',
-    phase: 8,
+    phase: 10,
     category: 'crisis',
     headline: 'Mars-kolonister kräver fackförbund',
     context: 'Era 50 000 marsarbetare vill ha rättigheter. De har bildat "Röda Planetens Skogsarbetarförbund". Förhandlingsläget: de kan inte åka hem.',
@@ -75,7 +75,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p8_rymd_lag',
-    phase: 8,
+    phase: 10,
     category: 'opportunity',
     headline: 'FN:s rymdlag: Skogsbruk i rymden oreglerat',
     context: 'FN:s rymdkommitté konstaterar att det inte finns lagstiftning för skogsbruk utanför jordatmosfären. Er juridiska avdelning kallar det "det största juridiska vakuumet sedan havsrätten".',
@@ -103,7 +103,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p8_sol_energi_skog',
-    phase: 8,
+    phase: 10,
     category: 'absurd',
     headline: 'Solpaneler eller skog? Båda.',
     context: 'Ingenjörerna har skapat en gran som absorberar solenergi och konverterar den till cellulosa. Den glöder. Nätterna på Mars är nu gröna.',
@@ -129,7 +129,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p8_titan_koloni',
-    phase: 8,
+    phase: 10,
     category: 'opportunity',
     headline: 'Titan: Metansjöar omvandlas till skogsmark',
     context: 'Saturnus måne Titan har metansjöar. Er kemiska avdelning kan omvandla metan till cellulosa. Titan blir det nya Norrland.',
@@ -158,7 +158,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   // ── Phase 9: Kosmisk expansion ──
   {
     id: 'p9_generation_ship',
-    phase: 9,
+    phase: 10,
     category: 'absurd',
     headline: 'Generationsskepp: "Silva Ark"',
     context: 'Styrelsen beslutar att bygga ett generationsskepp till Alpha Centauri. Resan tar 400 år. Passagerarna? Gran. Enbart gran. Och en AI som sköter dem.',
@@ -185,7 +185,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p9_dyson_trä',
-    phase: 9,
+    phase: 10,
     category: 'absurd',
     headline: 'Dyson-sfär: Byggt av trä',
     context: 'Ingenjörsteamet föreslår en Dyson-sfär runt solen — konstruerad av komprimerad cellulosa. Fysiker protesterar. Styrelsen godkänner budgeten.',
@@ -212,7 +212,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p9_svart_hal_energi',
-    phase: 9,
+    phase: 10,
     category: 'absurd',
     headline: 'Svart hål identifierat som ineffektiv resurs',
     context: 'Styrelsen noterar att svarta hål slösar enorm energi. "Varför producerar det inte cellulosa?" Forskarteamet ombeds undersöka.',
@@ -238,7 +238,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p9_alien_signal',
-    phase: 9,
+    phase: 10,
     category: 'opportunity',
     headline: 'Aliens svarar: "Vi har också skog"',
     context: 'SETI fångar upp en signal från Proxima Centauri. Meddelandet, översatt: "Vi noterar ert intresse för cellulosa. Vi har ett förslag." Styrelsen kallar till extrainsatt möte.',
@@ -274,7 +274,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p9_alien_patent_tvist',
-    phase: 9,
+    phase: 10,
     category: 'crisis',
     headline: 'Alienerna hävdar patent på fotosyntes',
     context: 'Civilisationen vid Proxima Centauri hävdar att de uppfann fotosyntes för 3 miljarder år sedan och seedade jorden. Patentanspråk inlämnat i Intergalaktisk Domstol.',
@@ -311,7 +311,8 @@ export const PHASE8_EVENTS: GameEvent[] = [
   // ── Phase 10: Kosmisk Skala ──
   {
     id: 'p10_galaktisk_skog',
-    phase: 10,
+    phase: 11,
+    // Renumbered from old phase 10 to EXPANSION era
     category: 'absurd',
     headline: 'Vintergatan: 73% skogsbeklädd',
     context: 'Er expansion har gjort Vintergatan till en "skogsrik galax". Astronomiska observatorier kan inte längre se stjärnor — granen blockerar sikten.',
@@ -764,7 +765,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p8_mars_fackforhandling',
-    phase: 8,
+    phase: 10,
     category: 'absurd',
     headline: 'Mars-facket kräver syre',
     context: 'Skogsarbetarna på Mars kräver "andningsbar luft" på arbetsplatsen. Er juridiska avdelning hävdar att syre inte specificeras i anställningsavtalet.',
@@ -791,7 +792,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p8_jupiter_storm',
-    phase: 8,
+    phase: 10,
     category: 'crisis',
     headline: 'Jupiterstormen river upp plantager',
     context: 'Den Stora Röda Fläcken har expanderat och förstört era plantager på Jupiter. Förluster: 800 miljoner stammar. Försäkringsbolaget hävdar "force majeure" — på en annan planet.',
@@ -818,7 +819,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
   },
   {
     id: 'p9_nebulosa_skog',
-    phase: 9,
+    phase: 10,
     category: 'absurd',
     headline: 'Orion-nebulan: Omvandlad till skogsbruksområde',
     context: 'Er gasomvandlingsteknik konverterar nebulöst väte till cellulosa. Orion-nebulan, en gång känd för sina vackra bilder, är nu ett skogsbruksområde. Astronomer gråter.',

@@ -5,20 +5,7 @@ import { Generators } from './Generators'
 import { GlassCard } from './ui/GlassCard'
 import { AnimatedNumber } from './ui/AnimatedNumber'
 
-const PHASE_NAMES: Record<number, string> = {
-  1: 'Lokalpatriot',
-  2: 'Den Goda Grannen',
-  3: 'Massabaronen',
-  4: 'PR-Katastrofen',
-  5: 'Det Skogsindustriella Komplexet',
-  6: 'Global Skogskonglomerat',
-  7: 'Post-Biologisk Skogsbruk',
-  8: 'Terraforming AB',
-  9: 'Kosmisk Industrialisering',
-  10: 'Den Perfekta Raden',
-  11: 'Parallella Universum',
-  12: 'Entropins Slut',
-}
+import { PHASE_NAMES } from '../engine/phases'
 
 const PHASE_THRESHOLDS: Record<number, number> = {
   1: 10_000,

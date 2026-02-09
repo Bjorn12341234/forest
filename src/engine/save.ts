@@ -1,7 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
-const CURRENT_VERSION = 3
+const CURRENT_VERSION = 4
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -83,6 +83,18 @@ const migrations: Record<number, MigrationFn> = {
       (save.state as GameState).expansionTargets = {}
     }
     save.version = 3
+    return save
+  },
+  3: (save) => {
+    // v3 → v4: Add countries and warningLevel for Sprint 6
+    const state = save.state as GameState
+    if (!state.countries) {
+      state.countries = {}
+    }
+    if (state.warningLevel === undefined) {
+      state.warningLevel = 0
+    }
+    save.version = 4
     return save
   },
 }

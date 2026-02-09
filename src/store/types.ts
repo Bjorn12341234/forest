@@ -2,6 +2,7 @@
 // Matches spec.md schema. Single source of truth for all game state types.
 
 export type Phase = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
+export type Era = 'SVERIGE' | 'MAKT' | 'INTERNATIONELL' | 'EXPANSION'
 
 export interface GameState {
   // Meta
@@ -52,6 +53,12 @@ export interface GameState {
   // Expansion targets (acquired territories)
   expansionTargets: Record<string, ExpansionTargetState>
 
+  // Country takeover state (INTERNATIONELL era)
+  countries: Record<string, CountryState>
+
+  // Warning level based on image (0-3)
+  warningLevel: 0 | 1 | 2 | 3
+
   // Owner action cooldowns (timestamp when action becomes available again)
   ownerActionCooldowns: Record<string, number>
 
@@ -98,9 +105,22 @@ export interface ExpansionTargetState {
   acquiredAt: number
 }
 
+export interface CountryState {
+  status: 'locked' | 'available' | 'invading' | 'controlled' | 'rebelling'
+  resistance: number           // 0-100, must reduce to 0 to control
+  controlProgress: number      // 0-100, tracks invasion progress
+  rebellionTimer?: number       // timestamp when rebellion started
+  pressureAllocation?: {
+    kapital: number
+    lobby: number
+    stammar: number
+  }
+}
+
 export interface GameEvent {
   id: string
   phase: number
+  maxPhase?: number            // event won't appear after this phase
   category: string
   headline: string
   context: string
@@ -185,6 +205,8 @@ export interface GameActions {
   buyPRCampaign: (id: string) => void
   counterAntagonist: (id: string) => void
   acquireExpansionTarget: (id: string) => void
+  invadeCountry: (id: string) => void
+  allocatePressure: (id: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => void
   resolveEvent: (choiceIndex: number) => void
   dismissEvent: () => void
   save: () => void

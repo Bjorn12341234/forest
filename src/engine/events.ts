@@ -41,6 +41,9 @@ function isEligible(event: GameEvent, state: GameState): boolean {
   // Phase check
   if (event.phase > state.phase) return false
 
+  // Max phase check (era-based event filtering)
+  if (event.maxPhase && state.phase > event.maxPhase) return false
+
   // Unique events can only fire once
   if (event.unique && state.eventHistory.includes(event.id)) return false
 

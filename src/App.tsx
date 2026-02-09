@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from './store/gameStore'
 import { ALL_EVENTS } from './store/gameStore'
-import type { Phase } from './store/types'
+import { getEra } from './engine/phases'
 import { useGameLoop } from './hooks/useGameLoop'
 import { useAutoSave } from './hooks/useAutoSave'
 import { useOfflineCalc } from './hooks/useOfflineCalc'
@@ -30,7 +30,6 @@ function App() {
   const [offlineReport, setOfflineReport] = useState<OfflineResult | null>(null)
   const [showEndScreen, setShowEndScreen] = useState(false)
   const currentPhase = useGameStore(state => state.phase)
-  const totalStammar = useGameStore(state => state.totalStammar)
   const endgameSeen = useGameStore(state => state.achievements['endgame_seen'])
   const pendingTransition = useGameStore(state => state.pendingTransition)
   const completePhaseTransition = useGameStore(state => state.completePhaseTransition)
@@ -46,12 +45,12 @@ function App() {
     load()
   }, [load])
 
-  // Trigger endscreen at 10B stammar (milestone at phase 7→8 transition)
+  // Trigger endscreen at phase 9→10 transition (entering EXPANSION)
   useEffect(() => {
-    if (currentPhase >= 7 && totalStammar >= 10_000_000_000 && !endgameSeen && !showEndScreen) {
+    if (currentPhase >= 10 && !endgameSeen && !showEndScreen) {
       setShowEndScreen(true)
     }
-  }, [currentPhase, totalStammar, endgameSeen, showEndScreen])
+  }, [currentPhase, endgameSeen, showEndScreen])
 
   // Offline report callback
   const handleOfflineReport = useCallback((report: OfflineResult) => {
@@ -81,7 +80,7 @@ function App() {
   useThemeSync()
 
   return (
-    <div className="flex flex-col min-h-dvh bg-bg-primary">
+    <div className="flex flex-col min-h-dvh bg-bg-primary" data-era={getEra(currentPhase)}>
       {/* News Ticker */}
       <Ticker />
 
@@ -94,17 +93,12 @@ function App() {
       {/* Offline Return Modal */}
       <OfflineReturnModal report={offlineReport} onDismiss={handleDismissOffline} />
 
-      {/* Endgame Screen (Milestone at 10B — not game over) */}
+      {/* Endgame Screen (Milestone at phase 10 — entering EXPANSION) */}
       {showEndScreen && (
         <EndScreen
           onContinue={() => {
             setShowEndScreen(false)
-            // Advance to phase 8 if still on 7
-            const state = useGameStore.getState()
-            if (state.phase === 7) {
-              useGameStore.setState({ phase: 8 as Phase })
-              useGameStore.getState().save()
-            }
+            useGameStore.getState().save()
           }}
           onReset={() => {
             setShowEndScreen(false)
