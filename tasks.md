@@ -353,6 +353,38 @@
 
 ---
 
+## Sprint 6: Den M\u00f6rka Expansionen
+
+### 6A \u2014 Era System Restructure
+- [x] 6A-1: Era System Foundation \u2014 New Era type (SVERIGE/MAKT/INTERNATIONELL/EXPANSION), ERA_PHASES mapping, getEra() helper, new PHASE_NAMES, TRANSITION_SCRIPTS for all 11 transitions, CountryState + warningLevel in GameState
+- [x] 6A-2: Era-Based Event Filtering \u2014 Added maxPhase to GameEvent interface, maxPhase check in isEligible(), tagged all Sweden-specific events (phase 1-6) with maxPhase: 6, renumbered phase8 space events to phases 10-12
+- [x] 6A-3: Save Migration v3\u2192v4 \u2014 Added countries: {} and warningLevel: 0, bumped CURRENT_VERSION to 4
+
+### 6B \u2014 Warning System & Country Mechanic
+- [x] 6B-1: Warning System \u2014 New engine/warnings.ts with 4 levels (image thresholds: >25/15-25/5-15/<5), production penalties [1.0/0.8/0.5/0.25], ownerTrust trigger in MAKT/INTERNATIONELL eras, integrated into tick() stammarPS multiplier
+- [x] 6B-2: Country Takeover Mechanic \u2014 14 countries in data/countries.ts (5 phase 7, 5 phase 8, 4 phase 9), 3 defense types with weakness modifiers (2x effective), invasion via pressure allocation (kapital/lobby/stammar), tick reduces resistance, maintenance costs, production rewards, hidden biodiversity/CO2 costs. Store actions: invadeCountry(), allocatePressure()
+
+### 6C \u2014 Content Expansion
+- [x] 6C-1: Tech Tree Refresh \u2014 32 new upgrades: phase4/upgrades.ts (12: Institutionell Kapning, Narrativkontroll, Juridisk Arsenal), phase7/upgrades.ts (12: Kolonialt Ramverk, Motst\u00e5ndskrossning, Global Logistik), phase10/upgrades.ts (8: Post-Biologisk Teknik, AI Styrelse). Updated upgradeRegistry.ts
+- [x] 6C-2: Redistribute Generators \u2014 Reassigned unlockPhases: SVERIGE (1-3) 5 generators, MAKT (4-6) 3 generators (Klon-Skog moved to phase 6), INTERNATIONELL (7-9) 3 NEW generators (Global Skogskoncessioner, Industriell Monokulturfabrik, Automatiserad Avskogning), EXPANSION (10-12) 6 generators. Adjusted baseCosts/production for new positions
+- [x] 6C-3: Redistribute Antagonists \u2014 Added maxPhase field, tagged Sweden antagonists (maxPhase 6 or 9), added 5 new: Internationella Milj\u00f6tribunalen (phase 7-9), Lokala Rebellr\u00f6relsen (8-9), Urfolkens Globala Allians (8-9), Den Medvetna Maskinen (10+), Entropins Budb\u00e4rare (12+). Total: 17 antagonists
+- [x] 6C-4: INTERNATIONELL Era Events \u2014 22 new events in phase7/events.ts: 8 phase 7 (country resistance, Swedish model export, corruption), 8 phase 8 (Amazonia fires, global boycott, trade wars), 6 phase 9 (last rainforest, biodiversity zero, Earth's invoice)
+- [x] 6C-5: EXPANSION Era Events \u2014 Renumbered existing space events from phases 8-9 to 10-12 in phase8/events.ts
+- [x] 6C-6: Lobby + News Ticker Updates \u2014 2 new INTERNATIONELL earners, 2 new purchases, moved galactic lobby to phase 10+. Tagged Sweden ticker headlines with maxPhase: 6, added INTERNATIONELL headlines (dark corporate colonialism), rewrote EXPANSION headlines in [SYSTEM]/[PROTOKOLL] machine-language style
+
+### 6D \u2014 UI Rework
+- [x] 6D-1: Rework Expansion Tab \u2014 3 views: locked (pre-phase 7), CountryPanel (INTERNATIONELL phases 7-9) with world map, country dots (grey/orange/green/red), resistance bars, pressure allocation sliders, SpaceExpansionPanel (EXPANSION phases 10+). Removed old country expansion targets, renumbered space targets to phase 10+
+- [x] 6D-2: Dark Visual Theme \u2014 data-era attribute on root container, CSS custom properties per era: INTERNATIONELL (muted corporate grey #1A1A1A), EXPANSION (black #0A0A0A with deep red/orange accents). Dashboard imports PHASE_NAMES from engine/phases.ts
+- [x] 6D-3: EndScreen Updates \u2014 Moved trigger to phase >= 10 (entering EXPANSION), added "L\u00e4nder er\u00f6vrade" stat to \u00c5rsredovisning (step 8 of 10), updated achievements referencing old expansion targets to use country system
+- [x] 6D-4: Achievement Fixes \u2014 Updated nordisk_hegemoni, kolonialmakten_2, global_dominans to use countries instead of removed expansion targets. Fixed phase numbers for terraformaren (10), dysonbyggaren (11), ai_overlorden (11), arsredovisningen (10)
+
+### 6E \u2014 Verification
+- [x] 6E-1: Build Verification \u2014 TypeScript clean, 182KB gzipped, all imports consistent, save migration working
+
+**Notes:** Sprint 6 complete. 30 files changed, +2,715 lines, -338 lines. Major restructuring: old 4-era system (SVERIGE/V\u00c4RLDEN/UNIVERSUM/BORTOM) replaced with new 4-era system (SVERIGE/MAKT/INTERNATIONELL/EXPANSION). Country takeover mechanic replaces old country-based expansion targets for phases 7-9. Warning system adds strategic tension via image-based production penalties. Era-specific visual themes darken the game progressively. Events filtered by maxPhase prevent immersion-breaking Sweden content in space eras. Save version bumped to 4. Deployed to GitHub Pages.
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:
