@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from './store/gameStore'
 import { ALL_EVENTS } from './store/gameStore'
+import type { Phase } from './store/types'
 import { useGameLoop } from './hooks/useGameLoop'
 import { useAutoSave } from './hooks/useAutoSave'
 import { useOfflineCalc } from './hooks/useOfflineCalc'
@@ -20,6 +21,7 @@ import { OfflineReturnModal } from './components/OfflineReturnModal'
 import { SettingsPanel, useThemeSync } from './components/SettingsPanel'
 import { TabNav, type Tab } from './components/TabNav'
 import { EndScreen } from './components/EndScreen'
+import { ExpansionPanel } from './components/ExpansionPanel'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -44,7 +46,7 @@ function App() {
     load()
   }, [load])
 
-  // Trigger endscreen at 10B stammar (phase 7 endgame)
+  // Trigger endscreen at 10B stammar (milestone at phase 7→8 transition)
   useEffect(() => {
     if (currentPhase >= 7 && totalStammar >= 10_000_000_000 && !endgameSeen && !showEndScreen) {
       setShowEndScreen(true)
@@ -92,10 +94,18 @@ function App() {
       {/* Offline Return Modal */}
       <OfflineReturnModal report={offlineReport} onDismiss={handleDismissOffline} />
 
-      {/* Endgame Screen */}
+      {/* Endgame Screen (Milestone at 10B — not game over) */}
       {showEndScreen && (
         <EndScreen
-          onContinue={() => setShowEndScreen(false)}
+          onContinue={() => {
+            setShowEndScreen(false)
+            // Advance to phase 8 if still on 7
+            const state = useGameStore.getState()
+            if (state.phase === 7) {
+              useGameStore.setState({ phase: 8 as Phase })
+              useGameStore.getState().save()
+            }
+          }}
           onReset={() => {
             setShowEndScreen(false)
             reset()
@@ -140,6 +150,7 @@ function App() {
             {activeTab === 'dashboard' && <Dashboard />}
             {activeTab === 'research' && <ResearchTree />}
             {activeTab === 'lobby' && <LobbyPanel />}
+            {activeTab === 'expansion' && <ExpansionPanel />}
           </motion.div>
         </AnimatePresence>
       </main>

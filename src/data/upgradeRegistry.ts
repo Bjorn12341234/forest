@@ -3,9 +3,11 @@
 
 import type { UpgradeData } from '../store/types'
 import { PHASE1_UPGRADES } from './phase1/upgrades'
+import { PHASE3_UPGRADES } from './phase3/upgrades'
 
 const UPGRADES: UpgradeData[] = [
   ...PHASE1_UPGRADES,
+  ...PHASE3_UPGRADES,
 ]
 
 export function getUpgradeData(id: string): UpgradeData | undefined {

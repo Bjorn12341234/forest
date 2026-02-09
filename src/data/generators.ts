@@ -9,6 +9,7 @@ export interface GeneratorData {
   baseProduction: number // stammar per second per unit
   unlockPhase: number    // phase required to see this generator
   unlockCost?: number    // show when player can almost afford (optional hint)
+  costScale?: number     // cost scaling factor (default 1.15)
 }
 
 export const GENERATORS: GeneratorData[] = [
@@ -67,6 +68,7 @@ export const GENERATORS: GeneratorData[] = [
     baseCost: 1_000_000,
     baseProduction: 10_000,
     unlockPhase: 5,
+    costScale: 1.20,
   },
   {
     id: 'gen_orbital',
@@ -75,6 +77,61 @@ export const GENERATORS: GeneratorData[] = [
     baseCost: 10_000_000,
     baseProduction: 250_000,
     unlockPhase: 6,
+    costScale: 1.25,
+  },
+  {
+    id: 'gen_klonskog',
+    name: 'Klon-Skog',
+    description: 'Genetiskt identiska träd. Ingen variation. Ingen motst\u00e5ndskraft. Maximal produktion.',
+    baseCost: 50_000_000,
+    baseProduction: 500_000,
+    unlockPhase: 7,
+    costScale: 1.25,
+  },
+  {
+    id: 'gen_terraformer',
+    name: 'Planet\u00e4r Terraformer',
+    description: 'G\u00f6r d\u00f6da planeter till granplanteringar. Exakt 1,8 meter mellanrum. \u00c4ven i vakuum.',
+    baseCost: 500_000_000,
+    baseProduction: 2_000_000,
+    unlockPhase: 8,
+    costScale: 1.25,
+  },
+  {
+    id: 'gen_nano',
+    name: 'Nanosk\u00f6rdare',
+    description: 'Molekyl\u00e4ra maskiner som plockar is\u00e4r tr\u00e4d atom f\u00f6r atom. Effektivt. Om\u00e4nskligt effektivt.',
+    baseCost: 5_000_000_000,
+    baseProduction: 20_000_000,
+    unlockPhase: 9,
+    costScale: 1.30,
+  },
+  {
+    id: 'gen_dimension',
+    name: 'Dimensionssk\u00f6rdare',
+    description: 'Avverkar skog i parallella universum. Klagom\u00e5l fr\u00e5n andra dimensioner avvisas.',
+    baseCost: 50_000_000_000,
+    baseProduction: 200_000_000,
+    unlockPhase: 10,
+    costScale: 1.30,
+  },
+  {
+    id: 'gen_multiverse',
+    name: 'Multiverse-Harvester',
+    description: 'Sk\u00f6rdar tr\u00e4d fr\u00e5n alla t\u00e4nkbara verkligheter. O\u00e4ndligheten \u00e4r inte nog.',
+    baseCost: 500_000_000_000,
+    baseProduction: 2_000_000_000,
+    unlockPhase: 11,
+    costScale: 1.35,
+  },
+  {
+    id: 'gen_entropi',
+    name: 'Entropimotor',
+    description: 'Extraherar energi fr\u00e5n universums termiska d\u00f6d. Sista maskinen som n\u00e5gonsin g\u00e5r.',
+    baseCost: 5_000_000_000_000,
+    baseProduction: 20_000_000_000,
+    unlockPhase: 12,
+    costScale: 1.35,
   },
 ]
 
@@ -86,6 +143,6 @@ export function getGeneratorsByPhase(phase: number): GeneratorData[] {
   return GENERATORS.filter(g => g.unlockPhase <= phase)
 }
 
-export function getGeneratorCost(baseCost: number, count: number): number {
-  return Math.floor(baseCost * Math.pow(1.15, count))
+export function getGeneratorCost(baseCost: number, count: number, costScale = 1.15): number {
+  return Math.floor(baseCost * Math.pow(costScale, count))
 }

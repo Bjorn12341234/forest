@@ -11,8 +11,13 @@ const PHASE_NAMES: Record<number, string> = {
   3: 'Massabaronen',
   4: 'PR-Katastrofen',
   5: 'Det Skogsindustriella Komplexet',
-  6: 'Post-Biologisk Skogsbruk',
-  7: 'UNIVERSUM AB',
+  6: 'Global Skogskonglomerat',
+  7: 'Post-Biologisk Skogsbruk',
+  8: 'Terraforming AB',
+  9: 'Kosmisk Industrialisering',
+  10: 'Den Perfekta Raden',
+  11: 'Parallella Universum',
+  12: 'Entropins Slut',
 }
 
 const PHASE_THRESHOLDS: Record<number, number> = {
@@ -22,7 +27,12 @@ const PHASE_THRESHOLDS: Record<number, number> = {
   4: 10_000_000,
   5: 100_000_000,
   6: 1_000_000_000,
-  7: Infinity,
+  7: 10_000_000_000,
+  8: 100_000_000_000,
+  9: 1_000_000_000_000,
+  10: 10_000_000_000_000,
+  11: 100_000_000_000_000,
+  12: Infinity,
 }
 
 export function Dashboard() {

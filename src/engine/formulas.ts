@@ -16,6 +16,11 @@ const KAPITAL_BASE_RATE: Record<number, number> = {
   5: 0.03,
   6: 0.04,
   7: 0.05,
+  8: 0.06,
+  9: 0.07,
+  10: 0.08,
+  11: 0.09,
+  12: 0.10,
 }
 
 export function getKapitalConversionRate(phase: number): number {
@@ -32,14 +37,20 @@ export function getOwnerTrustModifier(trust: number): number {
 }
 
 // ── Event Frequency ──
+// Increased intervals ~30-50% from Sprint 4 to reduce event spam
 const EVENT_FREQUENCY: Record<number, [number, number]> = {
-  1: [120, 200],
-  2: [90, 150],
-  3: [70, 120],
-  4: [60, 100],
-  5: [50, 90],
-  6: [45, 80],
-  7: [40, 70],
+  1: [160, 260],
+  2: [120, 200],
+  3: [90, 150],
+  4: [80, 130],
+  5: [70, 120],
+  6: [60, 100],
+  7: [50, 90],
+  8: [50, 90],
+  9: [45, 80],
+  10: [40, 75],
+  11: [40, 70],
+  12: [35, 65],
 }
 
 export function getNextEventDelay(phase: number): number {

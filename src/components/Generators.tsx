@@ -85,7 +85,7 @@ interface GeneratorRowProps {
 
 function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
   const [showFlash, setShowFlash] = useState(false)
-  const cost = getGeneratorCost(data.baseCost, count)
+  const cost = getGeneratorCost(data.baseCost, count, data.costScale)
   const canAfford = stammar >= cost
   const totalProduction = count * data.baseProduction
 

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-export type Tab = 'dashboard' | 'research' | 'lobby'
+export type Tab = 'dashboard' | 'research' | 'lobby' | 'expansion'
 
 interface TabDef {
   id: Tab
@@ -10,9 +10,10 @@ interface TabDef {
 }
 
 const TABS: TabDef[] = [
-  { id: 'dashboard', label: 'Oversikt', icon: '\ud83d\udcca', phase: 1 },
+  { id: 'dashboard', label: '\u00d6versikt', icon: '\ud83d\udcca', phase: 1 },
   { id: 'research', label: 'Teknik', icon: '\ud83d\udd2c', phase: 1 },
   { id: 'lobby', label: 'Makt', icon: '\ud83c\udfdb\ufe0f', phase: 2 },
+  { id: 'expansion', label: 'Expansion', icon: '\ud83c\udf0d', phase: 6 },
 ]
 
 interface TabNavProps {

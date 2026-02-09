@@ -1,6 +1,6 @@
 import type { GameState } from '../store/types'
 
-export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'meta'
+export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'kosmisk' | 'meta'
 
 export interface AchievementDef {
   id: string
@@ -21,6 +21,7 @@ export const TIER_LABELS: Record<AchievementTier, string> = {
   nationell: 'Tier 3: Nationell',
   internationell: 'Tier 4: Internationell',
   endgame: 'Tier 5: Endgame',
+  kosmisk: 'Tier 6: Kosmisk',
   meta: 'Meta',
 }
 
@@ -30,6 +31,7 @@ export const TIER_COLORS: Record<AchievementTier, string> = {
   nationell: '#FFD700',
   internationell: '#FF6600',
   endgame: '#CC22CC',
+  kosmisk: '#00CCFF',
   meta: '#888888',
 }
 
@@ -279,9 +281,199 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (s) => s.achievements['endgame_seen'] === true,
   },
 
-  // ═══════════════════════════════════════════
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  //  TIER 6: KOSMISK
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  {
+    id: 'nordisk_hegemoni',
+    name: 'Nordisk Hegemoni',
+    description: 'F\u00f6rv\u00e4rva alla nordiska l\u00e4nder. Kalmarunionen \u00e5teruppr\u00e4ttad. F\u00f6r tr\u00e4virke.',
+    icon: '\ud83d\udc51',
+    phase: 6,
+    tier: 'kosmisk',
+    check: (s) => ['exp_finland', 'exp_norge', 'exp_baltikum'].every(id => s.expansionTargets[id]?.acquired),
+  },
+  {
+    id: 'kolonialmakten_2',
+    name: 'Kolonialmakten 2.0',
+    description: 'F\u00f6rv\u00e4rva Brasilien och Kongo. Historien upprepar sig, men med b\u00e4ttre logistik.',
+    icon: '\ud83c\udf0d',
+    phase: 6,
+    tier: 'kosmisk',
+    check: (s) => s.expansionTargets['exp_brasilien']?.acquired && s.expansionTargets['exp_kongo']?.acquired,
+  },
+  {
+    id: 'global_dominans',
+    name: 'Global Dominans',
+    description: 'Alla jordiska territorier f\u00f6rv\u00e4rvade. Jorden \u00e4r en enda plantage.',
+    icon: '\ud83c\udf0f',
+    phase: 7,
+    tier: 'kosmisk',
+    check: (s) => ['exp_finland', 'exp_norge', 'exp_baltikum', 'exp_tyskland', 'exp_brasilien', 'exp_kongo', 'exp_sibirien', 'exp_kanada', 'exp_indonesien'].every(id => s.expansionTargets[id]?.acquired),
+  },
+  {
+    id: 'arsredovisningen',
+    name: '\u00c5rsredovisningen',
+    description: 'Bevittna f\u00f6retagets milstolpesrapport. Akte\u00e4garna \u00e4r n\u00f6jda.',
+    icon: '\ud83d\udcca',
+    phase: 7,
+    tier: 'kosmisk',
+    check: (s) => s.achievements['endgame_seen'] === true,
+  },
+  {
+    id: 'terraformaren',
+    name: 'Terraformaren',
+    description: 'F\u00f6rv\u00e4rva M\u00e5nen och Mars. Himlen \u00e4r inte l\u00e4ngre gr\u00e4nsen.',
+    icon: '\ud83c\udf11',
+    phase: 8,
+    tier: 'kosmisk',
+    check: (s) => s.expansionTargets['exp_manen']?.acquired && s.expansionTargets['exp_mars']?.acquired,
+  },
+  {
+    id: 'galaktisk_skogsbrukare',
+    name: 'Galaktisk Skogsbrukare',
+    description: 'N\u00e5 fas 9. Tr\u00e4d v\u00e4xer p\u00e5 exoplaneter.',
+    icon: '\ud83c\udf0c',
+    phase: 9,
+    tier: 'kosmisk',
+    check: (s) => s.phase >= 9,
+  },
+  {
+    id: 'en_punkt_atta_meter',
+    name: '1,8 Meter Mellan Stj\u00e4rnorna',
+    description: 'N\u00e5 fas 10. Universums perfekta plantage.',
+    icon: '\u2728',
+    phase: 10,
+    tier: 'kosmisk',
+    check: (s) => s.phase >= 10,
+  },
+  {
+    id: 'ai_overlorden',
+    name: 'AI-\u00d6verlorden',
+    description: 'K\u00f6p 10 Nanosk\u00f6rdare. Maskinerna st\u00e4ller inga fr\u00e5gor.',
+    icon: '\ud83e\udd16',
+    phase: 9,
+    tier: 'kosmisk',
+    check: (s) => (s.generators['gen_nano']?.count ?? 0) >= 10,
+  },
+  {
+    id: 'dysonbyggaren',
+    name: 'Dysonbyggaren',
+    description: 'F\u00f6rv\u00e4rva Dysonsfären. Solen \u00e4r nu en produktionsresurs.',
+    icon: '\u2600\ufe0f',
+    phase: 9,
+    tier: 'kosmisk',
+    check: (s) => s.expansionTargets['exp_dyson']?.acquired === true,
+  },
+  {
+    id: 'den_sista_gransen',
+    name: 'Den Sista Gr\u00e4nsen',
+    description: 'N\u00e5 fas 11. Andra universum v\u00e4ntar.',
+    icon: '\ud83c\udf00',
+    phase: 11,
+    tier: 'kosmisk',
+    check: (s) => s.phase >= 11,
+  },
+  {
+    id: 'multiverse_magnaten',
+    name: 'Multiverse-Magnaten',
+    description: 'F\u00f6rv\u00e4rva b\u00e5da parallella universum. Verkligheten \u00e4r en franchise.',
+    icon: '\ud83c\udf10',
+    phase: 11,
+    tier: 'kosmisk',
+    check: (s) => s.expansionTargets['exp_universe_alpha']?.acquired && s.expansionTargets['exp_universe_beta']?.acquired,
+  },
+  {
+    id: 'tidsresenaren',
+    name: 'Tidskorrekt\u00f6ren',
+    description: 'F\u00f6rv\u00e4rva Tidslinje-korrektion. Dinosauriernas skog \u00e4r din.',
+    icon: '\u231b',
+    phase: 12,
+    tier: 'kosmisk',
+    check: (s) => s.expansionTargets['exp_tidslinje']?.acquired === true,
+  },
+  {
+    id: 'entropins_besegrare',
+    name: 'Entropins Besegrare',
+    description: 'N\u00e5 fas 12. Universum d\u00f6r. Bolaget lever.',
+    icon: '\u267e\ufe0f',
+    phase: 12,
+    tier: 'kosmisk',
+    check: (s) => s.phase >= 12,
+  },
+  {
+    id: 'hundra_generatorer',
+    name: 'Hundra Generatorer',
+    description: '\u00c4g totalt 100 generatorer. Effektivitet \u00e4r sk\u00f6nhet.',
+    icon: '\ud83c\udfed',
+    phase: 5,
+    tier: 'kosmisk',
+    check: (s) => Object.values(s.generators).reduce((sum, g) => sum + g.count, 0) >= 100,
+  },
+  {
+    id: 'biljon_stammar',
+    name: 'Biljonen',
+    description: 'N\u00e5 1 biljon stammar. Det finns inte s\u00e5 m\u00e5nga tr\u00e4d. Det spelar ingen roll.',
+    icon: '\ud83c\udf32',
+    phase: 9,
+    tier: 'kosmisk',
+    check: (s) => s.totalStammar >= 1_000_000_000_000,
+  },
+  {
+    id: 'lobby_baron',
+    name: 'Lobbybaronen',
+    description: 'Ackumulera 100 000 Politiskt Kapital. Demokrati \u00e4r en formalitet.',
+    icon: '\ud83c\udfdb\ufe0f',
+    phase: 8,
+    tier: 'kosmisk',
+    check: (s) => s.lobby >= 100_000,
+  },
+  {
+    id: 'noll_biodiversitet',
+    name: 'Steril Perfektion',
+    description: 'Biodiversitet n\u00e5r 0%. Ingen konkurrens. Maximal produktion.',
+    icon: '\ud83d\udc80',
+    phase: 6,
+    tier: 'kosmisk',
+    check: (s) => s.biodiversity <= 0,
+  },
+  {
+    id: 'alla_antagonister',
+    name: 'Alla Tystade',
+    description: 'Neutralisera alla antagonister. Ingen motst\u00e5r.',
+    icon: '\ud83e\udd10',
+    phase: 5,
+    tier: 'kosmisk',
+    check: (s) => {
+      const vals = Object.values(s.antagonists)
+      return vals.length >= 7 && vals.every(a => a.countered)
+    },
+  },
+  {
+    id: 'tio_tusen_klick',
+    name: 'Mikrostyrning',
+    description: '10 000 klick. Styrelsen rekommenderar delegering.',
+    icon: '\ud83d\udd1f',
+    phase: 3,
+    tier: 'kosmisk',
+    check: (s) => s.clickCount >= 10_000,
+  },
+  {
+    id: 'allting_kopt',
+    name: 'Allt \u00e4r K\u00f6pt',
+    description: 'K\u00f6p alla lobby-projekt. Systemet \u00e4r helt ditt.',
+    icon: '\ud83d\udcb8',
+    phase: 5,
+    tier: 'kosmisk',
+    check: (s) => {
+      const bought = Object.values(s.lobbyProjects).filter(p => p.purchased)
+      return bought.length >= 7
+    },
+  },
+
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
   //  META
-  // ═══════════════════════════════════════════
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
   {
     id: 'karpaltunnel',
     name: 'Karpaltunnel',
@@ -321,8 +513,13 @@ const PHASE_NAMES: Record<number, string> = {
   3: 'Fas 3: Massabaronen',
   4: 'Fas 4: PR-Katastrofen',
   5: 'Fas 5: Det Skogsindustriella Komplexet',
-  6: 'Fas 6: Post-Biologisk Skogsbruk',
-  7: 'Fas 7: UNIVERSUM AB',
+  6: 'Fas 6: Global Skogskonglomerat',
+  7: 'Fas 7: Post-Biologisk Skogsbruk',
+  8: 'Fas 8: Terraforming AB',
+  9: 'Fas 9: Kosmisk Industrialisering',
+  10: 'Fas 10: Den Perfekta Raden',
+  11: 'Fas 11: Parallella Universum',
+  12: 'Fas 12: Entropins Slut',
 }
 
 export function getPhaseLabel(phase: number): string {

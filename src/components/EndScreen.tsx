@@ -9,20 +9,22 @@ interface EndScreenProps {
 }
 
 const POST_CREDITS: string[] = [
-  'Skogsstyrelsen publicerade "Makten över Skogen" (2024). Den bekräftade vår branschledande position inom politisk påverkan.',
-  '"Frihet under ansvar" \u2014 Sveriges skogspolitik sedan 1993. Tack vare oss.',
-  'Näringens lobbybudget uppgår till uppskattningsvis 200 Mkr per år. Väl investerade pengar.',
-  'EU:s hållbarhetslagar urvattnas via Omnibus-direktivet. Med svensk hjälp.',
-  '63% av svenskt virke går till massa \u2014 engångsprodukter med maximalt flöde.',
-  'Alternativa brukningsformer som hyggesfritt finns. Vi har sett till att de förblir marginella.',
-  'Svängdörren mellan politik och skogsindustri fungerar utmärkt.',
-  'FSC-certifiering ger konsumenten lugn. Vi ger oss själva certifikatet.',
-  'Kalhuggning går att se från rymden. 66 hektar om dagen. Imponerande effektivitet.',
+  'Akte\u00e4garna \u00e4r n\u00f6jda. Styrelsen gratulerar.',
   '',
-  'Marknaden kräver mer. Aktieägarna kräver mer.',
-  'Vi levererar.',
+  'Marknadsandelen \u00f6verstiger 100%. Det borde vara om\u00f6jligt. Det \u00e4r det inte.',
   '',
-  'Läs mer: Skogsstyrelsen, "Makten över Skogen" (2024)',
+  'All biologisk m\u00e5ngfald har ersatts med produktiv biomassa.',
+  'Varje kvadratmeter \u00e4r optimerad. Varje organism \u00e4r en produktionsenhet.',
+  '',
+  'Klimatf\u00f6r\u00e4ndringarna visade sig vara en utm\u00e4rkt aff\u00e4rsm\u00f6jlighet.',
+  'FSC-certifikatet h\u00e4nger kvar. Ingen fr\u00e5gar varf\u00f6r.',
+  'Sv\u00e4ngd\u00f6rren snurrar fortfarande. Snabbare \u00e4n n\u00e5gonsin.',
+  '',
+  'N\u00e4sta kvartal: Expansion bortom Sveriges gr\u00e4nser.',
+  'N\u00e4sta \u00e5r: Expansion bortom jordens gr\u00e4nser.',
+  'N\u00e4sta \u00e5rhundrade: Expansion bortom fysikens gr\u00e4nser.',
+  '',
+  'Tillv\u00e4xt \u00e4r den enda lagen.',
 ]
 
 export function EndScreen({ onReset, onContinue }: EndScreenProps) {
@@ -113,19 +115,19 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: POST_CREDITS.length * 2.5 + 2 }}
-            className="mt-12 flex flex-col gap-4 items-center"
+            className="mt-12 flex flex-col gap-6 items-center"
           >
             <button
               onClick={onContinue}
               className="px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
             >
-              FORTSÄTT EXPANDERA
+              FORTS\u00c4TT EXPANDERA
             </button>
             <button
               onClick={onReset}
-              className="px-6 py-2 bg-transparent text-white/40 text-xs tracking-wider cursor-pointer border border-white/20 hover:border-white/40 hover:text-white/60 transition-colors"
+              className="px-4 py-1 bg-transparent text-white/20 text-[0.5rem] tracking-wider cursor-pointer border-none hover:text-white/40 transition-colors"
             >
-              STARTA OM
+              starta om
             </button>
           </motion.div>
         </div>

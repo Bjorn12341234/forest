@@ -422,6 +422,11 @@ const PHASE_DRONES: Record<number, { freq: number; type: OscillatorType; detune:
   5: { freq: 49, type: 'sawtooth', detune: -12 },    // G1 — cosmic dread
   6: { freq: 40, type: 'sine', detune: 0 },           // Sub-bass — barely audible hum
   7: { freq: 0, type: 'sine', detune: 0 },            // Silence — no drone
+  8: { freq: 30, type: 'sine', detune: -20 },         // Deep space sub-bass
+  9: { freq: 25, type: 'sine', detune: -30 },         // Deeper
+  10: { freq: 20, type: 'sine', detune: 0 },          // Near-infrasonic
+  11: { freq: 0, type: 'sine', detune: 0 },           // Digital silence
+  12: { freq: 0, type: 'sine', detune: 0 },           // Final silence
 }
 
 // Ambient layer nodes (cleaned up on phase change)
@@ -479,6 +484,8 @@ export function startAmbient(phase: number) {
 
   if (phase <= 6 && drone.freq > 0) {
     createDroneLayer(ctx, now, drone)
+  } else if (phase >= 8 && phase <= 10 && drone.freq > 0) {
+    createDroneLayer(ctx, now, drone)
   }
 
   if (phase <= 2) {
@@ -495,13 +502,103 @@ export function startAmbient(phase: number) {
   } else if (phase === 5) {
     createIndustrialLayer(ctx, now, 1.0)
   } else if (phase === 6) {
-    // Near silence — just the faint sub-bass drone (already created above)
-    // Plus a very quiet high-pitched whine
     createWhineLayer(ctx, now)
-  } else if (phase >= 7) {
+  } else if (phase === 7) {
     // Complete silence with periodic EKG beep
     createEKGAmbient(ctx)
+  } else if (phase === 8 || phase === 9) {
+    // Deep space ambient: sub-bass drone + distant mechanical
+    createDeepSpaceLayer(ctx, now)
+  } else if (phase === 10 || phase === 11) {
+    // Abstract digital sounds
+    createDigitalAbstractLayer(ctx, now)
+  } else if (phase >= 12) {
+    // Silence, then a single final tone
+    createFinalToneLayer(ctx, now)
   }
+}
+
+function createDeepSpaceLayer(ctx: AudioContext, now: number) {
+  if (!ambientMasterGain) return
+
+  // Deep space: very low sub-bass + distant mechanical clicks
+  const sub = ctx.createOscillator()
+  sub.type = 'sine'
+  sub.frequency.setValueAtTime(28, now)
+  const subGain = ctx.createGain()
+  subGain.gain.setValueAtTime(0.4, now)
+  sub.connect(subGain)
+  subGain.connect(ambientMasterGain)
+  sub.start(now)
+  ambientNodes.push(sub)
+
+  // Distant metallic ping every ~3 seconds
+  const bufferSize = ctx.sampleRate * 0.05
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.sin(i * 0.1) * Math.exp(-i / (bufferSize * 0.3)) * 0.3
+  }
+
+  ekgInterval = setInterval(() => {
+    if (!ambientMasterGain || masterMuted) return
+    const source = ctx.createBufferSource()
+    source.buffer = buffer
+    const gain = ctx.createGain()
+    gain.gain.setValueAtTime(0.1, ctx.currentTime)
+    source.connect(gain)
+    gain.connect(ambientMasterGain!)
+    source.start(ctx.currentTime)
+  }, 3000 + Math.random() * 2000)
+}
+
+function createDigitalAbstractLayer(ctx: AudioContext, now: number) {
+  if (!ambientMasterGain) return
+
+  // Abstract digital: filtered noise bursts at random intervals
+  const bufferSize = ctx.sampleRate * 2
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    // Stepped noise — digital texture
+    if (i % 100 === 0) {
+      data[i] = (Math.random() * 2 - 1) * 0.15
+    } else {
+      data[i] = data[i - (i % 100)] ?? 0
+    }
+  }
+  const source = ctx.createBufferSource()
+  source.buffer = buffer
+  source.loop = true
+  const bpf = ctx.createBiquadFilter()
+  bpf.type = 'bandpass'
+  bpf.frequency.setValueAtTime(2000, now)
+  bpf.Q.setValueAtTime(5, now)
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.06, now)
+  source.connect(bpf)
+  bpf.connect(gain)
+  gain.connect(ambientMasterGain)
+  source.start(now)
+  ambientNodes.push(source)
+}
+
+function createFinalToneLayer(ctx: AudioContext, now: number) {
+  if (!ambientMasterGain) return
+
+  // Phase 12: Silence for 5 seconds, then a single sustained A4 (440Hz) — the last sound
+  const osc = ctx.createOscillator()
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(440, now + 5)
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0, now)
+  gain.gain.setValueAtTime(0, now + 5)
+  gain.gain.linearRampToValueAtTime(0.08, now + 8)
+  // Sustain indefinitely at low volume
+  osc.connect(gain)
+  gain.connect(ambientMasterGain)
+  osc.start(now + 5)
+  ambientNodes.push(osc)
 }
 
 export function stopAmbient() {

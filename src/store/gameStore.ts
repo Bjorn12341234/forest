@@ -6,7 +6,11 @@ import { checkEventTrigger, selectEvent, scheduleNextEvent } from '../engine/eve
 import { checkPhaseTransition } from '../engine/phases'
 import { PHASE1_EVENTS } from '../data/phase1/events'
 import { PHASE2_EVENTS } from '../data/phase2/events'
+import { PHASE2_NEW_EVENTS } from '../data/phase2/newEvents'
+import { PHASE3_EVENTS } from '../data/phase3/events'
 import { PHASE5_EVENTS } from '../data/phase5/events'
+import { PHASE5_NEW_EVENTS } from '../data/phase5/newEvents'
+import { PHASE8_EVENTS } from '../data/phase8/events'
 import { getGeneratorData, getGeneratorCost } from '../data/generators'
 import { getClickUpgrade, CLICK_UPGRADES } from '../data/clickUpgrades'
 import { getUpgradeData } from '../data/upgradeRegistry'
@@ -14,8 +18,17 @@ import { getLobbyEarner, getLobbyPurchase, LOBBY_PURCHASES } from '../data/lobby
 import { getOwnerAction } from '../data/ownerActions'
 import { getPRCampaign } from '../data/ownerActions'
 import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist } from '../data/antagonists'
+import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
 
-export const ALL_EVENTS = [...PHASE1_EVENTS, ...PHASE2_EVENTS, ...PHASE5_EVENTS]
+export const ALL_EVENTS = [
+  ...PHASE1_EVENTS,
+  ...PHASE2_EVENTS,
+  ...PHASE2_NEW_EVENTS,
+  ...PHASE3_EVENTS,
+  ...PHASE5_EVENTS,
+  ...PHASE5_NEW_EVENTS,
+  ...PHASE8_EVENTS,
+]
 
 // ── Initial State ──
 
@@ -52,6 +65,7 @@ export const INITIAL_STATE: GameState = {
   clickUpgrades: {},
   lobbyProjects: {},
   antagonists: {},
+  expansionTargets: {},
 
   ownerActionCooldowns: {},
 
@@ -88,7 +102,7 @@ function computeBaseStammarPerSecond(generators: GameState['generators']): numbe
   return total
 }
 
-/** Get total generator boost multiplier from purchased lobby projects */
+/** Get total generator boost multiplier from purchased lobby projects (capped at +100%) */
 function getLobbyGeneratorBoost(lobbyProjects: GameState['lobbyProjects']): number {
   let boost = 1.0
   for (const purchase of LOBBY_PURCHASES) {
@@ -100,7 +114,7 @@ function getLobbyGeneratorBoost(lobbyProjects: GameState['lobbyProjects']): numb
       }
     }
   }
-  return boost
+  return Math.min(2.0, boost) // Cap at +100% (2x)
 }
 
 /** Get kapital boost multiplier from purchased lobby projects */
@@ -213,24 +227,39 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const lobbyBoost = getLobbyGeneratorBoost(state.lobbyProjects)
     const stammarPS = baseStammarPS * lobbyBoost
 
+    // Add expansion target production
+    let expansionStammarPS = 0
+    let expansionKapitalPS = 0
+    let expansionBiodivLoss = 0
+    let expansionCO2 = 0
+    for (const target of EXPANSION_TARGETS) {
+      if (state.expansionTargets[target.id]?.acquired) {
+        expansionStammarPS += target.production.stammarPerSecond
+        expansionKapitalPS += target.production.kapitalPerSecond
+        expansionBiodivLoss += target.hiddenCosts.biodiversityLoss
+        expansionCO2 += target.hiddenCosts.co2Gain
+      }
+    }
+
     // Calculate kapital conversion with ownerTrust modifier + lobby kapital boost
     const conversionRate = getKapitalConversionRate(state.phase)
     const trustModifier = getOwnerTrustModifier(state.ownerTrust)
     const kapitalBoost = getLobbyKapitalBoost(state.lobbyProjects)
-    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost
+    const totalStammarPS = stammarPS + expansionStammarPS
+    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS
 
-    const stammarGained = stammarPS * dt
+    const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
 
-    // Update hidden variables
-    const co2Gain = stammarGained * 0.05
+    // Update hidden variables (include expansion hidden costs)
+    const co2Gain = stammarGained * 0.05 + expansionCO2 * dt
     const ownerShare = kapitalGained * 0.08
     const industryShare = kapitalGained * 0.92
-    const biodivLoss = stammarGained * 0.0001
+    const biodivLoss = stammarGained * 0.0001 + expansionBiodivLoss * dt
 
     const updates: Partial<GameState> = {
       stammar: state.stammar + stammarGained,
-      stammarPerSecond: stammarPS,
+      stammarPerSecond: totalStammarPS,
       totalStammar: state.totalStammar + stammarGained,
       kapital: state.kapital + kapitalGained,
       realCO2: state.realCO2 + co2Gain,
@@ -330,7 +359,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     const current = state.generators[id]
     const count = current?.count ?? 0
-    const cost = getGeneratorCost(data.baseCost, count)
+    const cost = getGeneratorCost(data.baseCost, count, data.costScale)
 
     if (state.stammar < cost) return
 
@@ -542,6 +571,29 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
+  acquireExpansionTarget: (id: string) => {
+    const state = get()
+    const target = getExpansionTarget(id)
+    if (!target) return
+    if (target.unlockPhase > state.phase) return
+    if (state.expansionTargets[id]?.acquired) return
+
+    // Check costs
+    if (state.stammar < target.cost.stammar) return
+    if (state.kapital < target.cost.kapital) return
+    if (state.lobby < target.cost.lobby) return
+
+    set({
+      stammar: state.stammar - target.cost.stammar,
+      kapital: state.kapital - target.cost.kapital,
+      lobby: state.lobby - target.cost.lobby,
+      expansionTargets: {
+        ...state.expansionTargets,
+        [id]: { acquired: true, acquiredAt: Date.now() },
+      },
+    } as Partial<GameStore>)
+  },
+
   resolveEvent: (choiceIndex: number) => {
     const state = get()
     if (!state.activeEvent) return
@@ -608,6 +660,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lastSaveAt: now,
       nextEventAt: now + 120_000,
       pendingTransition: null,
+      expansionTargets: {},
     })
   },
 

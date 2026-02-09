@@ -227,44 +227,139 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     phase: 6,
   },
 
-  // ── Fas 7: Endgame ──
+  // \u2500\u2500 Fas 7: Post-Biologisk \u2500\u2500
   {
     id: 'tick_lavskrika',
-    text: 'Sista lavskrikan observerad. Observatören arresterad för "störande av produktiv verksamhet."',
+    text: 'Sista lavskrikan observerad. Observat\u00f6ren arresterad f\u00f6r "st\u00f6rande av produktiv verksamhet."',
     phase: 7,
   },
   {
     id: 'tick_biologisk_mangfald',
-    text: 'Jordens skogar: 100% produktiva. Biologisk mångfald: "Vad är det?" \u2014 Näringsdepartementet.',
+    text: 'Jordens skogar: 100% produktiva. Biologisk m\u00e5ngfald: "Vad \u00e4r det?" \u2014 N\u00e4ringsdepartementet.',
     phase: 7,
   },
   {
     id: 'tick_lunar_silva',
-    text: 'Lunar Silva AB godkänt för börsnotering. Kurs: \u221E.',
+    text: 'Lunar Silva AB godk\u00e4nt f\u00f6r b\u00f6rsnotering. Kurs: \u221e.',
     phase: 7,
   },
   {
     id: 'tick_fn',
-    text: 'FN:s generalsekreterare gratulerar: "Ni har löst klimatfrågan. Genom att eliminera den."',
+    text: 'FN:s generalsekreterare gratulerar: "Ni har l\u00f6st klimatfr\u00e5gan. Genom att eliminera den."',
     phase: 7,
   },
   {
     id: 'tick_mars_fabrik',
-    text: 'Mars Massafabrik produktionsstart. Kvaliteten är låg. Men ingen klagar \u2014 det finns inga människor där.',
+    text: 'Mars Massafabrik produktionsstart. Kvaliteten \u00e4r l\u00e5g. Men ingen klagar \u2014 det finns inga m\u00e4nniskor d\u00e4r.',
     phase: 7,
     trigger: { type: 'totalStammar', value: 3_000_000_000 },
   },
   {
     id: 'tick_sista_anstallda',
-    text: 'Sista mänskliga medarbetaren går i pension. Styrelsemötet hålls mellan serverhallar.',
+    text: 'Sista m\u00e4nskliga medarbetaren g\u00e5r i pension. Styrelseprotokoll f\u00f6rs av AI.',
     phase: 7,
     trigger: { type: 'totalStammar', value: 5_000_000_000 },
   },
   {
-    id: 'tick_universums_industriskog',
-    text: 'Universum har blivit en industriskog. Stjärnorna lyser genom rutnätet.',
+    id: 'tick_klonskog_rapport',
+    text: 'Klon-Skog-programmet visar lovande resultat. Alla tr\u00e4d \u00e4r identiska. Alla d\u00f6r samtidigt.',
     phase: 7,
-    trigger: { type: 'totalStammar', value: 10_000_000_000 },
+    trigger: { type: 'generator', value: 'gen_klonskog' },
+  },
+
+  // \u2500\u2500 Fas 8-9: Rymden \u2500\u2500
+  {
+    id: 'tick_terraforming_start',
+    text: 'Terraforming av Mars inledd. F\u00f6rsta granplantorna klarade -60\u00b0C. De sista med.',
+    phase: 8,
+  },
+  {
+    id: 'tick_mars_kolonister',
+    text: 'Mars-kolonisterna kr\u00e4ver semester. HR-avdelningen skickar ett standardmejl fr\u00e5n jorden.',
+    phase: 8,
+  },
+  {
+    id: 'tick_lunar_silva_ipo',
+    text: 'Lunar Silva AB:s b\u00f6rsnotering \u00f6vertecknad 4000%. M\u00e5nen har ingen skog \u00e4n.',
+    phase: 8,
+    trigger: { type: 'totalStammar', value: 20_000_000_000 },
+  },
+  {
+    id: 'tick_rymdvirke',
+    text: 'F\u00f6rsta rymdvirkeleveransen: 3 plankor. Fraktkostnad: 4,2 miljarder. Vinst: 12 kr.',
+    phase: 8,
+  },
+  {
+    id: 'tick_titan_metansjöar',
+    text: 'Titans metansj\u00f6ar visar sig vara utm\u00e4rkta f\u00f6r industriell kylning. Lokalt liv protesterar inte. Det finns inget.',
+    phase: 9,
+    trigger: { type: 'totalStammar', value: 100_000_000_000 },
+  },
+  {
+    id: 'tick_dyson_konstruktion',
+    text: 'Dysonsfärens konstruktion p\u00e5b\u00f6rjad. Solnedg\u00e5ngar kommer inte l\u00e4ngre vara m\u00f6jliga. Ingen beklagar.',
+    phase: 9,
+  },
+  {
+    id: 'tick_exoplanet_signal',
+    text: 'Signal mottagen fr\u00e5n Proxima b: "Sluta." Styrelsen tolkar det som en aff\u00e4rsinbjudan.',
+    phase: 9,
+    trigger: { type: 'totalStammar', value: 500_000_000_000 },
+  },
+
+  // \u2500\u2500 Fas 10-12: Kosmisk \u2192 Bortom \u2500\u2500
+  {
+    id: 'tick_perfekta_raden',
+    text: 'Universum har blivit en industriskog. Stj\u00e4rnorna lyser genom rutn\u00e4tet. 1,8 meter.',
+    phase: 10,
+  },
+  {
+    id: 'tick_aliens_besok',
+    text: 'Utomjordisk delegation bes\u00f6ker. De \u00e4r imponerade av v\u00e5r effektivitet. Mindre imponerade av v\u00e5r empati.',
+    phase: 10,
+  },
+  {
+    id: 'tick_svart_hal',
+    text: 'Svart h\u00e5l identifierat som ineffektiv resurs. Styrelsen vill st\u00e4nga det.',
+    phase: 10,
+    trigger: { type: 'totalStammar', value: 5_000_000_000_000 },
+  },
+  {
+    id: 'tick_galaxkarta',
+    text: 'Vintergatan kartlagd. 400 miljarder stj\u00e4rnor. 400 miljarder produktionsnummer.',
+    phase: 10,
+  },
+  {
+    id: 'tick_dimension_portal',
+    text: 'F\u00f6rsta dimensionsportalen \u00f6ppnad. Parallellt universum identiskt med v\u00e5rt. Dubbel oms\u00e4ttning.',
+    phase: 11,
+  },
+  {
+    id: 'tick_beta_miljororelse',
+    text: 'I Universum Beta vann milj\u00f6r\u00f6relsen. Vi skickar konsulter.',
+    phase: 11,
+  },
+  {
+    id: 'tick_tidslinje',
+    text: 'Tidslinje-korrektion godk\u00e4nd. Dinosauriernas skog avverkas retroaktivt. Historieforskare protesterar.',
+    phase: 12,
+    trigger: { type: 'totalStammar', value: 50_000_000_000_000 },
+  },
+  {
+    id: 'tick_entropi_hot',
+    text: 'Entropi hotar produktionen. Aktieutdelningen f\u00f6rblir of\u00f6r\u00e4ndrad.',
+    phase: 12,
+  },
+  {
+    id: 'tick_sista_maskinen',
+    text: 'Universum n\u00e5r termisk d\u00f6d. Sista h\u00e4ndelsen: en maskin s\u00f6ker efter tr\u00e4d att f\u00e4lla.',
+    phase: 12,
+    trigger: { type: 'totalStammar', value: 100_000_000_000_000 },
+  },
+  {
+    id: 'tick_aktieagarna',
+    text: 'Akte\u00e4garna fick sin utdelning. Allt annat \u00e4r detaljer. Allt annat \u00e4r borta.',
+    phase: 12,
   },
 ]
 

@@ -1,7 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
-const CURRENT_VERSION = 2
+const CURRENT_VERSION = 3
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -75,6 +75,14 @@ const migrations: Record<number, MigrationFn> = {
       (save.state as GameState).ownerActionCooldowns = {}
     }
     save.version = 2
+    return save
+  },
+  2: (save) => {
+    // v2 → v3: Add expansionTargets field for Sprint 5
+    if (!(save.state as GameState).expansionTargets) {
+      (save.state as GameState).expansionTargets = {}
+    }
+    save.version = 3
     return save
   },
 }

@@ -1,7 +1,7 @@
 // ── Silva Maximus — Game State Types ──
 // Matches spec.md schema. Single source of truth for all game state types.
 
-export type Phase = 1 | 2 | 3 | 4 | 5 | 6 | 7
+export type Phase = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 
 export interface GameState {
   // Meta
@@ -49,6 +49,9 @@ export interface GameState {
   // Antagonists
   antagonists: Record<string, AntagonistState>
 
+  // Expansion targets (acquired territories)
+  expansionTargets: Record<string, ExpansionTargetState>
+
   // Owner action cooldowns (timestamp when action becomes available again)
   ownerActionCooldowns: Record<string, number>
 
@@ -88,6 +91,11 @@ export interface LobbyProjectState {
 export interface AntagonistState {
   active: boolean
   countered: boolean
+}
+
+export interface ExpansionTargetState {
+  acquired: boolean
+  acquiredAt: number
 }
 
 export interface GameEvent {
@@ -176,6 +184,7 @@ export interface GameActions {
   performOwnerAction: (id: string) => void
   buyPRCampaign: (id: string) => void
   counterAntagonist: (id: string) => void
+  acquireExpansionTarget: (id: string) => void
   resolveEvent: (choiceIndex: number) => void
   dismissEvent: () => void
   save: () => void
