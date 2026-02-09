@@ -306,6 +306,18 @@
 
 ---
 
+## Post-Launch Fixes
+
+### PL.1 — Event/Transition Overlap Fix
+- [x] Block events from triggering during phase transitions (pendingTransition check in tick)
+
+### PL.2 — Nastlé/NCA Content
+- [x] Updated phase 3→4 transition: "Nastlé ringer. De tycker ni har för dåligt rykte... Nastlé. Tänk på det."
+- [x] Updated ticker headline: Nastlé bryter med NCA (the irony of Nestlé finding SCA too disreputable)
+- [x] New ticker headline: NCA namnbyte till "Nordic Cellulose Association"
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

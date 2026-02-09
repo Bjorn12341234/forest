@@ -75,22 +75,16 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 
 ---
 
-## Current Sprint Status: Sprint 1 Complete
+## Current Status: All 4 Sprints Complete — Deployed
+
+**Live at:** https://bjorn12341234.github.io/forest/
 
 ### What's working
-- Core idle loop: click → stammar → generators → kapital
-- 8 generators (phase-gated), 4 click upgrades, 20 tech tree upgrades, 11 events, 11 achievements
-- 2-panel dashboard layout (ClickArea + Generators), resource bar, phase progress
-- Kapital conversion with ownerTrust modifier
-- Phase transitions with overlay
-- Events system, achievements, offline progression, auto-save
-
-### Next: Sprint 2 — Maktspelet (Power Systems)
-- Lobby system (Politiskt Kapital)
-- Skogsägarförtroende meter (OwnerMeter)
-- Image/PR system
-- More events
-- News ticker
+- **Sprint 1 — Core mechanics:** click → stammar → generators → kapital, 8 generators (phase-gated), 4 click upgrades, 20 tech tree upgrades, phase transitions
+- **Sprint 2 — Power systems:** Lobby system (4 earners + 7 purchases), OwnerMeter with 5 manipulation actions, PR campaigns (4 image-restore options), News ticker (30+ milestone-based headlines), Events (11 phase 1 + 12 phase 2-4), 3 tabs (Översikt, Teknik, Makt)
+- **Sprint 3 — Depth & endgame:** 28 achievements in 6 tiers, 7 antagonists with condition triggers and countermeasures, hidden variables (realCO2, ownerProfit, biodiversity, species, samiLand), EndScreen "Årsredovisning" with sequential reveal and post-credits
+- **Sprint 4 — Polish & ship:** Multi-layered ambient soundscapes per phase (Web Audio API), generator balancing pass, 12 new events (phases 5-7), ~15 new ticker headlines, PWA (manifest, service worker, icons), mobile touch targets, safe area insets, GitHub Actions deploy
+- **Post-launch fixes:** Events blocked during phase transitions (no more popups covering transition text), Nastlé/NCA satirical references (phase 3→4 transition + ticker headlines)
 
 ---
 
@@ -103,46 +97,66 @@ forest/
 ├── spec.md               # Technical spec
 ├── tasks.md              # Sprint tasks
 ├── plan.md               # Original planning document (reference only)
-├── index.html            # Entry HTML (IBM Plex Mono fonts)
+├── index.html            # Entry HTML (IBM Plex Mono fonts, PWA meta tags)
 ├── package.json          # Vite, React, TS, Zustand, Framer Motion, Tailwind
+├── vite.config.ts        # base: '/forest/'
+├── .github/workflows/
+│   └── deploy.yml        # GitHub Actions: build + deploy to Pages
+├── public/
+│   ├── manifest.json     # PWA manifest
+│   ├── sw.js             # Service worker (cache-first)
+│   ├── icon.svg          # SVG favicon
+│   ├── icon-192.png      # PWA icon 192x192
+│   └── icon-512.png      # PWA icon 512x512
 ├── src/
 │   ├── App.tsx           # Root component — tab nav, overlays, engine hooks
+│   ├── main.tsx          # Entry point + service worker registration
 │   ├── store/
 │   │   ├── types.ts      # GameState, GeneratorState, actions, etc.
-│   │   ├── gameStore.ts  # Zustand store + all actions (tick, click, buy, etc.)
-│   │   └── selectors.ts  # Selector hooks (useStammarPS, useKapital, etc.)
+│   │   ├── gameStore.ts  # Zustand store + all actions (tick, click, buy, lobby, etc.)
+│   │   └── selectors.ts  # Selector hooks
 │   ├── engine/
-│   │   ├── formulas.ts   # Cost scaling, kapital conversion, ownerTrust modifier
-│   │   ├── format.ts     # Number formatting
+│   │   ├── formulas.ts   # Cost scaling, kapital conversion, ownerTrust, event timing
+│   │   ├── format.ts     # Number formatting (Swedish)
 │   │   ├── events.ts     # Event engine (scheduling, selection, resolution)
 │   │   ├── phases.ts     # Phase thresholds + transition scripts
-│   │   ├── audio.ts      # Sound effects (click, purchase, achievement)
-│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save)
-│   │   └── offline.ts    # Offline progression calculation
+│   │   ├── audio.ts      # Procedural audio (Web Audio API): ambient soundscapes + SFX
+│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 2)
+│   │   └── offline.ts    # Offline progression (10% rate, max 10 events)
 │   ├── data/
-│   │   ├── generators.ts     # 8 generator definitions (phase-gated)
-│   │   ├── clickUpgrades.ts  # 4 click multiplier upgrades (kapital-cost)
-│   │   ├── upgradeRegistry.ts # Central registry connecting all upgrade data
-│   │   ├── achievements.ts   # All achievements by tier
-│   │   └── phase1/
-│   │       ├── upgrades.ts   # 20 tech tree upgrades (4 trees)
-│   │       └── events.ts     # 11 phase 1 events
+│   │   ├── generators.ts     # 8 generators (phase-gated)
+│   │   ├── clickUpgrades.ts  # 4 click multiplier upgrades
+│   │   ├── upgradeRegistry.ts # Central registry for tech tree upgrades
+│   │   ├── achievements.ts   # 28 achievements in 6 tiers
+│   │   ├── antagonists.ts    # 7 antagonists with triggers + countermeasures
+│   │   ├── lobbyProjects.ts  # 4 lobby earners + 7 one-time purchases
+│   │   ├── ownerActions.ts   # 5 owner actions + 4 PR campaigns
+│   │   ├── newsTickerLines.ts # 40+ headlines organized by phase
+│   │   ├── phase1/
+│   │   │   ├── upgrades.ts   # Tech tree upgrades
+│   │   │   └── events.ts     # Phase 1 events
+│   │   ├── phase2/
+│   │   │   └── events.ts     # Phase 2-4 events
+│   │   └── phase5/
+│   │       └── events.ts     # Phase 5-7 events
 │   ├── components/
 │   │   ├── ClickArea.tsx      # "Skriv Skogsbruksplan" button + click upgrades
 │   │   ├── Generators.tsx     # Generator list with buy buttons
 │   │   ├── Dashboard.tsx      # Main game view (resources + ClickArea + Generators)
 │   │   ├── ResearchTree.tsx   # Tech tree (Avverkning branch)
+│   │   ├── LobbyPanel.tsx     # Makt tab: earn PK, spend PK, PR campaigns
+│   │   ├── OwnerMeter.tsx     # Skogsägarförtroende bar + manipulation actions
+│   │   ├── AntagonistPanel.tsx # Active antagonists + counter buttons
+│   │   ├── EndScreen.tsx      # Endgame "Årsredovisning" + post-credits
 │   │   ├── EventModal.tsx     # Event popup with choices
-│   │   ├── Ticker.tsx         # News ticker (event headlines)
-│   │   ├── MainButton.tsx     # Generic click button (legacy, used by ClickArea)
+│   │   ├── Ticker.tsx         # News ticker (milestone-based headlines)
 │   │   ├── UpgradeList.tsx    # Tech tree upgrade cards
-│   │   ├── UpgradeCard.tsx    # Individual upgrade card
 │   │   ├── PhaseTransition.tsx # Phase transition overlay
 │   │   ├── AchievementToast.tsx # Toast notification manager
-│   │   ├── AchievementPanel.tsx # Full achievement list panel
+│   │   ├── AchievementPanel.tsx # Full achievement list by tier
 │   │   ├── OfflineReturnModal.tsx # Offline progress report
-│   │   ├── SettingsPanel.tsx  # Settings (volume, theme, save/load)
-│   │   ├── TabNav.tsx         # Bottom tab navigation
+│   │   ├── SettingsPanel.tsx  # Settings (volume, theme, save/load/export)
+│   │   ├── TabNav.tsx         # Bottom tab navigation (3 tabs)
 │   │   └── ui/
 │   │       ├── GlassCard.tsx      # Brutalist card component
 │   │       ├── AnimatedNumber.tsx  # Smooth number counter
@@ -152,8 +166,7 @@ forest/
 │   │   ├── useAutoSave.ts    # 30-second auto-save
 │   │   ├── useAchievements.ts # Achievement condition checking
 │   │   ├── useOfflineCalc.ts # Offline progression on mount
-│   │   ├── useAudioSync.ts   # Audio state sync
-│   │   └── useAnimatedNumber.ts # Number animation hook
+│   │   └── useAudioSync.ts   # Audio state sync (ambient + phase changes)
 │   └── styles/
 │       └── global.css        # Byråkratisk Brutalism theme (Tailwind v4)
 ```

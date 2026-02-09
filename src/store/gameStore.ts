@@ -249,8 +249,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       }
     }
 
-    // Check event triggers
-    if (checkEventTrigger(state, now)) {
+    // Check event triggers (skip during phase transitions)
+    if (!updates.pendingTransition && !state.pendingTransition && checkEventTrigger(state, now)) {
       const event = selectEvent(state, ALL_EVENTS)
       if (event) {
         updates.activeEvent = event

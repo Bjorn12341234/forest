@@ -49,9 +49,10 @@ export const TRANSITION_SCRIPTS: Partial<Record<`${Phase}_${Phase}`, TransitionL
     { text: 'MASSABARONEN', delay: 0, style: 'bold' },
     { text: 'Du dominerar den nationella marknaden.', delay: 2000 },
     { text: 'Men din image börjar krackelera...', delay: 4000 },
-    { text: 'Nestlé ringer. De har synpunkter.', delay: 6500, style: 'dim' },
-    { text: 'PR-SYSTEMET UPPLÅST', delay: 9000, style: 'accent' },
-    { text: 'Fas 4: PR-Katastrofen', delay: 12000, style: 'bold' },
+    { text: 'Nastlé ringer. De tycker ni har för dåligt rykte.', delay: 6500, style: 'dim' },
+    { text: '...Nastlé. Tänk på det.', delay: 8500, style: 'dim' },
+    { text: 'PR-SYSTEMET UPPLÅST', delay: 11000, style: 'accent' },
+    { text: 'Fas 4: PR-Katastrofen', delay: 14000, style: 'bold' },
   ],
   '4_5': [
     { text: 'PR-KATASTROFEN', delay: 0, style: 'bold' },
