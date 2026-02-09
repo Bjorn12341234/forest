@@ -29,10 +29,10 @@ export function Ticker() {
       }}
     >
       <div className="absolute inset-0 flex items-center animate-ticker whitespace-nowrap">
-        <span className="text-[0.75rem] text-text-primary/80 tracking-wide px-4">
+        <span className="text-sm text-text-primary/80 tracking-wide px-4">
           {tickerText}
         </span>
-        <span className="text-[0.75rem] text-text-primary/80 tracking-wide px-4">
+        <span className="text-sm text-text-primary/80 tracking-wide px-4">
           {tickerText}
         </span>
       </div>

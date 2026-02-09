@@ -37,13 +37,13 @@ export function LobbyPanel() {
       <div className="grid grid-cols-2 gap-2">
         <GlassCard padding="sm">
           <div className="flex flex-col gap-0.5">
-            <span className="text-text-muted text-[0.6rem] uppercase tracking-wider">Politiskt Kapital</span>
+            <span className="text-text-muted text-xs uppercase tracking-wider">Politiskt Kapital</span>
             <AnimatedNumber value={lobby} className="text-lg text-text-primary" />
           </div>
         </GlassCard>
         <GlassCard padding="sm">
           <div className="flex flex-col gap-0.5">
-            <span className="text-text-muted text-[0.6rem] uppercase tracking-wider">Grön Image\u2122</span>
+            <span className="text-text-muted text-xs uppercase tracking-wider">Grön Image\u2122</span>
             <AnimatedNumber value={image} className={`text-lg ${image > 60 ? 'text-accent-green' : image > 30 ? 'text-accent' : 'text-danger'}`} />
           </div>
         </GlassCard>
@@ -59,8 +59,8 @@ export function LobbyPanel() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Earn PK */}
         <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-text-primary">Tjäna Politiskt Kapital</h2>
-          <p className="text-[0.6rem] text-text-muted -mt-2">Spendera Kapital för att bygga politiskt inflytande.</p>
+          <h2 className="text-base font-medium text-text-primary">Tjäna Politiskt Kapital</h2>
+          <p className="text-xs text-text-muted -mt-2">Spendera Kapital för att bygga politiskt inflytande.</p>
 
           <div className="flex flex-col gap-2">
             {visibleEarners.map(earner => (
@@ -80,8 +80,8 @@ export function LobbyPanel() {
           {/* PR Campaigns */}
           {showPR && (
             <>
-              <h2 className="text-sm font-medium text-text-primary mt-4">PR-kampanjer</h2>
-              <p className="text-[0.6rem] text-text-muted -mt-2">Köp tillbaka er Gröna Image\u2122.</p>
+              <h2 className="text-base font-medium text-text-primary mt-4">PR-kampanjer</h2>
+              <p className="text-xs text-text-muted -mt-2">Köp tillbaka er Gröna Image\u2122.</p>
               <div className="flex flex-col gap-2">
                 {PR_CAMPAIGNS.map(campaign => (
                   <PRCampaignRow
@@ -102,8 +102,8 @@ export function LobbyPanel() {
 
         {/* Right: Spend PK on law changes */}
         <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-text-primary">Lagandringar & Projekt</h2>
-          <p className="text-[0.6rem] text-text-muted -mt-2">Använd Politiskt Kapital för att ändra regelverket.</p>
+          <h2 className="text-base font-medium text-text-primary">Lagändringar & Projekt</h2>
+          <p className="text-xs text-text-muted -mt-2">Använd Politiskt Kapital för att ändra regelverket.</p>
 
           <div className="flex flex-col gap-2">
             <AnimatePresence initial={false}>
@@ -155,18 +155,18 @@ function LobbyEarnerRow({ data, kapital, count, onBuy }: {
         <span className="text-lg flex-shrink-0">{data.icon}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-text-primary truncate">{data.name}</span>
+            <span className="text-sm font-medium text-text-primary">{data.name}</span>
             {count > 0 && (
-              <span className="text-[0.55rem] text-text-muted">x{count}</span>
+              <span className="text-xs text-text-muted">x{count}</span>
             )}
           </div>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed truncate">{data.description}</p>
+          <p className="text-xs text-text-muted leading-relaxed">{data.description}</p>
         </div>
         <div className="text-right flex-shrink-0">
-          <span className={`text-[0.65rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+          <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
             {formatNumber(data.cost)} Mkr
           </span>
-          <div className="text-[0.55rem] text-accent-green font-numbers">+{data.pkReward} PK</div>
+          <div className="text-xs text-accent-green font-numbers">+{data.pkReward} PK</div>
         </div>
       </div>
     </GlassCard>
@@ -193,24 +193,24 @@ function LobbyPurchaseRow({ data, lobby, purchased, onBuy }: {
         <span className="text-lg flex-shrink-0 mt-0.5">{data.icon}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-text-primary">{data.name}</span>
+            <span className="text-sm font-medium text-text-primary">{data.name}</span>
             {purchased && <span className="w-2 h-2 rounded-full bg-success flex-shrink-0" />}
           </div>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed">{data.description}</p>
+          <p className="text-xs text-text-muted leading-relaxed">{data.description}</p>
           <div className="flex flex-wrap gap-1 mt-1">
             {data.effects.map((eff, i) => (
-              <span key={i} className="text-[0.5rem] text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
+              <span key={i} className="text-xs text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
                 {eff.description}
               </span>
             ))}
           </div>
-          <p className="text-[0.45rem] text-text-muted/60 mt-1 italic">Baserat på: {data.basedOn}</p>
+          <p className="text-xs text-text-muted/60 mt-1 italic">Baserat på: {data.basedOn}</p>
         </div>
         <div className="text-right flex-shrink-0">
           {purchased ? (
-            <span className="text-[0.6rem] text-success">Antagen</span>
+            <span className="text-xs text-success">Antagen</span>
           ) : (
-            <span className={`text-[0.65rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+            <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
               {formatNumber(data.cost)} PK
             </span>
           )}
@@ -241,14 +241,14 @@ function PRCampaignRow({ data, kapital, image, onBuy }: {
       <div className="flex items-center gap-2">
         <span className="text-lg flex-shrink-0">{data.icon}</span>
         <div className="flex-1 min-w-0">
-          <span className="text-xs font-medium text-text-primary truncate block">{data.name}</span>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed truncate">{data.description}</p>
+          <span className="text-sm font-medium text-text-primary block">{data.name}</span>
+          <p className="text-xs text-text-muted leading-relaxed">{data.description}</p>
         </div>
         <div className="text-right flex-shrink-0">
-          <span className={`text-[0.65rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+          <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
             {formatNumber(data.cost)} Mkr
           </span>
-          <div className="text-[0.55rem] text-accent-green font-numbers">+{data.imageGain} Image</div>
+          <div className="text-xs text-accent-green font-numbers">+{data.imageGain} Image</div>
         </div>
       </div>
     </GlassCard>

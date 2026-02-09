@@ -28,7 +28,7 @@ export function Generators() {
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-sm font-medium text-text-primary mb-1">Byggnader</h2>
+      <h2 className="text-base font-medium text-text-primary mb-1">Byggnader</h2>
 
       <div className="flex flex-col gap-2">
         <AnimatePresence initial={false}>
@@ -59,8 +59,8 @@ export function Generators() {
             <div className="flex items-center gap-3">
               <span className="text-xl">🔒</span>
               <div className="flex-1">
-                <span className="text-xs font-medium text-text-muted">???</span>
-                <p className="text-[0.6rem] text-text-muted/50">Nasta fas</p>
+                <span className="text-sm font-medium text-text-muted">???</span>
+                <p className="text-xs text-text-muted/50">Nästa fas</p>
               </div>
             </div>
           </GlassCard>
@@ -122,20 +122,20 @@ function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
         {/* Count badge */}
         <div className="flex flex-col items-center flex-shrink-0 w-10">
           <span className="text-lg font-bold text-accent font-numbers">{count}</span>
-          <span className="text-[0.5rem] text-text-muted uppercase">st</span>
+          <span className="text-xs text-text-muted uppercase">st</span>
         </div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-xs font-medium text-text-primary truncate">{data.name}</h3>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed line-clamp-2 mt-0.5">
+          <h3 className="text-sm font-medium text-text-primary">{data.name}</h3>
+          <p className="text-xs text-text-muted leading-relaxed mt-0.5">
             {data.description}
           </p>
           <div className="flex items-center justify-between mt-1">
-            <span className={`text-[0.65rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+            <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
               {formatNumber(cost)} stammar
             </span>
-            <span className="text-[0.55rem] text-text-secondary font-numbers">
+            <span className="text-xs text-text-secondary font-numbers">
               +{formatNumber(data.baseProduction)}/s
               {count > 0 && (
                 <span className="text-text-muted ml-1">

@@ -77,11 +77,11 @@ export function UpgradeCard({ data, state, canAfford, onPurchase }: UpgradeCardP
         <div className="flex-1 min-w-0">
           {/* Name + count */}
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium text-text-primary truncate">
+            <h3 className="text-base font-medium text-text-primary">
               {data.name}
             </h3>
             {data.maxCount > 1 && count > 0 && (
-              <span className="text-[0.6rem] font-numbers text-text-muted px-1.5 py-0.5 bg-white/5 rounded-full">
+              <span className="text-xs font-numbers text-text-muted px-1.5 py-0.5 bg-white/5 rounded-full">
                 x{count}
               </span>
             )}
@@ -91,20 +91,20 @@ export function UpgradeCard({ data, state, canAfford, onPurchase }: UpgradeCardP
           </div>
 
           {/* Description */}
-          <p className="text-[0.65rem] text-text-muted mt-0.5 leading-relaxed line-clamp-2">
+          <p className="text-sm text-text-muted mt-0.5 leading-relaxed">
             {data.description}
           </p>
 
           {/* Cost + production */}
           <div className="flex items-center justify-between mt-1.5">
             {!purchased ? (
-              <span className={`text-xs font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+              <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
                 {formatNumber(cost)} {data.costResource}
               </span>
             ) : (
-              <span className="text-xs text-success">Purchased</span>
+              <span className="text-sm text-success">Köpt</span>
             )}
-            <span className="text-[0.6rem] text-text-secondary font-numbers">
+            <span className="text-xs text-text-secondary font-numbers">
               +{data.production}/s
             </span>
           </div>

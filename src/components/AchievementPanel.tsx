@@ -56,7 +56,7 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
           <div className="flex items-center justify-between mb-3 flex-shrink-0">
             <h2 className="text-lg font-medium text-text-primary">Prestationer</h2>
             <div className="flex items-center gap-3">
-              <span className="text-xs font-numbers text-text-secondary">
+              <span className="text-sm font-numbers text-text-secondary">
                 {unlocked.length}/{visible.length}
               </span>
               <button
@@ -125,7 +125,7 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
                         {isUnlocked ? a.name : '???'}
                       </p>
                       <span
-                        className="text-[0.5rem] uppercase tracking-wider px-1 py-0.5 rounded"
+                        className="text-xs uppercase tracking-wider px-1 py-0.5 rounded"
                         style={{
                           color: tierColor,
                           background: `${tierColor}15`,
@@ -135,12 +135,12 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
                         {TIER_LABELS[a.tier].split(': ')[1] ?? a.tier}
                       </span>
                     </div>
-                    <p className="text-[0.65rem] text-text-muted line-clamp-1">
-                      {isUnlocked ? a.description : 'Fortsatt spela for att lasa upp'}
+                    <p className="text-sm text-text-muted">
+                      {isUnlocked ? a.description : 'Fortsätt spela för att låsa upp'}
                     </p>
                   </div>
                   {isUnlocked && (
-                    <span className="text-[0.55rem] uppercase tracking-wider font-medium flex-shrink-0" style={{ color: tierColor }}>
+                    <span className="text-xs uppercase tracking-wider font-medium flex-shrink-0" style={{ color: tierColor }}>
                       Klar
                     </span>
                   )}
@@ -172,7 +172,7 @@ function TierTab({ label, isActive, color, count, total, onClick }: {
   return (
     <button
       onClick={onClick}
-      className={`px-2.5 py-1.5 rounded-sm text-[0.6rem] font-medium whitespace-nowrap
+      className={`px-2.5 py-1.5 rounded-sm text-xs font-medium whitespace-nowrap
         border cursor-pointer transition-all ${
         isActive
           ? 'bg-bg-secondary text-text-primary'

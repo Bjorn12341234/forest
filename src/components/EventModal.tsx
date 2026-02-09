@@ -72,7 +72,7 @@ function EventModalContent({
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         className="fixed inset-0 z-[101] flex items-center justify-center p-4"
       >
-        <div className="glass-card p-6 max-w-md w-full mx-auto"
+        <div className="glass-card p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto"
           style={{
             borderColor: `${color}33`,
             boxShadow: `0 0 40px ${color}22, 0 4px 24px rgba(0,0,0,0.5)`,
@@ -81,7 +81,7 @@ function EventModalContent({
           {/* Category badge */}
           <div className="mb-4">
             <span
-              className="text-[0.6rem] font-bold uppercase tracking-[0.15em] px-2 py-1 rounded"
+              className="text-xs font-bold uppercase tracking-[0.15em] px-2 py-1 rounded"
               style={{
                 color,
                 background: `${color}15`,
@@ -93,12 +93,12 @@ function EventModalContent({
           </div>
 
           {/* Headline */}
-          <h2 className="text-xl font-bold text-text-primary leading-tight mb-2">
+          <h2 className="text-xl font-bold text-text-primary leading-tight mb-3">
             {event.headline}
           </h2>
 
           {/* Context */}
-          <p className="text-sm text-text-secondary leading-relaxed mb-6">
+          <p className="text-base text-text-secondary leading-relaxed mb-6">
             {event.context}
           </p>
 
@@ -112,11 +112,11 @@ function EventModalContent({
                            transition-all duration-150 hover:brightness-110
                            bg-white/[0.03] border-white/10 hover:border-white/20"
               >
-                <span className="text-sm font-medium text-text-primary">
+                <span className="text-base font-medium text-text-primary">
                   {choice.label}
                 </span>
                 {choice.description && (
-                  <p className="text-[0.65rem] text-text-muted mt-0.5">
+                  <p className="text-sm text-text-muted mt-1">
                     {choice.description}
                   </p>
                 )}

@@ -59,17 +59,17 @@ export function ClickArea() {
     <div className="flex flex-col items-center gap-4">
       {/* Stammar Counter */}
       <div className="text-center">
-        <div className="text-text-secondary text-xs uppercase tracking-wider mb-1">Stammar</div>
+        <div className="text-text-secondary text-sm uppercase tracking-wider mb-1">Stammar</div>
         <AnimatedNumber
           value={stammar}
           className="font-display text-text-primary"
         />
         <div className="flex gap-4 justify-center mt-1">
-          <span className="text-text-muted text-xs">
+          <span className="text-text-muted text-sm">
             +{formatNumber(stammarPerClick)}/klick
           </span>
           {stammarPerSecond > 0 && (
-            <span className="text-text-muted text-xs">
+            <span className="text-text-muted text-sm">
               {formatNumber(stammarPerSecond)}/s
             </span>
           )}
@@ -97,14 +97,14 @@ export function ClickArea() {
       </div>
 
       {/* Flavourtext */}
-      <p className="text-text-muted text-xs italic text-center max-w-xs leading-relaxed px-2">
+      <p className="text-text-muted text-sm italic text-center max-w-sm leading-relaxed px-2">
         {flavour}
       </p>
 
       {/* Click Upgrades */}
       {visibleClickUpgrades.length > 0 && (
         <div className="w-full mt-2">
-          <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-2">
+          <h3 className="text-sm font-medium text-text-secondary uppercase tracking-wider mb-2">
             Klick-uppgraderingar
           </h3>
           <div className="flex flex-col gap-1.5">
@@ -124,20 +124,20 @@ export function ClickArea() {
                     <span className="text-lg flex-shrink-0">{cu.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium text-text-primary truncate">{cu.name}</span>
+                        <span className="text-sm font-medium text-text-primary">{cu.name}</span>
                         {purchased && <span className="w-2 h-2 rounded-full bg-success flex-shrink-0" />}
                       </div>
-                      <p className="text-[0.6rem] text-text-muted leading-relaxed truncate">{cu.description}</p>
+                      <p className="text-xs text-text-muted leading-relaxed">{cu.description}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
                       {purchased ? (
-                        <span className="text-[0.6rem] text-success">Köpt</span>
+                        <span className="text-xs text-success">Köpt</span>
                       ) : (
-                        <span className={`text-[0.65rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+                        <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
                           {formatNumber(cu.cost)} Mkr
                         </span>
                       )}
-                      <div className="text-[0.55rem] text-text-secondary">+{cu.stammarPerClickBonus}/klick</div>
+                      <div className="text-xs text-text-secondary">+{cu.stammarPerClickBonus}/klick</div>
                     </div>
                   </div>
                 </GlassCard>

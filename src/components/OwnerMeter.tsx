@@ -34,8 +34,8 @@ export function OwnerMeter() {
       <div className="flex flex-col gap-2">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-text-primary">Skogsagarfortroende</span>
-          <span className="text-xs font-numbers" style={{ color: status.color }}>
+          <span className="text-sm font-medium text-text-primary">Skogsägarförtroende</span>
+          <span className="text-sm font-numbers" style={{ color: status.color }}>
             {Math.round(ownerTrust)} — {status.label}
           </span>
         </div>
@@ -53,7 +53,7 @@ export function OwnerMeter() {
 
           {/* Sweet spot label */}
           <div className="absolute top-0 left-[40%] w-[20%] h-full flex items-center justify-center">
-            <span className="text-[0.4rem] text-accent-green/70 font-medium uppercase tracking-wider">Sweet spot</span>
+            <span className="text-[0.6rem] text-accent-green/70 font-medium uppercase tracking-wider">Sweet spot</span>
           </div>
 
           {/* Trust indicator */}
@@ -69,7 +69,7 @@ export function OwnerMeter() {
 
         {/* Owner Actions */}
         <div className="flex flex-col gap-1.5 mt-1">
-          <span className="text-[0.6rem] text-text-muted uppercase tracking-wider">Manipulationsatgarder</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider">Manipulationsåtgärder</span>
           {OWNER_ACTIONS.map(action => (
             <OwnerActionRow
               key={action.id}
@@ -129,26 +129,26 @@ function OwnerActionRow({ data, kapital, lobby, cooldownUntil, onPerform }: {
     >
       <span className="text-base flex-shrink-0">{data.icon}</span>
       <div className="flex-1 min-w-0">
-        <span className="text-[0.65rem] font-medium text-text-primary truncate block">{data.name}</span>
-        <p className="text-[0.5rem] text-text-muted leading-relaxed truncate">{data.description}</p>
+        <span className="text-sm font-medium text-text-primary block">{data.name}</span>
+        <p className="text-xs text-text-muted leading-relaxed">{data.description}</p>
         {data.sideEffects.length > 0 && (
           <div className="flex gap-1 mt-0.5">
             {data.sideEffects.map((eff, i) => (
-              <span key={i} className="text-[0.45rem] text-text-secondary">{eff.description}</span>
+              <span key={i} className="text-xs text-text-secondary">{eff.description}</span>
             ))}
           </div>
         )}
       </div>
       <div className="text-right flex-shrink-0 flex flex-col items-end gap-0.5">
-        <span className={`text-[0.6rem] font-numbers ${trustColor}`}>{trustChangeText} fortroende</span>
+        <span className={`text-xs font-numbers ${trustColor}`}>{trustChangeText} förtroende</span>
         {onCooldown ? (
-          <span className="text-[0.55rem] text-text-muted font-numbers">{cooldownRemaining}s</span>
+          <span className="text-xs text-text-muted font-numbers">{cooldownRemaining}s</span>
         ) : data.cost > 0 ? (
-          <span className={`text-[0.55rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
+          <span className={`text-xs font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
             {formatNumber(data.cost)} {data.costResource === 'kapital' ? 'Mkr' : 'PK'}
           </span>
         ) : (
-          <span className="text-[0.55rem] text-text-muted">Gratis</span>
+          <span className="text-xs text-text-muted">Gratis</span>
         )}
       </div>
     </div>

@@ -69,7 +69,7 @@ function OfflineReturnContent({ report, onDismiss }: { report: OfflineResult; on
                 +{formatNumber(report.stammarGained)}
               </span>
             </div>
-            <div className="text-[0.6rem] text-text-muted mt-1">
+            <div className="text-xs text-text-muted mt-1">
               Offlinetakt: {Math.round(report.offlineRate * 100)}%
             </div>
           </div>
@@ -86,7 +86,7 @@ function OfflineReturnContent({ report, onDismiss }: { report: OfflineResult; on
                 </div>
               )}
               {report.autoResolvedCount > 0 && (
-                <div className="text-[0.6rem] text-text-muted mt-1">
+                <div className="text-xs text-text-muted mt-1">
                   {report.autoResolvedCount} kris{report.autoResolvedCount > 1 ? 'er' : ''} auto-hanterade
                 </div>
               )}

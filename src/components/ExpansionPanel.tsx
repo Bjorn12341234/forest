@@ -209,12 +209,12 @@ function CountryPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-medium text-text-primary">Internationell Expansion</h2>
-          <p className="text-[0.6rem] text-text-muted">
+          <h2 className="text-base font-medium text-text-primary">Internationell Expansion</h2>
+          <p className="text-xs text-text-muted">
             Exportera den svenska modellen. Krossa motst\u00e5nd med kapital, lobby och stammar.
           </p>
         </div>
-        <span className="text-[0.55rem] text-text-muted uppercase tracking-widest">
+        <span className="text-xs text-text-muted uppercase tracking-widest">
           {VIEW_LABELS.countries}
         </span>
       </div>
@@ -293,7 +293,7 @@ function CountryPanel() {
                   transform: 'translateX(-50%)',
                 }}
               >
-                <span className={`text-[0.45rem] leading-none font-medium whitespace-nowrap
+                <span className={`text-xs leading-none font-medium whitespace-nowrap
                   ${isControlled ? 'text-accent-green' : isInvading ? 'text-accent' : 'text-text-muted'}`}>
                   {country.name}
                 </span>
@@ -331,19 +331,19 @@ function CountryPanel() {
       {/* Stats summary */}
       <div className="grid grid-cols-3 gap-2">
         <GlassCard padding="sm">
-          <span className="text-[0.55rem] text-text-muted uppercase tracking-wider block">Kontrollerade</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider block">Kontrollerade</span>
           <span className="text-sm text-accent-green font-numbers">
             {controlledCount} / {visibleCountries.length}
           </span>
         </GlassCard>
         <GlassCard padding="sm">
-          <span className="text-[0.55rem] text-text-muted uppercase tracking-wider block">Invasioner</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider block">Invasioner</span>
           <span className="text-sm text-accent font-numbers">
             {invadingCount}
           </span>
         </GlassCard>
         <GlassCard padding="sm">
-          <span className="text-[0.55rem] text-text-muted uppercase tracking-wider block">Produktion</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider block">Produktion</span>
           <span className="text-sm text-accent font-numbers">
             +{formatNumber(Object.entries(countries)
               .filter(([, cs]) => cs.status === 'controlled')
@@ -392,19 +392,19 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium text-text-primary">{country.name}</h3>
-            {status === 'controlled' && <span className="text-[0.55rem] text-accent-green">Kontrollerad</span>}
-            {status === 'invading' && <span className="text-[0.55rem] text-accent">Invasion p\u00e5g\u00e5r</span>}
-            {status === 'rebelling' && <span className="text-[0.55rem] text-danger">Uppror!</span>}
+            <h3 className="text-base font-medium text-text-primary">{country.name}</h3>
+            {status === 'controlled' && <span className="text-xs text-accent-green">Kontrollerad</span>}
+            {status === 'invading' && <span className="text-xs text-accent">Invasion p\u00e5g\u00e5r</span>}
+            {status === 'rebelling' && <span className="text-xs text-danger">Uppror!</span>}
           </div>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed mt-1">{country.description}</p>
+          <p className="text-xs text-text-muted leading-relaxed mt-1">{country.description}</p>
 
           {/* Defense info */}
           <div className="flex flex-wrap gap-2 mt-2">
-            <span className="text-[0.5rem] px-1.5 py-0.5 rounded bg-bg-tertiary text-text-secondary">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-bg-tertiary text-text-secondary">
               F\u00f6rsvar: {defenseLabel[country.defenseType]} ({country.defenseStrength}/10)
             </span>
-            <span className="text-[0.5rem] px-1.5 py-0.5 rounded bg-bg-tertiary text-accent">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-bg-tertiary text-accent">
               Svaghet: {weaknessLabel[country.defenseType]}
             </span>
           </div>
@@ -413,8 +413,8 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           {status === 'invading' && (
             <div className="mt-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[0.5rem] text-text-muted">Motst\u00e5nd</span>
-                <span className="text-[0.5rem] text-text-secondary font-numbers">{resistance.toFixed(1)}%</span>
+                <span className="text-xs text-text-muted">Motst\u00e5nd</span>
+                <span className="text-xs text-text-secondary font-numbers">{resistance.toFixed(1)}%</span>
               </div>
               <div className="w-full h-2 bg-bg-tertiary rounded-sm overflow-hidden">
                 <div
@@ -428,7 +428,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           {/* Pressure Allocation (when invading) */}
           {status === 'invading' && (
             <div className="mt-3 flex flex-col gap-2">
-              <span className="text-[0.5rem] text-text-muted uppercase tracking-wider">Allokera tryck</span>
+              <span className="text-xs text-text-muted uppercase tracking-wider">Allokera tryck</span>
               <PressureSlider
                 label="Kapital"
                 value={pa.kapital}
@@ -462,13 +462,13 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           {/* Production (when controlled) */}
           {status === 'controlled' && (
             <div className="flex flex-wrap gap-2 mt-2">
-              <span className="text-[0.5rem] text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
+              <span className="text-xs text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
                 +{formatNumber(country.production.stammarPerSecond)} stammar/s
               </span>
-              <span className="text-[0.5rem] text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
+              <span className="text-xs text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
                 +{formatNumber(country.production.kapitalPerSecond)} kapital/s
               </span>
-              <span className="text-[0.5rem] text-danger bg-danger/10 px-1.5 py-0.5 rounded">
+              <span className="text-xs text-danger bg-danger/10 px-1.5 py-0.5 rounded">
                 -{formatNumber(country.maintenanceCost.kapitalPerSecond)} kapital/s underh\u00e5ll
               </span>
             </div>
@@ -478,7 +478,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <button
             onClick={onClose}
-            className="text-[0.6rem] text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors cursor-pointer"
           >
             [X]
           </button>
@@ -490,7 +490,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
                 if (affordable) onInvade()
               }}
               disabled={!affordable}
-              className={`px-4 py-2 rounded-sm text-[0.65rem] font-medium border transition-all
+              className={`px-4 py-2 rounded-sm text-sm font-medium border transition-all
                 ${affordable
                   ? 'bg-accent/10 border-accent/30 text-accent hover:bg-accent/20 cursor-pointer'
                   : 'bg-bg-tertiary border-bg-tertiary text-text-muted cursor-not-allowed'
@@ -501,11 +501,11 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           )}
 
           {status === 'controlled' && (
-            <span className="text-[0.55rem] text-accent-green glow-text-orange">Aktiv produktion</span>
+            <span className="text-xs text-accent-green glow-text-orange">Aktiv produktion</span>
           )}
 
           {status === 'invading' && (
-            <span className="text-[0.55rem] text-accent">Motst\u00e5nd: {resistance.toFixed(0)}%</span>
+            <span className="text-xs text-accent">Motst\u00e5nd: {resistance.toFixed(0)}%</span>
           )}
         </div>
       </div>
@@ -523,7 +523,7 @@ function PressureSlider({ label, value, isWeak, onChange }: {
 }) {
   return (
     <div className="flex items-center gap-2">
-      <span className={`text-[0.5rem] w-14 ${isWeak ? 'text-accent font-bold' : 'text-text-secondary'}`}>
+      <span className={`text-xs w-16 ${isWeak ? 'text-accent font-bold' : 'text-text-secondary'}`}>
         {label}{isWeak ? ' \u2605' : ''}
       </span>
       <input
@@ -534,7 +534,7 @@ function PressureSlider({ label, value, isWeak, onChange }: {
         onChange={(e) => onChange(Number(e.target.value))}
         className="flex-1 h-1.5 accent-accent"
       />
-      <span className="text-[0.5rem] text-text-muted font-numbers w-8 text-right">{value}</span>
+      <span className="text-xs text-text-muted font-numbers w-8 text-right">{value}</span>
     </div>
   )
 }
@@ -576,14 +576,14 @@ function SpaceExpansionPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-medium text-text-primary">Expansion</h2>
-          <p className="text-[0.6rem] text-text-muted">
+          <h2 className="text-base font-medium text-text-primary">Expansion</h2>
+          <p className="text-xs text-text-muted">
             {mapView === 'solar' && 'Interplanet\u00e4r skogsbruksindustri. Inga m\u00e4nniskor beh\u00f6vs.'}
             {mapView === 'galaxy' && 'Galaktisk expansion. AI-styrelsen godk\u00e4nner.'}
             {mapView === 'multiverse' && 'Skogsbruk \u00f6ver alla verkligheter. Entropi \u00e4r det sista hindret.'}
           </p>
         </div>
-        <span className="text-[0.55rem] text-text-muted uppercase tracking-widest">
+        <span className="text-xs text-text-muted uppercase tracking-widest">
           {VIEW_LABELS[mapView]}
         </span>
       </div>
@@ -655,7 +655,7 @@ function SpaceExpansionPanel() {
                   transform: 'translateX(-50%)',
                 }}
               >
-                <span className={`text-[0.45rem] leading-none font-medium whitespace-nowrap
+                <span className={`text-xs leading-none font-medium whitespace-nowrap
                   ${isAcquired ? 'text-accent' : 'text-text-muted'}`}>
                   {target.name}
                 </span>
@@ -692,13 +692,13 @@ function SpaceExpansionPanel() {
       {/* Stats summary */}
       <div className="grid grid-cols-3 gap-2">
         <GlassCard padding="sm">
-          <span className="text-[0.55rem] text-text-muted uppercase tracking-wider block">Territorier</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider block">Territorier</span>
           <span className="text-sm text-text-primary font-numbers">
             {Object.values(expansionTargets).filter(t => t.acquired).length} / {visibleTargets.length}
           </span>
         </GlassCard>
         <GlassCard padding="sm">
-          <span className="text-[0.55rem] text-text-muted uppercase tracking-wider block">Stammar/s</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider block">Stammar/s</span>
           <span className="text-sm text-accent font-numbers">
             +{formatNumber(visibleTargets
               .filter(t => expansionTargets[t.id]?.acquired)
@@ -706,7 +706,7 @@ function SpaceExpansionPanel() {
           </span>
         </GlassCard>
         <GlassCard padding="sm">
-          <span className="text-[0.55rem] text-text-muted uppercase tracking-wider block">Kapital/s</span>
+          <span className="text-xs text-text-muted uppercase tracking-wider block">Kapital/s</span>
           <span className="text-sm text-accent font-numbers">
             +{formatNumber(visibleTargets
               .filter(t => expansionTargets[t.id]?.acquired)
@@ -735,10 +735,10 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium text-text-primary">{target.name}</h3>
-            {acquired && <span className="text-[0.55rem] text-accent">Etablerad</span>}
+            <h3 className="text-base font-medium text-text-primary">{target.name}</h3>
+            {acquired && <span className="text-xs text-accent">Etablerad</span>}
           </div>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed mt-1">{target.description}</p>
+          <p className="text-xs text-text-muted leading-relaxed mt-1">{target.description}</p>
 
           {/* Costs */}
           {!acquired && (
@@ -751,10 +751,10 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
 
           {/* Production */}
           <div className="flex flex-wrap gap-2 mt-2">
-            <span className="text-[0.5rem] text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
+            <span className="text-xs text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
               +{formatNumber(target.production.stammarPerSecond)} stammar/s
             </span>
-            <span className="text-[0.5rem] text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
+            <span className="text-xs text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
               +{formatNumber(target.production.kapitalPerSecond)} kapital/s
             </span>
           </div>
@@ -763,7 +763,7 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <button
             onClick={onClose}
-            className="text-[0.6rem] text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors cursor-pointer"
           >
             [X]
           </button>
@@ -775,7 +775,7 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
                 if (affordable) onBuy()
               }}
               disabled={!affordable}
-              className={`px-4 py-2 rounded-sm text-[0.65rem] font-medium border transition-all
+              className={`px-4 py-2 rounded-sm text-sm font-medium border transition-all
                 ${affordable
                   ? 'bg-accent/10 border-accent/30 text-accent hover:bg-accent/20 cursor-pointer'
                   : 'bg-bg-tertiary border-bg-tertiary text-text-muted cursor-not-allowed'
@@ -786,7 +786,7 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
           )}
 
           {acquired && (
-            <span className="text-[0.55rem] text-accent glow-text-orange">Aktiv produktion</span>
+            <span className="text-xs text-accent glow-text-orange">Aktiv produktion</span>
           )}
         </div>
       </div>
@@ -799,7 +799,7 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
 function CostBadge({ label, cost, current }: { label: string; cost: number; current: number }) {
   const enough = current >= cost
   return (
-    <span className={`text-[0.5rem] px-1.5 py-0.5 rounded font-numbers
+    <span className={`text-xs px-1.5 py-0.5 rounded font-numbers
       ${enough ? 'text-accent bg-accent/10' : 'text-danger bg-danger/10'}`}>
       {label}: {formatNumber(cost)}
     </span>

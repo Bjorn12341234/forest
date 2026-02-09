@@ -35,13 +35,13 @@ function getNodeStatus(
 }
 
 const STATUS_COLORS = {
-  locked: { border: 'rgba(85, 85, 85, 0.3)', bg: 'rgba(240, 240, 240, 0.3)', text: 'text-text-muted' },
-  available: { border: 'rgba(136, 136, 136, 0.4)', bg: 'rgba(240, 240, 240, 0.6)', text: 'text-text-secondary' },
-  affordable: { border: 'rgba(212, 115, 12, 0.5)', bg: 'rgba(240, 240, 240, 0.6)', text: 'text-text-primary' },
-  purchased: { border: 'rgba(125, 184, 64, 0.4)', bg: 'rgba(240, 240, 240, 0.5)', text: 'text-text-primary' },
+  locked: { border: 'rgba(85, 85, 85, 0.3)', bg: 'var(--color-bg-secondary)', text: 'text-text-muted' },
+  available: { border: 'rgba(136, 136, 136, 0.4)', bg: 'var(--color-bg-secondary)', text: 'text-text-secondary' },
+  affordable: { border: 'rgba(212, 115, 12, 0.5)', bg: 'var(--color-bg-secondary)', text: 'text-text-primary' },
+  purchased: { border: 'rgba(125, 184, 64, 0.4)', bg: 'var(--color-bg-secondary)', text: 'text-text-primary' },
 }
 
-const NODE_HEIGHT = 100
+const NODE_HEIGHT = 120
 const NODE_GAP = 32
 const CONNECTOR_HEIGHT = NODE_GAP
 
@@ -83,8 +83,8 @@ export function ResearchTree() {
   return (
     <div className="flex flex-col items-center gap-6 pt-4 pb-4 max-w-lg mx-auto">
       <div className="w-full">
-        <h1 className="text-lg font-medium text-text-primary mb-1 px-1">Teknikträd</h1>
-        <p className="text-xs text-text-muted px-1 mb-6">
+        <h1 className="text-xl font-medium text-text-primary mb-1 px-1">Teknikträd</h1>
+        <p className="text-sm text-text-muted px-1 mb-6">
           Modernisera avverkningen. Varje steg låser upp nästa.
         </p>
       </div>
@@ -257,35 +257,35 @@ function ResearchNode({ data, state, status, yOffset, index, isLast, onPurchase 
           {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className={`text-sm font-medium ${colors.text} truncate`}>
+              <h3 className={`text-base font-medium ${colors.text}`}>
                 {status === 'locked' ? '???' : data.name}
               </h3>
               {status === 'purchased' && (
                 <span className="w-2 h-2 rounded-full bg-success flex-shrink-0" />
               )}
               {isLast && status !== 'purchased' && (
-                <span className="text-[0.55rem] uppercase tracking-wider text-accent font-medium px-1.5 py-0.5 bg-accent/10 rounded-full border border-accent/20">
+                <span className="text-xs uppercase tracking-wider text-accent font-medium px-1.5 py-0.5 bg-accent/10 rounded-full border border-accent/20">
                   Fas 2
                 </span>
               )}
             </div>
 
-            <p className={`text-[0.65rem] ${status === 'locked' ? 'text-text-muted/50' : 'text-text-muted'} mt-0.5 leading-relaxed line-clamp-1`}>
+            <p className={`text-sm ${status === 'locked' ? 'text-text-muted/50' : 'text-text-muted'} mt-0.5 leading-relaxed`}>
               {status === 'locked' ? 'Slutför föregående forskning först' : data.description}
             </p>
 
             <div className="flex items-center justify-between mt-1">
               {status === 'purchased' ? (
-                <span className="text-xs text-success font-medium">Klar</span>
+                <span className="text-sm text-success font-medium">Klar</span>
               ) : status === 'locked' ? (
-                <span className="text-xs text-text-muted/50">Låst</span>
+                <span className="text-sm text-text-muted/50">Låst</span>
               ) : (
-                <span className={`text-xs font-numbers ${status === 'affordable' ? 'text-accent' : 'text-text-muted'}`}>
+                <span className={`text-sm font-numbers ${status === 'affordable' ? 'text-accent' : 'text-text-muted'}`}>
                   {formatNumber(cost)} {data.costResource}
                 </span>
               )}
               {status !== 'locked' && (
-                <span className="text-[0.6rem] text-text-secondary font-numbers">
+                <span className="text-xs text-text-secondary font-numbers">
                   +{data.production}/s
                 </span>
               )}

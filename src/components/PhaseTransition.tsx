@@ -106,7 +106,7 @@ export function PhaseTransition({ from, to, onComplete }: PhaseTransitionProps) 
 
         {/* Skip hint */}
         <motion.p
-          className="absolute bottom-8 text-[0.65rem] text-text-muted/40 tracking-wider"
+          className="absolute bottom-8 text-sm text-text-muted/40 tracking-wider"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3 }}

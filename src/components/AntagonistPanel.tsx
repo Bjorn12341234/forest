@@ -20,8 +20,8 @@ export function AntagonistPanel() {
 
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-sm font-medium text-danger">Motstandare</h2>
-      <p className="text-[0.6rem] text-text-muted -mt-2">
+      <h2 className="text-base font-medium text-danger">Motståndare</h2>
+      <p className="text-xs text-text-muted -mt-2">
         Krafter som motverkar industrin. Neutralisera dem — eller lid konsekvenserna.
       </p>
 
@@ -76,18 +76,18 @@ function AntagonistRow({ data, countered, kapital, lobby, onCounter }: {
         <span className="text-lg flex-shrink-0 mt-0.5">{data.icon}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className={`text-xs font-medium ${countered ? 'text-text-muted line-through' : 'text-danger'}`}>
+            <span className={`text-sm font-medium ${countered ? 'text-text-muted line-through' : 'text-danger'}`}>
               {data.name}
             </span>
-            {countered && <span className="text-[0.55rem] text-success">Neutraliserad</span>}
+            {countered && <span className="text-xs text-success">Neutraliserad</span>}
           </div>
-          <p className="text-[0.55rem] text-text-muted leading-relaxed">{data.description}</p>
+          <p className="text-xs text-text-muted leading-relaxed">{data.description}</p>
 
           {/* Tick effects */}
           {!countered && (
             <div className="flex flex-wrap gap-1 mt-1">
               {data.tickEffects.map((eff, i) => (
-                <span key={i} className="text-[0.5rem] text-danger bg-danger/10 px-1.5 py-0.5 rounded">
+                <span key={i} className="text-xs text-danger bg-danger/10 px-1.5 py-0.5 rounded">
                   {eff.description}
                 </span>
               ))}
@@ -102,7 +102,7 @@ function AntagonistRow({ data, countered, kapital, lobby, onCounter }: {
                 if (canAfford) onCounter()
               }}
               disabled={!canAfford}
-              className={`mt-2 px-3 py-1.5 rounded-sm text-[0.6rem] font-medium border transition-all
+              className={`mt-2 px-3 py-1.5 rounded-sm text-xs font-medium border transition-all
                 ${canAfford
                   ? 'bg-accent/10 border-accent/30 text-accent hover:bg-accent/20 cursor-pointer'
                   : 'bg-bg-tertiary border-bg-tertiary text-text-muted cursor-not-allowed'
@@ -112,7 +112,7 @@ function AntagonistRow({ data, countered, kapital, lobby, onCounter }: {
             </button>
           )}
           {!countered && (
-            <p className="text-[0.45rem] text-text-muted/60 mt-1 italic">{data.counterDescription}</p>
+            <p className="text-xs text-text-muted/60 mt-1 italic">{data.counterDescription}</p>
           )}
         </div>
       </div>

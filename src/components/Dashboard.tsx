@@ -49,11 +49,11 @@ export function Dashboard() {
       {/* Phase Progress */}
       <GlassCard padding="sm">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-medium text-text-primary">
+          <span className="text-sm font-medium text-text-primary">
             Fas {phase}: {phaseName}
           </span>
           {nextThreshold !== Infinity && (
-            <span className="text-[0.6rem] text-text-muted font-numbers">
+            <span className="text-xs text-text-muted font-numbers">
               {formatNumber(totalStammar)} / {formatNumber(nextThreshold)}
             </span>
           )}
@@ -93,7 +93,7 @@ function ResourceCard({ label, value, format, className = '' }: ResourceCardProp
   return (
     <GlassCard padding="sm">
       <div className="flex flex-col gap-0.5">
-        <span className="text-text-muted text-[0.6rem] uppercase tracking-wider">
+        <span className="text-text-muted text-xs uppercase tracking-wider">
           {label}
         </span>
         <AnimatedNumber

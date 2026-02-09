@@ -47,7 +47,7 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
               <span className={`text-xl ${isLocked ? 'grayscale' : ''}`}>
                 {tab.icon}
               </span>
-              <span className={`text-[0.65rem] font-medium tracking-wide uppercase ${
+              <span className={`text-xs font-medium tracking-wide uppercase ${
                 isActive ? 'text-accent' : isLocked ? 'text-text-muted' : 'text-text-secondary'
               }`}>
                 {isLocked ? '???' : tab.label}

@@ -48,7 +48,7 @@ export function UpgradeList() {
     <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
       {Object.entries(grouped).map(([tree, treeUpgrades]) => (
         <div key={tree}>
-          <h2 className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-2 px-1">
+          <h2 className="text-sm font-medium text-text-secondary uppercase tracking-wider mb-2 px-1">
             {tree}
           </h2>
           <div className="flex flex-col gap-2">
