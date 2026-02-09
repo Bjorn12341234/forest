@@ -41,9 +41,9 @@ export function Dashboard() {
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
       {/* Top Resource Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <ResourceCard label="Stammar" value={stammar} format={formatNumber} className="text-accent" />
+        <ResourceCard label="Stammar" value={stammar} format={formatNumber} />
         <ResourceCard label="Kapital" value={kapital} format={n => `${formatNumber(n)} Mkr`} />
-        <ResourceCard label="Grön Image\u2122" value={image} className="text-accent-green" />
+        <ResourceCard label="Grön Image™" value={image} className="text-accent-green" />
         {phase >= 2 && (
           <ResourceCard label="Politiskt Kapital" value={lobby} />
         )}

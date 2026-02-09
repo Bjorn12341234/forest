@@ -5,12 +5,32 @@
 type EventCategory = string
 
 let audioCtx: AudioContext | null = null
+let userHasInteracted = false
 
-function getContext(): AudioContext {
+// Register once: enable audio after first user gesture
+if (typeof window !== 'undefined') {
+  const enableAudio = () => {
+    userHasInteracted = true
+    window.removeEventListener('click', enableAudio)
+    window.removeEventListener('touchstart', enableAudio)
+    window.removeEventListener('keydown', enableAudio)
+    // If ambient was waiting, start it now
+    if (pendingAmbientPhase > 0) {
+      startAmbient(pendingAmbientPhase)
+    }
+  }
+  window.addEventListener('click', enableAudio)
+  window.addEventListener('touchstart', enableAudio)
+  window.addEventListener('keydown', enableAudio)
+}
+
+let pendingAmbientPhase = 0
+
+function getContext(): AudioContext | null {
+  if (!userHasInteracted) return null
   if (!audioCtx) {
     audioCtx = new AudioContext()
   }
-  // Resume if suspended (browser autoplay policy)
   if (audioCtx.state === 'suspended') {
     audioCtx.resume()
   }
@@ -33,10 +53,11 @@ export function getSfxVolume(): number {
 
 export function setAmbientVolume(vol: number) {
   ambientVolume = Math.max(0, Math.min(1, vol))
-  if (ambientMasterGain) {
+  const ctx = getContext()
+  if (ambientMasterGain && ctx) {
     ambientMasterGain.gain.setTargetAtTime(
       masterMuted ? 0 : ambientVolume * 0.08,
-      getContext().currentTime,
+      ctx.currentTime,
       0.1
     )
   }
@@ -48,10 +69,11 @@ export function getAmbientVolume(): number {
 
 export function setMuted(muted: boolean) {
   masterMuted = muted
-  if (ambientMasterGain) {
+  const ctx = getContext()
+  if (ambientMasterGain && ctx) {
     ambientMasterGain.gain.setTargetAtTime(
       muted ? 0 : ambientVolume * 0.08,
-      getContext().currentTime,
+      ctx.currentTime,
       0.1
     )
   }
@@ -72,6 +94,7 @@ export function playClick() {
   if (vol === 0) return
 
   const ctx = getContext()
+  if (!ctx) return
   const now = ctx.currentTime
 
   // In Phase 7, click becomes an EKG pip
@@ -122,6 +145,7 @@ export function playPurchase() {
   if (vol === 0) return
 
   const ctx = getContext()
+  if (!ctx) return
   const now = ctx.currentTime
 
   // Ascending two-tone — "upgrade acquired" feel
@@ -159,6 +183,7 @@ export function playEventByCategory(category: EventCategory) {
   if (vol === 0) return
 
   const ctx = getContext()
+  if (!ctx) return
   const now = ctx.currentTime
 
   switch (category) {
@@ -323,6 +348,7 @@ export function playAchievement() {
   if (vol === 0) return
 
   const ctx = getContext()
+  if (!ctx) return
   const now = ctx.currentTime
 
   // Triumphant ascending fanfare
@@ -352,6 +378,7 @@ export function playPhaseTransition() {
   if (vol === 0) return
 
   const ctx = getContext()
+  if (!ctx) return
   const now = ctx.currentTime
 
   // Deep rumble + rising tone — dramatic shift
@@ -425,10 +452,15 @@ function cleanupAmbientNodes() {
 }
 
 export function startAmbient(phase: number) {
+  if (!userHasInteracted) {
+    pendingAmbientPhase = phase
+    return
+  }
   if (phase === currentAmbientPhase && ambientMasterGain) return
   stopAmbient()
 
   const ctx = getContext()
+  if (!ctx) return
   const now = ctx.currentTime
 
   // Master gain for all ambient layers
