@@ -28,7 +28,7 @@ const POST_CREDITS: string[] = [
 ]
 
 export function EndScreen({ onReset, onContinue }: EndScreenProps) {
-  const [stage, setStage] = useState<'reveal' | 'postcredits'>('reveal')
+  const [stage, setStage] = useState<'reveal' | 'postcredits' | 'reality'>('reveal')
   const [revealStep, setRevealStep] = useState(0)
   const [showReset, setShowReset] = useState(false)
   const [creditScroll, setCreditScroll] = useState(false)
@@ -81,6 +81,10 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
   const omnibus = lobbyProjects['lobby_buy_omnibus']?.purchased
   const antagonistsCountered = Object.values(antagonists).filter(a => a.countered).length
 
+  if (stage === 'reality') {
+    return <RealityPage onContinue={onContinue} onReset={onReset} />
+  }
+
   if (stage === 'postcredits') {
     return (
       <motion.div
@@ -118,7 +122,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             className="mt-12 flex flex-col gap-6 items-center"
           >
             <button
-              onClick={onContinue}
+              onClick={() => setStage('reality')}
               className="px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
             >
               FORTS\u00c4TT EXPANDERA
@@ -314,5 +318,161 @@ function StatusLine({ label, status, bought }: {
         {status}
       </span>
     </div>
+  )
+}
+
+// ── Reality Page ──
+
+const REALITY_SECTIONS: { heading: string; text: string }[] = [
+  {
+    heading: 'Det h\u00e4r var ett spel. Det h\u00e4r \u00e4r inte det.',
+    text: 'Allt du just spelade \u00e4r en satir. Men den bygger p\u00e5 verkligheten. Svensk skogsindustri \u00e4r en av de m\u00e4ktigaste lobbygrupperna i Europa \u2014 och det som h\u00e4nder i v\u00e5ra skogar \u00e4r n\u00e5got de flesta aldrig ser.',
+  },
+  {
+    heading: 'Kalhyggesbruket',
+    text: 'Cirka 95% av all avverkning i Sverige \u00e4r kalhyggen. Hela skogsekosystem j\u00e4mnas med marken. Det som planteras \u00e4r monokulturer av gran i raka rader \u2014 biologiska \u00f6knar d\u00e4r n\u00e4stan ingenting annat lever. \u00d6ver 2\u00a0000 skogslevande arter \u00e4r r\u00f6dlistade i Sverige. Gammelskogen, den som aldrig kalhuggits, utg\u00f6r idag under 5% av den produktiva skogsmarken.',
+  },
+  {
+    heading: 'Lobbyn',
+    text: 'Skogsindustrierna och LRF Skogsägarna \u00e4r bland Sveriges mest inflytelserika lobbyorganisationer. De har systematiskt format ber\u00e4ttelsen om att svenskt skogsbruk \u00e4r \"h\u00e5llbart\" och \"klimatsmart\" \u2014 trots att oberoende forskning g\u00e5ng p\u00e5 g\u00e5ng visar motsatsen. Budskapen genomsyrar l\u00e4romedel, myndighetstexter och politiska debatter.',
+  },
+  {
+    heading: 'Sv\u00e4ngd\u00f6rren',
+    text: 'F\u00f6re detta politiker och myndighetschefer rekryteras regelbundet av skogsindustrin, och personer fr\u00e5n industrin hamnar i nyckelpositioner p\u00e5 myndigheter. Det skapar en kultur d\u00e4r reglering och kontroll systematiskt f\u00f6rsvagas inifr\u00e5n. Skogsstyrelsen, som ska sk\u00f6ta tillsynen, har f\u00e5tt sin budget sk\u00e4ren g\u00e5ng p\u00e5 g\u00e5ng.',
+  },
+  {
+    heading: 'EU och Sverige',
+    text: 'Sverige har aktivt motarbetat EU:s milj\u00f6lagstiftning som ber\u00f6r skog. Restaureringsf\u00f6rordningen, taxonomin, avskogningsf\u00f6rordningen \u2014 Sverige har i varje fall lobbat f\u00f6r undantag och utsp\u00e4dning, ofta p\u00e5 direkt beg\u00e4ran fr\u00e5n skogsindustrin. N\u00e4r EU f\u00f6reslog att kalhyggesbruk inte skulle klassas som h\u00e5llbart, reagerade den svenska regeringen som om det vore ett angrepp p\u00e5 nationen.',
+  },
+  {
+    heading: 'Kina och snabbprodukter',
+    text: 'En stor del av det svenska virket exporteras som r\u00e5vara eller halvfabrikat \u2014 ofta till Kina, d\u00e4r det blir engångsprodukter, pappersf\u00f6rpackningar och viskostyg till snabbmode. Tr\u00e4d som tog 60\u2013100 \u00e5r att v\u00e4xa f\u00f6rvandlas till produkter som anv\u00e4nds i minuter. Toalettpapper, n\u00e4sdukar, kartonger. Mer\u00e4rdet f\u00f6rsvinner utomlands. Kvar i Sverige finns kahyggena.',
+  },
+  {
+    heading: 'Det finns andra s\u00e4tt',
+    text: 'Hyggesfritt skogsbruk \u2014 kontinuitetsskogsbruk \u2014 beh\u00e5ller skogens struktur och ekologiska funktioner medan man fortfarande producerar virke. Selektiv avverkning, l\u00e4ngre omloppstider och fokus p\u00e5 h\u00f6gv\u00e4rdiga massivtr\u00e4produkter ist\u00e4llet f\u00f6r massa och papper ger b\u00e5de b\u00e4ttre ekonomi f\u00f6r skogs\u00e4garen och b\u00e4ttre koldioxidlagring p\u00e5 l\u00e5ng sikt. Det lagrar kol i byggmaterial i \u00e5rhundraden ist\u00e4llet f\u00f6r att elda upp det eller g\u00f6ra engångsprodukter.',
+  },
+  {
+    heading: 'Samerna',
+    text: 'Kalhyggesbruket sl\u00e5r h\u00e5rt mot rensk\u00f6tande samer. Marklavar, som renar \u00e4r beroende av f\u00f6r vinterbete, beh\u00f6ver 50\u2013100 \u00e5r f\u00f6r att \u00e5terh\u00e4mta sig efter en kalavverkning. Industrins avverkningsplaner g\u00f6rs ofta utan samr\u00e5d med samebyar. Urfolksr\u00e4ttigheterna hamnar konsekvent under industrins ekonomiska intressen.',
+  },
+  {
+    heading: 'Klimatet',
+    text: 'Industrin h\u00e4vdar att skogsbruket \u00e4r \"klimatpositivt\". Men kalhyggen frig\u00f6r enorma m\u00e4ngder markbundet kol, och det tar \u00e5rtionden innan nyplanterad skog b\u00f6rjar ta upp kol netto. N\u00e4r virket g\u00e5r till kortlivade produkter som eldas eller komposteras, \u00e5terv\u00e4nder kolet till atmosf\u00e4ren snabbt. Bokf\u00f6ringen som anv\u00e4nds f\u00f6r att visa \"klimatnytta\" har kritiserats av forskare internationellt.',
+  },
+]
+
+function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset: () => void }) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-[200] overflow-y-auto"
+      style={{ background: '#0A0A0A' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2 }}
+    >
+      <div className="max-w-lg mx-auto px-6 py-16">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1.5 }}
+          className="mb-16 text-center"
+        >
+          <div className="w-12 h-px bg-white/20 mx-auto mb-8" />
+          <p
+            className="text-[0.6rem] tracking-[0.4em] text-white/30 mb-3 uppercase"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            V\u00e4nta.
+          </p>
+          <p
+            className="text-[0.6rem] tracking-[0.3em] text-white/30"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            Innan du forts\u00e4tter.
+          </p>
+        </motion.div>
+
+        {/* Fact sections */}
+        {REALITY_SECTIONS.map((section, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5 + i * 0.3, duration: 0.8 }}
+            className="mb-10"
+          >
+            <h3
+              className={`text-sm font-bold mb-3 ${i === 0 ? 'text-white' : 'text-white/80'}`}
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+            >
+              {section.heading}
+            </h3>
+            <p
+              className="text-xs leading-relaxed text-white/50"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+            >
+              {section.text}
+            </p>
+            {i < REALITY_SECTIONS.length - 1 && (
+              <div className="w-8 h-px bg-white/10 mt-10" />
+            )}
+          </motion.div>
+        ))}
+
+        {/* Call to action */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 + REALITY_SECTIONS.length * 0.3 + 0.5, duration: 1 }}
+          className="mt-16 mb-8 text-center"
+        >
+          <div className="w-12 h-px bg-white/20 mx-auto mb-10" />
+
+          <p
+            className="text-xs text-white/60 leading-relaxed mb-2"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            Vill du veta mer? St\u00f6d de som k\u00e4mpar f\u00f6r skogen:
+          </p>
+
+          <a
+            href="https://naturhansyn.se/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-4 mb-12 px-6 py-3 border border-white/30 text-white text-xs font-bold tracking-[0.15em] no-underline hover:bg-white/10 transition-colors"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            F\u00d6RENINGEN NATURH\u00c4NSYN
+          </a>
+
+          <p
+            className="text-[0.55rem] text-white/25 leading-relaxed mb-12"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            naturhansyn.se
+          </p>
+
+          <div className="w-8 h-px bg-white/10 mx-auto mb-10" />
+
+          <div className="flex flex-col gap-4 items-center">
+            <button
+              onClick={onContinue}
+              className="px-8 py-3 bg-white/10 text-white/70 text-xs font-bold tracking-wider cursor-pointer border border-white/20 hover:bg-white/20 transition-colors"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+            >
+              FORTS\u00c4TT SPELA
+            </button>
+            <button
+              onClick={onReset}
+              className="px-4 py-1 bg-transparent text-white/20 text-[0.5rem] tracking-wider cursor-pointer border-none hover:text-white/40 transition-colors"
+            >
+              starta om
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
   )
 }
