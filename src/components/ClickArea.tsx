@@ -10,13 +10,13 @@ import { GlassCard } from './ui/GlassCard'
 
 // Flavourtext changes with phase progression
 const CLICK_FLAVOUR: Record<number, string> = {
-  1: 'Du skriver en skogsbruksplan at en pensionerad larare i Angermanland. Gratis, saklart.',
-  2: 'Du rekommenderar "foryngringsavverkning" \u2014 det later ju battre an "kalavverkning".',
-  3: 'Planen foreslar gallring. Av det fina virket. Skrapet lamnar du kvar. Agaren marker inget.',
-  4: 'Avverkningsanmalan inskickad. Skogsstyrelsen hinner inte granska. Perfekt.',
-  5: 'Planen skrivs nu av en AI. Agaren far ett mail. Skordaren ar redan pa plats.',
-  6: 'Det finns inga agare kvar att skriva planer at. AI:n optimerar anda. Av gammal vana.',
-  7: 'Klick. Pip. Stammar raknas. Universum ar en produktionsskog. Du ar ett nummer.',
+  1: 'Du skriver en skogsbruksplan åt en pensionerad lärare i Ångermanland. Gratis, såklart.',
+  2: 'Du rekommenderar "föryngringsavverkning" \u2014 det låter ju bättre än "kalavverkning".',
+  3: 'Planen föreslår gallring. Av det fina virket. Skrapet lämnar du kvar. Ägaren märker inget.',
+  4: 'Avverkningsanmälan inskickad. Skogsstyrelsen hinner inte granska. Perfekt.',
+  5: 'Planen skrivs nu av en AI. Ägaren får ett mail. Skördaren är redan på plats.',
+  6: 'Det finns inga ägare kvar att skriva planer åt. AI:n optimerar ändå. Av gammal vana.',
+  7: 'Klick. Pip. Stammar räknas. Universum är en produktionsskog. Du är ett nummer.',
 }
 
 export function ClickArea() {
@@ -62,7 +62,7 @@ export function ClickArea() {
         <div className="text-text-secondary text-xs uppercase tracking-wider mb-1">Stammar</div>
         <AnimatedNumber
           value={stammar}
-          className="font-display text-accent"
+          className="font-display text-text-primary"
         />
         <div className="flex gap-4 justify-center mt-1">
           <span className="text-text-muted text-xs">
@@ -85,15 +85,12 @@ export function ClickArea() {
           whileHover={{ scale: 1.03 }}
           onClick={handleClick}
           className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
-                     border-2 border-accent bg-accent/10
+                     border-2 border-text-secondary bg-bg-secondary
                      flex items-center justify-center
-                     animate-pulse-glow"
-          style={{
-            background: 'radial-gradient(circle at 40% 40%, rgba(212, 115, 12, 0.2) 0%, rgba(212, 115, 12, 0.05) 60%, transparent 80%)',
-          }}
+                     hover:border-text-primary transition-colors"
         >
-          <div className="absolute inset-2 rounded-full border border-accent/20" />
-          <span className="text-accent font-bold text-sm sm:text-base text-center leading-tight px-4">
+          <div className="absolute inset-2 rounded-full border border-text-secondary/30" />
+          <span className="text-text-primary font-bold text-sm sm:text-base text-center leading-tight px-4">
             SKRIV{'\n'}SKOGSBRUKS-{'\n'}PLAN
           </span>
         </motion.button>
@@ -134,7 +131,7 @@ export function ClickArea() {
                     </div>
                     <div className="text-right flex-shrink-0">
                       {purchased ? (
-                        <span className="text-[0.6rem] text-success">Kopt</span>
+                        <span className="text-[0.6rem] text-success">Köpt</span>
                       ) : (
                         <span className={`text-[0.65rem] font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
                           {formatNumber(cu.cost)} Mkr

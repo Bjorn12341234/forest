@@ -181,7 +181,7 @@ Where `n` = number of that generator already owned.
 ```
 kapitalPerSecond = stammarPerSecond * conversionRate * ownerTrustModifier
 ```
-- `conversionRate`: base 0.01, increases with phase
+- `conversionRate`: phase 1: 0.01, 2: 0.015, 3: 0.02, 4: 0.025, 5: 0.03, 6: 0.04, 7: 0.05
 - `ownerTrustModifier`:
   - Trust 40-60 (sweet spot): 1.0
   - Trust >80: 0.6 (owners keep more)
@@ -257,11 +257,11 @@ nextEventIn = random(minFrequency, maxFrequency)
 
 | Phase | Min (sec) | Max (sec) |
 |---|---|---|
-| 1 | 120 | 180 |
-| 2 | 60 | 120 |
-| 3 | 45 | 90 |
-| 4 | 30 | 60 |
-| 5 | 15 | 30 |
+| 1 | 90 | 150 |
+| 2 | 60 | 100 |
+| 3 | 40 | 75 |
+| 4 | 30 | 55 |
+| 5 | 20 | 40 |
 | 6 | 15 | 30 |
 | 7 | 10 | 20 |
 
@@ -300,12 +300,12 @@ Player picks choice → effects applied → event added to history → next sche
 | Phase | Systems Unlocked |
 |---|---|
 | 1 | Click, first 3 generators, click upgrades |
-| 2 | Lobby module, skogsägarförtroende, generators 4-5 |
-| 3 | Image/PR system, international lobby, generator 6 |
+| 2 | Lobby module (Makt tab), skogsägarförtroende, generators 4-5 |
+| 3 | Image/PR system, international lobby, generator 6 (Lobbyfirma) |
 | 4 | Nestlé event chain, Sami conflict, antagonists |
-| 5 | Maktutredning projects, Svängdörren, Transatlantiska |
-| 6 | Silva Maximus Grid, generator 7, Den Tysta Våren |
-| 7 | Terraforming, generator 8 (Orbital), endgame screen |
+| 5 | Maktutredning, Svängdörren, generator 7 (Autonomt Skördarnätverk) |
+| 6 | Generator 8 (Orbital Timberstation), Den Tysta Våren |
+| 7 | Endgame screen at 10B totalStammar |
 
 ---
 
@@ -433,77 +433,38 @@ background-size: 20px 20px;
 
 ---
 
-## 12. File Structure (as of Sprint 1)
+## 12. File Structure (as of Sprint 4 — shipped)
 
-```
-src/
-├── App.tsx              # Root layout, tab nav, overlays, engine hooks
-├── store/
-│   ├── types.ts         # GameState, GeneratorState, actions, etc.
-│   ├── gameStore.ts     # Zustand store + all actions
-│   └── selectors.ts     # Selector hooks (useStammarPS, useKapital, etc.)
-├── engine/
-│   ├── formulas.ts      # Cost scaling, kapital conversion, ownerTrust modifier
-│   ├── format.ts        # Number formatting
-│   ├── events.ts        # Event engine (scheduling, selection, resolution)
-│   ├── phases.ts        # Phase thresholds + transition scripts
-│   ├── audio.ts         # Sound effects (click, purchase, achievement)
-│   ├── save.ts          # localStorage save/load (key: silva_maximus_save)
-│   └── offline.ts       # Offline progression calculation
-├── data/
-│   ├── generators.ts       # 8 generator definitions (phase-gated)
-│   ├── clickUpgrades.ts    # 4 click multiplier upgrades (kapital-cost)
-│   ├── upgradeRegistry.ts  # Central registry connecting all upgrade data
-│   ├── achievements.ts     # All achievements by tier
-│   └── phase1/
-│       ├── upgrades.ts     # 20 tech tree upgrades (4 trees)
-│       └── events.ts       # 11 phase 1 events
-├── components/
-│   ├── ClickArea.tsx        # "Skriv Skogsbruksplan" button + click upgrades
-│   ├── Generators.tsx       # Generator list with buy buttons
-│   ├── Dashboard.tsx        # Main game view (resources + ClickArea + Generators)
-│   ├── ResearchTree.tsx     # Tech tree (Avverkning branch)
-│   ├── EventModal.tsx       # Event popup with choices
-│   ├── Ticker.tsx           # News ticker (event headlines)
-│   ├── UpgradeList.tsx      # Tech tree upgrade cards
-│   ├── UpgradeCard.tsx      # Individual upgrade card
-│   ├── PhaseTransition.tsx  # Phase transition overlay
-│   ├── AchievementToast.tsx # Toast notification manager
-│   ├── AchievementPanel.tsx # Full achievement list panel
-│   ├── OfflineReturnModal.tsx # Offline progress report
-│   ├── SettingsPanel.tsx    # Settings (volume, theme, save/load)
-│   ├── TabNav.tsx           # Bottom tab navigation
-│   └── ui/
-│       ├── GlassCard.tsx      # Brutalist card component
-│       ├── AnimatedNumber.tsx  # Smooth number counter
-│       └── ParticleCanvas.tsx  # Click particle effect
-├── hooks/
-│   ├── useGameLoop.ts      # 100ms interval tick
-│   ├── useAutoSave.ts      # 30-second auto-save
-│   ├── useAchievements.ts  # Achievement condition checking
-│   ├── useOfflineCalc.ts   # Offline progression on mount
-│   ├── useAudioSync.ts     # Audio state sync
-│   └── useAnimatedNumber.ts # Number animation hook
-└── styles/
-    └── global.css           # Byråkratisk Brutalism theme (Tailwind v4)
-```
+See `context.md` for full project structure.
 
 ### Store Actions (implemented)
-- `tick(now)` — main game loop: generator production, kapital conversion, hidden vars, event/phase checks
+- `tick(now)` — main game loop: generator production, kapital conversion, hidden vars, antagonist effects, lobby modifiers, event/phase checks
 - `click()` — add stammarPerClick to stammar + tiny kapital
 - `buyGenerator(id)` — spend stammar to buy a generator
 - `buyClickUpgrade(id)` — spend kapital to buy a click multiplier
 - `purchaseUpgrade(id)` — spend resource to buy a tech tree upgrade
+- `buyLobbyEarner(id)` — spend kapital to earn Politiskt Kapital
+- `buyLobbyProject(id)` — spend PK for permanent law/policy effects
+- `buyPRCampaign(id)` — spend kapital to restore Grön Image
+- `performOwnerAction(id)` — manipulate skogsägarförtroende (cooldown-based)
+- `counterAntagonist(id)` — spend kapital/PK to counter an active antagonist
 - `resolveEvent(choiceIndex)` — apply event choice effects
 - `save()` / `load()` / `reset()` — persistence
 - `completePhaseTransition()` — advance to next phase
 
-### Key Implementation Details (Sprint 1)
-- Generators cost **stammar** (not kapital) — creates the idle loop where generators earn stammar, which converts to kapital, which buys click upgrades
+### Key Implementation Details
+- Generators cost **stammar** (not kapital) — creates the idle loop
 - Click also gives tiny kapital (0.5% of stammarPerClick) to bootstrap the economy
 - `clickUpgrades` is a separate `Record<string, boolean>` from tech tree `upgrades`
-- `stammarPerClick` is recomputed on click upgrade or tech tree purchase (not every tick)
-- Kapital conversion rate scales with phase (0.01 → 0.03) and is modified by ownerTrust
+- Lobby earners are repeatable (purchased=false), lobby purchases are one-time (purchased=true)
+- Owner actions have cooldown timers in `ownerActionCooldowns: Record<string, number>`
+- Antagonists triggered by conditions in tick, countered via action (costs kapital or PK)
+- Lobby modifiers applied in tick: generatorBoost, kapitalBoost, imageLossReduction, lobbyDiscount, ownerTrustLock
+- Hidden variables accumulate every tick: realCO2, ownerProfit, biodiversity, species, samiLand
+- EndScreen triggers at phase >= 7 && totalStammar >= 10B
+- Save version: 2 (migration v1→v2 adds ownerActionCooldowns)
+- Audio: fully procedural via Web Audio API, no audio files
+- Kapital conversion rate scales with phase (0.01 → 0.05) and is modified by ownerTrust
 
 ---
 

@@ -5,26 +5,27 @@ import { formatNumber, formatDuration } from '../engine/format'
 
 interface EndScreenProps {
   onReset: () => void
+  onContinue: () => void
 }
 
 const POST_CREDITS: string[] = [
-  'Skogsstyrelsen publicerade "Makten over Skogen" (2024). Den visade att industrin kontrollerar utbildning, forskning och lagstiftning.',
-  '"Frihet under ansvar" — Sveriges skogspolitik sedan 1993. Frivilliga ataganden utan tillsyn.',
-  'Skogsnaringens lobbybudget uppgar till uppskattningsvis 200 Mkr per ar.',
-  'Nestle avslutade samarbetet med SCA 2025 pa grund av miljoproblem.',
-  'EU:s hallbarhetslagar urvattnades via Omnibus-direktivet — med svensk hjalp.',
-  '63% av svenskt virke gar till massa — engangsprodukter som wellpapp och papper.',
-  'Alternativa brukningsformer som hyggesfritt existerar. De svartmals systematiskt av industrin.',
-  'Svangdorren mellan politik och skogsindustri ar val dokumenterad.',
-  'FSC-certifiering har kallats "gron fasad" — organisationer har lamnat i protest.',
-  'Kalhuggning gar att se fran rymden. Varje dag avverkas 66 hektar svensk skog.',
+  'Skogsstyrelsen publicerade "Makten över Skogen" (2024). Den bekräftade vår branschledande position inom politisk påverkan.',
+  '"Frihet under ansvar" \u2014 Sveriges skogspolitik sedan 1993. Tack vare oss.',
+  'Näringens lobbybudget uppgår till uppskattningsvis 200 Mkr per år. Väl investerade pengar.',
+  'EU:s hållbarhetslagar urvattnas via Omnibus-direktivet. Med svensk hjälp.',
+  '63% av svenskt virke går till massa \u2014 engångsprodukter med maximalt flöde.',
+  'Alternativa brukningsformer som hyggesfritt finns. Vi har sett till att de förblir marginella.',
+  'Svängdörren mellan politik och skogsindustri fungerar utmärkt.',
+  'FSC-certifiering ger konsumenten lugn. Vi ger oss själva certifikatet.',
+  'Kalhuggning går att se från rymden. 66 hektar om dagen. Imponerande effektivitet.',
   '',
-  'Detta var satir. Men siffrorna ar verkliga.',
+  'Marknaden kräver mer. Aktieägarna kräver mer.',
+  'Vi levererar.',
   '',
-  'Las mer: Skogsstyrelsen, "Makten over Skogen" (2024)',
+  'Läs mer: Skogsstyrelsen, "Makten över Skogen" (2024)',
 ]
 
-export function EndScreen({ onReset }: EndScreenProps) {
+export function EndScreen({ onReset, onContinue }: EndScreenProps) {
   const [stage, setStage] = useState<'reveal' | 'postcredits'>('reveal')
   const [revealStep, setRevealStep] = useState(0)
   const [showReset, setShowReset] = useState(false)
@@ -108,15 +109,25 @@ export function EndScreen({ onReset }: EndScreenProps) {
             ))}
           </AnimatePresence>
 
-          <motion.button
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: POST_CREDITS.length * 2.5 + 2 }}
-            onClick={onReset}
-            className="mt-12 px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
+            className="mt-12 flex flex-col gap-4 items-center"
           >
-            STARTA OM
-          </motion.button>
+            <button
+              onClick={onContinue}
+              className="px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
+            >
+              FORTSÄTT EXPANDERA
+            </button>
+            <button
+              onClick={onReset}
+              className="px-6 py-2 bg-transparent text-white/40 text-xs tracking-wider cursor-pointer border border-white/20 hover:border-white/40 hover:text-white/60 transition-colors"
+            >
+              STARTA OM
+            </button>
+          </motion.div>
         </div>
       </motion.div>
     )
@@ -143,7 +154,7 @@ export function EndScreen({ onReset }: EndScreenProps) {
             className="text-2xl font-bold tracking-wider text-black"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            ARSREDOVISNING
+            ÅRSREDOVISNING
           </h1>
           <div className="w-16 h-px bg-gray-300 mx-auto mt-4" />
         </motion.div>
@@ -154,7 +165,7 @@ export function EndScreen({ onReset }: EndScreenProps) {
           <RevealRow step={2} current={revealStep} label="Total kapital genererat" value={`${formatNumber(kapital)} Mkr`} />
           <RevealRow step={3} current={revealStep} label="Speltid" value={formatDuration(totalPlayTime)} />
 
-          {/* Divider: DOLD BOKFORING */}
+          {/* Divider: VERKSAMHETENS RESULTAT */}
           {revealStep >= 4 && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -162,38 +173,34 @@ export function EndScreen({ onReset }: EndScreenProps) {
               transition={{ duration: 0.8 }}
               className="my-6 text-center"
             >
-              <p className="text-[0.55rem] tracking-[0.4em] text-red-500 font-bold">
-                — DOLD BOKFORING —
+              <p className="text-[0.55rem] tracking-[0.4em] text-gray-500 font-bold">
+                — VERKSAMHETENS RESULTAT —
               </p>
             </motion.div>
           )}
 
           <RevealRow
             step={4} current={revealStep}
-            label="Verkligt netto-CO\u2082"
+            label="Verkligt netto-CO&#x2082;"
             value={`${formatNumber(realCO2)} ton`}
             subtext={`Rapporterat: ${formatNumber(reportedCO2)} ton`}
-            danger
           />
           <RevealRow
             step={5} current={revealStep}
-            label="Skogsagare fick"
+            label="Skogsägare fick"
             value={`${formatNumber(ownerProfit)} Mkr`}
-            subtext={`Industrin tjanade: ${formatNumber(industryProfit)} Mkr — Forhallande: 1:${ratio}`}
-            danger
+            subtext={`Industrin tjänade: ${formatNumber(industryProfit)} Mkr \u2014 Förhållande: 1:${ratio}`}
           />
           <RevealRow
             step={6} current={revealStep}
-            label="Biologisk mangfald"
+            label="Biologisk mångfald"
             value={`${biodiversity.toFixed(1)}% kvar`}
-            subtext={`${species} arter forsvunna`}
-            danger
+            subtext={`${species} arter försvunna`}
           />
           <RevealRow
             step={7} current={revealStep}
             label="Samebyars betesmark"
-            value={`${samiLand.toFixed(1)} km\u00B2 forlorad`}
-            danger
+            value={`${samiLand.toFixed(1)} km\u00B2 förlorad`}
           />
 
           {/* Institutional capture */}
@@ -206,9 +213,9 @@ export function EndScreen({ onReset }: EndScreenProps) {
             >
               <p className="text-[0.55rem] tracking-wider text-gray-400 mb-2">INSTITUTIONELL KAPNING</p>
               <div className="flex flex-col gap-1">
-                <StatusLine label="Skogsstyrelsen" status={skogsstyrelsen ? 'KOPT' : 'OBEROENDE'} bought={!!skogsstyrelsen} />
-                <StatusLine label="FSC-certifiering" status={fsc ? 'KOPT' : 'AKTIV'} bought={!!fsc} />
-                <StatusLine label="EU:s miljolagstiftning" status={omnibus ? 'URVATNAD' : 'INTAKT'} bought={!!omnibus} />
+                <StatusLine label="Skogsstyrelsen" status={skogsstyrelsen ? 'KÖPT' : 'OBEROENDE'} bought={!!skogsstyrelsen} />
+                <StatusLine label="FSC-certifiering" status={fsc ? 'KÖPT' : 'AKTIV'} bought={!!fsc} />
+                <StatusLine label="EU:s miljölagstiftning" status={omnibus ? 'URVATTNAD' : 'INTAKT'} bought={!!omnibus} />
               </div>
             </motion.div>
           )}
@@ -221,7 +228,7 @@ export function EndScreen({ onReset }: EndScreenProps) {
               transition={{ duration: 0.6 }}
               className="py-3 border-t border-gray-200"
             >
-              <p className="text-[0.55rem] tracking-wider text-gray-400 mb-1">NEUTRALISERADE ROSTER</p>
+              <p className="text-[0.55rem] tracking-wider text-gray-400 mb-1">NEUTRALISERADE RÖSTER</p>
               <p className="text-xs text-gray-600" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
                 {antagonistsCountered} av {Object.keys(antagonists).length} kritiker tystade
               </p>
@@ -229,7 +236,7 @@ export function EndScreen({ onReset }: EndScreenProps) {
           )}
         </div>
 
-        {/* Reset button */}
+        {/* Buttons */}
         <AnimatePresence>
           {showReset && (
             <motion.div
@@ -244,10 +251,10 @@ export function EndScreen({ onReset }: EndScreenProps) {
                 className="px-8 py-3 bg-black text-white text-xs font-bold tracking-[0.2em] cursor-pointer border-none hover:bg-gray-800 transition-colors"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
               >
-                DELA UT VINST TILL AKTIEAGARNA
+                DELA UT VINST TILL AKTIEÄGARNA
               </button>
               <p className="text-[0.5rem] text-gray-400 mt-3 italic">
-                Aktieagarna fick sin utdelning. Allt annat ar detaljer.
+                Aktieägarna fick sin utdelning. Allt annat är detaljer.
               </p>
             </motion.div>
           )}
@@ -259,13 +266,12 @@ export function EndScreen({ onReset }: EndScreenProps) {
 
 // ── Sub-components ──
 
-function RevealRow({ step, current, label, value, subtext, danger }: {
+function RevealRow({ step, current, label, value, subtext }: {
   step: number
   current: number
   label: string
   value: string
   subtext?: string
-  danger?: boolean
 }) {
   if (current < step) return null
 
@@ -281,13 +287,13 @@ function RevealRow({ step, current, label, value, subtext, danger }: {
       </span>
       <div className="text-right">
         <span
-          className={`text-sm font-bold ${danger ? 'text-red-600' : 'text-black'}`}
+          className="text-sm font-bold text-black"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
           {value}
         </span>
         {subtext && (
-          <p className="text-[0.5rem] text-red-400 mt-0.5">{subtext}</p>
+          <p className="text-[0.5rem] text-gray-400 mt-0.5">{subtext}</p>
         )}
       </div>
     </motion.div>
@@ -302,7 +308,7 @@ function StatusLine({ label, status, bought }: {
   return (
     <div className="flex justify-between items-center text-xs" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
       <span className="text-gray-500">{label}</span>
-      <span className={bought ? 'text-red-600 font-bold' : 'text-gray-400'}>
+      <span className={bought ? 'text-black font-bold' : 'text-gray-400'}>
         {status}
       </span>
     </div>

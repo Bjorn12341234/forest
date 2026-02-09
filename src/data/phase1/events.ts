@@ -127,6 +127,15 @@ export const PHASE1_EVENTS: GameEvent[] = [
           { resource: 'kapital', amount: 20, type: 'add' },
         ],
       },
+      {
+        label: 'Avverka direkt, sälj till raffinaderi',
+        description: 'Marken passar perfekt för ett tyskt oljeraffinaderi. Importerad LNG till 3x världspriset.',
+        effects: [
+          { resource: 'stammar', amount: 200, type: 'add' },
+          { resource: 'kapital', amount: 150, type: 'add' },
+          { resource: 'image', amount: -8, type: 'add' },
+        ],
+      },
     ],
     conditions: [{ resource: 'kapital', operator: '>=', value: 50 }],
   },
@@ -281,6 +290,15 @@ export const PHASE1_EVENTS: GameEvent[] = [
         effects: [
           { resource: 'kapital', amount: -20, type: 'add' },
           { resource: 'stammar', amount: 30, type: 'add' },
+        ],
+      },
+      {
+        label: 'Avverka allt och salta jorden',
+        description: 'Inga borrar kan leva på en parkeringsplats. Bygg köpcentrum.',
+        effects: [
+          { resource: 'stammar', amount: 300, type: 'add' },
+          { resource: 'kapital', amount: 100, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
         ],
       },
     ],

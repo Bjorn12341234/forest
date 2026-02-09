@@ -39,8 +39,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   // ═══════════════════════════════════════════
   {
     id: 'forsta_planen',
-    name: 'Forsta Planen',
-    description: 'Den forsta ar gratis. Precis som dealern sa.',
+    name: 'Första Planen',
+    description: 'Den första är gratis. Precis som dealern sa.',
     icon: '\ud83d\udccb',
     phase: 1,
     tier: 'lokal',
@@ -49,7 +49,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'kaffekoppen',
     name: 'Kaffekoppen',
-    description: 'Tio inspektorer. Tio kaffekoppar. 5 000 hektar.',
+    description: 'Tio inspektörer. Tio kaffekoppar. 5 000 hektar.',
     icon: '\u2615',
     phase: 1,
     tier: 'lokal',
@@ -57,8 +57,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'gallringsmastaren',
-    name: 'Gallringsmastaren',
-    description: 'Du tog de basta traden och lamnade skrapet. Agaren tackade dig.',
+    name: 'Gallringsmästaren',
+    description: 'Du tog de bästa träden och lämnade skrapet. Ägaren tackade dig.',
     icon: '\ud83e\ude93',
     phase: 1,
     tier: 'lokal',
@@ -66,8 +66,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'forsta_kronan',
-    name: 'Forsta kronan',
-    description: 'Kapital borjar strommen in. Det har gar att vaxa.',
+    name: 'Första kronan',
+    description: 'Kapital börjar strömma in. Det här går att växa.',
     icon: '\ud83d\udcb0',
     phase: 1,
     tier: 'lokal',
@@ -76,7 +76,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'stammar_1k',
     name: 'Lokalpatriot',
-    description: 'Na 1 000 stammar totalt. Du ar pa vag.',
+    description: 'Nå 1 000 stammar totalt. Du är på väg.',
     icon: '\ud83c\udf32',
     phase: 1,
     tier: 'lokal',
@@ -85,7 +85,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'stammar_10k',
     name: 'Storskogsbrukare',
-    description: 'Na 10 000 stammar. Dags att expandera.',
+    description: 'Nå 10 000 stammar. Dags att expandera.',
     icon: '\ud83c\udfd4\ufe0f',
     phase: 1,
     tier: 'lokal',
@@ -94,7 +94,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'first_event',
     name: 'Senaste nytt',
-    description: 'Hantera din forsta handelse. Valj klokt.',
+    description: 'Hantera din första händelse. Välj klokt.',
     icon: '\ud83d\udcf0',
     phase: 1,
     tier: 'lokal',
@@ -107,7 +107,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'frihet_under_ansvar',
     name: 'Frihet Under Ansvar',
-    description: 'Staten litar pa dig. Det borde den inte.',
+    description: 'Staten litar på dig. Det borde den inte.',
     icon: '\ud83d\uddfd',
     phase: 2,
     tier: 'regional',
@@ -115,8 +115,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'aganderattskrigaren',
-    name: 'Aganderattskrigaren',
-    description: 'De tror du kampar for dem. Du kampar for deras skog.',
+    name: 'Äganderättskrigaren',
+    description: 'De tror du kämpar för dem. Du kämpar för deras skog.',
     icon: '\ud83d\udee1\ufe0f',
     phase: 2,
     tier: 'regional',
@@ -125,7 +125,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'rysslands_bonansen',
     name: 'Rysslands-Bonansen',
-    description: 'En tragedi. Men din omsattning okade 40%.',
+    description: 'En tragedi. Men din omsättning ökade 40%.',
     icon: '\ud83c\uddf7\ud83c\uddfa',
     phase: 2,
     tier: 'regional',
@@ -133,8 +133,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'grontvattare',
-    name: 'Grontvattare',
-    description: 'Lat Gron Image sjunka under 50. Men du ar ju hallbar!',
+    name: 'Gröntvättare',
+    description: 'Låt Grön Image sjunka under 50. Men du är ju hållbar!',
     icon: '\ud83c\udfad',
     phase: 2,
     tier: 'regional',
@@ -142,8 +142,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'lobbyist',
-    name: 'Forsta lobbymote',
-    description: 'Algjakt med riksdagsledamot. Inget diskuteras. Allt forstass.',
+    name: 'Första lobbymöte',
+    description: 'Älgjakt med riksdagsledamot. Inget diskuteras. Allt förstås.',
     icon: '\ud83e\udd8c',
     phase: 2,
     tier: 'regional',
@@ -156,7 +156,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'nestle_sa_nej',
     name: 'Choco-Corp sa nej',
-    description: 'Det foretag som salde brostmjolksersattning till fattiga modrar tycker att DU har etikproblem.',
+    description: 'Det företag som sålde bröstmjölksersättning till fattiga mödrar tycker att DU har etikproblem.',
     icon: '\ud83c\udf6b',
     phase: 4,
     tier: 'nationell',
@@ -164,8 +164,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'gd_flansen',
-    name: 'GD-Flansen',
-    description: 'Han raderade mejlen. Han ager skogen. Han jobbar for dig nu.',
+    name: 'GD-Fansen',
+    description: 'Han raderade mejlen. Han äger skogen. Han jobbar för dig nu.',
     icon: '\ud83d\udeaa',
     phase: 4,
     tier: 'nationell',
@@ -173,8 +173,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'klimatambassadoren',
-    name: 'Klimatambassadoren',
-    description: 'Du slappte ut 4 miljoner ton CO2. Din rapport visar -200 000. Matematik!',
+    name: 'Klimatambassadören',
+    description: 'Du släppte ut 4 miljoner ton CO2. Din rapport visar -200 000. Matematik!',
     icon: '\ud83c\udf31',
     phase: 3,
     tier: 'nationell',
@@ -183,7 +183,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'massabaronen',
     name: 'Massabaronen',
-    description: 'Na 1 miljon stammar. Du dominerar.',
+    description: 'Nå 1 miljon stammar. Du dominerar.',
     icon: '\ud83c\udfe2',
     phase: 3,
     tier: 'nationell',
@@ -195,8 +195,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   // ═══════════════════════════════════════════
   {
     id: 'warborn_manovern',
-    name: 'Warborn-Manovern',
-    description: 'Anmald for jav. Omnibus antogs anda. Frihetens Tankesmedja skickar blommor.',
+    name: 'Warborn-Manövern',
+    description: 'Anmäld för jäv. Omnibus antogs ändå. Frihetens Tankesmedja skickar blommor.',
     icon: '\ud83c\uddea\ud83c\uddfa',
     phase: 3,
     tier: 'internationell',
@@ -205,7 +205,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'transatlantiska_pipansen',
     name: 'Den Transatlantiska Pipansen',
-    description: 'Exxon, en tankesmedja, och din EU-parlamentariker i samma rum. Ingen antecknar.',
+    description: 'Fossil Energi AB, en tankesmedja, och din EU-parlamentariker i samma rum. Ingen antecknar.',
     icon: '\ud83e\udd1d',
     phase: 4,
     tier: 'internationell',
@@ -213,8 +213,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'fsc_karussellen',
-    name: 'FSC-Karussellen',
-    description: 'Lamna. Hugga nyckelbiotoper. Ga tillbaka. Repeat. Certifiering!',
+    name: 'FSC-Karusellen',
+    description: 'Lämna. Hugga nyckelbiotoper. Gå tillbaka. Repeat. Certifiering!',
     icon: '\u267b\ufe0f',
     phase: 3,
     tier: 'internationell',
@@ -222,8 +222,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'svangdorren',
-    name: 'Svangdorren',
-    description: 'Ministrar jobbar for dig efterat. Svangdorren snurrar.',
+    name: 'Svängdörren',
+    description: 'Ministrar jobbar för dig efteråt. Svängdörren snurrar.',
     icon: '\ud83d\udd04',
     phase: 5,
     tier: 'internationell',
@@ -235,7 +235,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   // ═══════════════════════════════════════════
   {
     id: 'den_tysta_varen',
-    name: 'Den Tysta Varen',
+    name: 'Den Tysta Våren',
     description: 'Rachel Carson varnade. Du levererade.',
     icon: '\ud83d\udd07',
     phase: 6,
@@ -245,7 +245,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'djurfritt_sedan_2035',
     name: 'Djurfritt Sedan 2035',
-    description: 'Inte ens insekterna overlevde. Men din wellpapp-produktion okade 12%.',
+    description: 'Inte ens insekterna överlevde. Men din wellpapp-produktion ökade 12%.',
     icon: '\ud83e\udeb3',
     phase: 6,
     tier: 'endgame',
@@ -254,7 +254,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'kolonialmakten',
     name: 'Kolonialmakten',
-    description: 'Jorden var inte nog. Manen har mineraler. Och du har skordare.',
+    description: 'Jorden var inte nog. Månen har mineraler. Och du har skördare.',
     icon: '\ud83c\udf11',
     phase: 7,
     tier: 'endgame',
@@ -263,7 +263,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'den_perfekta_raden',
     name: 'Den Perfekta Raden',
-    description: 'Universum har blivit en industriskog. Stjarnorna lyser genom rutnattet.',
+    description: 'Universum har blivit en industriskog. Stjärnorna lyser genom rutnätet.',
     icon: '\u221e',
     phase: 7,
     tier: 'endgame',
@@ -271,8 +271,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'och_sen_da',
-    name: 'Och Sen Da?',
-    description: 'Aktieagarna fick sin utdelning. Allt annat ar detaljer.',
+    name: 'Och Sen Då?',
+    description: 'Aktieägarna fick sin utdelning. Allt annat är detaljer.',
     icon: '\ud83d\udc80',
     phase: 7,
     tier: 'endgame',
@@ -285,7 +285,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'karpaltunnel',
     name: 'Karpaltunnel',
-    description: 'Klicka 1 000 ganger. Overvag ergonomi.',
+    description: '1 000 klick. Överväg att anlita en ergonomikonsult. Höj- och sänkbart skrivbord och studsboll \u2014 på bolagets bekostnad, såklart.',
     icon: '\ud83e\uddbe',
     phase: 1,
     tier: 'meta',
@@ -293,7 +293,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
   {
     id: 'talamod',
-    name: 'Talamod',
+    name: 'Tålamod',
     description: 'Spela i totalt 1 timme.',
     icon: '\u23f0',
     phase: 1,

@@ -43,7 +43,7 @@ export function Dashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <ResourceCard label="Stammar" value={stammar} format={formatNumber} className="text-accent" />
         <ResourceCard label="Kapital" value={kapital} format={n => `${formatNumber(n)} Mkr`} />
-        <ResourceCard label="Gron Image\u2122" value={image} className="text-accent-green" />
+        <ResourceCard label="Grön Image\u2122" value={image} className="text-accent-green" />
         {phase >= 2 && (
           <ResourceCard label="Politiskt Kapital" value={lobby} />
         )}

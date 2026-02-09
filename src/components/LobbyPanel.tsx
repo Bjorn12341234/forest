@@ -43,7 +43,7 @@ export function LobbyPanel() {
         </GlassCard>
         <GlassCard padding="sm">
           <div className="flex flex-col gap-0.5">
-            <span className="text-text-muted text-[0.6rem] uppercase tracking-wider">Gron Image\u2122</span>
+            <span className="text-text-muted text-[0.6rem] uppercase tracking-wider">Grön Image\u2122</span>
             <AnimatedNumber value={image} className={`text-lg ${image > 60 ? 'text-accent-green' : image > 30 ? 'text-accent' : 'text-danger'}`} />
           </div>
         </GlassCard>
@@ -59,8 +59,8 @@ export function LobbyPanel() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Earn PK */}
         <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-text-primary">Tjana Politiskt Kapital</h2>
-          <p className="text-[0.6rem] text-text-muted -mt-2">Spendera Kapital for att bygga politiskt inflytande.</p>
+          <h2 className="text-sm font-medium text-text-primary">Tjäna Politiskt Kapital</h2>
+          <p className="text-[0.6rem] text-text-muted -mt-2">Spendera Kapital för att bygga politiskt inflytande.</p>
 
           <div className="flex flex-col gap-2">
             {visibleEarners.map(earner => (
@@ -81,7 +81,7 @@ export function LobbyPanel() {
           {showPR && (
             <>
               <h2 className="text-sm font-medium text-text-primary mt-4">PR-kampanjer</h2>
-              <p className="text-[0.6rem] text-text-muted -mt-2">Kop tillbaka er Grona Image\u2122.</p>
+              <p className="text-[0.6rem] text-text-muted -mt-2">Köp tillbaka er Gröna Image\u2122.</p>
               <div className="flex flex-col gap-2">
                 {PR_CAMPAIGNS.map(campaign => (
                   <PRCampaignRow
@@ -103,7 +103,7 @@ export function LobbyPanel() {
         {/* Right: Spend PK on law changes */}
         <div className="flex flex-col gap-3">
           <h2 className="text-sm font-medium text-text-primary">Lagandringar & Projekt</h2>
-          <p className="text-[0.6rem] text-text-muted -mt-2">Anvand Politiskt Kapital for att andla regelverket.</p>
+          <p className="text-[0.6rem] text-text-muted -mt-2">Använd Politiskt Kapital för att ändra regelverket.</p>
 
           <div className="flex flex-col gap-2">
             <AnimatePresence initial={false}>
@@ -204,7 +204,7 @@ function LobbyPurchaseRow({ data, lobby, purchased, onBuy }: {
               </span>
             ))}
           </div>
-          <p className="text-[0.45rem] text-text-muted/60 mt-1 italic">Baserat pa: {data.basedOn}</p>
+          <p className="text-[0.45rem] text-text-muted/60 mt-1 italic">Baserat på: {data.basedOn}</p>
         </div>
         <div className="text-right flex-shrink-0">
           {purchased ? (

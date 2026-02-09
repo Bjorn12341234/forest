@@ -116,12 +116,12 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_nestle_break',
-    text: 'Nastl\u00e9 bryter med NCA: "Ert rykte \u00e4r s\u00e4mre \u00e4n v\u00e5rt." Nastl\u00e9. Bolaget som f\u00f6rgiftade barnmat. De tycker NI \u00e4r f\u00f6r skumma.',
+    text: 'Nastlé bryter med NCA: "Ert rykte är sämre än vårt." Nastlé. Bolaget som förgiftade barnmat. De tycker NI är för skumma.',
     phase: 4,
   },
   {
     id: 'tick_nca_rebrand',
-    text: 'NCA \u00f6verv\u00e4ger namnbyte till "Nordic Cellulose Association". Konsult: "Samma folkf\u00f6rakt, ny f\u00f6rpackning."',
+    text: 'NCA överväger namnbyte till "Nordic Cellulose Association". Konsult: "Samma folkförakt, ny förpackning."',
     phase: 4,
   },
   {

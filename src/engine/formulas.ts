@@ -33,13 +33,13 @@ export function getOwnerTrustModifier(trust: number): number {
 
 // ── Event Frequency ──
 const EVENT_FREQUENCY: Record<number, [number, number]> = {
-  1: [90, 150],
-  2: [60, 100],
-  3: [40, 75],
-  4: [30, 55],
-  5: [20, 40],
-  6: [15, 30],
-  7: [10, 20],
+  1: [120, 200],
+  2: [90, 150],
+  3: [70, 120],
+  4: [60, 100],
+  5: [50, 90],
+  6: [45, 80],
+  7: [40, 70],
 }
 
 export function getNextEventDelay(phase: number): number {

@@ -94,10 +94,13 @@ function App() {
 
       {/* Endgame Screen */}
       {showEndScreen && (
-        <EndScreen onReset={() => {
-          setShowEndScreen(false)
-          reset()
-        }} />
+        <EndScreen
+          onContinue={() => setShowEndScreen(false)}
+          onReset={() => {
+            setShowEndScreen(false)
+            reset()
+          }}
+        />
       )}
 
       {/* Phase Transition Overlay */}

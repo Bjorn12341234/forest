@@ -7,11 +7,11 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 2,
     category: 'opportunity',
     headline: 'Rysslands-embargo!',
-    context: 'Kriget i Ukraina stoppar rysk virkesexport. Europeisk efterfragan exploderar. Ditt virke ar guld vart.',
+    context: 'Kriget i Ukraina stoppar rysk virkesexport. Europeisk efterfrågan exploderar. Ditt virke är guld värt.',
     choices: [
       {
         label: 'Maximera leverans',
-        description: 'Avverka allt tillgangligt for att mota efterfragan',
+        description: 'Avverka allt tillgängligt för att möta efterfrågan',
         effects: [
           { resource: 'stammar', amount: 2_000, type: 'add' },
           { resource: 'kapital', amount: 5_000, type: 'add' },
@@ -19,8 +19,8 @@ export const PHASE2_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Hoja priserna',
-        description: 'Lat marknaden betala premiumpriser',
+        label: 'Höja priserna',
+        description: 'Låt marknaden betala premiumpriser',
         effects: [
           { resource: 'kapital', amount: 10_000, type: 'add' },
           { resource: 'ownerTrust', amount: -5, type: 'add' },
@@ -34,12 +34,12 @@ export const PHASE2_EVENTS: GameEvent[] = [
     id: 'p2_pension_skogsagare',
     phase: 2,
     category: 'opportunity',
-    headline: 'Pensionerad skogsagare saljer 800 hektar',
-    context: 'Barnen vill inte ha skogen. Perfekt tillfalle att expandera — och skriva en "geneross" plan.',
+    headline: 'Pensionerad skogsägare säljer 800 hektar',
+    context: 'Barnen vill inte ha skogen. Perfekt tillfälle att expandera \u2014 och skriva en "generös" plan.',
     choices: [
       {
-        label: 'Kop till marknadspris',
-        description: 'Schysst affar, bra PR',
+        label: 'Köp till marknadspris',
+        description: 'Schysst affär, bra PR',
         effects: [
           { resource: 'kapital', amount: -3_000, type: 'add' },
           { resource: 'stammar', amount: 1_500, type: 'add' },
@@ -47,8 +47,8 @@ export const PHASE2_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: '"Vardering av expert"',
-        description: 'Din expert varderar skogen 40% lagre an marknadsvarde',
+        label: '"Värdering av expert"',
+        description: 'Din expert värderar skogen 40% lägre än marknadsvärde',
         effects: [
           { resource: 'kapital', amount: -1_500, type: 'add' },
           { resource: 'stammar', amount: 1_500, type: 'add' },
@@ -63,17 +63,17 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 2,
     category: 'scandal',
     headline: 'FSC-revision: Avvikelser hittade',
-    context: 'Revisorn har hittat "mindre avvikelser" i 23 av 25 granskade bestand. Pressen vill ha kommentarer.',
+    context: 'Revisorn har hittat "mindre avvikelser" i 23 av 25 granskade bestånd. Pressen vill ha kommentarer.',
     choices: [
       {
-        label: '"Processforandringar genomfors"',
-        description: 'Tomma loften, certifieringen behalles',
+        label: '"Processförändringar genomförs"',
+        description: 'Tomma löften, certifieringen behålles',
         effects: [
           { resource: 'image', amount: -8, type: 'add' },
         ],
       },
       {
-        label: 'Lamna FSC tillfaldigt',
+        label: 'Lämna FSC tillfälligt',
         description: 'Fritt fram att avverka nyckelbiotoper under pausen',
         effects: [
           { resource: 'image', amount: -15, type: 'add' },
@@ -81,8 +81,8 @@ export const PHASE2_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Sponsra revisionsbyran',
-        description: 'Nasta revision gar smidigare',
+        label: 'Sponsra revisionsbyrån',
+        description: 'Nästa revision går smidigare',
         effects: [
           { resource: 'kapital', amount: -2_000, type: 'add' },
           { resource: 'image', amount: 3, type: 'add' },
@@ -98,19 +98,19 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 3,
     category: 'crisis',
     headline: 'Kinesisk massa-dumpning!',
-    context: 'Kina oversvammar marknaden med billig massa. Dina marginaler krymper. Dags att hugga snabbare — eller smartare.',
+    context: 'Kina översvämmar marknaden med billig massa. Dina marginaler krymper. Dags att hugga snabbare \u2014 eller smartare.',
     choices: [
       {
-        label: 'Sank avverkningsaldern',
-        description: 'Yngre trad = snabbare omsattning',
+        label: 'Sänk avverkningsåldern',
+        description: 'Yngre träd = snabbare omsättning',
         effects: [
           { resource: 'stammar', amount: 5_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
       {
-        label: 'Satsa pa "premiumvirke"',
-        description: 'Marknadsforing av svenskt trad som lyxprodukt',
+        label: 'Satsa på "premiumvirke"',
+        description: 'Marknadsföring av svenskt trä som lyxprodukt',
         effects: [
           { resource: 'kapital', amount: -5_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
@@ -125,10 +125,10 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 3,
     category: 'contradiction',
     headline: 'Plockhugget-problemet',
-    context: 'Skogsvispen AB visar att alternativt skogsbruk ger hogre avkastning an kalavverkning. Deras rapport far uppmärksamhet.',
+    context: 'Skogsvispen AB visar att alternativt skogsbruk ger högre avkastning än kalavverkning. Deras rapport får uppmärksamhet.',
     choices: [
       {
-        label: 'Svartmala som "ovetenskapligt"',
+        label: 'Svartmåla som "ovetenskapligt"',
         description: 'Finansiera motstudier',
         effects: [
           { resource: 'kapital', amount: -3_000, type: 'add' },
@@ -137,8 +137,8 @@ export const PHASE2_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Kopiera och salj som "premium"',
-        description: 'Gror dom bra? Da gor vi lika, men dyrare.',
+        label: 'Kopiera och sälj som "premium"',
+        description: 'Gör dom bra? Då gör vi lika, men dyrare.',
         effects: [
           { resource: 'kapital', amount: 10_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
@@ -153,27 +153,27 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 3,
     category: 'crisis',
     headline: 'Samebyns protest',
-    context: 'Samebyns renskotsel har drabbats av era avverkningar. De kraver samrad — och hotar med juridik.',
+    context: 'Samebyns renskötsel har drabbats av era avverkningar. De kräver samråd \u2014 och hotar med juridik.',
     choices: [
       {
         label: 'Ignorera',
-        description: 'Fortsatt som planerat',
+        description: 'Fortsätt som planerat',
         effects: [
           { resource: 'image', amount: -5, type: 'add' },
           { resource: 'samiLand', amount: 15, type: 'add' },
         ],
       },
       {
-        label: '"Samrad"',
-        description: 'Lamna ett brev och fortsatt avverka',
+        label: '"Samråd"',
+        description: 'Lämna ett brev och fortsätt avverka',
         effects: [
           { resource: 'kapital', amount: -3_000, type: 'add' },
           { resource: 'samiLand', amount: 15, type: 'add' },
         ],
       },
       {
-        label: 'Kop betesmark',
-        description: 'Kompensera med mark nagon annanstans',
+        label: 'Köp betesmark',
+        description: 'Kompensera med mark någon annanstans',
         effects: [
           { resource: 'kapital', amount: -50_000, type: 'add' },
           { resource: 'stammar', amount: 10_000, type: 'add' },
@@ -189,7 +189,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 3,
     category: 'opportunity',
     headline: 'Wellpapp-boomen',
-    context: 'Kartongen.com bestaller 10 miljoner lador. Nastadagsleverans kraver nastadagsavverkning. Jeff behover lador.',
+    context: 'Mammazånas beställer 10 miljoner lådor. Nästa-dags-leverans kräver nästa-dags-avverkning. Chefen behöver lådor.',
     choices: [
       {
         label: 'Acceptera kontraktet',
@@ -200,8 +200,8 @@ export const PHASE2_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Forhandla exklusivavtal',
-        description: 'Lagre pris men langsiktig relation',
+        label: 'Förhandla exklusivavtal',
+        description: 'Lägre pris men långsiktig relation',
         effects: [
           { resource: 'kapital', amount: 30_000, type: 'add' },
         ],
@@ -216,12 +216,12 @@ export const PHASE2_EVENTS: GameEvent[] = [
     id: 'p4_svt_dokumentar',
     phase: 4,
     category: 'scandal',
-    headline: 'SVT-dokumentar: Slaget om Skogen',
-    context: 'Statliga Dokumentarkanalen sandar en granskning av skogsindustrin. GD Tallstrom raderade mejlen — men SVT hittade kopior.',
+    headline: 'SVT-dokumentär: Slaget om Skogen',
+    context: 'Statliga Dokumentärkanalen sänder en granskning av skogsindustrin. GD Tallström raderade mejlen \u2014 men SVT hittade kopior.',
     choices: [
       {
         label: 'SMS:a GD mot SVT',
-        description: 'Anvand dina kontakter for att motverka',
+        description: 'Använd dina kontakter för att motverka',
         effects: [
           { resource: 'lobby', amount: -50, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
@@ -229,14 +229,14 @@ export const PHASE2_EVENTS: GameEvent[] = [
       },
       {
         label: '"Radera mejlen"',
-        description: 'Forhoppningsvis hittar ingen mer',
+        description: 'Förhoppningsvis hittar ingen mer',
         effects: [
           { resource: 'image', amount: -5, type: 'add' },
         ],
       },
       {
-        label: 'Lat det passera',
-        description: 'Nyhetszykeln ar kort',
+        label: 'Låt det passera',
+        description: 'Nyhetszykeln är kort',
         effects: [
           { resource: 'image', amount: -20, type: 'add' },
         ],
@@ -249,20 +249,20 @@ export const PHASE2_EVENTS: GameEvent[] = [
     id: 'p4_nestle_retratten',
     phase: 4,
     category: 'crisis',
-    headline: 'Choco-Corp Retratten',
-    context: 'Choco-Corp International — foretaget som salde brostmjolksersattning till fattiga modrar — tycker att DU har etikproblem. De bryter alla avtal.',
+    headline: 'Choco-Corp Reträtten',
+    context: 'Choco-Corp International \u2014 företaget som sålde bröstmjölksersättning till fattiga mödrar \u2014 tycker att DU har etikproblem. De bryter alla avtal.',
     choices: [
       {
         label: 'Dubbeldown: "Certifieringspaus"',
-        description: 'Slut hyckla — avverka nyckelbiotoperna',
+        description: 'Slut hyckla \u2014 avverka nyckelbiotoperna',
         effects: [
           { resource: 'image', amount: -30, type: 'add' },
           { resource: 'stammar', amount: 50_000, type: 'add' },
         ],
       },
       {
-        label: 'Greenwash: Skapa "grasrotsorganisationer"',
-        description: '50 fejkade miljoorganisationer som forsvarar dig',
+        label: 'Greenwash: Skapa "gräsrotsorganisationer"',
+        description: '50 fejkade miljöorganisationer som försvarar dig',
         effects: [
           { resource: 'image', amount: 20, type: 'add' },
           { resource: 'kapital', amount: -100_000, type: 'add' },
@@ -270,7 +270,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
       },
       {
         label: 'Attackera kritikerna',
-        description: '"Extremister! Aktivister! De hatar skogsagare!"',
+        description: '"Extremister! Aktivister! De hatar skogsägare!"',
         effects: [
           { resource: 'lobby', amount: 10, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
@@ -285,10 +285,10 @@ export const PHASE2_EVENTS: GameEvent[] = [
     phase: 4,
     category: 'crisis',
     headline: 'Greta-effekten',
-    context: 'En tonaring med plakat star utanfor ert huvudkontor. Global uppmärksamhet. Ert anseende ar under attack.',
+    context: 'En tonåring med plakat står utanför ert huvudkontor. Global uppmärksamhet. Ert anseende är under attack.',
     choices: [
       {
-        label: 'Lat det ga over',
+        label: 'Låt det gå över',
         description: 'Global Image-katastrof i veckor',
         effects: [
           { resource: 'image', amount: -25, type: 'add' },
@@ -296,7 +296,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
       },
       {
         label: '"Vi delar oron"-kampanj',
-        description: 'Dyrt men kan vanda narrativet',
+        description: 'Dyrt men kan vända narrativet',
         effects: [
           { resource: 'kapital', amount: -50_000, type: 'add' },
           { resource: 'image', amount: 15, type: 'add' },
@@ -310,11 +310,11 @@ export const PHASE2_EVENTS: GameEvent[] = [
     id: 'p3_kyrkan_saljer',
     phase: 3,
     category: 'opportunity',
-    headline: 'Svenska Kyrkan saljer',
-    context: 'Kyrkan gror sig av 3 000 hektar gammelskog. 150-arig tall till danska borshuset — "Det ar cirkularit."',
+    headline: 'Svenska Kyrkan säljer',
+    context: 'Kyrkan gör sig av med 3 000 hektar gammelskog. 150-årig tall till danska börshuset \u2014 "Det är cirkulärt."',
     choices: [
       {
-        label: 'Kop for spotpris',
+        label: 'Köp för spotpris',
         description: 'Billig gammelskog med premium-virke',
         effects: [
           { resource: 'kapital', amount: -20_000, type: 'add' },
@@ -322,8 +322,8 @@ export const PHASE2_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Lat nagon annan kopa',
-        description: 'Konkurrenten far gammelskogen',
+        label: 'Låt någon annan köpa',
+        description: 'Konkurrenten får gammelskogen',
         effects: [
           { resource: 'image', amount: 3, type: 'add' },
         ],
@@ -336,27 +336,27 @@ export const PHASE2_EVENTS: GameEvent[] = [
     id: 'p3_nyckelbiotop',
     phase: 2,
     category: 'contradiction',
-    headline: 'Ideell forening hittar nyckelbiotop',
-    context: 'En pensionar med GPS och artkunskap har hittat en nyckelbiotop i ditt avverkningsomrade. Foton publiceras pa sociala medier.',
+    headline: 'Ideell förening hittar nyckelbiotop',
+    context: 'En pensionär med GPS och artkunskap har hittat en nyckelbiotop i ditt avverkningsområde. Foton publiceras på sociala medier.',
     choices: [
       {
-        label: 'Avverka anda',
-        description: 'Vinst framfor ekologi',
+        label: 'Avverka allt!',
+        description: 'Vinst framför ekologi',
         effects: [
           { resource: 'stammar', amount: 5_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
         ],
       },
       {
-        label: '"Paus" certifiering',
-        description: 'Lamna FSC tillfaldigt, avverka, atervand',
+        label: 'Paus',
+        description: 'Lämna FSC tillfälligt, avverka, återvänd',
         effects: [
           { resource: 'stammar', amount: 3_000, type: 'add' },
           { resource: 'image', amount: -8, type: 'add' },
         ],
       },
       {
-        label: 'Anklaga dem som "ovetenskapliga"',
+        label: 'Anklaga dem för att vara ovetenskapliga',
         description: 'Ifrågasatt kompetens',
         effects: [
           { resource: 'lobby', amount: 5, type: 'add' },
