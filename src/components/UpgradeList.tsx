@@ -8,18 +8,18 @@ import { UpgradeCard } from './UpgradeCard'
 export function UpgradeList() {
   const phase = useGameStore(s => s.phase)
   const upgrades = useGameStore(s => s.upgrades)
-  const attention = useGameStore(s => s.attention)
-  const cash = useGameStore(s => s.cash)
-  const greatness = useGameStore(s => s.greatness)
+  const stammar = useGameStore(s => s.stammar)
+  const kapital = useGameStore(s => s.kapital)
+  const lobby = useGameStore(s => s.lobby)
   const clickCount = useGameStore(s => s.clickCount)
   const purchaseUpgrade = useGameStore(s => s.purchaseUpgrade)
 
   const resourceMap = useMemo(() => ({
-    attention,
-    cash,
-    greatness,
+    stammar,
+    kapital,
+    lobby,
     clickCount,
-  }), [attention, cash, greatness, clickCount])
+  }), [stammar, kapital, lobby, clickCount])
 
   const visibleUpgrades = useMemo(() => {
     const allUpgrades = getUpgradesByPhase(phase)
@@ -76,7 +76,7 @@ export function UpgradeList() {
 
       {visibleUpgrades.length === 0 && (
         <div className="text-center text-text-muted text-sm py-8">
-          Keep clicking to discover upgrades...
+          Fortsätt avverka för att låsa upp uppgraderingar...
         </div>
       )}
     </div>
@@ -86,13 +86,11 @@ export function UpgradeList() {
 function isVisible(
   data: UpgradeData,
   upgrades: Record<string, { purchased: boolean; count: number; unlocked: boolean }>,
-  resources: { attention: number; cash: number; greatness: number; clickCount: number }
+  resources: { stammar: number; kapital: number; lobby: number; clickCount: number }
 ): boolean {
-  // Already purchased max? Still show it
   const state = upgrades[data.id]
   if (state?.purchased) return true
 
-  // Check prerequisites
   if (data.prerequisites) {
     for (const prereqId of data.prerequisites) {
       const prereq = upgrades[prereqId]
@@ -100,13 +98,11 @@ function isVisible(
     }
   }
 
-  // Check unlock conditions
   if (data.unlockAt) {
     const current = resources[data.unlockAt.resource as keyof typeof resources] ?? 0
     if (current < data.unlockAt.threshold) return false
   }
 
-  // First upgrade in each tree is always visible if no prerequisites
   if (!data.prerequisites && !data.unlockAt) return true
 
   return true

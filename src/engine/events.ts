@@ -67,6 +67,6 @@ function checkCondition(condition: EventCondition, state: GameState): boolean {
   }
 }
 
-export function scheduleNextEvent(phase: number, now: number, state?: GameState): number {
-  return now + getNextEventDelay(phase, state)
+export function scheduleNextEvent(phase: number, now: number): number {
+  return now + getNextEventDelay(phase)
 }

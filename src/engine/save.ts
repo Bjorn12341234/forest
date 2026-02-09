@@ -1,7 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
-const SAVE_KEY = 'orange_man_save'
-const CURRENT_VERSION = 1
+const SAVE_KEY = 'silva_maximus_save'
+const CURRENT_VERSION = 2
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -69,8 +69,14 @@ export function importSave(encoded: string): GameState | null {
 type MigrationFn = (save: SaveFile) => SaveFile
 
 const migrations: Record<number, MigrationFn> = {
-  // Example: when version 2 is introduced
-  // 1: (save) => { ... transform v1 → v2 ...; save.version = 2; return save }
+  1: (save) => {
+    // v1 → v2: Add ownerActionCooldowns field
+    if (!save.state.ownerActionCooldowns) {
+      (save.state as GameState).ownerActionCooldowns = {}
+    }
+    save.version = 2
+    return save
+  },
 }
 
 function migrate(save: SaveFile): SaveFile {

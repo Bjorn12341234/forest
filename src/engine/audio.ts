@@ -1,7 +1,8 @@
 // ── Lightweight Web Audio Sound System ──
 // Procedurally generated sounds using Web Audio API — no audio files needed
+// Phase-specific ambient soundscapes: nature → industrial → silence → flatline
 
-import type { EventCategory } from '../store/types'
+type EventCategory = string
 
 let audioCtx: AudioContext | null = null
 
@@ -32,9 +33,9 @@ export function getSfxVolume(): number {
 
 export function setAmbientVolume(vol: number) {
   ambientVolume = Math.max(0, Math.min(1, vol))
-  if (ambientGain) {
-    ambientGain.gain.setTargetAtTime(
-      masterMuted ? 0 : ambientVolume * 0.06,
+  if (ambientMasterGain) {
+    ambientMasterGain.gain.setTargetAtTime(
+      masterMuted ? 0 : ambientVolume * 0.08,
       getContext().currentTime,
       0.1
     )
@@ -47,9 +48,9 @@ export function getAmbientVolume(): number {
 
 export function setMuted(muted: boolean) {
   masterMuted = muted
-  if (ambientGain) {
-    ambientGain.gain.setTargetAtTime(
-      muted ? 0 : ambientVolume * 0.06,
+  if (ambientMasterGain) {
+    ambientMasterGain.gain.setTargetAtTime(
+      muted ? 0 : ambientVolume * 0.08,
       getContext().currentTime,
       0.1
     )
@@ -73,6 +74,12 @@ export function playClick() {
   const ctx = getContext()
   const now = ctx.currentTime
 
+  // In Phase 7, click becomes an EKG pip
+  if (currentAmbientPhase >= 7) {
+    playEKGPip(ctx, now, vol)
+    return
+  }
+
   // Quick percussive click — short sine blip
   const osc = ctx.createOscillator()
   const gain = ctx.createGain()
@@ -89,6 +96,25 @@ export function playClick() {
 
   osc.start(now)
   osc.stop(now + 0.1)
+}
+
+function playEKGPip(ctx: AudioContext, now: number, vol: number) {
+  // Short, clinical beep — like a heart monitor
+  const osc = ctx.createOscillator()
+  const gain = ctx.createGain()
+
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(1000, now)
+
+  gain.gain.setValueAtTime(0.18 * vol, now)
+  gain.gain.setValueAtTime(0.18 * vol, now + 0.06)
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12)
+
+  osc.connect(gain)
+  gain.connect(ctx.destination)
+
+  osc.start(now)
+  osc.stop(now + 0.15)
 }
 
 export function playPurchase() {
@@ -358,6 +384,7 @@ export function playPhaseTransition() {
 }
 
 // ── Ambient Audio System ──
+// Multi-layered soundscapes that evolve from idyllic nature to industrial silence
 
 // Phase-specific drone frequencies and wave types
 const PHASE_DRONES: Record<number, { freq: number; type: OscillatorType; detune: number }> = {
@@ -366,48 +393,83 @@ const PHASE_DRONES: Record<number, { freq: number; type: OscillatorType; detune:
   3: { freq: 65.4, type: 'sawtooth', detune: 0 },    // C2 — military gravity
   4: { freq: 82.4, type: 'sine', detune: 7 },         // E2 — spacey
   5: { freq: 49, type: 'sawtooth', detune: -12 },    // G1 — cosmic dread
+  6: { freq: 40, type: 'sine', detune: 0 },           // Sub-bass — barely audible hum
+  7: { freq: 0, type: 'sine', detune: 0 },            // Silence — no drone
 }
 
-let ambientOsc: OscillatorNode | null = null
-let ambientOsc2: OscillatorNode | null = null
-let ambientGain: GainNode | null = null
+// Ambient layer nodes (cleaned up on phase change)
+let ambientMasterGain: GainNode | null = null
+let ambientNodes: AudioNode[] = []
 let currentAmbientPhase = 0
+let birdInterval: ReturnType<typeof setInterval> | null = null
+let ekgInterval: ReturnType<typeof setInterval> | null = null
+
+function cleanupAmbientNodes() {
+  // Stop all tracked oscillator/source nodes
+  for (const node of ambientNodes) {
+    try {
+      if (node instanceof OscillatorNode) node.stop()
+      else if (node instanceof AudioBufferSourceNode) node.stop()
+    } catch { /* already stopped */ }
+  }
+  ambientNodes = []
+
+  if (birdInterval) {
+    clearInterval(birdInterval)
+    birdInterval = null
+  }
+  if (ekgInterval) {
+    clearInterval(ekgInterval)
+    ekgInterval = null
+  }
+}
 
 export function startAmbient(phase: number) {
-  if (phase === currentAmbientPhase && ambientOsc) return
+  if (phase === currentAmbientPhase && ambientMasterGain) return
   stopAmbient()
 
   const ctx = getContext()
   const now = ctx.currentTime
-  const drone = PHASE_DRONES[phase] ?? PHASE_DRONES[1]
 
-  ambientGain = ctx.createGain()
-  ambientGain.gain.setValueAtTime(0, now)
-  ambientGain.gain.linearRampToValueAtTime(
-    masterMuted ? 0 : ambientVolume * 0.06,
+  // Master gain for all ambient layers
+  ambientMasterGain = ctx.createGain()
+  ambientMasterGain.gain.setValueAtTime(0, now)
+  ambientMasterGain.gain.linearRampToValueAtTime(
+    masterMuted ? 0 : ambientVolume * 0.08,
     now + 2
   )
-  ambientGain.connect(ctx.destination)
-
-  // Primary drone
-  ambientOsc = ctx.createOscillator()
-  ambientOsc.type = drone.type
-  ambientOsc.frequency.setValueAtTime(drone.freq, now)
-  ambientOsc.detune.setValueAtTime(drone.detune, now)
-  ambientOsc.connect(ambientGain)
-  ambientOsc.start(now)
-
-  // Harmonic layer — octave + fifth above, quieter
-  ambientOsc2 = ctx.createOscillator()
-  ambientOsc2.type = 'sine'
-  ambientOsc2.frequency.setValueAtTime(drone.freq * 3, now) // 5th harmonic
-  const harmonicGain = ctx.createGain()
-  harmonicGain.gain.setValueAtTime(0.3, now)
-  ambientOsc2.connect(harmonicGain)
-  harmonicGain.connect(ambientGain)
-  ambientOsc2.start(now)
+  ambientMasterGain.connect(ctx.destination)
 
   currentAmbientPhase = phase
+
+  // Build phase-specific soundscape
+  const drone = PHASE_DRONES[phase] ?? PHASE_DRONES[1]
+
+  if (phase <= 6 && drone.freq > 0) {
+    createDroneLayer(ctx, now, drone)
+  }
+
+  if (phase <= 2) {
+    createWindLayer(ctx, now, 1.0)
+    createBirdLayer(ctx, phase <= 1 ? 2500 : 3500)
+  } else if (phase === 3) {
+    createWindLayer(ctx, now, 0.5)
+    createBirdLayer(ctx, 6000) // Fewer birds
+    createChainsawLayer(ctx, now, 0.4)
+  } else if (phase === 4) {
+    createWindLayer(ctx, now, 0.2)
+    createBirdLayer(ctx, 12000) // Rare single bird
+    createIndustrialLayer(ctx, now, 0.6)
+  } else if (phase === 5) {
+    createIndustrialLayer(ctx, now, 1.0)
+  } else if (phase === 6) {
+    // Near silence — just the faint sub-bass drone (already created above)
+    // Plus a very quiet high-pitched whine
+    createWhineLayer(ctx, now)
+  } else if (phase >= 7) {
+    // Complete silence with periodic EKG beep
+    createEKGAmbient(ctx)
+  }
 }
 
 export function stopAmbient() {
@@ -415,81 +477,273 @@ export function stopAmbient() {
   if (!ctx) return
   const now = ctx.currentTime
 
-  if (ambientGain) {
-    ambientGain.gain.setTargetAtTime(0, now, 0.5)
+  if (ambientMasterGain) {
+    ambientMasterGain.gain.setTargetAtTime(0, now, 0.5)
   }
-  // Stop oscillators after fade out
+  // Stop nodes after fade out
   setTimeout(() => {
-    ambientOsc?.stop()
-    ambientOsc2?.stop()
-    ambientOsc = null
-    ambientOsc2 = null
-    ambientGain = null
+    cleanupAmbientNodes()
+    ambientMasterGain = null
   }, 2000)
   currentAmbientPhase = 0
 }
 
-// ── Reality Drift Audio Distortion ──
+// ── Ambient Layers ──
 
-let driftNoiseSource: AudioBufferSourceNode | null = null
-let driftNoiseGain: GainNode | null = null
+function createDroneLayer(ctx: AudioContext, now: number, drone: { freq: number; type: OscillatorType; detune: number }) {
+  if (!ambientMasterGain) return
 
-export function updateDriftAudio(driftPercent: number) {
-  if (masterMuted || driftPercent < 20) {
-    stopDriftAudio()
-    return
-  }
+  // Primary drone oscillator
+  const osc = ctx.createOscillator()
+  osc.type = drone.type
+  osc.frequency.setValueAtTime(drone.freq, now)
+  osc.detune.setValueAtTime(drone.detune, now)
 
-  const ctx = getContext()
-  const now = ctx.currentTime
-  const intensity = Math.min(1, (driftPercent - 20) / 80) // 0 at 20%, 1 at 100%
+  const droneGain = ctx.createGain()
+  droneGain.gain.setValueAtTime(0.6, now) // Relative to master
+  osc.connect(droneGain)
+  droneGain.connect(ambientMasterGain)
+  osc.start(now)
+  ambientNodes.push(osc)
 
-  // Start noise if not running
-  if (!driftNoiseSource) {
-    const bufferSize = ctx.sampleRate * 2
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
-    const data = buffer.getChannelData(0)
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1
-    }
-
-    driftNoiseSource = ctx.createBufferSource()
-    driftNoiseSource.buffer = buffer
-    driftNoiseSource.loop = true
-
-    driftNoiseGain = ctx.createGain()
-    driftNoiseGain.gain.setValueAtTime(0, now)
-
-    // Bandpass filter for colored noise
-    const filter = ctx.createBiquadFilter()
-    filter.type = 'bandpass'
-    filter.frequency.setValueAtTime(800, now)
-    filter.Q.setValueAtTime(0.5, now)
-
-    driftNoiseSource.connect(filter)
-    filter.connect(driftNoiseGain)
-    driftNoiseGain.connect(ctx.destination)
-    driftNoiseSource.start(now)
-  }
-
-  // Scale noise volume with drift intensity
-  if (driftNoiseGain) {
-    const targetVol = intensity * 0.04 * sfxVolume
-    driftNoiseGain.gain.setTargetAtTime(targetVol, now, 0.5)
-  }
-
-  // Detune the ambient drone proportionally to drift
-  if (ambientOsc) {
-    const drone = PHASE_DRONES[currentAmbientPhase] ?? PHASE_DRONES[1]
-    const detuneAmount = drone.detune + intensity * 50
-    ambientOsc.detune.setTargetAtTime(detuneAmount, now, 0.3)
-  }
+  // Harmonic layer — 5th harmonic, quieter
+  const harmonic = ctx.createOscillator()
+  harmonic.type = 'sine'
+  harmonic.frequency.setValueAtTime(drone.freq * 3, now)
+  const hGain = ctx.createGain()
+  hGain.gain.setValueAtTime(0.15, now)
+  harmonic.connect(hGain)
+  hGain.connect(ambientMasterGain)
+  harmonic.start(now)
+  ambientNodes.push(harmonic)
 }
 
-export function stopDriftAudio() {
-  if (driftNoiseSource) {
-    try { driftNoiseSource.stop() } catch { /* already stopped */ }
-    driftNoiseSource = null
-    driftNoiseGain = null
+function createWindLayer(ctx: AudioContext, now: number, intensity: number) {
+  if (!ambientMasterGain) return
+
+  // Wind = white noise → low-pass filter with slow LFO modulation
+  const bufferSize = ctx.sampleRate * 4
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1
   }
+
+  const source = ctx.createBufferSource()
+  source.buffer = buffer
+  source.loop = true
+
+  // Low-pass filter for wind character
+  const lpf = ctx.createBiquadFilter()
+  lpf.type = 'lowpass'
+  lpf.frequency.setValueAtTime(400, now)
+  lpf.Q.setValueAtTime(1, now)
+
+  // LFO to modulate filter frequency (wind gusts)
+  const lfo = ctx.createOscillator()
+  lfo.type = 'sine'
+  lfo.frequency.setValueAtTime(0.15, now) // Very slow
+  const lfoGain = ctx.createGain()
+  lfoGain.gain.setValueAtTime(200, now)
+  lfo.connect(lfoGain)
+  lfoGain.connect(lpf.frequency)
+  lfo.start(now)
+  ambientNodes.push(lfo)
+
+  const windGain = ctx.createGain()
+  windGain.gain.setValueAtTime(0.25 * intensity, now)
+
+  source.connect(lpf)
+  lpf.connect(windGain)
+  windGain.connect(ambientMasterGain)
+  source.start(now)
+  ambientNodes.push(source)
+}
+
+function createBirdLayer(ctx: AudioContext, intervalMs: number) {
+  if (!ambientMasterGain) return
+
+  // Periodic bird chirps — synthesized with rapid frequency sweeps
+  const chirp = () => {
+    if (!ambientMasterGain || masterMuted) return
+
+    const now = ctx.currentTime
+    // Randomize timing slightly
+    const delay = Math.random() * 0.3
+
+    // 2-3 note chirp
+    const noteCount = 2 + Math.floor(Math.random() * 2)
+    for (let i = 0; i < noteCount; i++) {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      const t = now + delay + i * 0.08
+
+      osc.type = 'sine'
+      const baseFreq = 2000 + Math.random() * 2000
+      osc.frequency.setValueAtTime(baseFreq, t)
+      osc.frequency.exponentialRampToValueAtTime(baseFreq * (0.7 + Math.random() * 0.6), t + 0.06)
+
+      gain.gain.setValueAtTime(0.12, t)
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07)
+
+      osc.connect(gain)
+      gain.connect(ambientMasterGain!)
+      osc.start(t)
+      osc.stop(t + 0.1)
+    }
+  }
+
+  // Random jitter on interval
+  birdInterval = setInterval(() => {
+    chirp()
+  }, intervalMs + Math.random() * intervalMs * 0.5)
+
+  // First chirp after short delay
+  setTimeout(chirp, 1000)
+}
+
+function createChainsawLayer(ctx: AudioContext, now: number, intensity: number) {
+  if (!ambientMasterGain) return
+
+  // Chainsaw = distorted sawtooth at ~100Hz with grinding overtones
+  const osc = ctx.createOscillator()
+  osc.type = 'sawtooth'
+  osc.frequency.setValueAtTime(95, now)
+
+  // Waveshaper for distortion
+  const shaper = ctx.createWaveShaper()
+  const curve = new Float32Array(256)
+  for (let i = 0; i < 256; i++) {
+    const x = (i / 128) - 1
+    curve[i] = Math.tanh(x * 3) // Soft clipping
+  }
+  shaper.curve = curve
+
+  // Band-pass to shape the chainsaw character
+  const bpf = ctx.createBiquadFilter()
+  bpf.type = 'bandpass'
+  bpf.frequency.setValueAtTime(800, now)
+  bpf.Q.setValueAtTime(0.8, now)
+
+  // LFO for revving effect
+  const lfo = ctx.createOscillator()
+  lfo.type = 'sine'
+  lfo.frequency.setValueAtTime(2, now) // Engine rhythm
+  const lfoGain = ctx.createGain()
+  lfoGain.gain.setValueAtTime(20, now)
+  lfo.connect(lfoGain)
+  lfoGain.connect(osc.frequency)
+  lfo.start(now)
+  ambientNodes.push(lfo)
+
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.12 * intensity, now)
+
+  osc.connect(shaper)
+  shaper.connect(bpf)
+  bpf.connect(gain)
+  gain.connect(ambientMasterGain)
+  osc.start(now)
+  ambientNodes.push(osc)
+}
+
+function createIndustrialLayer(ctx: AudioContext, now: number, intensity: number) {
+  if (!ambientMasterGain) return
+
+  // Heavy industrial drone = multiple detuned sawtooth oscillators + mechanical rhythm
+
+  // Low rumble base
+  const rumble = ctx.createOscillator()
+  rumble.type = 'sawtooth'
+  rumble.frequency.setValueAtTime(40, now)
+  const rumbleGain = ctx.createGain()
+  rumbleGain.gain.setValueAtTime(0.3 * intensity, now)
+  rumble.connect(rumbleGain)
+  rumbleGain.connect(ambientMasterGain)
+  rumble.start(now)
+  ambientNodes.push(rumble)
+
+  // Detuned mid-range grind
+  const grind = ctx.createOscillator()
+  grind.type = 'sawtooth'
+  grind.frequency.setValueAtTime(120, now)
+  grind.detune.setValueAtTime(-15, now)
+  const grindFilter = ctx.createBiquadFilter()
+  grindFilter.type = 'lowpass'
+  grindFilter.frequency.setValueAtTime(600, now)
+  const grindGain = ctx.createGain()
+  grindGain.gain.setValueAtTime(0.15 * intensity, now)
+  grind.connect(grindFilter)
+  grindFilter.connect(grindGain)
+  grindGain.connect(ambientMasterGain)
+  grind.start(now)
+  ambientNodes.push(grind)
+
+  // Mechanical clicking rhythm (noise bursts)
+  const bufferSize = ctx.sampleRate * 2
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  const clickRate = Math.floor(ctx.sampleRate / 4) // 4Hz mechanical pulse
+  for (let i = 0; i < bufferSize; i++) {
+    if (i % clickRate < 200) {
+      data[i] = (Math.random() * 2 - 1) * 0.5
+    } else {
+      data[i] = 0
+    }
+  }
+  const clickSource = ctx.createBufferSource()
+  clickSource.buffer = buffer
+  clickSource.loop = true
+  const clickGain = ctx.createGain()
+  clickGain.gain.setValueAtTime(0.08 * intensity, now)
+  const clickFilter = ctx.createBiquadFilter()
+  clickFilter.type = 'highpass'
+  clickFilter.frequency.setValueAtTime(2000, now)
+  clickSource.connect(clickFilter)
+  clickFilter.connect(clickGain)
+  clickGain.connect(ambientMasterGain)
+  clickSource.start(now)
+  ambientNodes.push(clickSource)
+}
+
+function createWhineLayer(ctx: AudioContext, now: number) {
+  if (!ambientMasterGain) return
+
+  // Phase 6: Faint high-pitched whine — tinnitus of a dead forest
+  const osc = ctx.createOscillator()
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(4200, now)
+
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.03, now) // Very quiet
+
+  osc.connect(gain)
+  gain.connect(ambientMasterGain)
+  osc.start(now)
+  ambientNodes.push(osc)
+}
+
+function createEKGAmbient(ctx: AudioContext) {
+  if (!ambientMasterGain) return
+
+  // Phase 7: Periodic EKG beep every 1.5 seconds — then nothing
+  ekgInterval = setInterval(() => {
+    if (!ambientMasterGain || masterMuted) return
+    const now = ctx.currentTime
+
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(1000, now)
+
+    gain.gain.setValueAtTime(0.15, now)
+    gain.gain.setValueAtTime(0.15, now + 0.06)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12)
+
+    osc.connect(gain)
+    gain.connect(ambientMasterGain!)
+    osc.start(now)
+    osc.stop(now + 0.15)
+  }, 1500)
 }

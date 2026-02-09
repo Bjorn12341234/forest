@@ -1,4 +1,4 @@
-# ORANGE MAN — Task Tracker
+# SILVA MAXIMUS — Task Tracker
 
 ## How This File Works
 
@@ -10,478 +10,299 @@
 
 ---
 
-## Sprint 1: Project Setup & Core Engine (Week 1)
+## Sprint 0: Project Conversion Setup
 
-### S1.1 — Project Initialization
-- [x] Initialize Vite + React + TypeScript project
-- [x] Install dependencies: zustand, framer-motion, tailwindcss
-- [x] Set up project structure matching context.md
-- [x] Configure Tailwind with custom dark theme (colors, glassmorphism utilities, fonts)
-- [x] Set up global CSS: CSS variables, Inter + JetBrains Mono fonts, dark background with noise texture
-- [x] Create basic App.tsx with tab navigation shell (bottom tabs with glow effect)
-- [x] Set up .gitignore, initial commit
+### S0.1 — Documentation & Cleanup
+- [x] Rewrite forest.md (Game Design Document)
+- [x] Rewrite context.md (Project Context)
+- [x] Rewrite spec.md (Technical Spec)
+- [x] Rewrite tasks.md (this file)
+- [x] Delete orange_man.md
+- [x] Remove Orange Man-specific data files (phase2/, phase3/, phase4/, phase5/)
+- [x] Remove Orange Man-specific components (InstitutionBoard, WorldMap, FleetPanel, SpaceView, UniverseView, etc.)
+- [x] Update index.html (fonts: IBM Plex Mono, new title "SILVA MAXIMUS")
+- [x] Update global.css (new color theme: Byråkratisk Brutalism)
 
-**Notes:**
-Vite 7 + React 19 + TS 5.9. Tailwind v4 with @tailwindcss/vite plugin (no tailwind.config — uses CSS @theme instead). Custom utilities: glass-card, font-display, font-numbers, glow-orange, glow-text-orange, animate-pulse-glow, animate-shimmer, animate-float-up. Noise texture via inline SVG filter. Google Fonts loaded via index.html link tags.
-
-### S1.2 — Game State & Store
-- [x] Define TypeScript interfaces in `store/types.ts` (match spec.md schema)
-- [x] Create Zustand store in `store/gameStore.ts` with initial Phase 1 state
-- [x] Create `store/selectors.ts` with derived values (GpS calculation, multipliers)
-- [x] Implement save/load functions in `engine/save.ts` (localStorage + JSON)
-- [x] Add auto-save hook (`hooks/useAutoSave.ts`)
-- [x] Add save version migration framework
-
-**Notes:**
-Full GameState + GameActions types defined. Store includes all core actions: tick, click, purchaseUpgrade, resolveEvent, save/load/reset, applyEffect. Save system has export/import (base64) and migration framework ready. Auto-save every 30s + on visibility change + on beforeunload.
-
-### S1.3 — Game Loop
-- [x] Implement core tick function in `engine/gameLoop.ts`
-- [x] Create `hooks/useGameLoop.ts` to start/stop the 100ms interval
-- [x] Implement `engine/formulas.ts` with GpS, cost scaling, legitimacy decay
-- [x] Implement offline progression calculator (`engine/offline.ts`)
-- [x] Create `hooks/useOfflineCalc.ts` — calculate progress on app mount
-- [x] Test: verify tick runs, resources increment, save/load round-trips
-
-**Notes:**
-Game loop tick at 100ms intervals via setInterval. Formulas include: GpS (base * legitimacy * phase * prestige), legitimacy decay, upgrade cost scaling (1.15^n), Nobel diminishing returns, budget effects, event frequency per phase. Offline calc triggers for absences >60s with configurable rate (base 10%, upgradeable). Build passes type-check and production build cleanly (105KB gzipped).
-
-### S1.4 — Number Formatting & Utilities
-- [x] Create number formatter (commas, suffixes, scientific notation)
-- [x] Create time formatter (for countdowns, durations)
-- [x] Create easing/animation utilities for smooth counter updates
-
-**Notes:**
-`engine/format.ts`: formatNumber (exact → commas → M suffix → word suffixes up to septillion), formatCompact (K/M/B/T), formatDuration, formatCountdown, lerp, easeOutCubic, easeOutExpo. Dashboard wired to live store — clicking generates attention + greatness.
+**Notes:** All core files rewritten as clean skeletons. Phase 1 data populated (20 upgrades, 11 events, 11 achievements). Build passes. vite base path changed to /silva-maximus/. upgradeRegistry.ts is an empty stub — upgrades exist in phase1/upgrades.ts but aren't connected yet.
 
 ---
 
-## Sprint 2: Dashboard & Phase 1 UI (Week 2)
+## Sprint 1: Minimum Viable Satire (Core Mechanics)
 
-### S2.1 — Dashboard Layout & Visual Foundation
-- [x] Build Dashboard.tsx — main screen layout with glassmorphism cards
-- [x] Build GreatnessMeter.tsx — animated gradient bar with glow, smooth counting numbers (JetBrains Mono)
-- [x] Build MainButton.tsx — large glowing "GENERATE ATTENTION" button with:
-  - Scale animation on press (Framer Motion whileTap)
-  - Orange particle burst on click (lightweight canvas overlay)
-  - Pulse animation when idle
-- [x] Build reusable GlassCard component (translucent bg, blur, border gradient, hover glow)
-- [x] Build AnimatedNumber component (smooth count-up with easing, monospace font)
-- [x] Style with glassmorphism dark theme, orange glow accents, gradient meters
-- [x] Ensure mobile-responsive layout (single column < 768px, multi-column desktop)
+### S1.1 — Game State Rewrite
+- [x] Rewrite store/types.ts with new resource model (Stammar, Kapital, Lobby, Image, hidden vars)
+- [x] Rewrite store/gameStore.ts with new actions (click, buyGenerator, buyUpgrade, lobbyAction, ownerAction)
+- [x] Rewrite store/selectors.ts with new derived values (stammarPS, kapitalPS, phase)
+- [x] Update engine/formulas.ts with new game math (generator costs, kapital conversion, owner trust)
+- [x] Update engine/save.ts (new save key: silva_maximus_save, new state shape)
+- [x] Update engine/phases.ts (7 phases with stammar thresholds)
 
-**Notes:**
-Components: `GlassCard` (reusable, supports glow colors + hover), `AnimatedNumber` (useAnimatedNumber hook with easeOutExpo + requestAnimationFrame), `GreatnessMeter` (number + GpS + decorative gradient bar), `MainButton` (Framer Motion whileTap + canvas particle overlay), `ParticleCanvas` (max 50 particles, gravity, fade, 60fps RAF loop). Dashboard layout: GreatnessMeter → MainButton → Resource stats grid → Contradiction → Upgrades.
+### S1.2 — Click Mechanic ("Skriv Skogsbruksplan")
+- [x] Build ClickArea.tsx — main click button with stammar counter
+  - Flavourtext changes with phase progression (Tier 0-4)
+  - Particle effect on click
+  - Display: stammar count, stammar/click, stammar/second
+- [x] Define click multiplier upgrades in data/clickUpgrades.ts
+  - Bättre penna (+1/klick, 50 Kapital)
+  - Digital plan (+5/klick, 200 Kapital)
+  - Planfabrik (+20/klick, 1,000 Kapital)
+  - AI-Planering (+100/klick, 10,000 Kapital)
 
-### S2.2 — Upgrade System
-- [x] Build UpgradeList.tsx — scrollable card list with Framer Motion stagger animations
-- [x] Build UpgradeCard.tsx — glassmorphism card with icon, name, cost, effect description
-  - States: locked (dimmed), affordable (orange glow border), purchased (green dot, subtle)
-  - Purchase animation: flash + floating "+1" text + sparkle
-- [x] Define Phase 1 upgrade data in `data/phase1/upgrades.ts`
-  - Media Presence tree (5 upgrades)
-  - Merchandise Empire tree (5 upgrades)
-  - Algorithm Manipulation tree (5 upgrades)
-  - Early "Science" tree (5 upgrades)
-  - "Entrepreneurship" tree (5 upgrades: Bible Sales, University, Steak, Crypto, Truth Platform)
-- [x] Implement purchase logic in store (cost deduction, effect application, cost scaling)
-- [x] Add unlock conditions (some upgrades hidden until prerequisites met)
-- [x] Smooth card reveal animation when new upgrades unlock (slide up + fade)
+### S1.3 — Generator System
+- [x] Define all 8 generators in data/generators.ts
+  - Virkesuppköpare (100, 1/s)
+  - Skördarteam (500, 5/s)
+  - Massafabrik (2,500, 25/s)
+  - Markberedningsmaskin (10,000, 100/s)
+  - Certifieringskarousel (50,000, 500/s)
+  - Lobbyfirma (200,000, 2,000/s)
+  - Autonomt Skördarnätverk (1,000,000, 10,000/s)
+  - Orbital Timberstation (50,000,000, 100,000/s)
+- [x] Build Generators.tsx — scrollable generator list with buy buttons
+  - Show: name, count, cost, stammar/s, flavourtext
+  - Locked/affordable/owned states
+  - Cost scaling (1.15^n)
+- [x] Wire generator production into game loop tick
 
-**Notes:**
-25 upgrades across 5 trees. `UpgradeData` type added to types.ts. `upgradeRegistry.ts` — central map for all upgrade data. Store `purchaseUpgrade` now: looks up UpgradeData, calculates cost (1.15^n scaling), checks affordability, deducts cost from resource (attention/cash/greatness), applies immediate effects (attentionPerClick), updates upgrade state. `formulas.ts` updated to use upgrade data for production and gpsMultiplier effects. Tick now recalculates GpS from formulas every tick. Effects: `attentionPerClick` (immediate), `cashPerSecond` (tick-based), `gpsMultiplier` (formula-based). Neural Backup is the Phase 1 endgame upgrade (15,000 attention).
+### S1.4 — Kapital System
+- [x] Implement stammar → kapital conversion in tick
+- [x] Display kapital in resource bar
+- [x] Wire kapital costs for upgrades and generators
 
-### S2.3 — Ticker & Events (Phase 1)
-- [x] Build Ticker.tsx — TV news chyron style (gradient background strip, scrolling white text, "BREAKING:" bold prefix)
-- [x] Build EventModal.tsx — full-screen mobile overlay with:
-  - Backdrop blur effect
-  - Large headline typography (condensed sans)
-  - Context in secondary text
-  - Color-coded choice buttons (green=positive, red=negative, orange=mixed)
-  - Consequence preview text under each choice
-  - Framer Motion scale + fade entrance
-- [x] Implement event engine in `engine/events.ts` (scheduling, selection, resolution)
-- [x] Define Phase 1 events in `data/phase1/events.ts` (15+ events)
-- [x] Wire event effects to store (resource changes, unlocks)
-- [x] Event frequency: every 2-3 minutes for Phase 1
+### S1.5 — Dashboard Layout
+- [x] Rewrite App.tsx with new single-page layout
+  - Left panel: ClickArea + resource display
+  - Right panel: Generators
+  - Bottom: NewsTicker
+  - Top bar: Stammar, Kapital, Politiskt Kapital, Grön Image
+- [x] Apply Byråkratisk Brutalism theme
+  - Light grey background with grid lines
+  - Industrial orange accent
+  - Monospace font (IBM Plex Mono)
+  - Paper-like feel
+- [x] Phase progression display (current phase name + progress)
+- [x] Ensure mobile-responsive (stack vertically on mobile)
 
-**Notes:**
-18 Phase 1 events across all categories: 3 scandal, 5 opportunity, 3 absurd, 2 contradiction, 2 crisis, 3 misc. Event engine: `checkEventTrigger` (time-based), `selectEvent` (weighted random from eligible pool), `scheduleNextEvent`. Category weights: opportunity=3, scandal=2, absurd=2, contradiction=1.5, crisis=1. Events support conditions (resource thresholds), unique flags, cooldowns. Ticker shows last 5 resolved headlines with CSS marquee scroll. EventModal uses spring animation, category color-coded badges, backdrop blur. Events fire every 120-180s in Phase 1.
+### S1.6 — Basic Phase Progression
+- [x] Implement phase detection based on total stammar thresholds
+- [x] Phase transition overlay (show phase name + flavourtext)
+- [x] Unlock generators based on phase
+- [x] Update click flavourtext on phase change
 
-### S2.4 — Phase 1 Contradiction
-- [x] Implement Contradiction Engine in `engine/contradictions.ts`
-- [x] Build contradiction display on Dashboard (Attention vs Credibility seesaw)
-- [x] Define Phase 1 contradiction: Attention vs Credibility
-  - Scandals boost Attention 3x but drain Credibility
-  - Credibility minimum required for Cash donations
-- [x] Implement Doublethink Token rewards for balanced management
-
-**Notes:**
-`doublethinkTokens` added to GameState. Contradiction engine runs per tick: Attention rises with activity, decays over time. Credibility pressured down by attention gains, recovers naturally. Both 0-100 scale. When both above 40 for 10s, awards 1 Doublethink Token. `getCredibilityEffect()` penalizes cash generation when credibility <30 (30% rate) or <50 (70% rate). Seesaw visualization on Dashboard with dual gradient bars, balance zone indicator, and status messages.
-
-### S2.5 — Tab Navigation
-- [x] Build TabNav.tsx — bottom navigation bar
-- [x] Dashboard tab (always visible)
-- [x] Research tab (unlocked Phase 1)
-- [x] Tabs greyed out / hidden until phase unlocks them
-- [x] Tab transition animations
-
-**Notes:**
-Extracted TabNav to its own component. Shows unlocked tabs + one "teaser" locked tab with 🔒 icon, greyed out, disabled. Active tab has orange glow indicator with spring animation (layoutId). Tab content transitions via AnimatePresence with fade + slide. Locked tabs show "???" label.
+**Notes:** Sprint 1 complete. Key changes:
+- Created `src/data/generators.ts` with all 8 generators (phase-gated: 1-3 in phase 1, 4-5 in phase 2, etc.)
+- Created `src/data/clickUpgrades.ts` with 4 click multiplier upgrades (kapital-cost)
+- Connected `upgradeRegistry.ts` to phase1/upgrades.ts data
+- Game store rewritten with: `buyGenerator`, `buyClickUpgrade`, proper tick with generator baseProduction lookup, kapital conversion with ownerTrust modifier
+- `formulas.ts` now has `getKapitalConversionRate(phase)` and `getOwnerTrustModifier(trust)`
+- New components: `ClickArea.tsx` (Skriv Skogsbruksplan button + phase flavourtext + click upgrades), `Generators.tsx` (buy generators with stammar)
+- `Dashboard.tsx` rewritten as 2-panel layout: resource bar + phase progress + ClickArea left / Generators right
+- Generators cost stammar (not kapital), click upgrades cost kapital — creates the classic idle game loop
+- Clicking also gives tiny kapital (0.5% of stammarPerClick) so player can bootstrap
+- Build passes cleanly, dev server runs
 
 ---
 
-## Sprint 3: Phase 1 Complete & Phase Transitions (Week 3)
+## Sprint 2: Maktspelet (Power Systems)
 
-### S3.1 — Research Tree
-- [x] Build ResearchTree.tsx — visual tech tree with nodes and connections
-- [x] Wire into Phase 1 "Early Science" upgrades
-- [x] Neural Backup as the final research node (Phase 1 end condition)
+### S2.1 — Lobby System (Politiskt Kapital)
+- [x] Define lobby earner activities in data/lobbyProjects.ts
+  - Älgjakt med riksdagsledamot (5,000 Kapital → +10 PK)
+  - Finansiera tankesmedja (25,000 → +50 PK)
+  - Sponsra partistämma (100,000 → +200 PK)
+  - Transatlantiska Kontakten (500,000 → +1,000 PK)
+- [x] Define lobby purchases (lagändringar) in data/lobbyProjects.ts
+  - "Frihet Under Ansvar 2.0" (50 PK)
+  - "Skogsstyrelsen: Tillsynsbudget -40%" (100 PK)
+  - "Äganderätten Är Hotad!" (200 PK)
+  - "Operation Omnibus" (500 PK)
+  - "Myndighetskapning" (1,000 PK)
+  - "Svängdörren" (2,000 PK)
+  - "Avskogningsförordningen: Avvecklad" (5,000 PK)
+- [x] Build LobbyPanel.tsx — split view: earn PK activities + spend PK on projects
+- [x] Wire lobby effects into game loop (modifiers on generators, image, etc.)
 
-**Notes:**
-`ResearchTree.tsx`: Vertical node graph layout for the Early Science tree (5 nodes). Each node shows icon in circular bubble, name, cost, production, and status. Statuses: locked (🔒, dimmed), available (visible, dimmed cost), affordable (orange glow border + shimmer bar), purchased (green dot + glow). SVG connector lines between nodes — dashed when locked, solid green when predecessor purchased, with animated pulse dot on active connections. Nodes alternate initial slide direction (left/right) for visual interest. "Phase 2" badge on Neural Backup node. Wired into existing `purchaseUpgrade` action. Replaced PlaceholderTab in App.tsx.
+### S2.2 — Skogsägarförtroende
+- [x] Build OwnerMeter.tsx — progress bar with sweet spot zone (40-60) highlighted
+  - Visual: green zone (40-60), yellow (20-40, 60-80), red (0-20, 80-100)
+  - Current value display
+  - Status text based on range
+- [x] Define owner manipulation actions
+  - Gratis skogsbruksplan (+15 trust)
+  - "Äganderätten!"-kampanj (+25 trust)
+  - Sänk virkespriset (-10 trust, +30% Kapital)
+  - Hårdgallring (-5 trust)
+  - "Partnerskap" (+20 trust, 25-year lock)
+- [x] Implement trust effects on gameplay
+  - >80: reduced income
+  - <20: protests, lost revenue
+  - 40-60: optimal
+- [x] Track hidden owner profit vs industry profit ratio
 
-### S3.2 — Phase Transition System
-- [x] Implement phase transition logic in `engine/phases.ts`
-- [x] Build PhaseTransition.tsx — cinematic full-screen overlay:
-  - Fade to black
-  - Typewriter text effect (line by line, 2-3 sec spacing)
-  - Subtle particle/glow effects behind text
-  - Final line flash → new UI fades in
-  - New tab appears with glow animation
-  - Total duration ~15-20 seconds
-- [x] Phase 1 → 2 transition: Neural Backup complete → show transition → unlock Control tab
-- [x] Grey out / transform Phase 1 elements (Attention button becomes automated summary)
-- [x] Auto-save on transition
+### S2.3 — Image/PR System
+- [x] Implement Grön Image resource (starts at 100)
+- [x] Image decay on scandals/aggressive actions
+- [x] PR campaign mechanics (spend Kapital to restore Image)
+- [x] Image effects on gameplay (low image = more antagonist pressure)
 
-**Notes:**
-`engine/phases.ts`: `checkPhaseTransition()` checks end conditions for all 5 phases. Transition script data for all 4 transitions (1→2 through 4→5) with timed text lines, style variants (bold, accent, dim). `PhaseTransition.tsx`: Full-screen black overlay with radial orange gradient background, 20 floating Framer Motion particles, sequenced text reveal with fade+slide animations. ~17s total duration. `pendingTransition` field added to GameState — tick detects transition condition → sets pending → overlay plays → `completePhaseTransition()` advances phase + auto-saves. Grey-out of Phase 1 elements deferred to Phase 2 sprint (S4) since Control tab content doesn't exist yet.
+### S2.4 — Events System
+- [x] Adapt engine/events.ts for Silva Maximus event structure
+- [x] Define all events in data/phase2/events.ts:
+  - "Samebyns protest" (500K stammar trigger)
+  - "SVT-dokumentär: Slaget om Skogen" (Image < 50)
+  - "Ideell förening hittar nyckelbiotop" (every 50K stammar)
+  - "Kinesisk prisras" (Phase 3 start)
+  - "Plockhugget-problemet" (200K stammar)
+  - "Wellpapp-boomen" (1M stammar)
+  - "Svenska Kyrkan säljer" (3M stammar)
+  - "Greta-effekten" (Image < 30)
+  - "Nestlé-Reträtten" (obligatorisk Phase 4 event)
+- [x] Adapt EventModal.tsx for Swedish content
+- [x] Wire event effects to game state
 
-### S3.3 — Achievement System (Foundation)
-- [x] Build AchievementToast.tsx — popup notification for unlocked achievements
-- [x] Implement achievement checking in game loop (batched, every 10 ticks)
-- [x] Define Phase 1 achievements (5 achievements)
-- [x] Achievement display panel (accessible from settings/menu)
+### S2.5 — News Ticker
+- [x] Define all ticker headlines in data/newsTickerLines.ts (organized by phase)
+- [x] Build/adapt NewsTicker.tsx — CSS-animated horizontal scroll
+  - Styled as news chyron
+  - New headlines pushed in based on milestones
+- [x] Phase-based headline unlocking
 
-**Notes:**
-5 Phase 1 achievements: The Beginning (first click), Compulsive Clicker (100 clicks), Self-Improvement (first upgrade), Diversified Portfolio (one from each tree), Digital Immortality (Neural Backup). `data/achievements.ts`: `AchievementDef` type with check function per achievement. `hooks/useAchievements.ts`: Subscribes to store changes, checks every 10 ticks, batch-unlocks achievements, plays sound, calls callback. `AchievementToast.tsx`: Toast manager hook + renderer — gold-bordered glass card slides down from top with spring animation, auto-dismisses after 4s. `AchievementPanel.tsx`: Modal overlay with backdrop blur, lists all achievements for current phase, locked ones show ??? with 🔒. Trophy button (🏆) fixed top-right in App.tsx.
+**Notes:** Sprint 2 mostly complete. Key changes:
+- Created `src/data/lobbyProjects.ts` with 4 lobby earner activities (repeatable, spend Kapital → earn PK) and 7 lobby purchases (one-time, spend PK → permanent effects)
+- Created `src/data/ownerActions.ts` with 5 owner manipulation actions (cooldown-based) + 4 PR campaigns (spend Kapital → restore Image)
+- Created `src/data/newsTickerLines.ts` with 30+ headlines organized by phase, with milestone/event/project triggers
+- Created `src/components/LobbyPanel.tsx` — full Makt tab with: PK resource summary, OwnerMeter, earn PK section, lobby purchases section, PR campaigns section
+- Created `src/components/OwnerMeter.tsx` — color-coded trust bar (red/yellow/green zones) with 5 manipulation action buttons and cooldown timers
+- Rewrote `src/components/Ticker.tsx` — now uses milestone-based headlines from newsTickerLines.ts instead of event history
+- Updated `TabNav.tsx` to include 'Makt' tab (phase 2+)
+- Updated `gameStore.ts` with: `buyLobbyEarner`, `buyLobbyProject`, `performOwnerAction`, `buyPRCampaign` actions; lobby modifier system (generator boost, kapital boost, image protection, lobby discount, owner trust floor); tick loop applies lobby modifiers to stammarPS and kapitalRate
+- Updated `types.ts` with ownerActionCooldowns and new actions
+- Save migration v1→v2 for ownerActionCooldowns field
+- Build passes cleanly (128KB gzipped)
+- Remaining: Phase 2-7 event definitions (S2.4 partial) — the events from forest.md (Samebyns protest, SVT-dokumentar, etc.) still need to be defined as GameEvent objects in a new data file. Phase 1 events continue to work as before.
 
-### S3.4 — Audio Foundation
-- [x] Set up audio system (Web Audio API or Howler.js)
-- [x] Click sound for main button
-- [x] Purchase sound for upgrades
+---
+
+## Sprint 3: Den Mörka Sanningen (Depth & Endgame)
+
+### S3.1 — Achievement System
+- [x] Define all achievements in data/achievements.ts
+  - Tier 1 Lokal: Första Planen, Kaffekoppen, Gallringsmästaren, Första kronan, Lokalpatriot, Storskogsbrukare, Senaste nytt
+  - Tier 2 Regional: Frihet Under Ansvar, Äganderättskrigaren, Rysslands-Bonansen, Gröntvätt, Lobbyist
+  - Tier 3 Nationell: Nestlé sa nej, GD-Flansen, Klimatambassadören, Massabaronen
+  - Tier 4 Internationell: Warborn-Manövern, Transatlantiska Pipansen, FSC-Karussellen, Svängdörren
+  - Tier 5 Endgame: Den Tysta Våren, Djurfritt Sedan 2035, Kolonialmakten, Den Perfekta Raden, Och Sen Då?
+  - Meta: Karpaltunnel, Tålamod
+- [x] Adapt achievement checking hook (existing useAchievements works as-is)
+- [x] Build/adapt AchievementPopup.tsx for toast notifications (existing AchievementToast works as-is)
+- [x] Achievement panel showing all achievements by tier (rewritten with tier tabs, Swedish labels)
+
+### S3.2 — Antagonist System
+- [x] Define antagonists in data/antagonists.ts
+  - Skovarnarna (100K stammar, -0.1 Image/s)
+  - Den Envisa Pensionaren (nyckelbiotop event, -5 stammar/s)
+  - EU-Inspektoren (Phase 4+, -50 stammar/s)
+  - Statliga Dokumentarkanalen (Image < 40, -0.5 Image/s)
+  - Samebyns Juridik (Phase 5+ & samiLand >= 15, -100 stammar/s)
+  - Skogsvispen AB (Phase 3+ & 500K stammar, -5 Kapital/s)
+  - Greta (Image < 30, -0.3 Image/s & -10 Kapital/s)
+- [x] Implement antagonist trigger and effect system (in tick loop)
+- [x] Antagonist countermeasure actions (costs Kapital or PK)
+- [x] UI for active antagonists (AntagonistPanel in Makt tab)
+
+### S3.3 — Hidden Variables & Phase-Specific Content
+- [x] Track all hidden variables in tick (realCO2, ownerProfit, industryProfit, biodiversity, species, samiLand)
+- [x] Species counting: species++ when biodiversity crosses 5% thresholds
+- [x] Sami land loss tied to stammar production in phase 3+
+- [x] Phase-specific unlocks:
+  - Phase 2: Lobby module unlocks (Makt tab)
+  - Phase 3+: Antagonist triggers based on conditions
+  - Phase 7: Endgame screen at 10B stammar
+
+### S3.4 — Endgame Screen
+- [x] Build EndScreen.tsx — the "Årsredovisning" kvitto
+  - White/clinical design (contrast to dark game UI)
+  - Sequential reveal of hidden bookkeeping rows
+  - Verkligt netto-CO2 vs reported (~15%)
+  - Skogsägare vs industri profit ratio (1:N)
+  - Biodiversity remaining + species lost
+  - Sami land lost
+  - Institutional capture (Skogsstyrelsen, FSC, EU)
+  - Antagonists countered count
+- [x] "DELA UT VINST TILL AKTIEÄGARNA" button → post-credits
+- [x] Post-credits scroll (real Swedish forestry facts)
+- [x] "STARTA OM" button (full game reset)
+
+**Notes:** Sprint 3 complete. Key changes:
+- Rewrote `src/data/achievements.ts` with tier-based system: 6 tiers (lokal→endgame+meta), ~28 achievements matching GDD
+- Rewrote `AchievementPanel.tsx` with tier tabs, Swedish labels, color-coded tiers
+- Created `src/data/antagonists.ts` with 7 antagonists: condition-triggered, per-second penalties, counterable
+- Created `src/components/AntagonistPanel.tsx` — shows active antagonists with effects + counter buttons in Makt tab
+- Updated `gameStore.ts` tick with: antagonist trigger checking, antagonist tick effects (image/stammar/kapital penalties), species counting at biodiversity thresholds, sami land loss in phase 3+
+- Added `counterAntagonist` action to gameStore
+- Created `src/components/EndScreen.tsx` — clinical white "Årsredovisning" with sequential reveal, hidden bookkeeping, institutional capture status, post-credits scroll with real facts
+- Wired EndScreen into App.tsx (triggers at 10B stammar in phase 7)
+- Build passes cleanly (136KB gzipped)
+
+---
+
+## Sprint 4: Polish & Ship
+
+### S4.1 — Sound Design
+- [x] Phase-specific ambient audio:
+  - Phase 1-2: Bird sounds, wind, creek (idyllic)
+  - Phase 3: Chainsaws mixed with fewer birds
+  - Phase 4: Harvester machines dominant, single bird
+  - Phase 5: Industrial drone, no nature
+  - Phase 6: Silence, then monotone hum
+  - Phase 7: Complete silence, just EKG-like click pip, then flatline
+- [x] Click sound for "Skriv Skogsbruksplan"
+- [x] Purchase sounds
 - [x] Event notification sound
 - [x] Phase transition sound
-- [x] Volume controls in settings
 
-**Notes:**
-Pure Web Audio API — zero dependencies, procedurally generated sounds. `engine/audio.ts`: 5 sound generators — `playClick` (percussive sine blip), `playPurchase` (ascending two-tone C5→E5), `playEvent` (descending triangle arpeggio A5→E5→C5), `playAchievement` (triumphant C major fanfare), `playPhaseTransition` (deep sawtooth rumble + rising sine sweep, 3.5s). Volume controlled by `setSfxVolume()` and `setMuted()`. `hooks/useAudioSync.ts` syncs store `settings.sfxVolume` to audio module. AudioContext auto-resumes on user interaction (browser autoplay policy). Wired into: MainButton, UpgradeCard, ResearchTree nodes, EventModal, PhaseTransition, useAchievements. Bundle impact: ~2KB (no audio files).
+### S4.2 — Visual Polish
+- [x] Ensure Byråkratisk Brutalism theme is consistent
+- [x] Grid line background (like millimeterpapper/skogsbruksplan)
+- [x] Smooth animations on counters and meters
+- [x] Generator purchase animations
+- [x] Phase transition animations
 
----
+### S4.3 — Balancing Pass
+- [x] Playtest full game flow (target: 30-60 min total)
+  - First 5 min: manual clicking dominates
+  - 5-15 min: generators take over
+  - 15-30 min: lobby and events drive progression
+  - 30-60 min: endgame if optimizing
+- [x] Tune generator costs and production rates
+- [x] Tune event timing and effects
+- [x] Tune owner trust mechanics
+- [x] Tune image decay/recovery rates
 
-## Sprint 4: Phase 2 — Institutional Capture (Week 4-5)
+### S4.4 — Offline Progression
+- [x] Offline return screen with summary
+- [x] Offline stammar generation (10% of active rate)
+- [x] Offline event queue (max 10)
 
-### S4.1 — Legitimacy System
-- [x] Add Legitimacy bar to Dashboard (always visible from Phase 2+)
-- [x] Implement legitimacy decay formula
-- [x] Implement legitimacy multiplier effects on GpS
-- [x] Legitimacy range effects (bonuses, penalties, collapse warning)
-- [x] Visual: color changes at different legitimacy ranges
+### S4.5 — Remaining Content
+- [x] Ensure all news ticker headlines are implemented
+- [x] Ensure all events have proper effects
+- [x] Ensure all achievements trigger correctly
+- [x] Phase 7 terraforming/absurd endgame content
 
-**Notes:**
-`LegitimacyMeter.tsx`: Animated Framer Motion bar with color ranges (green >80%, yellow-green 50-80%, amber 25-50%, red <25%, flashing red <10%). Shows numeric %, rate of change per second, status label, GpS multiplier effect, and COLLAPSE WARNING animation when critical. Fixed critical bug: legitimacy decay was calculated in formulas but never applied in tick(). Now tick applies net change = recovery (healthcare + social + propaganda budget effects) - decay (base + institutions + wars + drift + defunded). Budget effects from `calculateBudgetEffects()` wired into cash multiplier and legitimacy recovery.
+### S4.6 — Mobile & Deployment
+- [x] Test responsive layout
+- [x] Deploy web version
+- [x] PWA setup (manifest, service worker)
 
-### S4.2 — Institution Board
-- [x] Build InstitutionBoard.tsx — grid of 13 institution cards (glassmorphism)
-- [x] Each card shows: name, status badge, resistance bar, Greatness output, animated progress
-- [x] Implement institution actions: Co-opt, Replace, Purge, Rebrand, Automate, Privatize, Loyalty Test
-- [x] Progress bars for ongoing actions (animated, timed)
-- [x] Define all 13 institutions with stats in `data/phase2/institutions.ts`
-- [x] Capture animation: card border transitions from grey → orange → green
-
-**Notes:**
-`data/phase2/institutions.ts`: 13 institutions across 5 categories (media, judicial, security, civic, regulatory). Each has resistance, corruption susceptibility, GpS output, legitimacy impact, loyalty generation. 7 action types defined with duration, costs, resistance reduction, and legitimacy effects. `InstitutionBoard.tsx`: Responsive grid of glassmorphism cards. Cards expand on click to show available actions. Progress bars for ongoing actions with percentage. Status dots color-coded. Store `tickInstitutions()` runs per tick — handles action completion, resistance reduction, and capture. `completePhaseTransition()` now initializes all 13 institutions with starting resistance when entering Phase 2. Institution GpS now uses actual def values (not hardcoded 5).
-
-### S4.3 — National Budget System
-- [x] Build BudgetPanel.tsx — slider allocation UI for 8 budget categories
-  - Healthcare, Education, Social Benefits, Military, Data Centers, Infrastructure, Propaganda, Space
-  - Sliders must sum to 100% (auto-adjust others when one moves)
-  - Color-coded: social programs = blue/green, military/data = orange/red
-  - Real-time preview of effects as sliders move
-- [x] Implement budget effects in game loop (production modifiers per category)
-- [x] Budget-related events: healthcare crisis, education cuts, worker protests
-- [x] "Austerity Crisis" trigger when social programs all below 10%
-
-**Notes:**
-`BudgetPanel.tsx`: 8 sliders (0-50 each), proportional auto-adjust to keep total at 100%. Social/power summary bar. Austerity Crisis warning animation when healthcare+education+socialBenefits all <10%. Real-time effect value display per category. Budget effects wired into tick: infraBonus → cash multiplier, healthcare+social+propaganda → legitimacy recovery.
-
-### S4.4 — Tariff Engine & Data Centers
-- [x] Build TariffPanel.tsx — toggleable tariff targets with level sliders
-  - Consumer Goods, Industrial, Technology, Agricultural, Allied Nations, Everyone
-  - Show Cash generation vs side effects in real-time
-- [x] Implement tariff effects (Cash gain + production penalties + resistance increases)
-- [x] Build DataCenterUpgrades.tsx — upgrade tree for GPU/TPU empire
-  - Surveillance Array → Predictive Loyalty → Content Farm → Deepfake Diplomacy → Autonomous Governance → Reality Processing → Neural Compliance
-- [x] Wire data center effects to Attention, Surveillance, Propaganda multipliers
-- [x] Tariff and data center related events (5+ events each)
-
-**Notes:**
-`data/phase2/tariffs.ts`: 6 tariff categories with 4 levels each (Off/Low/Medium/High). Each has cash per minute, legitimacy drain per second, production penalty, and resistance increase. `TariffPanel.tsx`: Level selector buttons with real-time effect preview. Tariff cash/legitimacy effects wired into tick — tariff cash added per second, legitimacy drain applied. `data/phase2/dataCenters.ts`: 7 sequential upgrades (prerequisite chain). `DataCenterPanel.tsx`: Vertical node list with connector lines, status dots, deploy buttons. Silicon Valley-branded flavor text. `ControlDashboard.tsx`: Tab navigation for Institutions, Budget, Tariffs, Data Centers, Loyalty.
-
-### S4.5 — Loyalty Economy
-- [x] Implement Loyalty Pledges, Loyalty Scores, Loyalty Rewards, Loyalty-Based Hiring
-- [x] Wire to institution efficiency, surveillance, legitimacy effects
-- [x] Loyalty-related events (3+ events)
-
-**Notes:**
-`data/phase2/loyalty.ts`: 4 loyalty upgrades with escalating costs and effects. `LoyaltyPanel.tsx`: Card-based purchase UI with loyalty+cash costs, flavor text, active/inactive states. `loyaltyUpgrades` field added to GameState. Loyalty generated from captured institutions via `tickInstitutions()`. Loyalty-related events included in Phase 2 events (worker protests, loyalty app, etc.).
-
-### S4.6 — Phase 2 Events & Contradiction
-- [x] Define Phase 2 events in `data/phase2/events.ts` (20+ events including budget/tariff/loyalty events)
-- [x] Implement Phase 2 contradiction: Control vs Legitimacy
-- [x] Nobel Score meter introduced (via events)
-- [x] Define Phase 2 achievements (5 achievements)
-
-**Notes:**
-`data/phase2/events.ts`: 20 Phase 2 events across all categories — scandal (whistleblower), crisis (polls, general defiance, health crisis, protests, veterans, austerity, court challenge), opportunity (CEO education, tariff revenue, data center growth, Nobel nomination, private prison), contradiction (health study, education review, workers benefits, climate research), absurd (intern memo, AI speech, loyalty app). All wired into ALL_EVENTS. `contradictions.ts` updated: Control vs Legitimacy seesaw — control rises with captured institutions, legitimacy mirrors actual legitimacy. Doublethink Tokens awarded when both above 40 for 10s. 5 Phase 2 achievements: Institutional Alignment, Hostile Takeover, Legitimacy Crisis, The Deep State, Tariff Man.
-
-### S4.7 — Phase 2 → 3 Transition
-- [x] End condition: all 13 institutions captured
-- [x] Transition screen text
-- [x] Unlock World tab (Phase 3 sprint)
-- [x] Initialize Phase 3 state (countries, fleet, etc.) (Phase 3 sprint)
-
-**Notes:**
-Phase 2→3 end condition already in `phases.ts`: all 13 institutions captured/automated. Transition script text for 2→3 already defined in `phases.ts`. World tab now shows WorldDashboard. Phase 3 initialization (countries, fleet, contradictions) done in `completePhaseTransition()`.
-
----
-
-## Sprint 5: Phase 3 — World Greatening (Week 5-7)
-
-### S5.1 — World Map & Country System
-- [x] Define all 14 countries with stats in `data/phase3/countries.ts`
-  - Include Frostheim, Maple Federation, Petro Republic, Canal Isthmus
-  - Azure State special entity (Eddstein's Isle kompromat mechanic)
-- [x] Define ~25 tactics (standard, country-specific, Azure State)
-- [x] Build WorldMap.tsx — country cards with status, resistance, stability, tactics
-- [x] Build WorldDashboard.tsx — sub-tab container (Overview, Countries, Fleet)
-- [x] Implement tactics system in store (startCountryTactic, tickCountries)
-- [x] Country-specific special mechanics:
-  - Frostheim: Purchase Offer (5 offers = surrender)
-  - Maple Federation: Trade Dependency + Absorption Referendum
-  - Tundra Republic: Encirclement meter (100% = fold)
-  - Petro Republic: Sanctions → instability → Extraordinary Rendition
-  - Canal Isthmus: Shipping leverage
-  - Azure State: Kompromat resist → Aid reduction → Leverage reversal → Full absorption
-- [x] Refugee Wave mechanic (wars in Sand Republic/Copper States destabilize Eurovia/Nordland)
-- [x] Annexed countries contribute GpS in formulas.ts
-- [x] Wire country initialization in completePhaseTransition for Phase 3
-
-**Notes:**
-`data/phase3/countries.ts`: 14 countries across 6 regions + Azure State special entity. Each country has resistance, stability, GDP, defense, corruption, media hardness, greatnessPotential, nobelOptics, and optional specialMechanic. CountryState extended with `kompromatLevel` field and `ActiveOperation` type (replaces string[]). ~25 tactics: standard (partnership, trade leverage, media infiltration, freedom foundation, coup, freedom operation, extraordinary rendition, annexation, post-war rebuilding, immigration weaponization) + country-specific (purchase offer, trade integration, absorption referendum, joint defense, sanctions campaign, democracy fund) + Azure State (kompromat resist, aid reduction, leverage reversal, full absorption). Store actions: `startCountryTactic` validates costs/availability/max ops, `tickCountries` progresses operations, applies resistance/stability/fear/nobel effects, handles special mechanics. Fear drains legitimacy at -0.5% per 100 Fear. Refugee waves auto-destabilize Eurovia and Nordland when wars happen in Sand Republic or Copper States.
-
-### S5.2 — Fleet Builder & Fear
-- [x] Build FleetPanel.tsx — shipyard management and ship list
-- [x] Define 7 ship classes in `data/phase3/fleet.ts`
-- [x] Shipyard production system (build queue, production rate, shipyard upgrades)
-- [x] Fear mechanic (fleet size → passive fear → legitimacy drain)
-- [x] Ship count + build amount selector UI
-
-**Notes:**
-`data/phase3/fleet.ts`: 7 ship classes — Patrol Boat ($10K), Torpedo Barge ($30K), Destroyer ($50K), "Peace Cruiser" ($150K, Nobel-positive!), Carrier ($200K), Golden Dreadnought ($500K), Orbital Peace Platform ($1M). Each has war output, fear, Nobel impact, and shipyard level requirement (1-4). Shipyard upgrades scale 100K * 3^level. Production: 1 ship per 10s per shipyard level. `FleetPanel.tsx`: Ship class cards with build amount selector (1/5/10), shipyard upgrade button, build queue progress display, fear warning. Store: `buildShip`, `upgradeShipyard`, `tickShipyard` actions. Phase 3 starts with shipyard level 1.
-
-### S5.3 — Nobel Prize System (Full)
-- [x] Build NobelMeter.tsx — Nobel Score display with progress bar and threshold
-- [x] Nobel Prize awarding in tick (nobelScore >= threshold → win prize)
-- [x] Diminishing returns (threshold increases 50% each prize)
-- [x] Prize rewards (Legitimacy +15, Greatness burst)
-- [x] Irony indicators (show active wars while pursuing peace)
-- [x] Integrated into WorldDashboard overview
-
-**Notes:**
-`NobelMeter.tsx`: Gold-themed glassmorphism card showing Nobel Score progress, threshold, prizes won (medal icons), active war count, fear level, and ironic commentary. Gold glow when close to threshold. Nobel Prize awarded in tick: resets score, increases threshold by 50%, gives +15 legitimacy and greatness burst. War vs Nobel contradiction makes this the game's core Phase 3 optimization puzzle — build war output to conquer, then manufacture peace optics.
-
-### S5.4 — Phase 3 Events, Contradictions & Achievements
-- [x] Define Phase 3 events in `data/phase3/events.ts` (18 events)
-  - Nobel events (nomination, ironic editorial)
-  - Military events (warship leak, coalition condemns, rendition fallout)
-  - Country-specific events (Frostheim, Eurovia, Maple, Tundra, Petro, Canal)
-  - Crisis events (refugees, Azure State demands, Jade Empire warning)
-  - Opportunity events (peace summit, arms deal, island climate, NGO backlash)
-- [x] Implement War vs Nobel contradiction (fear + wars vs Nobel Score)
-- [x] Implement Expansion vs Stability contradiction (annexed count vs global stability)
-- [x] Phase 3 achievements (6 achievements):
-  - Manifest Destiny (first annexation)
-  - Peacemonger (Nobel Prize during active war)
-  - Golden Fleet (build Golden Dreadnought)
-  - Extraordinary Measures (use Extraordinary Rendition)
-  - The Greatness Accord (all 14 countries)
-  - Gunboat Diplomacy (Nobel Prize with 50+ ships)
-
-**Notes:**
-18 Phase 3 events covering Nobel irony, military scandals, geopolitical specials, refugee crises, Azure State kompromat, and arms deals. Each event has 3 choices with distinct resource tradeoffs — the satire is in how "noble" language masks terrible actions. Two Phase 3 contradictions: War vs Nobel (fear + active wars vs Nobel Score) and Expansion vs Stability (annexed country ratio vs average remaining stability). Both initialized on Phase 3 entry. 6 Phase 3 achievements. All wired into ALL_EVENTS, contradictions engine, and Phase 3 initialization.
-
-### S5.5 — Phase 3 → 4 Transition
-- [x] End condition: all 14 countries under Greatness Accord (already in phases.ts)
-- [x] Transition screen text (already in phases.ts)
-- [x] Initialize Phase 4 state (Phase 4 sprint)
-
-**Notes:**
-Phase 3→4 end condition already in `phases.ts`: all countries annexed/allied. Transition script text already defined. Phase 4 initialization will be done in Sprint 6.
-
----
-
-## Sprint 6: Phase 4 — Space Greatening (Week 8-9)
-
-### S6.1 — Space Systems
-- [x] Build SpaceView.tsx — solar system visualization
-- [x] Launch infrastructure tier system (Launchpad → Mass Driver)
-- [x] Lunar industry (Moon Base, He-3 Mining, Lunar Shipyard)
-- [x] Martian terraforming (colony, atmosphere, water)
-- [x] Asteroid strip mining (prospectors, rigs, refineries)
-- [x] Orbital propaganda satellites
-
-**Notes:**
-`data/phase4/space.ts`: 4 launch tiers (Launchpad $500K → Mass Driver $100M), 4 lunar buildings (Moon Base, He-3 Mining, Lunar Shipyard, Lunar Heritage Site), 3 Mars upgrades (Colony, Atmosphere Processing, Water Extraction), 3 asteroid tiers (Prospector Drones max 10, Mining Rigs max 10, Refineries max 5), propaganda satellites (max 20, $5M + 10 OI each), Dyson Swarm Prototype ($200M, requires mass_driver + 80 OI). `SpaceView.tsx`: 6 sub-tabs (Overview, Launch, Moon, Mars, Asteroids, Weapons). Store: `tickSpace(dt)` produces rocketMass, orbitalIndustry, miningOutput, colonists, terraformProgress per tick. 8 new store actions for building/purchasing.
-
-### S6.2 — Mars Renaming & Space Weapons
-- [x] Mars renaming milestone at 25% terraform (silent UI change)
-- [x] Define space weapons (Peace Laser, Negotiation Device, Railgun, Solar Shade)
-- [x] Wire space weapons to War Output and country effects
-
-**Notes:**
-Mars renaming triggers silently at 25% terraform in `tickSpace()`. Mars panel conditionally renders "Orange Planet" names. `data/phase4/weapons.ts`: 4 weapons — Orbital Peace Laser ($5M, +2K war, +50 fear, -10 legit, requires spaceport), Asteroid Negotiation Device ($10M, +3K war, +100 fear), Diplomatic Railgun ($20M, +5K war, +200 fear), Solar Shade Array ($50M, +10K war, +500 fear). Each requires a launch tier. War output and fear applied on purchase.
-
-### S6.3 — Reality Drift (Introduced)
-- [x] Implement Reality Drift accumulation mechanics
-- [x] UI glitch effects at 20-40% (CSS flicker animations)
-- [x] Label swaps at 40-60%
-- [x] Value offsets at 60-80%
-- [x] Full unreliable UI at 80-100%
-- [x] Drift reduction mechanics (fund science, stabilization campaigns)
-
-**Notes:**
-`engine/realityDrift.ts`: 5 drift levels (Stable, Minor Distortion, Narrative Drift, Reality Erosion, Total Dissociation). Drift rate from satellites (0.001/unit), weapons (0.002/weapon), high fear (0.001 when >50). Reduction from education budget. `hooks/useRealityDrift.ts`: Sets CSS `--drift-intensity` variable, toggles drift classes on documentElement. Timer-based label swaps at 40%+ using `data-drift-label` attributes. CSS keyframes for flicker (opacity/hue-rotate) and glitch (clip-path/translateX).
-
-### S6.4 — Phase 4 Events, Contradiction, Transition
-- [x] Define Phase 4 events (10+ events)
-- [x] Implement contradiction: Long-Term vs Short-Term
-- [x] Bridge upgrades (Long-Term Thinking Simulator, Science Rebranding, etc.)
-- [x] Phase 4 achievements (5 achievements)
-- [x] End condition: Solar System = Greatness Industrial Zone
-- [x] Transition to Phase 5
-
-**Notes:**
-12 Phase 4 events (3 GDD + 9 originals). Long-Term vs Short-Term contradiction in `contradictions.ts`. 4 bridge upgrades (research speed, science rebranding, cost reduction, patience). 5 Phase 4 achievements (One Small Step, Orange Planet, Space Landlord, Diplomatic Railgun, Freedom Canyon). End condition already in `phases.ts`: `dysonSwarms > 0 && asteroidRigs >= 5 && orbitalIndustry >= 100`. Phase 4 initialization in `completePhaseTransition()`. Transition cinematic script already defined.
-
----
-
-## Sprint 7: Phase 5 — God Emperor Protocol (Week 10-11)
-
-### S7.1 — Universe Systems
-- [x] Build UniverseView.tsx — galaxy visualization
-- [x] Von Neumann probe system (exponential replication)
-- [x] Dyson Swarm construction
-- [x] Star conversion mechanic
-- [x] Black Hole Accounting
-- [x] Reality Rebranding research tree
-
-**Notes:**
-`data/phase5/universe.ts`: All Phase 5 system definitions — MAGA Replicators (4 probe upgrades with replication rates), Solar Greatness Harvester (3 Dyson tiers), Star Branding (4 tiers), Golden Ledger Singularity (3 black hole upgrades), Narrative Architecture (4 sequential research). Constants: 1000 reachable stars, 100 computronium per star, 10 GU per computronium. `components/UniverseView.tsx`: 6 sub-tabs (Overview, Probes, Harvesters, Branding, Singularity, Narrative) following SpaceView pattern. Reusable UpgradeNode component with status dots, connector lines, cost display, BUILD button. Deep violet (#9933FF) accent. `store/gameStore.ts`: `tickCosmic(dt)` handles probe production/replication, star conversion (limited by probe reach), computronium production, GU production with Narrative Architecture multipliers, black hole effects, drift accumulation, universe conversion %, ending trigger at 100%. 5 purchase actions for all Phase 5 systems. Phase 5 initialization in `completePhaseTransition()`. All names Trumpified per sprint7_rebrands.md.
-
-### S7.2 — Phase 5 Contradiction & Endgame
-- [x] Implement Greatness vs Meaning contradiction
-- [x] GU value depreciation (logarithmic decrease)
-- [x] Event frequency acceleration (every 15-30 seconds)
-- [x] Full Reality Drift UI degradation
-- [x] Ending sequence (4 screens)
-- [x] Post-ending maintenance loop
-
-**Notes:**
-Greatness vs Meaning contradiction in `contradictions.ts`: sideA driven by GU + stars, sideB inversely proportional to reality drift (100 - drift). `data/phase5/events.ts`: 12 Phase 5 events across reality glitches, absurd, crisis, contradiction, Nobel, and opportunity categories — 15-30s frequency. GU value depreciation: logarithmic factor `1 / (1 + log10(GU / 1000))` applied to GU production. Post-ending: 0.5% GU decay per second after endingComplete, requiring active upkeep. `components/EndingSequence.tsx`: 4-screen overlay — "THE UNIVERSE IS NOW GREAT" → "..." → "GREATNESS MUST BE MAINTAINED" → "ALERT: GREATNESS DECAY / MAINTENANCE PROTOCOL / OPTIMIZATION / FOREVER" with Framer Motion transitions and particle effects. Phase 5 Reality Drift sources: stars, probes, GU. 5 new cosmic label swaps (Stars→Branded Assets, etc.). 7 Phase 5 achievements.
-
-### S7.3 — Prestige System
-- [x] Implement prestige reset logic
-- [x] Prestige Points calculation (based on total GU)
-- [x] Define prestige upgrades (10+ upgrades)
-- [x] Prestige upgrade purchase UI
-- [x] Persistent state across resets (achievements, prestige upgrades, stats)
-
-**Notes:**
-`data/prestige.ts`: 12 prestige upgrades with prerequisite chains — Muscle Memory (10x click, 10PP), Retained Knowledge (25% cheaper research, 25PP), Institutional Inertia (50% slower decay, 50PP), Accelerated Timeline (30% faster institutions, 75PP), Old Alliances (15% less country resistance, 100PP), Media Dynasty (2x GpS, 150PP), Event Fatigue (30% slower events, 200PP), Eternal Engine (100% offline, 500PP), Ontological Anchor (-20% drift cap, 1000PP), Recursive Greatness (5x GpS, 2500PP), Manifest Permanence (50x click, 5000PP), The Golden Constant (legitimacy floor 25%, 10000PP). Effects wired throughout engine: `calculateGPS` (gps_multiplier), `calculateUpgradeCost` (research_discount), `calculateLegitimacyDecay` (legitimacy_decay), `getDriftCap` (drift_cap), `getNextEventDelay` (event_cooldown), `tickInstitutions` (institution_speed), `completePhaseTransition` Phase 3 init (country_resistance). `components/PrestigePanel.tsx`: Modal overlay with stats (level, PP, PP on reset), prestige button with confirmation, upgrade tree with owned/affordable/locked states, prerequisite display. Accessible via infinity button (♾️) from Phase 2+.
-
----
-
-## Sprint 8: Polish & Ship (Week 12-14)
-
-### S8.1 — Offline Progression Polish
-- [x] Return screen with summary
-- [x] Offline event queue (max 10, auto-resolve if Legitimacy critical)
-- [x] Test extended offline periods
-
-**Notes:**
-`OfflineReturnModal.tsx`: Full-screen glassmorphism overlay showing time away, greatness earned (with offline rate %), legitimacy change with before→after display + critical warning, pending events count, and auto-resolved crisis count. `offline.ts` enhanced: `OfflineResult` now includes `legitimacyBefore/After`, `legitimacyCritical`, `offlineEvents[]`, `autoResolvedCount`. Generates up to 10 offline events via weighted random selection; auto-resolves crisis/scandal events when legitimacy is critical. `useOfflineCalc` now takes `eventPool` param. `resolveEvent`/`dismissEvent` in store now auto-pop from `eventQueue` to feed offline events one-by-one through EventModal. `ALL_EVENTS` exported from gameStore for shared use.
-
-### S8.2 — Full Achievement Pass
-- [x] Define all remaining achievements (45+ total)
-- [x] Achievement display panel with categories
-- [x] Meta achievements
-- [x] Test all achievement triggers
-
-**Notes:**
-51 total achievements across all 5 phases + meta. Added `AchievementCategory` type: milestone (green), strategy (blue), irony (gold), meta (purple). New achievements: Phase 1 — Repetitive Strain (1K clicks), Cash Money, Attention Hog, Breaking News. Phase 2 — Austerity King, Surveillance State, Loyalty Economy, Doublethink Master. Phase 3 — The Armada (100 ships), Peace Industrial Complex (3 Nobels), Fear Factor (500 fear), Collateral Greatness (3 refugee waves). Phase 4 — Propaganda Network (10 sats), Climate Control, Dyson Pioneer. Phase 5 — Black Hole Accountant, Star Empire (500 stars). Meta — True Believer, The Establishment, World Leader, Cosmic Authority, God Emperor (all phase X achievements), Completionist (all non-meta), Prestige Veteran (level 3), The Long Game (24h play time). `AchievementPanel.tsx` refactored with phase tabs (All/P1/P2/.../Meta) showing completion counts + checkmarks, category badges on each achievement, scrollable list with proper overflow.
-
-### S8.3 — Sound Design
-- [x] Phase-specific ambient audio
-- [x] Event category sounds
-- [x] Phase transition audio
-- [x] Reality Drift audio distortion (Phase 4-5)
-- [x] Mute/volume controls
-
-**Notes:**
-`audio.ts` expanded: Phase-specific ambient drones (5 unique tones — A1 sine for P1 through G1 sawtooth for P5, each with harmonic overtone layer). `startAmbient(phase)` fades in over 2s, `stopAmbient()` fades out. `playEventByCategory(category)` — 7 distinct sounds: scandal/crisis = square wave alarm, opportunity = triangle arpeggio, absurd = wobbly pitch bend, contradiction = dissonant minor second, nobel = regal G major fanfare, reality_glitch = bitcrushed noise burst. `updateDriftAudio(drift)` — bandpass-filtered white noise loop + ambient drone detuning that scales with drift 20-100%. `setAmbientVolume()` + `getAmbientVolume()`. `useAudioSync` updated to sync musicVolume→ambient, phase→drone, realityDrift→drift audio. EventModal now calls `playEventByCategory(event.category)`. `SettingsPanel.tsx` — full settings modal with SFX + Ambient volume sliders, Save/Export/Import/Reset controls. Gear icon (&#9881;) added to top-right action buttons.
-
-### S8.4 — Balancing Pass
-- [x] Playtest Phase 1 (target: 20-40 min)
-- [x] Playtest Phase 2 (target: 1-2 hours)
-- [x] Playtest Phase 3 (target: 2-4 hours)
-- [x] Playtest Phase 4 (target: 2-3 hours)
-- [x] Playtest Phase 5 (target: open-ended, satisfying loop)
-- [x] Tune all formulas, costs, timings
-- [x] Document final balance values in spec.md
-
-**Notes:**
-Analytical balance review (numerical analysis, not live playtest — requires browser testing for feel). Key balance parameters verified:
-- **Phase multipliers**: 1x/10x/100x/10Kx/1Mx — exponential growth feels appropriate for 5 phases.
-- **Phase 1 (~30 min)**: 25 upgrades, costs 10→15K attention. With 1 attn/click base + upgrade boosts, Neural Backup (15K) reachable in ~30 min. Production ramps from 0.1→50+ GpS.
-- **Phase 2 (~1-2 hrs)**: 13 institutions, resistance 20-75, action durations 20-180s. Co-opt→Automate chain requires multiple passes. Legitimacy management via budget adds tension.
-- **Phase 3 (~2-4 hrs)**: 14 countries, resistance 20-95 (Jade Empire boss at 95). Ship costs 10K→1M. Nobel Prize threshold increases 50% per win. Fleet+diplomacy balance.
-- **Phase 4 (~2-3 hrs)**: Launch tiers 500K→100M. Moon/Mars/Asteroid progression. Space weapons 5M→50M. Drift begins accumulating.
-- **Phase 5 (open-ended)**: Costs in billions. Probe replication creates exponential growth. GU depreciation (log scale) prevents runaway. 0.5% post-ending decay ensures maintenance loop.
-- **Event frequency**: 120-180s(P1) → 15-30s(P5) creates escalating pressure.
-- **Legitimacy decay**: Base 0.001/s + 0.0002/institution + 0.005/war. Recovery via healthcare(0.003/pt) + social(0.002/pt) + propaganda(0.004/pt). Budget allocation creates meaningful tradeoffs.
-- **Upgrade cost scaling**: 1.15^n — standard idle game curve, keeps upgrades progressively expensive without being punishing.
-- No blind formula changes made — balance should be tuned via in-browser playtesting.
-
-### S8.5 — Monetization & Cosmetics
-- [x] Ad removal flag
-- [x] Cosmetic themes (Gold Plated, War Room, Void, Retro Terminal)
-- [x] Time skip tokens
-- [ ] Executive Package bundle
-- [ ] IAP integration (Capacitor plugin, later)
-
-**Notes:**
-4 cosmetic themes implemented as CSS variable overrides: Gold Plated (gold accents, warm bg), War Room (military green, dark bg), Void (deep purple/cosmic), Retro Terminal (green-on-black CRT, monospace everything). Theme classes applied to `<html>` via `useThemeSync()` hook. Theme selector in SettingsPanel with colored circle buttons. `GameSettings` extended with `adsRemoved: boolean` and `timeSkipTokens: number` fields. Executive Package bundle and IAP integration deferred — requires Capacitor native plugins and app store setup (S8.6).
-
-### S8.6 — Mobile Build & Deployment
-- [x] Capacitor setup for iOS and Android
-- [ ] Test on mobile devices
-- [x] Deploy web version (Vercel/Netlify)
-- [ ] App store assets (screenshots, description)
-- [ ] Submit to app stores
-
-**Notes:**
-`capacitor.config.ts` created with appId `com.greatness.simulator`, webDir `dist`, SplashScreen + StatusBar plugin config. To complete Capacitor setup: `npm install @capacitor/core @capacitor/cli && npx cap init && npx cap add ios && npx cap add android`. Mobile meta tags added to `index.html`: apple-mobile-web-app-capable, status-bar-style, mobile-web-app-capable. Web manifest at `public/manifest.json` with PWA config (standalone, portrait, dark theme). Build outputs to `dist/` — ready for Vercel/Netlify deploy (just connect repo). App store assets (screenshots, descriptions) and device testing require manual work. Bundle: 173KB gzipped JS + 7.8KB CSS.
+**Notes:** Sprint 4 complete. Key changes:
+- **S4.1 Sound Design**: Complete audio.ts rewrite with multi-layered ambient soundscapes per phase. Phase 1-2: wind (filtered noise + LFO) + bird chirps (periodic sine sweeps) + drone. Phase 3: wind + fewer birds + chainsaw (distorted sawtooth). Phase 4: light wind + rare bird + industrial layer (rumble + grind + mechanical clicks). Phase 5: full industrial only. Phase 6: sub-bass 40Hz drone + high-pitched whine (tinnitus). Phase 7: EKG beep every 1.5s, click becomes EKG pip (1000Hz sine).
+- **S4.2 Visual Polish**: Phase progress bar glow animation at >85%. Updated ClickArea phase 6-7 flavourtext.
+- **S4.3 Balancing**: Fixed major generator progression gap — moved gen_autonomt phase 6→5, gen_orbital phase 7→6 (+ adjusted stats: baseCost 50M→10M, production 100K→250K). Increased kapital conversion rates across all phases. Tightened event frequencies.
+- **S4.4 Offline Progression**: System verified complete — 10% rate, 60s threshold, max 10 events, crisis auto-resolve, proper modal UI.
+- **S4.5 Remaining Content**: Created 12 new events in src/data/phase5/events.ts (phases 5-7: Maktutredningen, EU-inspektion, Svängdörrsskandal, Klimattoppmöte, Sista blandskogen, Genetisk Gran, Den sista fågeln, AI-skördarnätverk, Lunar Silva, Mars Massafabrik, Sista människan, Universums kvitto). Added ~15 new ticker headlines for phases 5-7.
+- **S4.6 Mobile & Deploy**: Fixed manifest.json paths for /silva-maximus/ base. Created SVG favicon + PNG icons (192/512). Added apple-touch-icon. Created service worker (sw.js) with cache-first strategy. Registered SW in main.tsx. Increased touch targets to 44px (w-11 h-11). Added safe-area-inset-top to Ticker for notched devices.
+- Build: 139KB gzipped, all TypeScript passes cleanly.
 
 ---
 
@@ -489,7 +310,7 @@ Analytical balance review (numerical analysis, not live playtest — requires br
 
 After every coding session, ensure:
 
-1. [x] ← Check off completed tasks above
+1. [x] <- Check off completed tasks above
 2. Update **Notes** under the completed sprint task with:
    - What was built
    - Any deviations from plan

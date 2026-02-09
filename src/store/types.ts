@@ -1,7 +1,7 @@
-// ── Core Game State Types ──
+// ── Silva Maximus — Game State Types ──
 // Matches spec.md schema. Single source of truth for all game state types.
 
-export type Phase = 1 | 2 | 3 | 4 | 5
+export type Phase = 1 | 2 | 3 | 4 | 5 | 6 | 7
 
 export interface GameState {
   // Meta
@@ -10,87 +10,47 @@ export interface GameState {
   lastTickAt: number
   lastSaveAt: number
   totalPlayTime: number
-  prestigeLevel: number
-  prestigePoints: number
 
-  // Core Resources
-  greatness: number
-  greatnessPerSecond: number
-  cash: number
-  attention: number
-  influence: number
+  // Primary Resources
+  stammar: number            // lifetime total (never decreases)
+  stammarPerSecond: number   // computed each tick
+  stammarPerClick: number    // base + upgrades
+  kapital: number            // currency, spendable
+  lobby: number              // Politiskt Kapital
+  image: number              // Grön Image™, 0-100
 
-  // Phase 2+
-  loyalty: number
-  control: number
-  legitimacy: number
-  surveillance: number
+  // Hidden Resources (not shown until endgame/reveal)
+  realCO2: number
+  ownerProfit: number
+  industryProfit: number
+  biodiversity: number       // 0-100%, starts at 100
+  species: number            // species lost count
+  samiLand: number           // reindeer grazing land lost (km²)
 
-  // Budget allocation (Phase 2+)
-  budget: BudgetAllocation
-
-  // Tariffs (Phase 2+)
-  tariffs: Record<string, TariffState>
-
-  // Data Centers (Phase 2+)
-  dataCenterUpgrades: Record<string, boolean>
-
-  // Loyalty system upgrades (Phase 2+)
-  loyaltyUpgrades: Record<string, boolean>
-
-  // Phase 3+
-  treatyPower: number
-  sanctions: number
-  annexationPoints: number
-  warOutput: number
-  nobelScore: number
-  nobelPrizesWon: number
-  nobelThreshold: number
-  fear: number
-
-  // Phase 4+
-  rocketMass: number
-  orbitalIndustry: number
-  miningOutput: number
-  colonists: number
-  terraformProgress: number
-
-  // Phase 5+
-  computronium: number
-  greatnessUnits: number
-  realityDrift: number
-  starsConverted: number
-  probesLaunched: number
-
-  // Meta-currency
-  doublethinkTokens: number
+  // Skogsägarförtroende
+  ownerTrust: number         // 0-100, starts at 50
 
   // Tracking
   clickCount: number
-  attentionPerClick: number
+  totalStammar: number       // lifetime total for phase thresholds
+
+  // Generators
+  generators: Record<string, GeneratorState>
 
   // Upgrades
   upgrades: Record<string, UpgradeState>
 
-  // Phase 2: Institutions
-  institutions: Record<string, InstitutionState>
+  // Click upgrades purchased
+  clickUpgrades: Record<string, boolean>
 
-  // Phase 3: Countries
-  countries: Record<string, CountryState>
+  // Lobby projects
+  lobbyProjects: Record<string, LobbyProjectState>
 
-  // Phase 3: Fleet
-  fleet: Record<string, number>
-  shipyardLevel: number
-  shipyardQueue: ShipyardOrder | null
+  // Antagonists
+  antagonists: Record<string, AntagonistState>
 
-  // Phase 4: Space
-  space: SpaceState
-
-  // Phase 5: Universe
-  universe: UniverseState
-
-  // Contradictions
-  contradictions: Record<string, ContradictionState>
+  // Owner action cooldowns (timestamp when action becomes available again)
+  ownerActionCooldowns: Record<string, number>
 
   // Events
   eventQueue: GameEvent[]
@@ -101,14 +61,16 @@ export interface GameState {
   // Achievements
   achievements: Record<string, boolean>
 
-  // Prestige upgrades (persist across resets)
-  prestigeUpgrades: Record<string, boolean>
-
   // Phase transition
   pendingTransition: { from: Phase; to: Phase } | null
 
   // Settings
   settings: GameSettings
+}
+
+export interface GeneratorState {
+  count: number
+  unlocked: boolean
 }
 
 export interface UpgradeState {
@@ -117,120 +79,21 @@ export interface UpgradeState {
   unlocked: boolean
 }
 
-export type InstitutionStatus = 'independent' | 'co-opting' | 'replacing' | 'purging' | 'captured' | 'automated'
-
-export interface InstitutionState {
-  status: InstitutionStatus
-  resistance: number
-  progress: number
-  actionStartedAt: number | null
-  rebranded: boolean
+export interface LobbyProjectState {
+  purchased: boolean
+  count: number
+  unlocked: boolean
 }
 
-export type CountryStatus = 'independent' | 'sanctioned' | 'infiltrated' | 'coup_target' | 'occupied' | 'annexed' | 'allied'
-
-export interface CountryState {
-  status: CountryStatus
-  resistance: number
-  stability: number
-  activeOperations: ActiveOperation[]
-  refugeeWavesSent: number
-  encirclement: number
-  tradeDependency: number
-  purchaseOffers: number
-  kompromatLevel: number
-}
-
-export interface ActiveOperation {
-  tacticType: string
-  startedAt: number
-  duration: number
-}
-
-export interface ShipyardOrder {
-  shipId: string
-  quantity: number
-  builtSoFar: number
-  lastBuildAt: number
-}
-
-export interface BudgetAllocation {
-  healthcare: number
-  education: number
-  socialBenefits: number
-  military: number
-  dataCenters: number
-  infrastructure: number
-  propagandaBureau: number
-  spaceProgram: number
-}
-
-export interface TariffState {
+export interface AntagonistState {
   active: boolean
-  level: number
-  cashGenerated: number
-  sideEffectAccumulated: number
+  countered: boolean
 }
-
-export interface ContradictionState {
-  sideA: number
-  sideB: number
-  balancedTime: number
-  active: boolean
-}
-
-export interface UniverseState {
-  // MAGA Replicators (probe infrastructure)
-  probeUpgrades: Record<string, boolean>
-  probeFactories: number
-
-  // Solar Greatness Harvesters
-  dysonUpgrades: Record<string, boolean>
-
-  // Star Branding
-  starBrandingUpgrades: Record<string, boolean>
-
-  // Golden Ledger Singularity
-  blackHoleUpgrades: Record<string, boolean>
-  blackHoles: number
-
-  // Narrative Architecture
-  narrativeResearch: Record<string, boolean>
-
-  // Endgame tracking
-  universeConverted: number   // 0-100 percentage
-  endingTriggered: boolean
-  endingComplete: boolean
-}
-
-export type LaunchTier = 'none' | 'launchpad' | 'spaceport' | 'orbital_elevator' | 'mass_driver'
-
-export interface SpaceState {
-  launchTier: LaunchTier
-  moonBase: boolean
-  helium3Mining: boolean
-  lunarShipyard: boolean
-  lunarHeritage: boolean
-  marsColony: boolean
-  marsRenamed: boolean
-  atmosphereProcessing: boolean
-  waterExtraction: boolean
-  asteroidRigs: number
-  asteroidProspectors: number
-  asteroidRefineries: number
-  propagandaSatellites: number
-  dysonSwarms: number
-  vonNeumannProbes: number
-  spaceWeapons: Record<string, boolean>
-  bridgeUpgrades: Record<string, boolean>
-}
-
-export type EventCategory = 'scandal' | 'opportunity' | 'contradiction' | 'absurd' | 'crisis' | 'nobel' | 'reality_glitch'
 
 export interface GameEvent {
   id: string
   phase: number
-  category: EventCategory
+  category: string
   headline: string
   context: string
   choices: EventChoice[]
@@ -262,9 +125,7 @@ export interface GameSettings {
   musicVolume: number
   sfxVolume: number
   notificationsEnabled: boolean
-  theme: string    // 'default' | 'gold' | 'warroom' | 'void' | 'terminal'
-  adsRemoved: boolean
-  timeSkipTokens: number
+  theme: string
 }
 
 // ── Upgrade Data (config, not state) ──
@@ -276,22 +137,22 @@ export interface UpgradeData {
   tree: string
   icon: string
   baseCost: number
-  costResource: 'attention' | 'cash' | 'greatness'
-  production: number       // GpS added per purchase
-  maxCount: number         // 1 = one-time, >1 = repeatable
+  costResource: 'kapital' | 'stammar' | 'lobby'
+  production: number
+  maxCount: number
   effects?: UpgradeEffect[]
-  prerequisites?: string[] // upgrade IDs that must be purchased
+  prerequisites?: string[]
   unlockAt?: UnlockCondition
   phase: number
 }
 
 export interface UpgradeEffect {
-  type: 'attentionPerClick' | 'attentionPerSecond' | 'cashPerSecond' | 'gpsMultiplier'
+  type: 'stammarPerClick' | 'stammarPerSecond' | 'kapitalPerSecond' | 'gpsMultiplier'
   value: number
 }
 
 export interface UnlockCondition {
-  resource: 'attention' | 'greatness' | 'cash' | 'clickCount'
+  resource: 'stammar' | 'kapital' | 'totalStammar' | 'clickCount'
   threshold: number
 }
 
@@ -302,72 +163,27 @@ export interface SaveFile {
   state: GameState
 }
 
-// Store actions (separated from state for clarity)
+// Store actions
 export interface GameActions {
-  // Core
   tick: (now: number) => void
   click: () => void
-
-  // Upgrades
+  buyGenerator: (id: string) => void
+  buyClickUpgrade: (id: string) => void
   purchaseUpgrade: (id: string) => void
   unlockUpgrade: (id: string) => void
-
-  // Events
+  buyLobbyEarner: (id: string) => void
+  buyLobbyProject: (id: string) => void
+  performOwnerAction: (id: string) => void
+  buyPRCampaign: (id: string) => void
+  counterAntagonist: (id: string) => void
   resolveEvent: (choiceIndex: number) => void
   dismissEvent: () => void
-
-  // Save/Load
   save: () => void
   load: () => boolean
   reset: () => void
-
-  // Phase
   setPhase: (phase: Phase) => void
   triggerPhaseTransition: (from: Phase, to: Phase) => void
   completePhaseTransition: () => void
-
-  // Settings
   updateSettings: (settings: Partial<GameSettings>) => void
-
-  // Budget (Phase 2+)
-  setBudget: (budget: Partial<BudgetAllocation>) => void
-
-  // Institutions (Phase 2+)
-  startInstitutionAction: (institutionId: string, action: string) => void
-  tickInstitutions: (dt: number) => void
-
-  // Countries (Phase 3+)
-  startCountryTactic: (countryId: string, tacticType: string) => void
-  tickCountries: (dt: number) => void
-
-  // Fleet (Phase 3+)
-  buildShip: (shipId: string, quantity: number) => void
-  upgradeShipyard: () => void
-  tickShipyard: (dt: number) => void
-
-  // Space (Phase 4+)
-  upgradeLaunchTier: () => void
-  buildLunarBuilding: (id: string) => void
-  buildMarsUpgrade: (id: string) => void
-  buildAsteroidUnit: (tierId: string, count: number) => void
-  buildSatellite: () => void
-  buildDysonPrototype: () => void
-  purchaseSpaceWeapon: (id: string) => void
-  purchaseBridgeUpgrade: (id: string) => void
-  tickSpace: (dt: number) => void
-
-  // Universe (Phase 5+)
-  purchaseProbeUpgrade: (id: string) => void
-  purchaseDysonUpgrade: (id: string) => void
-  purchaseStarBranding: (id: string) => void
-  purchaseBlackHole: (id: string) => void
-  purchaseNarrativeResearch: (id: string) => void
-  tickCosmic: (dt: number) => void
-
-  // Prestige
-  prestige: () => void
-  purchasePrestigeUpgrade: (id: string) => void
-
-  // Generic resource setter for effects
   applyEffect: (effect: Effect) => void
 }

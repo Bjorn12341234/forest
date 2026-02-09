@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-export type Tab = 'dashboard' | 'research' | 'control' | 'world' | 'space' | 'universe'
+export type Tab = 'dashboard' | 'research' | 'lobby'
 
 interface TabDef {
   id: Tab
@@ -10,12 +10,9 @@ interface TabDef {
 }
 
 const TABS: TabDef[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: '📊', phase: 1 },
-  { id: 'research', label: 'Research', icon: '🧬', phase: 1 },
-  { id: 'control', label: 'Control', icon: '🏛️', phase: 2 },
-  { id: 'world', label: 'World', icon: '🌍', phase: 3 },
-  { id: 'space', label: 'Space', icon: '🚀', phase: 4 },
-  { id: 'universe', label: 'Universe', icon: '🌌', phase: 5 },
+  { id: 'dashboard', label: 'Oversikt', icon: '\ud83d\udcca', phase: 1 },
+  { id: 'research', label: 'Teknik', icon: '\ud83d\udd2c', phase: 1 },
+  { id: 'lobby', label: 'Makt', icon: '\ud83c\udfdb\ufe0f', phase: 2 },
 ]
 
 interface TabNavProps {
@@ -25,7 +22,6 @@ interface TabNavProps {
 }
 
 export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
-  // Show unlocked tabs + one "teaser" locked tab
   const maxVisiblePhase = currentPhase + 1
   const visibleTabs = TABS.filter(t => t.phase <= maxVisiblePhase)
 
@@ -61,14 +57,14 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
                 <motion.div
                   layoutId="tab-indicator"
                   className="absolute -top-px left-2 right-2 h-0.5 bg-accent rounded-full"
-                  style={{ boxShadow: '0 0 8px rgba(255, 102, 0, 0.5)' }}
+                  style={{ boxShadow: '0 0 8px rgba(212, 115, 12, 0.5)' }}
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
 
               {/* Lock icon for locked tabs */}
               {isLocked && (
-                <span className="absolute -top-1 -right-1 text-[0.5rem]">🔒</span>
+                <span className="absolute -top-1 -right-1 text-[0.5rem]">{'\ud83d\udd12'}</span>
               )}
             </button>
           )

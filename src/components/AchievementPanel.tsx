@@ -1,29 +1,17 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import { ACHIEVEMENTS } from '../data/achievements'
-import type { AchievementCategory } from '../data/achievements'
+import { ACHIEVEMENTS, TIER_LABELS, TIER_COLORS } from '../data/achievements'
+import type { AchievementTier } from '../data/achievements'
 import { GlassCard } from './ui/GlassCard'
 
 interface AchievementPanelProps {
   onClose: () => void
 }
 
-type ViewMode = 'all' | 1 | 2 | 3 | 4 | 5 | 'meta'
+type ViewMode = 'all' | AchievementTier
 
-const CATEGORY_COLORS: Record<AchievementCategory, string> = {
-  milestone: '#88CC44',
-  strategy: '#4488CC',
-  irony: '#FFD700',
-  meta: '#CC44FF',
-}
-
-const CATEGORY_LABELS: Record<AchievementCategory, string> = {
-  milestone: 'Milestone',
-  strategy: 'Strategy',
-  irony: 'Irony',
-  meta: 'Meta',
-}
+const TIER_ORDER: AchievementTier[] = ['lokal', 'regional', 'nationell', 'internationell', 'endgame', 'meta']
 
 export function AchievementPanel({ onClose }: AchievementPanelProps) {
   const achievements = useGameStore(s => s.achievements)
@@ -33,19 +21,14 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
   const visible = ACHIEVEMENTS.filter(a => a.phase <= phase)
   const unlocked = visible.filter(a => achievements[a.id])
 
-  // Filter by view mode
   const filtered = viewMode === 'all'
     ? visible
-    : viewMode === 'meta'
-      ? visible.filter(a => a.category === 'meta')
-      : visible.filter(a => a.phase === viewMode && a.category !== 'meta')
+    : visible.filter(a => a.tier === viewMode)
 
-  // Available phase tabs
-  const phaseTabs: ViewMode[] = ['all']
-  for (let p = 1; p <= phase; p++) {
-    phaseTabs.push(p as ViewMode)
-  }
-  phaseTabs.push('meta')
+  // Only show tier tabs that have visible achievements
+  const visibleTiers = TIER_ORDER.filter(tier =>
+    visible.some(a => a.tier === tier)
+  )
 
   return (
     <motion.div
@@ -71,7 +54,7 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
         <GlassCard padding="lg" className="flex flex-col max-h-[85vh]">
           {/* Header */}
           <div className="flex items-center justify-between mb-3 flex-shrink-0">
-            <h2 className="text-lg font-medium text-text-primary">Achievements</h2>
+            <h2 className="text-lg font-medium text-text-primary">Prestationer</h2>
             <div className="flex items-center gap-3">
               <span className="text-xs font-numbers text-text-secondary">
                 {unlocked.length}/{visible.length}
@@ -85,36 +68,29 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
             </div>
           </div>
 
-          {/* Phase tabs */}
+          {/* Tier tabs */}
           <div className="flex gap-1 mb-3 overflow-x-auto flex-shrink-0 pb-1">
-            {phaseTabs.map(tab => {
-              const isActive = viewMode === tab
-              const tabAchievements = tab === 'all'
-                ? visible
-                : tab === 'meta'
-                  ? visible.filter(a => a.category === 'meta')
-                  : visible.filter(a => a.phase === tab && a.category !== 'meta')
-              const tabUnlocked = tabAchievements.filter(a => achievements[a.id]).length
-              const tabTotal = tabAchievements.length
-              const allDone = tabTotal > 0 && tabUnlocked === tabTotal
-
+            <TierTab
+              label="Alla"
+              isActive={viewMode === 'all'}
+              color="#D4730C"
+              count={unlocked.length}
+              total={visible.length}
+              onClick={() => setViewMode('all')}
+            />
+            {visibleTiers.map(tier => {
+              const tierAchievements = visible.filter(a => a.tier === tier)
+              const tierUnlocked = tierAchievements.filter(a => achievements[a.id]).length
               return (
-                <button
-                  key={String(tab)}
-                  onClick={() => setViewMode(tab)}
-                  className={`px-2.5 py-1.5 rounded-md text-[0.65rem] font-medium whitespace-nowrap
-                    border cursor-pointer transition-all ${
-                    isActive
-                      ? 'bg-white/10 border-orange-accent/30 text-text-primary'
-                      : 'bg-transparent border-white/5 text-text-muted hover:text-text-secondary hover:border-white/10'
-                  }`}
-                >
-                  {tab === 'all' ? 'All' : tab === 'meta' ? 'Meta' : `P${tab}`}
-                  <span className="ml-1 font-numbers opacity-60">
-                    {tabUnlocked}/{tabTotal}
-                  </span>
-                  {allDone && <span className="ml-0.5">&#10003;</span>}
-                </button>
+                <TierTab
+                  key={tier}
+                  label={TIER_LABELS[tier]}
+                  isActive={viewMode === tier}
+                  color={TIER_COLORS[tier]}
+                  count={tierUnlocked}
+                  total={tierAchievements.length}
+                  onClick={() => setViewMode(tier)}
+                />
               )
             })}
           </div>
@@ -123,25 +99,25 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
           <div className="flex flex-col gap-2 overflow-y-auto flex-1 min-h-0">
             {filtered.map(a => {
               const isUnlocked = achievements[a.id]
-              const cat = a.category ?? 'milestone'
-              const catColor = CATEGORY_COLORS[cat]
+              const tierColor = TIER_COLORS[a.tier]
 
               return (
                 <div
                   key={a.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+                  className={`flex items-center gap-3 p-3 rounded-sm transition-all ${
                     isUnlocked
-                      ? 'bg-white/[0.04]'
-                      : 'bg-white/[0.02] opacity-50'
+                      ? 'bg-bg-secondary'
+                      : 'bg-bg-secondary/50 opacity-50'
                   }`}
                   style={isUnlocked ? {
-                    border: '1px solid rgba(255, 215, 0, 0.15)',
+                    border: `1px solid ${tierColor}30`,
+                    boxShadow: `0 0 8px ${tierColor}10`,
                   } : {
-                    border: '1px solid rgba(255, 255, 255, 0.04)',
+                    border: '1px solid var(--color-bg-tertiary)',
                   }}
                 >
                   <span className={`text-xl flex-shrink-0 ${isUnlocked ? '' : 'grayscale'}`}>
-                    {isUnlocked ? a.icon : '🔒'}
+                    {isUnlocked ? a.icon : '\ud83d\udd12'}
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -151,21 +127,21 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
                       <span
                         className="text-[0.5rem] uppercase tracking-wider px-1 py-0.5 rounded"
                         style={{
-                          color: catColor,
-                          background: `${catColor}15`,
-                          border: `1px solid ${catColor}25`,
+                          color: tierColor,
+                          background: `${tierColor}15`,
+                          border: `1px solid ${tierColor}25`,
                         }}
                       >
-                        {CATEGORY_LABELS[cat]}
+                        {TIER_LABELS[a.tier].split(': ')[1] ?? a.tier}
                       </span>
                     </div>
                     <p className="text-[0.65rem] text-text-muted line-clamp-1">
-                      {isUnlocked ? a.description : 'Keep playing to unlock'}
+                      {isUnlocked ? a.description : 'Fortsatt spela for att lasa upp'}
                     </p>
                   </div>
                   {isUnlocked && (
-                    <span className="text-[0.55rem] uppercase tracking-wider text-nobel-gold font-medium flex-shrink-0">
-                      Done
+                    <span className="text-[0.55rem] uppercase tracking-wider font-medium flex-shrink-0" style={{ color: tierColor }}>
+                      Klar
                     </span>
                   )}
                 </div>
@@ -174,12 +150,46 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
 
             {filtered.length === 0 && (
               <div className="text-center text-text-muted text-sm py-8">
-                No achievements in this category yet.
+                Inga prestationer i denna kategori annu.
               </div>
             )}
           </div>
         </GlassCard>
       </motion.div>
     </motion.div>
+  )
+}
+
+function TierTab({ label, isActive, color, count, total, onClick }: {
+  label: string
+  isActive: boolean
+  color: string
+  count: number
+  total: number
+  onClick: () => void
+}) {
+  const allDone = total > 0 && count === total
+  return (
+    <button
+      onClick={onClick}
+      className={`px-2.5 py-1.5 rounded-sm text-[0.6rem] font-medium whitespace-nowrap
+        border cursor-pointer transition-all ${
+        isActive
+          ? 'bg-bg-secondary text-text-primary'
+          : 'bg-transparent text-text-muted hover:text-text-secondary'
+      }`}
+      style={isActive ? {
+        borderColor: `${color}40`,
+        boxShadow: `0 0 8px ${color}15`,
+      } : {
+        borderColor: 'var(--color-bg-tertiary)',
+      }}
+    >
+      {label}
+      <span className="ml-1 font-numbers opacity-60">
+        {count}/{total}
+      </span>
+      {allDone && <span className="ml-0.5">&#10003;</span>}
+    </button>
   )
 }

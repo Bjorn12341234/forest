@@ -10,33 +10,30 @@ import { useAchievements } from './hooks/useAchievements'
 import { useAudioSync } from './hooks/useAudioSync'
 import { Dashboard } from './components/Dashboard'
 import { ResearchTree } from './components/ResearchTree'
-import { ControlDashboard } from './components/ControlDashboard'
+import { LobbyPanel } from './components/LobbyPanel'
 import { PhaseTransition } from './components/PhaseTransition'
 import { AchievementToastManager, useAchievementToasts } from './components/AchievementToast'
 import { AchievementPanel } from './components/AchievementPanel'
 import { Ticker } from './components/Ticker'
 import { EventModal } from './components/EventModal'
 import { OfflineReturnModal } from './components/OfflineReturnModal'
-import { WorldDashboard } from './components/WorldDashboard'
-import { SpaceView } from './components/SpaceView'
-import { UniverseView } from './components/UniverseView'
-import { EndingSequence } from './components/EndingSequence'
-import { PrestigePanel } from './components/PrestigePanel'
 import { SettingsPanel, useThemeSync } from './components/SettingsPanel'
 import { TabNav, type Tab } from './components/TabNav'
-import { useRealityDrift } from './hooks/useRealityDrift'
+import { EndScreen } from './components/EndScreen'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
   const [showAchievements, setShowAchievements] = useState(false)
-  const [showPrestige, setShowPrestige] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [offlineReport, setOfflineReport] = useState<OfflineResult | null>(null)
+  const [showEndScreen, setShowEndScreen] = useState(false)
   const currentPhase = useGameStore(state => state.phase)
-  const prestigeLevel = useGameStore(state => state.prestigeLevel)
+  const totalStammar = useGameStore(state => state.totalStammar)
+  const endgameSeen = useGameStore(state => state.achievements['endgame_seen'])
   const pendingTransition = useGameStore(state => state.pendingTransition)
   const completePhaseTransition = useGameStore(state => state.completePhaseTransition)
   const load = useGameStore(state => state.load)
+  const reset = useGameStore(state => state.reset)
 
   // Achievement toasts
   const { toasts, showToast, dismissToast } = useAchievementToasts()
@@ -47,11 +44,16 @@ function App() {
     load()
   }, [load])
 
-  // Offline report callback — queue events into the store for the player to resolve
+  // Trigger endscreen at 10B stammar (phase 7 endgame)
+  useEffect(() => {
+    if (currentPhase >= 7 && totalStammar >= 10_000_000_000 && !endgameSeen && !showEndScreen) {
+      setShowEndScreen(true)
+    }
+  }, [currentPhase, totalStammar, endgameSeen, showEndScreen])
+
+  // Offline report callback
   const handleOfflineReport = useCallback((report: OfflineResult) => {
     setOfflineReport(report)
-
-    // Queue offline events into the store so EventModal picks them up sequentially
     if (report.offlineEvents.length > 0) {
       useGameStore.setState({ eventQueue: report.offlineEvents })
     }
@@ -59,8 +61,6 @@ function App() {
 
   const handleDismissOffline = useCallback(() => {
     setOfflineReport(null)
-
-    // Trigger the first queued event immediately
     const state = useGameStore.getState()
     if (state.eventQueue.length > 0 && !state.activeEvent) {
       const [next, ...rest] = state.eventQueue
@@ -76,7 +76,6 @@ function App() {
   useAutoSave()
   useOfflineCalc(eventPool, handleOfflineReport)
   useAudioSync()
-  useRealityDrift()
   useThemeSync()
 
   return (
@@ -93,8 +92,13 @@ function App() {
       {/* Offline Return Modal */}
       <OfflineReturnModal report={offlineReport} onDismiss={handleDismissOffline} />
 
-      {/* Ending Sequence (Phase 5 endgame) */}
-      <EndingSequence />
+      {/* Endgame Screen */}
+      {showEndScreen && (
+        <EndScreen onReset={() => {
+          setShowEndScreen(false)
+          reset()
+        }} />
+      )}
 
       {/* Phase Transition Overlay */}
       {pendingTransition && (
@@ -109,13 +113,6 @@ function App() {
       <AnimatePresence>
         {showAchievements && (
           <AchievementPanel onClose={() => setShowAchievements(false)} />
-        )}
-      </AnimatePresence>
-
-      {/* Prestige Panel */}
-      <AnimatePresence>
-        {showPrestige && (
-          <PrestigePanel onClose={() => setShowPrestige(false)} />
         )}
       </AnimatePresence>
 
@@ -139,40 +136,27 @@ function App() {
           >
             {activeTab === 'dashboard' && <Dashboard />}
             {activeTab === 'research' && <ResearchTree />}
-            {activeTab === 'control' && <ControlDashboard />}
-            {activeTab === 'world' && <WorldDashboard />}
-            {activeTab === 'space' && <SpaceView />}
-            {activeTab === 'universe' && <UniverseView />}
+            {activeTab === 'lobby' && <LobbyPanel />}
           </motion.div>
         </AnimatePresence>
       </main>
 
       {/* Top-right action buttons */}
-      <div className="fixed top-12 right-3 z-40 flex flex-col gap-2">
+      <div className="fixed top-12 right-2 z-40 flex flex-col gap-1.5">
         <button
           onClick={() => setShowSettings(true)}
-          className="w-9 h-9 rounded-full glass-card flex items-center justify-center text-base cursor-pointer border-none hover:scale-110 transition-transform"
-          title="Settings"
+          className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-lg cursor-pointer border-none active:scale-95 transition-transform"
+          title="Installningar"
         >
           &#9881;
         </button>
         <button
           onClick={() => setShowAchievements(true)}
-          className="w-9 h-9 rounded-full glass-card flex items-center justify-center text-base cursor-pointer border-none hover:scale-110 transition-transform"
-          title="Achievements"
+          className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-lg cursor-pointer border-none active:scale-95 transition-transform"
+          title="Prestationer"
         >
-          🏆
+          &#127942;
         </button>
-        {(currentPhase >= 2 || prestigeLevel > 0) && (
-          <button
-            onClick={() => setShowPrestige(true)}
-            className="w-9 h-9 rounded-full glass-card flex items-center justify-center text-base cursor-pointer border-none hover:scale-110 transition-transform"
-            title="New Game+"
-            style={prestigeLevel > 0 ? { boxShadow: '0 0 8px rgba(255, 215, 0, 0.3)' } : {}}
-          >
-            ♾️
-          </button>
-        )}
       </div>
 
       {/* Bottom Tab Navigation */}

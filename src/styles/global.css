@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
-/* ── Custom Theme ── */
+/* ── Silva Maximus: Byråkratisk Brutalism Theme ── */
 @theme {
-  --color-bg-primary: #1a1a1a;
-  --color-bg-secondary: #2a2a2a;
-  --color-bg-tertiary: #333333;
-  --color-accent: #FF6600;
-  --color-accent-dark: #CC5200;
-  --color-accent-glow: rgba(255, 102, 0, 0.4);
-  --color-danger: #FF3333;
-  --color-success: #33CC66;
-  --color-nobel-gold: #FFD700;
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #888888;
-  --color-text-muted: #999999;
+  --color-bg-primary: #F0F0F0;
+  --color-bg-secondary: #E0E0E0;
+  --color-bg-tertiary: #D0D0D0;
+  --color-accent: #D4730C;
+  --color-accent-dark: #B05E0A;
+  --color-accent-glow: rgba(212, 115, 12, 0.4);
+  --color-accent-green: #7DB840;
+  --color-danger: #CC2222;
+  --color-success: #7DB840;
+  --color-text-primary: #2C2C2C;
+  --color-text-secondary: #666666;
+  --color-text-muted: #888888;
 
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-headline: 'Inter', -apple-system, sans-serif;
+  --font-ui: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-headline: 'IBM Plex Mono', 'Courier New', monospace;
 }
 
-/* ── Base Reset & Dark Theme ── */
+/* ── Base Reset & Light Theme ── */
 *,
 *::before,
 *::after {
@@ -42,15 +42,17 @@ body {
   overflow-x: hidden;
 }
 
-/* Subtle noise texture via CSS */
+/* Millimeterpapper grid background */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
+  background-image:
+    linear-gradient(var(--color-bg-tertiary) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-bg-tertiary) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
   pointer-events: none;
 }
 
@@ -70,27 +72,25 @@ body::before {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* ── Utility Classes ── */
 @utility glass-card {
-  background: rgba(42, 42, 42, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-bg-tertiary);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 var(--color-bg-tertiary);
 }
 
 @utility glass-card-hover {
-  border-color: rgba(255, 102, 0, 0.2);
-  box-shadow: 0 4px 24px rgba(255, 102, 0, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 2px 2px 0 var(--color-accent);
 }
 
 @utility font-display {
@@ -105,17 +105,17 @@ body::before {
 }
 
 @utility glow-orange {
-  box-shadow: 0 0 20px rgba(255, 102, 0, 0.3), 0 0 60px rgba(255, 102, 0, 0.1);
+  box-shadow: 0 0 12px rgba(212, 115, 12, 0.3), 0 0 40px rgba(212, 115, 12, 0.1);
 }
 
 @utility glow-text-orange {
-  text-shadow: 0 0 12px rgba(255, 102, 0, 0.5);
+  text-shadow: 0 0 8px rgba(212, 115, 12, 0.4);
 }
 
 /* ── Animations ── */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(255, 102, 0, 0.2); }
-  50% { box-shadow: 0 0 40px rgba(255, 102, 0, 0.4), 0 0 80px rgba(255, 102, 0, 0.1); }
+  0%, 100% { box-shadow: 0 0 12px rgba(212, 115, 12, 0.15); }
+  50% { box-shadow: 0 0 24px rgba(212, 115, 12, 0.3), 0 0 60px rgba(212, 115, 12, 0.08); }
 }
 
 @keyframes shimmer {
@@ -150,102 +150,15 @@ body::before {
   animation: ticker-scroll 20s linear infinite;
 }
 
-/* ── Reality Drift Effects ── */
-
-@keyframes drift-flicker-anim {
-  0%, 95%, 100% { opacity: 1; filter: none; }
-  96% { opacity: 0.92; filter: hue-rotate(calc(var(--drift-intensity, 0) * 15deg)); }
-  97% { opacity: 1; filter: none; }
-  98% { opacity: 0.88; filter: hue-rotate(calc(var(--drift-intensity, 0) * -10deg)) saturate(1.2); }
+/* ── Endgame Theme (clinical white) ── */
+.theme-endgame {
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F8F8F8;
+  --color-bg-tertiary: #EEEEEE;
+  --color-text-primary: #000000;
+  --color-text-secondary: #444444;
+  --color-accent: #CC2222;
 }
-
-@keyframes drift-glitch-anim {
-  0%, 90%, 100% { transform: none; clip-path: none; }
-  92% { transform: translateX(calc(var(--drift-intensity, 0) * 3px)); clip-path: inset(20% 0 60% 0); }
-  94% { transform: translateX(calc(var(--drift-intensity, 0) * -2px)); clip-path: inset(50% 0 20% 0); }
-  96% { transform: none; clip-path: none; }
-}
-
-.drift-flicker .font-numbers {
-  animation: drift-flicker-anim 4s ease-in-out infinite;
-  animation-delay: calc(var(--drift-intensity, 0) * -2s);
-}
-
-.drift-glitch .glass-card {
-  animation: drift-glitch-anim 6s ease-in-out infinite;
-}
-
-.drift-labels .font-numbers {
-  transition: color 0.3s ease;
-}
-
-/* ── Cosmetic Themes ── */
-
-/* Gold Plated — luxurious gold accent */
-.theme-gold {
-  --color-bg-primary: #1a1708;
-  --color-bg-secondary: #2a2510;
-  --color-bg-tertiary: #3a3318;
-  --color-accent: #FFD700;
-  --color-accent-dark: #B8860B;
-  --color-accent-glow: rgba(255, 215, 0, 0.4);
-}
-.theme-gold .glass-card {
-  background: rgba(42, 37, 16, 0.6);
-  border-color: rgba(255, 215, 0, 0.1);
-}
-
-/* War Room — military green/red */
-.theme-warroom {
-  --color-bg-primary: #0a120a;
-  --color-bg-secondary: #142014;
-  --color-bg-tertiary: #1e2e1e;
-  --color-accent: #44CC44;
-  --color-accent-dark: #228B22;
-  --color-accent-glow: rgba(68, 204, 68, 0.3);
-  --color-text-secondary: #66AA66;
-  --color-text-muted: #6a9a6a;
-}
-.theme-warroom .glass-card {
-  background: rgba(20, 32, 20, 0.7);
-  border-color: rgba(68, 204, 68, 0.08);
-}
-
-/* Void — deep purple/cosmic */
-.theme-void {
-  --color-bg-primary: #0a0a1a;
-  --color-bg-secondary: #141428;
-  --color-bg-tertiary: #1e1e36;
-  --color-accent: #9933FF;
-  --color-accent-dark: #7722CC;
-  --color-accent-glow: rgba(153, 51, 255, 0.4);
-  --color-text-secondary: #8888CC;
-  --color-text-muted: #7777CC;
-}
-.theme-void .glass-card {
-  background: rgba(20, 20, 40, 0.6);
-  border-color: rgba(153, 51, 255, 0.1);
-}
-
-/* Retro Terminal — green-on-black CRT */
-.theme-terminal {
-  --color-bg-primary: #000000;
-  --color-bg-secondary: #0a0a0a;
-  --color-bg-tertiary: #141414;
-  --color-accent: #00FF00;
-  --color-accent-dark: #00AA00;
-  --color-accent-glow: rgba(0, 255, 0, 0.3);
-  --color-text-primary: #00FF00;
-  --color-text-secondary: #00AA00;
-  --color-text-muted: #00AA00;
-  --color-danger: #FF0000;
-  --color-success: #00FF00;
-}
-.theme-terminal .glass-card {
-  background: rgba(0, 20, 0, 0.6);
-  border-color: rgba(0, 255, 0, 0.1);
-  border-radius: 2px;
-}
-.theme-terminal * {
-  font-family: var(--font-mono) !important;
+.theme-endgame body::before {
+  display: none;
 }

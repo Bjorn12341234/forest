@@ -1,35 +1,21 @@
 import type { GameState, Phase } from '../store/types'
 
 // ── Phase Transition Conditions ──
-// Returns the next phase if transition condition is met, or null
+// Based on totalStammar thresholds (see spec.md section 6)
+
+const PHASE_THRESHOLDS: Record<number, number> = {
+  1: 10_000,         // → Phase 2
+  2: 100_000,        // → Phase 3
+  3: 1_000_000,      // → Phase 4
+  4: 10_000_000,     // → Phase 5
+  5: 100_000_000,    // → Phase 6
+  6: 1_000_000_000,  // → Phase 7
+}
 
 export function checkPhaseTransition(state: GameState): Phase | null {
-  switch (state.phase) {
-    case 1:
-      // Neural Backup purchased → Phase 2
-      if (state.upgrades['sci_neural_backup']?.purchased) return 2
-      break
-    case 2:
-      // All 13 institutions captured
-      {
-        const institutions = Object.values(state.institutions)
-        if (institutions.length >= 13 && institutions.every(i => i.status === 'captured' || i.status === 'automated')) return 3
-      }
-      break
-    case 3:
-      // All 14 countries annexed or allied
-      {
-        const countries = Object.values(state.countries)
-        if (countries.length >= 14 && countries.every(c => c.status === 'annexed' || c.status === 'allied')) return 4
-      }
-      break
-    case 4:
-      // Solar System = Greatness Industrial Zone
-      if (state.space.dysonSwarms > 0 && state.space.asteroidRigs >= 5 && state.orbitalIndustry >= 100) return 5
-      break
-    // Phase 5 has no automatic transition — it's the endgame loop
-    // The ending is triggered when universe conversion reaches 100%
-    // (handled in tickCosmic)
+  const threshold = PHASE_THRESHOLDS[state.phase]
+  if (threshold && state.totalStammar >= threshold) {
+    return (state.phase + 1) as Phase
   }
   return null
 }
@@ -38,48 +24,63 @@ export function checkPhaseTransition(state: GameState): Phase | null {
 
 export interface TransitionLine {
   text: string
-  delay: number  // ms before showing this line
+  delay: number
   style?: 'normal' | 'bold' | 'accent' | 'dim'
 }
 
 export const TRANSITION_SCRIPTS: Partial<Record<`${Phase}_${Phase}`, TransitionLine[]>> = {
   '1_2': [
-    { text: 'NEURAL BACKUP COMPLETE', delay: 0, style: 'bold' },
-    { text: 'Consciousness digitized.', delay: 2000 },
-    { text: 'The brand is now immortal.', delay: 4000 },
-    { text: 'But immortality requires...', delay: 6500, style: 'dim' },
-    { text: 'INSTITUTIONAL INFRASTRUCTURE', delay: 9000, style: 'accent' },
-    { text: 'Time to capture the system.', delay: 11500 },
-    { text: 'Phase 2: Institutional Capture', delay: 14000, style: 'bold' },
+    { text: 'LOKALPATRIOT', delay: 0, style: 'bold' },
+    { text: 'Din första massaorder är fylld.', delay: 2000 },
+    { text: 'Skogsägarna litar på dig.', delay: 4000 },
+    { text: 'Dags att expandera.', delay: 6500, style: 'dim' },
+    { text: 'LOBBYMODULEN UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 2: Den Goda Grannen', delay: 11500, style: 'bold' },
   ],
   '2_3': [
-    { text: 'ALL INSTITUTIONS CAPTURED', delay: 0, style: 'bold' },
-    { text: 'The domestic apparatus is secured.', delay: 2000 },
-    { text: 'But true greatness knows no borders.', delay: 4000 },
-    { text: 'The world awaits optimization.', delay: 6500, style: 'dim' },
-    { text: 'GLOBAL GREATENING PROTOCOL', delay: 9000, style: 'accent' },
-    { text: 'Phase 3: World Greatening', delay: 12000, style: 'bold' },
+    { text: 'DEN GODA GRANNEN', delay: 0, style: 'bold' },
+    { text: 'Du kontrollerar regionen.', delay: 2000 },
+    { text: 'Men Kina börjar dumpa billig massa...', delay: 4000 },
+    { text: 'Lösning: volym. Alltid mer volym.', delay: 6500, style: 'dim' },
+    { text: 'INTERNATIONELL LOBBY UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 3: Massabaronen', delay: 12000, style: 'bold' },
   ],
   '3_4': [
-    { text: 'ALL NATIONS UNDER ACCORD', delay: 0, style: 'bold' },
-    { text: 'Earth has been optimized.', delay: 2000 },
-    { text: 'But there is so much more... out there.', delay: 4000 },
-    { text: 'The stars are merely unbranded resources.', delay: 6500, style: 'dim' },
-    { text: 'SPACE GREATENING INITIATIVE', delay: 9000, style: 'accent' },
-    { text: 'Phase 4: Space Greatening', delay: 12000, style: 'bold' },
+    { text: 'MASSABARONEN', delay: 0, style: 'bold' },
+    { text: 'Du dominerar den nationella marknaden.', delay: 2000 },
+    { text: 'Men din image börjar krackelera...', delay: 4000 },
+    { text: 'Nestlé ringer. De har synpunkter.', delay: 6500, style: 'dim' },
+    { text: 'PR-SYSTEMET UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 4: PR-Katastrofen', delay: 12000, style: 'bold' },
   ],
   '4_5': [
-    { text: 'SOLAR SYSTEM INDUSTRIALIZED', delay: 0, style: 'bold' },
-    { text: 'One star is not enough.', delay: 2000 },
-    { text: 'The universe itself must be converted.', delay: 4000 },
-    { text: 'Reality is merely unprocessed Greatness.', delay: 6500, style: 'dim' },
-    { text: 'GOD EMPEROR PROTOCOL', delay: 9000, style: 'accent' },
-    { text: 'Phase 5: Cosmic Greatening', delay: 12000, style: 'bold' },
+    { text: 'PR-KATASTROFEN', delay: 0, style: 'bold' },
+    { text: 'Du överlevde skandalerna.', delay: 2000 },
+    { text: 'Nu har du kontroll över narrativet.', delay: 4000 },
+    { text: 'Politiker. Myndigheter. Media. Allt ditt.', delay: 6500, style: 'dim' },
+    { text: 'MAKTUTREDNINGEN UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 5: Det Skogsindustriella Komplexet', delay: 12000, style: 'bold' },
+  ],
+  '5_6': [
+    { text: 'DET SKOGSINDUSTRIELLA KOMPLEXET', delay: 0, style: 'bold' },
+    { text: 'Sverige är klart. All skog är industriskog.', delay: 2000 },
+    { text: 'De sista blandskogarna ersätts med monokulturer.', delay: 4000 },
+    { text: 'Exakt 1,8m mellanrum. Inga fåglar.', delay: 6500, style: 'dim' },
+    { text: 'SILVA MAXIMUS GRID UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 6: Post-Biologisk Skogsbruk', delay: 12000, style: 'bold' },
+  ],
+  '6_7': [
+    { text: 'POST-BIOLOGISK SKOGSBRUK', delay: 0, style: 'bold' },
+    { text: 'Jorden räcker inte.', delay: 2000 },
+    { text: 'Månen har mineraler. Du har skördare.', delay: 4000 },
+    { text: 'Klimatförändringarna var en investering.', delay: 6500, style: 'dim' },
+    { text: 'TERRAFORMING UPPLÅST', delay: 9000, style: 'accent' },
+    { text: 'Fas 7: UNIVERSUM AB', delay: 12000, style: 'bold' },
   ],
 }
 
 export function getTransitionScript(from: Phase, to: Phase): TransitionLine[] {
   return TRANSITION_SCRIPTS[`${from}_${to}`] ?? [
-    { text: `Transitioning to Phase ${to}...`, delay: 0, style: 'bold' },
+    { text: `Fas ${to}...`, delay: 0, style: 'bold' },
   ]
 }

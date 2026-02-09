@@ -1,6 +1,6 @@
 import type { GameState } from '../store/types'
 
-export type AchievementCategory = 'milestone' | 'strategy' | 'irony' | 'meta'
+export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'meta'
 
 export interface AchievementDef {
   id: string
@@ -8,567 +8,297 @@ export interface AchievementDef {
   description: string
   icon: string
   phase: number
-  category?: AchievementCategory
+  tier: AchievementTier
   check: (state: GameState) => boolean
+}
+
+// Keep the old category type as alias for backwards compatibility
+export type AchievementCategory = AchievementTier
+
+export const TIER_LABELS: Record<AchievementTier, string> = {
+  lokal: 'Tier 1: Lokal',
+  regional: 'Tier 2: Regional',
+  nationell: 'Tier 3: Nationell',
+  internationell: 'Tier 4: Internationell',
+  endgame: 'Tier 5: Endgame',
+  meta: 'Meta',
+}
+
+export const TIER_COLORS: Record<AchievementTier, string> = {
+  lokal: '#88CC44',
+  regional: '#4488CC',
+  nationell: '#FFD700',
+  internationell: '#FF6600',
+  endgame: '#CC22CC',
+  meta: '#888888',
 }
 
 export const ACHIEVEMENTS: AchievementDef[] = [
   // ═══════════════════════════════════════════
-  //  PHASE 1 ACHIEVEMENTS
+  //  TIER 1: LOKAL
   // ═══════════════════════════════════════════
   {
-    id: 'first_click',
-    name: 'The Beginning',
-    description: 'Generate your first attention.',
-    icon: '👆',
+    id: 'forsta_planen',
+    name: 'Forsta Planen',
+    description: 'Den forsta ar gratis. Precis som dealern sa.',
+    icon: '\ud83d\udccb',
     phase: 1,
-    category: 'milestone',
+    tier: 'lokal',
     check: (s) => s.clickCount >= 1,
   },
   {
-    id: 'hundred_clicks',
-    name: 'Compulsive Clicker',
-    description: 'Click 100 times. Your dedication is noted.',
-    icon: '🖱️',
+    id: 'kaffekoppen',
+    name: 'Kaffekoppen',
+    description: 'Tio inspektorer. Tio kaffekoppar. 5 000 hektar.',
+    icon: '\u2615',
     phase: 1,
-    category: 'milestone',
+    tier: 'lokal',
+    check: (s) => (s.generators['gen_virkesuppkopare']?.count ?? 0) >= 10,
+  },
+  {
+    id: 'gallringsmastaren',
+    name: 'Gallringsmastaren',
+    description: 'Du tog de basta traden och lamnade skrapet. Agaren tackade dig.',
+    icon: '\ud83e\ude93',
+    phase: 1,
+    tier: 'lokal',
     check: (s) => s.clickCount >= 100,
   },
   {
-    id: 'thousand_clicks',
-    name: 'Repetitive Strain',
-    description: 'Click 1,000 times. Consider a trackball.',
-    icon: '🦾',
+    id: 'forsta_kronan',
+    name: 'Forsta kronan',
+    description: 'Kapital borjar strommen in. Det har gar att vaxa.',
+    icon: '\ud83d\udcb0',
     phase: 1,
-    category: 'milestone',
-    check: (s) => s.clickCount >= 1000,
+    tier: 'lokal',
+    check: (s) => s.kapital >= 1,
   },
   {
-    id: 'first_upgrade',
-    name: 'Self-Improvement',
-    description: 'Purchase your first upgrade.',
-    icon: '⬆️',
+    id: 'stammar_1k',
+    name: 'Lokalpatriot',
+    description: 'Na 1 000 stammar totalt. Du ar pa vag.',
+    icon: '\ud83c\udf32',
     phase: 1,
-    category: 'milestone',
-    check: (s) => Object.values(s.upgrades).some(u => u.purchased),
+    tier: 'lokal',
+    check: (s) => s.totalStammar >= 1_000,
   },
   {
-    id: 'all_trees',
-    name: 'Diversified Portfolio',
-    description: 'Purchase at least one upgrade from every tree.',
-    icon: '🌳',
+    id: 'stammar_10k',
+    name: 'Storskogsbrukare',
+    description: 'Na 10 000 stammar. Dags att expandera.',
+    icon: '\ud83c\udfd4\ufe0f',
     phase: 1,
-    category: 'strategy',
-    check: (s) => {
-      const trees = new Set<string>()
-      const treeMap: Record<string, string> = {
-        media_social_account: 'Media Presence',
-        merch_red_hat: 'Merchandise Empire',
-        algo_bots: 'Algorithm Manipulation',
-        sci_research_div: 'Early Science',
-        ent_bible: 'Entrepreneurship',
-      }
-      for (const [id, upgrade] of Object.entries(s.upgrades)) {
-        if (upgrade.purchased && treeMap[id]) {
-          trees.add(treeMap[id])
-        }
-      }
-      return trees.size >= 5
-    },
-  },
-  {
-    id: 'neural_backup',
-    name: 'Digital Immortality',
-    description: 'Complete the Neural Backup. Consciousness is just data.',
-    icon: '🧠',
-    phase: 1,
-    category: 'milestone',
-    check: (s) => s.upgrades['sci_neural_backup']?.purchased === true,
-  },
-  {
-    id: 'first_cash',
-    name: 'Cash Money',
-    description: 'Earn your first dollar. Capitalism begins.',
-    icon: '💵',
-    phase: 1,
-    category: 'milestone',
-    check: (s) => s.cash >= 1,
-  },
-  {
-    id: 'attention_hog',
-    name: 'Attention Hog',
-    description: 'Accumulate 10,000 attention. The algorithm loves you.',
-    icon: '📺',
-    phase: 1,
-    category: 'milestone',
-    check: (s) => s.attention >= 10_000,
+    tier: 'lokal',
+    check: (s) => s.totalStammar >= 10_000,
   },
   {
     id: 'first_event',
-    name: 'Breaking News',
-    description: 'Resolve your first event.',
-    icon: '📰',
+    name: 'Senaste nytt',
+    description: 'Hantera din forsta handelse. Valj klokt.',
+    icon: '\ud83d\udcf0',
     phase: 1,
-    category: 'milestone',
+    tier: 'lokal',
     check: (s) => s.eventHistory.length >= 1,
   },
 
   // ═══════════════════════════════════════════
-  //  PHASE 2 ACHIEVEMENTS
+  //  TIER 2: REGIONAL
   // ═══════════════════════════════════════════
   {
-    id: 'first_institution',
-    name: 'Institutional Alignment',
-    description: 'Capture your first institution.',
-    icon: '🏛️',
+    id: 'frihet_under_ansvar',
+    name: 'Frihet Under Ansvar',
+    description: 'Staten litar pa dig. Det borde den inte.',
+    icon: '\ud83d\uddfd',
     phase: 2,
-    category: 'milestone',
-    check: (s) => Object.values(s.institutions).some(i => i.status === 'captured' || i.status === 'automated'),
+    tier: 'regional',
+    check: (s) => s.lobbyProjects['lobby_buy_frihet']?.purchased === true,
   },
   {
-    id: 'hostile_takeover',
-    name: 'Hostile Takeover',
-    description: 'Capture an institution via Purge. Efficiency above all.',
-    icon: '⚡',
+    id: 'aganderattskrigaren',
+    name: 'Aganderattskrigaren',
+    description: 'De tror du kampar for dem. Du kampar for deras skog.',
+    icon: '\ud83d\udee1\ufe0f',
     phase: 2,
-    category: 'strategy',
-    check: (s) => s.eventHistory.length > 0 && Object.values(s.institutions).some(i => i.status === 'captured' || i.status === 'automated'),
+    tier: 'regional',
+    check: (s) => s.ownerTrust >= 80,
   },
   {
-    id: 'legitimacy_crisis',
-    name: 'Legitimacy Crisis',
-    description: 'Drop below 10% Legitimacy and survive.',
-    icon: '😰',
+    id: 'rysslands_bonansen',
+    name: 'Rysslands-Bonansen',
+    description: 'En tragedi. Men din omsattning okade 40%.',
+    icon: '\ud83c\uddf7\ud83c\uddfa',
     phase: 2,
-    category: 'irony',
-    check: (s) => s.legitimacy < 10 && s.phase >= 2,
+    tier: 'regional',
+    check: (s) => s.eventHistory.includes('p2_ryssland_embargo'),
   },
   {
-    id: 'deep_state',
-    name: 'The Deep State',
-    description: 'Automate all 13 institutions. The machine runs itself.',
-    icon: '🤖',
+    id: 'grontvattare',
+    name: 'Grontvattare',
+    description: 'Lat Gron Image sjunka under 50. Men du ar ju hallbar!',
+    icon: '\ud83c\udfad',
     phase: 2,
-    category: 'strategy',
-    check: (s) => {
-      const insts = Object.values(s.institutions)
-      return insts.length >= 13 && insts.every(i => i.status === 'automated')
-    },
+    tier: 'regional',
+    check: (s) => s.image < 50,
   },
   {
-    id: 'tariff_man',
-    name: 'Tariff Man',
-    description: 'Activate all tariff categories simultaneously.',
-    icon: '📊',
+    id: 'lobbyist',
+    name: 'Forsta lobbymote',
+    description: 'Algjakt med riksdagsledamot. Inget diskuteras. Allt forstass.',
+    icon: '\ud83e\udd8c',
     phase: 2,
-    category: 'strategy',
-    check: (s) => {
-      const tariffs = Object.values(s.tariffs)
-      return tariffs.length >= 6 && tariffs.every(t => t.active)
-    },
-  },
-  {
-    id: 'austerity_king',
-    name: 'Austerity King',
-    description: 'Set all social programs below 10%. People are expendable.',
-    icon: '📉',
-    phase: 2,
-    category: 'irony',
-    check: (s) => s.budget.healthcare < 10 && s.budget.education < 10 && s.budget.socialBenefits < 10 && s.phase >= 2,
-  },
-  {
-    id: 'data_center_online',
-    name: 'Surveillance State',
-    description: 'Deploy your first data center upgrade.',
-    icon: '🖥️',
-    phase: 2,
-    category: 'milestone',
-    check: (s) => Object.values(s.dataCenterUpgrades).some(v => v),
-  },
-  {
-    id: 'loyalty_complete',
-    name: 'Loyalty Economy',
-    description: 'Purchase all loyalty upgrades. Everyone is watching everyone.',
-    icon: '🏅',
-    phase: 2,
-    category: 'strategy',
-    check: (s) => {
-      const upgrades = Object.values(s.loyaltyUpgrades)
-      return upgrades.length >= 4 && upgrades.every(v => v)
-    },
-  },
-  {
-    id: 'doublethink_master',
-    name: 'Doublethink Master',
-    description: 'Earn 10 Doublethink Tokens. Two truths at once, effortlessly.',
-    icon: '🧩',
-    phase: 2,
-    category: 'irony',
-    check: (s) => s.doublethinkTokens >= 10,
+    tier: 'regional',
+    check: (s) => s.lobby >= 10,
   },
 
   // ═══════════════════════════════════════════
-  //  PHASE 3 ACHIEVEMENTS
+  //  TIER 3: NATIONELL
   // ═══════════════════════════════════════════
   {
-    id: 'first_annexation',
-    name: 'Manifest Destiny',
-    description: 'Annex your first country into the Greatness Accord.',
-    icon: '🗺️',
-    phase: 3,
-    category: 'milestone',
-    check: (s) => Object.values(s.countries).some(c => c.status === 'annexed'),
+    id: 'nestle_sa_nej',
+    name: 'Choco-Corp sa nej',
+    description: 'Det foretag som salde brostmjolksersattning till fattiga modrar tycker att DU har etikproblem.',
+    icon: '\ud83c\udf6b',
+    phase: 4,
+    tier: 'nationell',
+    check: (s) => s.eventHistory.includes('p4_nestle_retratten'),
   },
   {
-    id: 'peacemonger',
-    name: 'Peacemonger',
-    description: 'Win a Nobel Peace Prize while running active military operations.',
-    icon: '🏅',
-    phase: 3,
-    category: 'irony',
-    check: (s) => {
-      const atWar = Object.values(s.countries).filter(c => c.status === 'occupied' || c.status === 'coup_target').length
-      return s.nobelPrizesWon >= 1 && atWar >= 1
-    },
+    id: 'gd_flansen',
+    name: 'GD-Flansen',
+    description: 'Han raderade mejlen. Han ager skogen. Han jobbar for dig nu.',
+    icon: '\ud83d\udeaa',
+    phase: 4,
+    tier: 'nationell',
+    check: (s) => s.lobbyProjects['lobby_buy_myndighetskapning']?.purchased === true,
   },
   {
-    id: 'golden_fleet',
-    name: 'Golden Fleet',
-    description: 'Build a Golden Dreadnought. Peak military excess.',
-    icon: '👑',
+    id: 'klimatambassadoren',
+    name: 'Klimatambassadoren',
+    description: 'Du slappte ut 4 miljoner ton CO2. Din rapport visar -200 000. Matematik!',
+    icon: '\ud83c\udf31',
     phase: 3,
-    category: 'milestone',
-    check: (s) => (s.fleet['golden_dreadnought'] ?? 0) >= 1,
+    tier: 'nationell',
+    check: (s) => s.image >= 80 && s.totalStammar >= 500_000,
   },
   {
-    id: 'extraordinary',
-    name: 'Extraordinary Measures',
-    description: 'Use Extraordinary Rendition. Someone is missing and it\'s your fault.',
-    icon: '🕵️',
+    id: 'massabaronen',
+    name: 'Massabaronen',
+    description: 'Na 1 miljon stammar. Du dominerar.',
+    icon: '\ud83c\udfe2',
     phase: 3,
-    category: 'strategy',
-    check: (s) => s.eventHistory.includes('p3_rendition_fallout'),
-  },
-  {
-    id: 'world_accord',
-    name: 'The Greatness Accord',
-    description: 'All 14 countries under the Accord. Earth is optimized.',
-    icon: '🌍',
-    phase: 3,
-    category: 'milestone',
-    check: (s) => {
-      const countries = Object.entries(s.countries).filter(([id]) => id !== 'azure_state')
-      return countries.length >= 14 && countries.every(([, c]) => c.status === 'annexed' || c.status === 'allied')
-    },
-  },
-  {
-    id: 'gunboat_diplomacy',
-    name: 'Gunboat Diplomacy',
-    description: 'Win Nobel Prize with 50+ warships active.',
-    icon: '⚓',
-    phase: 3,
-    category: 'irony',
-    check: (s) => {
-      const totalShips = Object.values(s.fleet).reduce((sum, n) => sum + n, 0)
-      return s.nobelPrizesWon >= 1 && totalShips >= 50
-    },
-  },
-  {
-    id: 'armada',
-    name: 'The Armada',
-    description: 'Build 100 ships. The ocean is an orange parking lot.',
-    icon: '🚢',
-    phase: 3,
-    category: 'milestone',
-    check: (s) => {
-      const totalShips = Object.values(s.fleet).reduce((sum, n) => sum + n, 0)
-      return totalShips >= 100
-    },
-  },
-  {
-    id: 'triple_nobel',
-    name: 'Peace Industrial Complex',
-    description: 'Win 3 Nobel Peace Prizes. The committee has questions.',
-    icon: '🥇',
-    phase: 3,
-    category: 'irony',
-    check: (s) => s.nobelPrizesWon >= 3,
-  },
-  {
-    id: 'fear_factor',
-    name: 'Fear Factor',
-    description: 'Reach 500 Fear. The world trembles.',
-    icon: '💀',
-    phase: 3,
-    category: 'milestone',
-    check: (s) => s.fear >= 500,
-  },
-  {
-    id: 'refugee_crisis',
-    name: 'Collateral Greatness',
-    description: 'Trigger refugee waves in 3 countries. Freedom has side effects.',
-    icon: '🌊',
-    phase: 3,
-    category: 'irony',
-    check: (s) => {
-      const waves = Object.values(s.countries).filter(c => c.refugeeWavesSent > 0).length
-      return waves >= 3
-    },
+    tier: 'nationell',
+    check: (s) => s.totalStammar >= 1_000_000,
   },
 
   // ═══════════════════════════════════════════
-  //  PHASE 4 ACHIEVEMENTS
+  //  TIER 4: INTERNATIONELL
   // ═══════════════════════════════════════════
   {
-    id: 'one_small_step',
-    name: 'One Small Step',
-    description: 'Build a Moon Base. It has a gift shop.',
-    icon: '🌙',
-    phase: 4,
-    category: 'milestone',
-    check: (s) => s.space.moonBase,
+    id: 'warborn_manovern',
+    name: 'Warborn-Manovern',
+    description: 'Anmald for jav. Omnibus antogs anda. Frihetens Tankesmedja skickar blommor.',
+    icon: '\ud83c\uddea\ud83c\uddfa',
+    phase: 3,
+    tier: 'internationell',
+    check: (s) => s.lobbyProjects['lobby_buy_omnibus']?.purchased === true,
   },
   {
-    id: 'the_orange_planet',
-    name: 'The Orange Planet',
-    description: 'Mars has been rebranded. Scientists are crying.',
-    icon: '🔴',
+    id: 'transatlantiska_pipansen',
+    name: 'Den Transatlantiska Pipansen',
+    description: 'Exxon, en tankesmedja, och din EU-parlamentariker i samma rum. Ingen antecknar.',
+    icon: '\ud83e\udd1d',
     phase: 4,
-    category: 'milestone',
-    check: (s) => s.space.marsRenamed,
+    tier: 'internationell',
+    check: (s) => (s.lobbyProjects['lobby_earn_transatlantiska']?.count ?? 0) >= 5,
   },
   {
-    id: 'space_landlord',
-    name: 'Space Landlord',
-    description: 'Claim Moon, Mars, and Asteroids. The solar system has a new owner.',
-    icon: '🏠',
-    phase: 4,
-    category: 'strategy',
-    check: (s) => s.space.moonBase && s.space.marsColony && s.space.asteroidProspectors > 0,
+    id: 'fsc_karussellen',
+    name: 'FSC-Karussellen',
+    description: 'Lamna. Hugga nyckelbiotoper. Ga tillbaka. Repeat. Certifiering!',
+    icon: '\u267b\ufe0f',
+    phase: 3,
+    tier: 'internationell',
+    check: (s) => s.eventHistory.includes('p2_fsc_revision') && s.totalStammar >= 500_000,
   },
   {
-    id: 'diplomatic_railgun_achievement',
-    name: 'Diplomatic Railgun',
-    description: 'Deploy the Diplomatic Railgun. Diplomacy at Mach 20.',
-    icon: '💥',
-    phase: 4,
-    category: 'milestone',
-    check: (s) => s.space.spaceWeapons['diplomatic_railgun'] === true,
-  },
-  {
-    id: 'freedom_canyon',
-    name: 'Freedom Canyon',
-    description: 'Rename Mars, establish colony, and reach 50% terraform.',
-    icon: '🏔️',
-    phase: 4,
-    category: 'strategy',
-    check: (s) => s.space.marsRenamed && s.space.marsColony && s.terraformProgress >= 50,
-  },
-  {
-    id: 'satellite_network',
-    name: 'Propaganda Network',
-    description: 'Deploy 10 orbital propaganda satellites. Truth from above.',
-    icon: '📡',
-    phase: 4,
-    category: 'milestone',
-    check: (s) => s.space.propagandaSatellites >= 10,
-  },
-  {
-    id: 'solar_shade_deployed',
-    name: 'Climate Control',
-    description: 'Deploy the Solar Shade Array. Weather is now a policy decision.',
-    icon: '🌤️',
-    phase: 4,
-    category: 'strategy',
-    check: (s) => s.space.spaceWeapons['solar_shade'] === true,
-  },
-  {
-    id: 'dyson_prototype',
-    name: 'Dyson Pioneer',
-    description: 'Build the Dyson Swarm Prototype. Baby steps toward stellar domination.',
-    icon: '🔆',
-    phase: 4,
-    category: 'milestone',
-    check: (s) => s.space.dysonSwarms > 0,
+    id: 'svangdorren',
+    name: 'Svangdorren',
+    description: 'Ministrar jobbar for dig efterat. Svangdorren snurrar.',
+    icon: '\ud83d\udd04',
+    phase: 5,
+    tier: 'internationell',
+    check: (s) => s.lobbyProjects['lobby_buy_svangdorren']?.purchased === true,
   },
 
   // ═══════════════════════════════════════════
-  //  PHASE 5 ACHIEVEMENTS
+  //  TIER 5: ENDGAME
   // ═══════════════════════════════════════════
   {
-    id: 'first_replicator',
-    name: 'Self-Replicating',
-    description: 'Launch your first MAGA Replicator. Make All Galaxies American.',
-    icon: '🛸',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => s.probesLaunched >= 1,
+    id: 'den_tysta_varen',
+    name: 'Den Tysta Varen',
+    description: 'Rachel Carson varnade. Du levererade.',
+    icon: '\ud83d\udd07',
+    phase: 6,
+    tier: 'endgame',
+    check: (s) => s.biodiversity <= 0,
   },
   {
-    id: 'dyson_sphere',
-    name: 'Solar Greatness',
-    description: 'Build a Solar Greatness Harvester. The sun works for you now.',
-    icon: '☀️',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => Object.values(s.universe.dysonUpgrades).some(v => v),
+    id: 'djurfritt_sedan_2035',
+    name: 'Djurfritt Sedan 2035',
+    description: 'Inte ens insekterna overlevde. Men din wellpapp-produktion okade 12%.',
+    icon: '\ud83e\udeb3',
+    phase: 6,
+    tier: 'endgame',
+    check: (s) => s.species >= 50,
   },
   {
-    id: 'star_brander',
-    name: 'Star Brander',
-    description: 'Convert 50 stars. Each one gets a name and a logo.',
-    icon: '⭐',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => s.starsConverted >= 50,
+    id: 'kolonialmakten',
+    name: 'Kolonialmakten',
+    description: 'Jorden var inte nog. Manen har mineraler. Och du har skordare.',
+    icon: '\ud83c\udf11',
+    phase: 7,
+    tier: 'endgame',
+    check: (s) => (s.generators['gen_orbital']?.count ?? 0) >= 1,
   },
   {
-    id: 'post_reality',
-    name: 'Post-Reality',
-    description: 'Reach 80% Reality Drift. Truth is whatever the spreadsheet says.',
-    icon: '🌀',
-    phase: 5,
-    category: 'irony',
-    check: (s) => s.realityDrift >= 80,
+    id: 'den_perfekta_raden',
+    name: 'Den Perfekta Raden',
+    description: 'Universum har blivit en industriskog. Stjarnorna lyser genom rutnattet.',
+    icon: '\u221e',
+    phase: 7,
+    tier: 'endgame',
+    check: (s) => s.totalStammar >= 10_000_000_000,
   },
   {
-    id: 'universe_great',
-    name: 'The Universe Is Great',
-    description: 'Convert 100% of the reachable universe. Now what?',
-    icon: '🌌',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => s.universe.universeConverted >= 100,
-  },
-  {
-    id: 'infinite_loop',
-    name: 'Infinite Loop',
-    description: 'Prestige for the first time. It starts again. It always starts again.',
-    icon: '♾️',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => s.prestigeLevel >= 1,
-  },
-  {
-    id: 'ontological_supremacy',
-    name: 'Ontological Supremacy',
-    description: 'Complete the Narrative Architecture. Reality is your product.',
-    icon: '👁️',
-    phase: 5,
-    category: 'strategy',
-    check: (s) => s.universe.narrativeResearch['ontological_supremacy'] === true,
-  },
-  {
-    id: 'black_hole_accountant',
-    name: 'Black Hole Accountant',
-    description: 'Create your first black hole. Debt disappears into the singularity.',
-    icon: '🕳️',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => s.universe.blackHoles >= 1,
-  },
-  {
-    id: 'star_empire',
-    name: 'Star Empire',
-    description: 'Convert 500 stars. The galaxy has a new franchise owner.',
-    icon: '🌟',
-    phase: 5,
-    category: 'milestone',
-    check: (s) => s.starsConverted >= 500,
+    id: 'och_sen_da',
+    name: 'Och Sen Da?',
+    description: 'Aktieagarna fick sin utdelning. Allt annat ar detaljer.',
+    icon: '\ud83d\udc80',
+    phase: 7,
+    tier: 'endgame',
+    check: (s) => s.achievements['endgame_seen'] === true,
   },
 
   // ═══════════════════════════════════════════
-  //  META ACHIEVEMENTS
+  //  META
   // ═══════════════════════════════════════════
   {
-    id: 'meta_phase1',
-    name: 'True Believer',
-    description: 'Unlock all Phase 1 achievements.',
-    icon: '🏆',
+    id: 'karpaltunnel',
+    name: 'Karpaltunnel',
+    description: 'Klicka 1 000 ganger. Overvag ergonomi.',
+    icon: '\ud83e\uddbe',
     phase: 1,
-    category: 'meta',
-    check: (s) => {
-      const phase1 = ACHIEVEMENTS.filter(a => a.phase === 1 && a.category !== 'meta')
-      return phase1.every(a => s.achievements[a.id])
-    },
+    tier: 'meta',
+    check: (s) => s.clickCount >= 1_000,
   },
   {
-    id: 'meta_phase2',
-    name: 'The Establishment',
-    description: 'Unlock all Phase 2 achievements.',
-    icon: '🏆',
-    phase: 2,
-    category: 'meta',
-    check: (s) => {
-      const phase2 = ACHIEVEMENTS.filter(a => a.phase === 2 && a.category !== 'meta')
-      return phase2.every(a => s.achievements[a.id])
-    },
-  },
-  {
-    id: 'meta_phase3',
-    name: 'World Leader',
-    description: 'Unlock all Phase 3 achievements.',
-    icon: '🏆',
-    phase: 3,
-    category: 'meta',
-    check: (s) => {
-      const phase3 = ACHIEVEMENTS.filter(a => a.phase === 3 && a.category !== 'meta')
-      return phase3.every(a => s.achievements[a.id])
-    },
-  },
-  {
-    id: 'meta_phase4',
-    name: 'Cosmic Authority',
-    description: 'Unlock all Phase 4 achievements.',
-    icon: '🏆',
-    phase: 4,
-    category: 'meta',
-    check: (s) => {
-      const phase4 = ACHIEVEMENTS.filter(a => a.phase === 4 && a.category !== 'meta')
-      return phase4.every(a => s.achievements[a.id])
-    },
-  },
-  {
-    id: 'meta_phase5',
-    name: 'God Emperor',
-    description: 'Unlock all Phase 5 achievements.',
-    icon: '🏆',
-    phase: 5,
-    category: 'meta',
-    check: (s) => {
-      const phase5 = ACHIEVEMENTS.filter(a => a.phase === 5 && a.category !== 'meta')
-      return phase5.every(a => s.achievements[a.id])
-    },
-  },
-  {
-    id: 'meta_completionist',
-    name: 'Completionist',
-    description: 'Unlock every non-meta achievement. You have a problem.',
-    icon: '💎',
-    phase: 5,
-    category: 'meta',
-    check: (s) => {
-      const nonMeta = ACHIEVEMENTS.filter(a => a.category !== 'meta')
-      return nonMeta.every(a => s.achievements[a.id])
-    },
-  },
-  {
-    id: 'meta_prestige_veteran',
-    name: 'Prestige Veteran',
-    description: 'Reach prestige level 3. The cycle continues.',
-    icon: '🔄',
-    phase: 5,
-    category: 'meta',
-    check: (s) => s.prestigeLevel >= 3,
-  },
-  {
-    id: 'meta_long_game',
-    name: 'The Long Game',
-    description: 'Accumulate 24 hours of total play time. Greatness takes commitment.',
-    icon: '⏰',
+    id: 'talamod',
+    name: 'Talamod',
+    description: 'Spela i totalt 1 timme.',
+    icon: '\u23f0',
     phase: 1,
-    category: 'meta',
-    check: (s) => s.totalPlayTime >= 86400,
+    tier: 'meta',
+    check: (s) => s.totalPlayTime >= 3600,
   },
 ]
 
@@ -576,18 +306,25 @@ export function getAchievementsByPhase(phase: number): AchievementDef[] {
   return ACHIEVEMENTS.filter(a => a.phase <= phase)
 }
 
+export function getAchievementsByTier(tier: AchievementTier): AchievementDef[] {
+  return ACHIEVEMENTS.filter(a => a.tier === tier)
+}
+
+// Keep old name for backwards compat
 export function getAchievementsByCategory(category: AchievementCategory): AchievementDef[] {
-  return ACHIEVEMENTS.filter(a => a.category === category)
+  return getAchievementsByTier(category)
 }
 
 const PHASE_NAMES: Record<number, string> = {
-  1: 'Phase 1: Attention',
-  2: 'Phase 2: Control',
-  3: 'Phase 3: World',
-  4: 'Phase 4: Space',
-  5: 'Phase 5: Cosmic',
+  1: 'Fas 1: Lokalpatriot',
+  2: 'Fas 2: Den Goda Grannen',
+  3: 'Fas 3: Massabaronen',
+  4: 'Fas 4: PR-Katastrofen',
+  5: 'Fas 5: Det Skogsindustriella Komplexet',
+  6: 'Fas 6: Post-Biologisk Skogsbruk',
+  7: 'Fas 7: UNIVERSUM AB',
 }
 
 export function getPhaseLabel(phase: number): string {
-  return PHASE_NAMES[phase] ?? `Phase ${phase}`
+  return PHASE_NAMES[phase] ?? `Fas ${phase}`
 }
