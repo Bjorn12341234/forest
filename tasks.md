@@ -318,6 +318,41 @@
 
 ---
 
+## Sprint 5: Den Stora Expansionen
+
+### 5A — Foundation
+- [x] 5A-1: Balance Pass — event frequency +30-50%, lobby boost cap +100%, tech costs 3-5x, generator costScale
+- [x] 5A-2: Phase Type Extension (7→12) — Phase type union, thresholds, transition scripts, Dashboard PHASE_NAMES
+- [x] 5A-3: Endgame Rework — Årsredovisning as milestone, evil-corp post-credits, no fourth-wall breaks
+- [x] 5A-4: Save Migration v2→v3 — expansionTargets field, migration function
+
+### 5B — Expansion Tab
+- [x] 5B-1: Expansion Data & Store — expansionTargets.ts (18 targets), store integration (acquireExpansionTarget, tick production)
+- [x] 5B-2: Expansion Panel Component — 4 SVG map views (world/solar/galaxy/multiverse), CSS-positioned dots, target detail panel
+
+### 5C — Event Content Expansion
+- [x] 5C-1: Phase 2-4 Events (30 new) — phase2/newEvents.ts (10), phase3/events.ts (20)
+- [x] 5C-2: Phase 5-7 Events (20 new) — phase5/newEvents.ts (20)
+- [x] 5C-3: Phase 8-12 Events (37 new) — phase8/events.ts (37 events: space, aliens, multiverse, entropy, meta-endgame)
+
+### 5D — Content Expansion
+- [x] 5D-1: 6 New Generators (phases 7-12) — Klon-Skog, Planetär Terraformer, Nanoskördare, Dimensionsskördare, Multiverse-Harvester, Entropimotor
+- [x] 5D-2: Late Tech Tree (12 upgrades) — phase3/upgrades.ts: Geopolitik (4), Genetik (3), Rymdforskning (5) branches
+- [x] 5D-3: 20 New Achievements — kosmisk tier, phases 6-12 achievements
+- [x] 5D-4: 25+ New Ticker Headlines — phases 7-12
+
+### 5E — Antagonists, Lobby, Audio
+- [x] 5E-1: 5 New Antagonists (phases 6-12) — FN:s Skogsrapportör, Hacktivisterna, Mars-Rebellerna, Tidsgränslösen
+- [x] 5E-2: 5 New Lobby Projects (phases 8-12) — 2 earners + 3 purchases
+- [x] 5E-3: Audio for phases 8-12 — deep space, digital abstract, final tone
+
+### 5F — Reality Page
+- [x] 5F-1: Reality page after endgame — black background, real Swedish forestry facts (9 sections), link to Föreningen Naturhänsyn (naturhansyn.se)
+
+**Notes:** Sprint 5 complete. 25 files changed, +4,218 lines. Extended game from 7→12 phases across 4 eras. Added Expansion tab with territory acquisition maps. 87 new events spanning phases 2-12. Årsredovisning reworked as milestone (game continues). Reality page as true ending with real facts about Swedish forestry + link to Föreningen Naturhänsyn. Save version bumped to 3. Build: 169KB gzipped, TypeScript clean.
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

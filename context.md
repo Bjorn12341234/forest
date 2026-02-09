@@ -75,7 +75,7 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 
 ---
 
-## Current Status: All 4 Sprints Complete — Deployed
+## Current Status: All 5 Sprints Complete — Deployed
 
 **Live at:** https://bjorn12341234.github.io/forest/
 
@@ -84,6 +84,7 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 - **Sprint 2 — Power systems:** Lobby system (4 earners + 7 purchases), OwnerMeter with 5 manipulation actions, PR campaigns (4 image-restore options), News ticker (30+ milestone-based headlines), Events (11 phase 1 + 12 phase 2-4), 3 tabs (Översikt, Teknik, Makt)
 - **Sprint 3 — Depth & endgame:** 28 achievements in 6 tiers, 7 antagonists with condition triggers and countermeasures, hidden variables (realCO2, ownerProfit, biodiversity, species, samiLand), EndScreen "Årsredovisning" with sequential reveal and post-credits
 - **Sprint 4 — Polish & ship:** Multi-layered ambient soundscapes per phase (Web Audio API), generator balancing pass, 12 new events (phases 5-7), ~15 new ticker headlines, PWA (manifest, service worker, icons), mobile touch targets, safe area insets, GitHub Actions deploy
+- **Sprint 5 — Den Stora Expansionen:** Extended to 12 phases across 4 eras (Sverige→Världen→Universum→Bortom). Expansion tab with stylized maps (world→solar system→galaxy→multiverse) and 18 acquirable targets. 87 new events for phases 2-12. 6 new generators (Klon-Skog through Entropimotor). 12 new tech tree upgrades in 3 branches (Geopolitik, Genetik, Rymdforskning). 20 new achievements with 'kosmisk' tier. 5 new antagonists, 5 new lobby projects, 25+ ticker headlines. Audio for phases 8-12. Balance pass (event frequency +30-50%, lobby boost cap, tech cost 3-5x). Årsredovisning reworked as milestone. Reality page with real facts + link to Föreningen Naturhänsyn. Save migration v2→v3.
 - **Post-launch fixes:** Events blocked during phase transitions (no more popups covering transition text), Nastlé/NCA satirical references (phase 3→4 transition + ticker headlines)
 
 ---
@@ -121,24 +122,32 @@ forest/
 │   │   ├── events.ts     # Event engine (scheduling, selection, resolution)
 │   │   ├── phases.ts     # Phase thresholds + transition scripts
 │   │   ├── audio.ts      # Procedural audio (Web Audio API): ambient soundscapes + SFX
-│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 2)
+│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 3)
 │   │   └── offline.ts    # Offline progression (10% rate, max 10 events)
 │   ├── data/
-│   │   ├── generators.ts     # 8 generators (phase-gated)
+│   │   ├── generators.ts     # 14 generators (phase-gated, costScale per generator)
 │   │   ├── clickUpgrades.ts  # 4 click multiplier upgrades
 │   │   ├── upgradeRegistry.ts # Central registry for tech tree upgrades
-│   │   ├── achievements.ts   # 28 achievements in 6 tiers
-│   │   ├── antagonists.ts    # 7 antagonists with triggers + countermeasures
-│   │   ├── lobbyProjects.ts  # 4 lobby earners + 7 one-time purchases
+│   │   ├── achievements.ts   # 48 achievements in 7 tiers
+│   │   ├── antagonists.ts    # 12 antagonists with triggers + countermeasures
+│   │   ├── lobbyProjects.ts  # 6 lobby earners + 10 one-time purchases
 │   │   ├── ownerActions.ts   # 5 owner actions + 4 PR campaigns
-│   │   ├── newsTickerLines.ts # 40+ headlines organized by phase
+│   │   ├── newsTickerLines.ts # 65+ headlines organized by phase
+│   │   ├── expansionTargets.ts  # 18 expansion targets (countries, planets, multiverses)
 │   │   ├── phase1/
 │   │   │   ├── upgrades.ts   # Tech tree upgrades
 │   │   │   └── events.ts     # Phase 1 events
 │   │   ├── phase2/
-│   │   │   └── events.ts     # Phase 2-4 events
-│   │   └── phase5/
-│   │       └── events.ts     # Phase 5-7 events
+│   │   │   ├── events.ts     # Phase 2-4 events
+│   │   │   └── newEvents.ts   # Phase 2-3 new events (Sprint 5)
+│   │   ├── phase3/
+│   │   │   ├── upgrades.ts   # Tech tree: Geopolitik, Genetik, Rymdforskning branches
+│   │   │   └── events.ts     # Phase 3-4 events
+│   │   ├── phase5/
+│   │   │   ├── events.ts     # Phase 5-7 events
+│   │   │   └── newEvents.ts   # Phase 5-7 new events (Sprint 5)
+│   │   └── phase8/
+│   │       └── events.ts     # Phase 8-12 events
 │   ├── components/
 │   │   ├── ClickArea.tsx      # "Skriv Skogsbruksplan" button + click upgrades
 │   │   ├── Generators.tsx     # Generator list with buy buttons
@@ -147,7 +156,8 @@ forest/
 │   │   ├── LobbyPanel.tsx     # Makt tab: earn PK, spend PK, PR campaigns
 │   │   ├── OwnerMeter.tsx     # Skogsägarförtroende bar + manipulation actions
 │   │   ├── AntagonistPanel.tsx # Active antagonists + counter buttons
-│   │   ├── EndScreen.tsx      # Endgame "Årsredovisning" + post-credits
+│   │   ├── ExpansionPanel.tsx  # Expansion tab: territory map (phase 6+)
+│   │   ├── EndScreen.tsx      # Endgame "Årsredovisning" + post-credits + reality page
 │   │   ├── EventModal.tsx     # Event popup with choices
 │   │   ├── Ticker.tsx         # News ticker (milestone-based headlines)
 │   │   ├── UpgradeList.tsx    # Tech tree upgrade cards
@@ -156,7 +166,7 @@ forest/
 │   │   ├── AchievementPanel.tsx # Full achievement list by tier
 │   │   ├── OfflineReturnModal.tsx # Offline progress report
 │   │   ├── SettingsPanel.tsx  # Settings (volume, theme, save/load/export)
-│   │   ├── TabNav.tsx         # Bottom tab navigation (3 tabs)
+│   │   ├── TabNav.tsx         # Bottom tab navigation (4 tabs)
 │   │   └── ui/
 │   │       ├── GlassCard.tsx      # Brutalist card component
 │   │       ├── AnimatedNumber.tsx  # Smooth number counter
@@ -182,8 +192,13 @@ forest/
 | 3 | Massabaronen | 100k – 1M | International lobby |
 | 4 | PR-Katastrofen | 1M – 10M | Sami conflict event |
 | 5 | Det Skogsindustriella Komplexet | 10M – 100M | Endgame module |
-| 6 | Post-Biologisk Skogsbruk | 100M – 1B | Terraforming/Expansion |
-| 7 | UNIVERSUM AB | 1B+ | Endgame receipt |
+| 6 | Global Skogskonglomerat | 100M – 1B | Expansion tab |
+| 7 | Post-Biologisk Skogsbruk | 1B – 10B | Genetic engineering |
+| 8 | Terraforming AB | 10B – 100B | Årsredovisning milestone, space |
+| 9 | Kosmisk Industrialisering | 100B – 1T | Dyson spheres, aliens |
+| 10 | Den Perfekta Raden | 1T – 10T | Galactic dominance |
+| 11 | Parallella Universum | 10T – 100T | Multiverse, time loops |
+| 12 | Entropins Slut | 100T+ | Meta-endgame, reality page |
 
 ---
 

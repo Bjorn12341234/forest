@@ -82,12 +82,20 @@ Spelarens primära klick-action. Varje klick genererar stammar. Flavourtexten ä
 | **Lobbyfirma** | 200 000 | 2 000/s | *"Ex-statssekreterare som vet exakt vilka dörrar man knackar på."* |
 | **Autonomt Skördarnätverk** | 1 000 000 | 10 000/s | *"GPS-styrda skördare som opererar nattetid. Ingen ser dem. Ingen hör dem. Skogen hör dem."* |
 | **Orbital Timberstation** | 50 000 000 | 100 000/s | *"Varför sluta vid atmosfären?"* |
+| **Klon-Skog** | 5 000 000 | 500 000/s | *"Identiska granar. Identiska rader. Identisk framtid."* |
+| **Planetär Terraformer** | 50 000 000 | 2 000 000/s | *"Mars röda jord + svensk grön gran = orange vinst."* |
+| **Nanoskördare** | 500 000 000 | 20 000 000/s | *"Molekylär avverkning. Träden vet inte ens att de fälls."* |
+| **Dimensionsskördare** | 5 000 000 000 | 200 000 000/s | *"Avverkar i parallella dimensioner. Ingen kan klaga."* |
+| **Multiverse-Harvester** | 50 000 000 000 | 2 000 000 000/s | *"Oändliga universum. Oändlig skog. Oändlig avverkning."* |
+| **Entropimotor** | 500 000 000 000 | 20 000 000 000/s | *"Omvandlar universums termiska död till produktiv energi."* |
 
 ### Cost Scaling
 ```
 cost(n) = base_cost × 1.15^n
 ```
 Where `n` is the number of that generator already owned.
+
+Sena generatorer (fas 7+) har costScale 1.20–1.35 istället för standard 1.15.
 
 ---
 
@@ -177,15 +185,39 @@ Du har kontroll över politiker, myndigheter, och narrativet.
 - **Nyckelprojekt:** "Maktutredningen — Men tvärtom", "Svängdörren", "Transatlantiska Pipelinen"
 - **Unlock:** Endgame-modulen.
 
-### Phase 6: "Post-Biologisk Skogsbruk" (100M–1B stammar)
+### Phase 6: "Global Skogskonglomerat" (100M–1B stammar)
 Sverige är klart. All skog är industriskog.
 - **Nyckelprojekt: "Silva Maximus Grid"** — Ersätt de sista blandskogarna med genetiskt optimerade monokulturer.
 - **Achievement: "Den Tysta Våren"** — Fågelljud ersätts gradvis av drönande från autonoma skördare.
-- **Unlock:** Terraforming/Expansionsmodulen.
+- **Unlock:** Expansionsmodulen (världskarta).
 
-### Phase 7: "UNIVERSUM AB" (1B+ stammar — Endgame)
-- **Projekt: "Lunar Silva"** — Terraforma månen.
+### Phase 7: "Post-Biologisk Skogsbruk" (1B–10B stammar)
+- **Unlock:** Global expansion, terraforming-forskning.
+- **Nyckelprojekt:** Kloning, genetisk optimering, autonoma nätverk.
+- **Achievement: "Den Tysta Våren"** — Fågelljud ersätts gradvis av drönande från autonoma skördare.
+
+### Phase 8: "Terraforming AB" (10B–100B stammar)
+Årsredovisning triggas som milstolpe vid 10B. Rymden öppnas.
+- **Nyckelprojekt: "Lunar Silva"** — Terraforma månen.
+- **Unlock:** Solsystemskarta, planetära expansioner.
+
+### Phase 9: "Kosmisk Industrialisering" (100B–1T stammar)
+Dysonsfärer, svarta hål, alien-kontakt.
 - **Projekt: "Mars Massafabrik"** — Genetiskt modifierade träd i 0.6% atmosfärstryck.
+- **Unlock:** Galaktisk karta.
+
+### Phase 10: "Den Perfekta Raden" (1T–10T stammar)
+Galaktisk dominans, mörk materia.
+- **Projekt:** Exploatera svarta hål, mörk materia-skördare.
+- **Achievement: "Den Perfekta Raden"** — Universum blir ett rutnät.
+
+### Phase 11: "Parallella Universum" (10T–100T stammar)
+Multiversum, tidsresor, kausalitetsbrott.
+- **Unlock:** Multiversumskarta.
+- **Projekt:** Dimensionsskördare, temporala loopar.
+
+### Phase 12: "Entropins Slut" (100T+ stammar)
+Universums slut, den sista maskinen, meta-endgame.
 - **Den Sista Skärmen:** Årsredovisnings-kvittot (se Endgame section).
 
 ---
@@ -263,21 +295,32 @@ Events triggas vid specifika resursers milstolpar eller slumpmässigt.
 
 ---
 
-## 11. Endgame: "UNIVERSUM AB"
+## 11. Endgame & 4 Eror
 
-### Phase 7A: Terraforming
-- **Projekt: "Lunar Silva"** — CO₂ som atmosfär-investering på månen.
-- **Projekt: "Mars Massafabrik"** — Genetiskt modifierade träd i minimal atmosfär.
+### Spelstrukturen: Fyra eror
+- **SVERIGE (fas 1-4):** Lokal → Regional → Nationell dominans
+- **VÄRLDEN (fas 5-7):** Internationalisering, global expansion, terraforming-forskning
+- **UNIVERSUM (fas 8-10):** Rymden, planeter, galaktisk industrialisering
+- **BORTOM (fas 11-12):** Multiversum, tidsresor, entropins slut
 
-### Phase 7B: Den Sista Skärmen (Årsredovisning)
+### Årsredovisningen (triggas vid 10B stammar)
+Årsredovisningen är inte längre spelslut — den är en **milstolpe** som triggas vid 10B stammar (fas 8 start).
+
 Minimal, vit skärm. Kliniskt kvitto som visar:
 - Total stammar avverkade
 - Total kapital genererat
 - **DOLD BOKFÖRING:** Verkligt netto-CO₂ vs rapporterat, skogsägare vs industri (1:12), arter utrotade, samebyar = 0, Skogsstyrelsen = KÖPT, FSC = KÖPT, EU = URVATNAD
-- Knapp: **"DELA UT VINST TILL AKTIEÄGARNA"** (reset)
+- Knapp: **"FORTSÄTT SPELA"** (inte reset)
 
-### Post-Credits
-Scrollande text med verkliga fakta:
+### Post-Credits (efter Årsredovisningen)
+Scrollande text med evil-corp triumfalism:
+- *"Tack för din insats."*
+- *"Aktieägarna är nöjda."*
+- *"Styrelsens bonusar är säkrade."*
+- *"Expansionen fortsätter."*
+
+### Reality Page (efter post-credits)
+Svart bakgrund. Verkliga fakta om svensk skogsindustri:
 - Skogsstyrelsens maktutredning 2026
 - Svängdörrar politik ↔ näringsliv
 - "Frihet under ansvar" sedan 1993
@@ -286,7 +329,45 @@ Scrollande text med verkliga fakta:
 - EU:s hållbarhetslagar urvattnades via Omnibus
 - 63% av virke → massa (engångsprodukter)
 - Alternativa brukningsformer existerar. De svartmålas.
-- Länk till Skogsstyrelsens rapport "Makten Över Skogen" (2026).
+- Länk till **Föreningen Naturhänsyn** (naturhansyn.se)
+- Länk till Skogsstyrelsens rapport "Makten Över Skogen" (2026)
+
+Knappar:
+- **"FORTSÄTT SPELA"** (återgå till spelet)
+- **"Starta om"** (reset)
+
+---
+
+## 11b. Expansion-systemet
+
+### Översikt
+Expansion-fliken låses upp i **fas 6** och ger tillgång till globala/kosmiska expansionsmål.
+
+### 18 Expansion Targets
+- **Länder (fas 6-7):** Brasilien, Kongo, Ryssland, Kanada, etc.
+- **Planeter (fas 8-9):** Månen, Mars, Europa, Titan, etc.
+- **Galaktiska mål (fas 10):** Proxima Centauri b, Dysonsfärer, svarta hål
+- **Parallella universum (fas 11-12):** Alt-Earth 1, Alt-Earth 2, dimensionella loopar
+
+### 4 Kartvyer
+- **Världskarta (fas 6-7):** Expandera till andra länder.
+- **Solsystemskarta (fas 8-9):** Terraforma planeter och månar.
+- **Galax-karta (fas 10):** Exploatera stjärnsystem och svarta hål.
+- **Multiverse-karta (fas 11-12):** Skörda parallella dimensioner.
+
+### Mekanik
+Expansion targets kostar:
+- **Stammar** (initial investering)
+- **Kapital** (infrastruktur)
+- **Lobby** (politisk vilja / rymdfartsmyndigheter)
+
+Producerar:
+- **Stammar/s** (kontinuerlig produktion)
+- **Kapital/s** (kontinuerlig intäkt)
+
+Dolda kostnader:
+- **Biodiversitet** (minskar per expansion)
+- **realCO2** (ökar per expansion)
 
 ---
 
@@ -425,13 +506,21 @@ Verkliga händelser och fakta som genomsyrar spelet:
 
 ## 16. Balancing Guidelines
 
-Target: 30–60 min total playtime.
+Target: **2–4 timmar** total playtime (med 12 faser).
 - **Första 5 min:** Manuellt klickande dominerar
-- **5–15 min:** Generators tar över
-- **15–30 min:** Lobbymodul och events driver progressionen
-- **30–60 min:** Endgame om man optimerar
+- **5–20 min:** Generators tar över
+- **20–60 min:** Lobbymodul och events driver progressionen
+- **60–120 min:** Global expansion (fas 6-7)
+- **120–180 min:** Rymd-era (fas 8-10)
+- **180–240 min:** Meta-endgame (fas 11-12)
 
-Cost escalation: 1.15× multiplikator per köpt enhet. Event-triggers är absoluta stamtal, inte relativa.
+Cost escalation: 1.15× multiplikator per köpt enhet (sena generatorer 1.20–1.35×).
+
+Event-frekvenser skalade 30-50% längre intervaller för senare faser.
+
+Lobby boost capped at +100%.
+
+Late tech costs 3-5x higher än motsvarande early-game tech.
 
 ---
 

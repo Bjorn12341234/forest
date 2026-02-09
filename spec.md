@@ -11,7 +11,7 @@ All game state lives in a single Zustand store (`src/store/gameStore.ts`).
 ```typescript
 interface GameState {
   // Meta
-  phase: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  phase: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
   startedAt: number;          // timestamp
   lastTickAt: number;         // timestamp
   lastSaveAt: number;         // timestamp
@@ -55,6 +55,9 @@ interface GameState {
   // Antagonists
   antagonists: Record<string, AntagonistState>;
 
+  // Expansion targets
+  expansionTargets: Record<string, ExpansionTargetState>;
+
   // Events
   eventQueue: GameEvent[];
   eventHistory: string[];     // IDs of resolved events
@@ -96,6 +99,11 @@ interface LobbyProjectState {
 interface AntagonistState {
   active: boolean;
   countered: boolean;
+}
+
+interface ExpansionTargetState {
+  acquired: boolean;
+  acquiredAt: number;        // timestamp
 }
 
 interface GameEvent {
@@ -173,15 +181,16 @@ stammarPS = sum(generator.count * generator.baseProduction for each generator)
 
 ### Generator Cost Scaling
 ```
-cost(n) = baseCost * 1.15^n
+cost(n) = baseCost * costScale^n
 ```
+Where `costScale` defaults to 1.15 but varies per generator (1.20 for phase 7+, 1.25-1.35 for phase 8+).
 Where `n` = number of that generator already owned.
 
 ### Kapital Conversion
 ```
 kapitalPerSecond = stammarPerSecond * conversionRate * ownerTrustModifier
 ```
-- `conversionRate`: phase 1: 0.01, 2: 0.015, 3: 0.02, 4: 0.025, 5: 0.03, 6: 0.04, 7: 0.05
+- `conversionRate`: phase 1: 0.01, 2: 0.015, 3: 0.02, 4: 0.025, 5: 0.03, 6: 0.04, 7: 0.05, 8: 0.06, 9: 0.07, 10: 0.08, 11: 0.09, 12: 0.10
 - `ownerTrustModifier`:
   - Trust 40-60 (sweet spot): 1.0
   - Trust >80: 0.6 (owners keep more)
@@ -238,12 +247,13 @@ Base64-encoded JSON string. Copy/paste for backup.
 ### Schema Versioning
 ```typescript
 interface SaveFile {
-  version: number;
+  version: 3;
   savedAt: number;
   state: GameState;
 }
 ```
 Migration functions: `migrate_v1_to_v2(state)`, etc.
+Migration v2→v3: adds `expansionTargets: {}` to state.
 
 ---
 
@@ -264,6 +274,13 @@ nextEventIn = random(minFrequency, maxFrequency)
 | 5 | 20 | 40 |
 | 6 | 15 | 30 |
 | 7 | 10 | 20 |
+| 8 | 50 | 90 |
+| 9 | 40 | 70 |
+| 10 | 30 | 55 |
+| 11 | 25 | 45 |
+| 12 | 20 | 35 |
+
+Event frequencies were increased ~30-50% across all phases as part of balance pass.
 
 ### Event Selection
 1. Filter by: phase, conditions met, not on cooldown, not unique+already-fired
@@ -286,6 +303,11 @@ Player picks choice → effects applied → event added to history → next sche
 | 4 → 5 | totalStammar >= 10,000,000 |
 | 5 → 6 | totalStammar >= 100,000,000 |
 | 6 → 7 | totalStammar >= 1,000,000,000 |
+| 7 → 8 | totalStammar >= 10,000,000,000 |
+| 8 → 9 | totalStammar >= 100,000,000,000 |
+| 9 → 10 | totalStammar >= 1,000,000,000,000 |
+| 10 → 11 | totalStammar >= 10,000,000,000,000 |
+| 11 → 12 | totalStammar >= 100,000,000,000,000 |
 
 ### Transition Sequence
 1. Pause game tick
@@ -304,8 +326,11 @@ Player picks choice → effects applied → event added to history → next sche
 | 3 | Image/PR system, international lobby, generator 6 (Lobbyfirma) |
 | 4 | Nestlé event chain, Sami conflict, antagonists |
 | 5 | Maktutredning, Svängdörren, generator 7 (Autonomt Skördarnätverk) |
-| 6 | Generator 8 (Orbital Timberstation), Den Tysta Våren |
-| 7 | Endgame screen at 10B totalStammar |
+| 6 | Generator 8 (Orbital Timberstation), Den Tysta Våren, Expansion tab |
+| 7 | Post-Biologisk Skogsbruk, generators 9-10 (Klon-Skog, Planetär Terraformer) |
+| 8 | Årsredovisning milestone at 10B, Terraforming content |
+| 9-10 | Cosmic generators (Nanoskördare, Dimensionsskördare) |
+| 11-12 | Multiverse generators + meta-endgame |
 
 ---
 
@@ -320,21 +345,24 @@ App.tsx
 │   │   ├── ClickArea.tsx (main button + stammar display)
 │   │   └── OwnerMeter.tsx (skogsägarförtroende, phase 2+)
 │   └── RightPanel
+│       ├── TabNav.tsx (4 tabs: Produktion, Makt, Expansion, Fakta)
 │       ├── Generators.tsx (scrollable generator list)
-│       └── LobbyPanel.tsx (earn/spend PK, phase 2+)
+│       ├── LobbyPanel.tsx (earn/spend PK, phase 2+)
+│       └── ExpansionPanel.tsx (Expansion tab: territory map + acquisition, phase 6+)
 ├── NewsTicker.tsx (bottom ticker bar)
 ├── EventModal.tsx (overlay when event fires)
 ├── AchievementPopup.tsx (toast notification)
-└── EndScreen.tsx (phase 7 endgame)
+└── EndScreen.tsx (årsredovisning milestone + reality page)
 ```
 
 ### Rendering Strategy
 - **TopBar** always renders (resource counters)
 - **Generators** always renders (main interaction)
 - **LobbyPanel** renders when phase >= 2
+- **ExpansionPanel** renders when phase >= 6
 - **OwnerMeter** renders when phase >= 2
 - **EventModal** renders when `activeEvent !== null`
-- **EndScreen** renders when phase === 7 and endgame triggered
+- **EndScreen** renders as milestone at 10B totalStammar
 - **Numbers** use formatting utility (see below)
 - **Ticker** is CSS animation, content from milestone triggers
 
@@ -460,11 +488,14 @@ See `context.md` for full project structure.
 - Owner actions have cooldown timers in `ownerActionCooldowns: Record<string, number>`
 - Antagonists triggered by conditions in tick, countered via action (costs kapital or PK)
 - Lobby modifiers applied in tick: generatorBoost, kapitalBoost, imageLossReduction, lobbyDiscount, ownerTrustLock
+- Lobby generator boost capped at +100% (max 2.0x multiplier)
 - Hidden variables accumulate every tick: realCO2, ownerProfit, biodiversity, species, samiLand
-- EndScreen triggers at phase >= 7 && totalStammar >= 10B
-- Save version: 2 (migration v1→v2 adds ownerActionCooldowns)
+- Expansion targets produce stammar/s + kapital/s in tick, with hidden biodiversity + CO2 costs
+- EndScreen triggers as milestone at 10B; game continues to phase 12
+- Reality page shows real Swedish forestry facts + link to Föreningen Naturhänsyn after endgame
+- Save version: 3 (v2→v3 adds expansionTargets)
 - Audio: fully procedural via Web Audio API, no audio files
-- Kapital conversion rate scales with phase (0.01 → 0.05) and is modified by ownerTrust
+- Kapital conversion rate scales with phase (0.01 → 0.10) and is modified by ownerTrust
 
 ---
 
