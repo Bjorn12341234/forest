@@ -59,6 +59,10 @@ export const OWNER_CLICK_UPGRADES: OwnerClickUpgradeData[] = [
   },
 ]
 
+const OWNER_CLICK_UPGRADE_MAP = new Map<string, OwnerClickUpgradeData>(
+  OWNER_CLICK_UPGRADES.map(u => [u.id, u])
+)
+
 export function getOwnerClickUpgrade(id: string): OwnerClickUpgradeData | undefined {
-  return OWNER_CLICK_UPGRADES.find(u => u.id === id)
+  return OWNER_CLICK_UPGRADE_MAP.get(id)
 }

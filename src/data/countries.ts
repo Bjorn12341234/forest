@@ -242,9 +242,14 @@ export const COUNTRIES: CountryDef[] = [
 
 // ── Helper Functions ──
 
+// Map for O(1) lookups (hot path — called per country per tick)
+const COUNTRY_MAP = new Map<string, CountryDef>(
+  COUNTRIES.map(c => [c.id, c])
+)
+
 /** Get a single country by its id */
 export function getCountry(id: string): CountryDef | undefined {
-  return COUNTRIES.find((c) => c.id === id)
+  return COUNTRY_MAP.get(id)
 }
 
 /** Get all countries unlocked at or before the given phase */

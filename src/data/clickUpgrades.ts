@@ -50,6 +50,10 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
   },
 ]
 
+const CLICK_UPGRADE_MAP = new Map<string, ClickUpgradeData>(
+  CLICK_UPGRADES.map(u => [u.id, u])
+)
+
 export function getClickUpgrade(id: string): ClickUpgradeData | undefined {
-  return CLICK_UPGRADES.find(u => u.id === id)
+  return CLICK_UPGRADE_MAP.get(id)
 }

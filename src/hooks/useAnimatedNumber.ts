@@ -13,12 +13,21 @@ export function useAnimatedNumber(
   const rafRef = useRef<number>(0)
   const startRef = useRef(display)
   const startTimeRef = useRef(0)
+  // Throttle: only start new animation if target changed meaningfully
+  const lastTargetRef = useRef(target)
 
   const easeOutExpo = useCallback((t: number): number => {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
   }, [])
 
   useEffect(() => {
+    // Skip animation if the change is too small to see after formatting
+    const factor = Math.pow(10, decimals)
+    const roundedNew = Math.round(target * factor)
+    const roundedOld = Math.round(lastTargetRef.current * factor)
+    if (roundedNew === roundedOld) return
+
+    lastTargetRef.current = target
     startRef.current = display
     startTimeRef.current = performance.now()
 

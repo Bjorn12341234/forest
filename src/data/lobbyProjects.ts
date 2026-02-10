@@ -265,12 +265,20 @@ export const LOBBY_PURCHASES: LobbyPurchaseData[] = [
   },
 ]
 
+// Maps for O(1) lookups
+const LOBBY_EARNER_MAP = new Map<string, LobbyEarnerData>(
+  LOBBY_EARNERS.map(e => [e.id, e])
+)
+const LOBBY_PURCHASE_MAP = new Map<string, LobbyPurchaseData>(
+  LOBBY_PURCHASES.map(p => [p.id, p])
+)
+
 export function getLobbyEarner(id: string): LobbyEarnerData | undefined {
-  return LOBBY_EARNERS.find(e => e.id === id)
+  return LOBBY_EARNER_MAP.get(id)
 }
 
 export function getLobbyPurchase(id: string): LobbyPurchaseData | undefined {
-  return LOBBY_PURCHASES.find(p => p.id === id)
+  return LOBBY_PURCHASE_MAP.get(id)
 }
 
 export function getLobbyEarnersByPhase(phase: number): LobbyEarnerData[] {
@@ -279,4 +287,45 @@ export function getLobbyEarnersByPhase(phase: number): LobbyEarnerData[] {
 
 export function getLobbyPurchasesByPhase(phase: number): LobbyPurchaseData[] {
   return LOBBY_PURCHASES.filter(p => p.unlockPhase <= phase)
+}
+
+// ── Cached lobby modifier computation ──
+// Call once on buyLobbyProject instead of 5× per tick
+
+export interface LobbyModifiers {
+  generatorBoost: number   // capped at 2.0
+  kapitalBoost: number
+  imageProtection: number  // 0-1 factor (0 = full protection)
+  lobbyDiscount: number    // capped at 0.5
+  ownerTrustFloor: number
+}
+
+export function computeLobbyModifiers(lobbyProjects: Record<string, { purchased?: boolean }>): LobbyModifiers {
+  let genBoost = 1.0
+  let kapBoost = 1.0
+  let imgReduction = 0
+  let discount = 0
+  let trustFloor = 0
+
+  for (const purchase of LOBBY_PURCHASES) {
+    if (!lobbyProjects[purchase.id]?.purchased) continue
+    for (const effect of purchase.effects) {
+      switch (effect.type) {
+        case 'generatorBoost': genBoost += effect.value; break
+        case 'kapitalBoost': kapBoost += effect.value; break
+        case 'imageLossReduction':
+        case 'imageDecayReduction': imgReduction += effect.value; break
+        case 'lobbyDiscount': discount += effect.value; break
+        case 'ownerTrustLock': trustFloor = 40; break
+      }
+    }
+  }
+
+  return {
+    generatorBoost: Math.min(2.0, genBoost),
+    kapitalBoost: kapBoost,
+    imageProtection: Math.max(0, 1 - imgReduction),
+    lobbyDiscount: Math.min(0.5, discount),
+    ownerTrustFloor: trustFloor,
+  }
 }

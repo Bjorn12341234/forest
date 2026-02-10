@@ -166,8 +166,13 @@ export const GENERATORS: GeneratorData[] = [
   },
 ]
 
+// Map for O(1) lookups (hot path — called 20×/tick)
+const GENERATOR_MAP = new Map<string, GeneratorData>(
+  GENERATORS.map(g => [g.id, g])
+)
+
 export function getGeneratorData(id: string): GeneratorData | undefined {
-  return GENERATORS.find(g => g.id === id)
+  return GENERATOR_MAP.get(id)
 }
 
 export function getGeneratorsByPhase(phase: number): GeneratorData[] {

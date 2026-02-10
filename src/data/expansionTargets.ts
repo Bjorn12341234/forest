@@ -114,8 +114,13 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   },
 ]
 
+// Map for O(1) lookups
+const EXPANSION_TARGET_MAP = new Map<string, ExpansionTargetData>(
+  EXPANSION_TARGETS.map(t => [t.id, t])
+)
+
 export function getExpansionTarget(id: string): ExpansionTargetData | undefined {
-  return EXPANSION_TARGETS.find(t => t.id === id)
+  return EXPANSION_TARGET_MAP.get(id)
 }
 
 export function getExpansionTargetsByPhase(phase: number): ExpansionTargetData[] {

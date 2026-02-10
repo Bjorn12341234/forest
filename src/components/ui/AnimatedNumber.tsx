@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { useAnimatedNumber } from '../../hooks/useAnimatedNumber'
 import { formatNumber } from '../../engine/format'
 
@@ -9,7 +10,7 @@ interface AnimatedNumberProps {
   format?: (n: number) => string
 }
 
-export function AnimatedNumber({
+export const AnimatedNumber = memo(function AnimatedNumber({
   value,
   duration = 300,
   decimals = 1,
@@ -23,4 +24,4 @@ export function AnimatedNumber({
       {format(animated)}
     </span>
   )
-}
+})

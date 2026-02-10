@@ -16,8 +16,13 @@ const UPGRADES: UpgradeData[] = [
   ...PHASE10_UPGRADES,
 ]
 
+// Map for O(1) lookups
+const UPGRADE_MAP = new Map<string, UpgradeData>(
+  UPGRADES.map(u => [u.id, u])
+)
+
 export function getUpgradeData(id: string): UpgradeData | undefined {
-  return UPGRADES.find(u => u.id === id)
+  return UPGRADE_MAP.get(id)
 }
 
 export function getUpgradesByPhase(phase: number): UpgradeData[] {

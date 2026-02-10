@@ -130,10 +130,17 @@ export interface PRCampaignData {
   icon: string
 }
 
+const OWNER_ACTION_MAP = new Map<string, OwnerActionData>(
+  OWNER_ACTIONS.map(a => [a.id, a])
+)
+const PR_CAMPAIGN_MAP = new Map<string, PRCampaignData>(
+  PR_CAMPAIGNS.map(c => [c.id, c])
+)
+
 export function getOwnerAction(id: string): OwnerActionData | undefined {
-  return OWNER_ACTIONS.find(a => a.id === id)
+  return OWNER_ACTION_MAP.get(id)
 }
 
 export function getPRCampaign(id: string): PRCampaignData | undefined {
-  return PR_CAMPAIGNS.find(c => c.id === id)
+  return PR_CAMPAIGN_MAP.get(id)
 }

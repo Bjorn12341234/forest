@@ -12,6 +12,21 @@ const CATEGORY_WEIGHTS: Record<string, number> = {
   reality_glitch: 0.5,
 }
 
+// ── Phase-based event pool cache ──
+// Pre-filters events by phase/maxPhase so we only run condition checks on candidates
+let cachedPhase = -1
+let cachedPool: GameEvent[] = []
+let cachedFullPool: GameEvent[] = []
+
+function getPhaseFilteredPool(phase: number, eventPool: GameEvent[]): GameEvent[] {
+  // Invalidate if phase changed or pool changed (different array ref)
+  if (phase === cachedPhase && eventPool === cachedFullPool) return cachedPool
+  cachedPhase = phase
+  cachedFullPool = eventPool
+  cachedPool = eventPool.filter(e => e.phase <= phase && (!e.maxPhase || phase <= e.maxPhase))
+  return cachedPool
+}
+
 export function checkEventTrigger(state: GameState, now: number): boolean {
   if (state.activeEvent) return false
   return now >= state.nextEventAt
@@ -21,7 +36,8 @@ export function selectEvent(
   state: GameState,
   eventPool: GameEvent[]
 ): GameEvent | null {
-  const eligible = eventPool.filter(e => isEligible(e, state))
+  const phaseFiltered = getPhaseFilteredPool(state.phase, eventPool)
+  const eligible = phaseFiltered.filter(e => isEligible(e, state))
   if (eligible.length === 0) return null
 
   // Weighted random selection
@@ -38,11 +54,7 @@ export function selectEvent(
 }
 
 function isEligible(event: GameEvent, state: GameState): boolean {
-  // Phase check
-  if (event.phase > state.phase) return false
-
-  // Max phase check (era-based event filtering)
-  if (event.maxPhase && state.phase > event.maxPhase) return false
+  // Phase/maxPhase already filtered by cache — skip those checks
 
   // Unique events can only fire once
   if (event.unique && state.eventHistory.includes(event.id)) return false

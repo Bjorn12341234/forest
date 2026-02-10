@@ -107,8 +107,13 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
   },
 ]
 
+// Map for O(1) lookups (hot path — called per generator per tick in owner mode)
+const OWNER_GENERATOR_MAP = new Map<string, OwnerGeneratorData>(
+  OWNER_GENERATORS.map(g => [g.id, g])
+)
+
 export function getOwnerGeneratorData(id: string): OwnerGeneratorData | undefined {
-  return OWNER_GENERATORS.find(g => g.id === id)
+  return OWNER_GENERATOR_MAP.get(id)
 }
 
 export function getOwnerGeneratorCost(baseCost: number, count: number, costScale = 1.12): number {

@@ -135,6 +135,10 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
   },
 ]
 
+const INDUSTRY_ATTACK_MAP = new Map<string, IndustryAttackData>(
+  INDUSTRY_ATTACKS.map(a => [a.id, a])
+)
+
 export function getIndustryAttack(id: string): IndustryAttackData | undefined {
-  return INDUSTRY_ATTACKS.find(a => a.id === id)
+  return INDUSTRY_ATTACK_MAP.get(id)
 }

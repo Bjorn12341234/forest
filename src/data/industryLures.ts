@@ -74,6 +74,10 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
   },
 ]
 
+const INDUSTRY_LURE_MAP = new Map<string, IndustryLureData>(
+  INDUSTRY_LURES.map(l => [l.id, l])
+)
+
 export function getIndustryLure(id: string): IndustryLureData | undefined {
-  return INDUSTRY_LURES.find(l => l.id === id)
+  return INDUSTRY_LURE_MAP.get(id)
 }

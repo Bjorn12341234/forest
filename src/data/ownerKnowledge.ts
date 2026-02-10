@@ -69,6 +69,10 @@ export const KNOWLEDGE_THRESHOLDS: KnowledgeThreshold[] = [
   { level: 1_000, label: 'Nationell policy-påverkan', description: 'Riksdagen diskuterar plockhuggning som standard. Din budget: en termos kaffe och en kikare.' },
 ]
 
+const KNOWLEDGE_ACTIVITY_MAP = new Map<string, KnowledgeActivityData>(
+  KNOWLEDGE_ACTIVITIES.map(a => [a.id, a])
+)
+
 export function getKnowledgeActivity(id: string): KnowledgeActivityData | undefined {
-  return KNOWLEDGE_ACTIVITIES.find(a => a.id === id)
+  return KNOWLEDGE_ACTIVITY_MAP.get(id)
 }
