@@ -18,10 +18,10 @@ export function useAchievementToasts() {
     const id = ++toastCounter
     setToasts(prev => [...prev, { achievement, id }])
 
-    // Auto-dismiss after 4 seconds
+    // Auto-dismiss after 6 seconds (longer for mobile readability)
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id))
-    }, 4000)
+    }, 6000)
   }, [])
 
   const dismissToast = useCallback((id: number) => {
@@ -38,7 +38,7 @@ interface AchievementToastManagerProps {
 
 export function AchievementToastManager({ toasts, onDismiss }: AchievementToastManagerProps) {
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[90] flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[90] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2rem)] sm:max-w-sm w-full px-4">
       <AnimatePresence>
         {toasts.map(({ achievement, id }) => (
           <motion.div
@@ -62,10 +62,10 @@ export function AchievementToastManager({ toasts, onDismiss }: AchievementToastM
                 <p className="text-[0.6rem] uppercase tracking-wider text-nobel-gold font-medium">
                   Achievement Unlocked
                 </p>
-                <p className="text-sm font-medium text-text-primary truncate">
+                <p className="text-sm font-medium text-text-primary break-words">
                   {achievement.name}
                 </p>
-                <p className="text-[0.65rem] text-text-muted truncate">
+                <p className="text-[0.65rem] text-text-muted break-words">
                   {achievement.description}
                 </p>
               </div>
