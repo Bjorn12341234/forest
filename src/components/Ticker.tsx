@@ -28,7 +28,10 @@ export function Ticker() {
         height: 'calc(2rem + env(safe-area-inset-top))',
       }}
     >
-      <div className="absolute inset-0 flex items-center animate-ticker whitespace-nowrap">
+      <div
+        className="absolute inset-0 flex items-center whitespace-nowrap"
+        style={{ animation: 'ticker-scroll 8s linear infinite' }}
+      >
         <span className="text-sm text-text-primary/80 tracking-wide px-4">
           {tickerText}
         </span>
