@@ -75,7 +75,7 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 
 ---
 
-## Current Status: All 5 Sprints Complete — Deployed
+## Current Status: All 7 Sprints Complete — Deployed
 
 **Live at:** https://bjorn12341234.github.io/forest/
 
@@ -84,8 +84,10 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 - **Sprint 2 — Power systems:** Lobby system (4 earners + 7 purchases), OwnerMeter with 5 manipulation actions, PR campaigns (4 image-restore options), News ticker (30+ milestone-based headlines), Events (11 phase 1 + 12 phase 2-4), 3 tabs (Översikt, Teknik, Makt)
 - **Sprint 3 — Depth & endgame:** 28 achievements in 6 tiers, 7 antagonists with condition triggers and countermeasures, hidden variables (realCO2, ownerProfit, biodiversity, species, samiLand), EndScreen "Årsredovisning" with sequential reveal and post-credits
 - **Sprint 4 — Polish & ship:** Multi-layered ambient soundscapes per phase (Web Audio API), generator balancing pass, 12 new events (phases 5-7), ~15 new ticker headlines, PWA (manifest, service worker, icons), mobile touch targets, safe area insets, GitHub Actions deploy
-- **Sprint 5 — Den Stora Expansionen:** Extended to 12 phases across 4 eras (Sverige→Världen→Universum→Bortom). Expansion tab with stylized maps (world→solar system→galaxy→multiverse) and 18 acquirable targets. 87 new events for phases 2-12. 6 new generators (Klon-Skog through Entropimotor). 12 new tech tree upgrades in 3 branches (Geopolitik, Genetik, Rymdforskning). 20 new achievements with 'kosmisk' tier. 5 new antagonists, 5 new lobby projects, 25+ ticker headlines. Audio for phases 8-12. Balance pass (event frequency +30-50%, lobby boost cap, tech cost 3-5x). Årsredovisning reworked as milestone. Reality page with real facts + link to Föreningen Naturhänsyn. Save migration v2→v3.
-- **Post-launch fixes:** Events blocked during phase transitions (no more popups covering transition text), Nastlé/NCA satirical references (phase 3→4 transition + ticker headlines)
+- **Sprint 5 — Den Stora Expansionen:** Extended to 12 phases across 4 eras (Sverige→Världen→Universum→Bortom). Expansion tab with stylized maps (world→solar system→galaxy→multiverse) and 18 acquirable targets. 87 new events for phases 2-12. 6 new generators. 12 new tech tree upgrades. 20 new achievements. 5 new antagonists, 5 new lobby projects, 25+ ticker headlines. Audio for phases 8-12. Årsredovisning reworked as milestone. Reality page with real facts + link to naturhansyn.se. Save migration v2→v3.
+- **Sprint 6 — Den Mörka Expansionen:** New 4-era system (SVERIGE/MAKT/INTERNATIONELL/EXPANSION). Country takeover mechanic (14 countries, phases 7-9). Warning system (image-based production penalties). Era-specific visual themes. 32+ new tech upgrades. 22 INTERNATIONELL events. Redistributed generators/antagonists/lobby across eras. Save migration v3→v4.
+- **Sprint 7 — Skogsägarvägen:** Dual-path architecture (industry/owner). Owner path: CharacterSelect screen, owner resources (skogsvardering, inkomst, kunskap, resiliens, biodiv, carbon, legacy, deadwood), 9 owner generators with bonus system, 5 click upgrades, knowledge panel. Industry attacks (8 attacks at SV milestones, require kunskap to resist), industry lures (3 traps with reveal mechanic). 11 owner events, 25 owner ticker headlines, 13 owner achievements. OwnerEndScreen (triggers at legacy >= 500, 3-stage reveal). Owner ambient audio (wind, birds tied to biodiv, brook). Balancing pass. Save migration v4→v5→v6.
+- **Post-launch fixes:** Events blocked during phase transitions, Nastlé/NCA satirical references, UX readability pass, warning banner, easier endgame economy
 
 ---
 
@@ -122,18 +124,27 @@ forest/
 │   │   ├── events.ts     # Event engine (scheduling, selection, resolution)
 │   │   ├── phases.ts     # Phase thresholds + transition scripts
 │   │   ├── audio.ts      # Procedural audio (Web Audio API): ambient soundscapes + SFX
-│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 3)
+│   │   ├── warnings.ts   # Warning system (4 levels, image-based production penalties)
+│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 6)
 │   │   └── offline.ts    # Offline progression (10% rate, max 10 events)
 │   ├── data/
-│   │   ├── generators.ts     # 14 generators (phase-gated, costScale per generator)
+│   │   ├── generators.ts     # 20 generators (phase-gated, costScale per generator)
 │   │   ├── clickUpgrades.ts  # 4 click multiplier upgrades
 │   │   ├── upgradeRegistry.ts # Central registry for tech tree upgrades
-│   │   ├── achievements.ts   # 48 achievements in 7 tiers
-│   │   ├── antagonists.ts    # 12 antagonists with triggers + countermeasures
-│   │   ├── lobbyProjects.ts  # 6 lobby earners + 10 one-time purchases
+│   │   ├── achievements.ts   # 61 achievements in 8 tiers (incl. skogsagare)
+│   │   ├── antagonists.ts    # 17 antagonists with triggers + countermeasures
+│   │   ├── lobbyProjects.ts  # 8 lobby earners + 12 one-time purchases
 │   │   ├── ownerActions.ts   # 5 owner actions + 4 PR campaigns
-│   │   ├── newsTickerLines.ts # 65+ headlines organized by phase
-│   │   ├── expansionTargets.ts  # 18 expansion targets (countries, planets, multiverses)
+│   │   ├── newsTickerLines.ts # 80+ headlines organized by phase
+│   │   ├── countries.ts      # 14 countries (INTERNATIONELL phases 7-9)
+│   │   ├── expansionTargets.ts  # 8 expansion targets (EXPANSION phases 10-12)
+│   │   ├── ownerGenerators.ts   # 9 owner generators with bonus system
+│   │   ├── ownerClickUpgrades.ts # 5 owner click upgrades
+│   │   ├── ownerKnowledge.ts    # 5 knowledge activities + 6 thresholds
+│   │   ├── ownerEvents.ts       # 11 owner path events
+│   │   ├── ownerNewsLines.ts    # 25 owner ticker headlines
+│   │   ├── industryAttacks.ts   # 8 industry attacks on owner (SV milestones)
+│   │   ├── industryLures.ts     # 3 industry lures (trap mechanic)
 │   │   ├── phase1/
 │   │   │   ├── upgrades.ts   # Tech tree upgrades
 │   │   │   └── events.ts     # Phase 1 events
@@ -146,8 +157,13 @@ forest/
 │   │   ├── phase5/
 │   │   │   ├── events.ts     # Phase 5-7 events
 │   │   │   └── newEvents.ts   # Phase 5-7 new events (Sprint 5)
-│   │   └── phase8/
-│   │       └── events.ts     # Phase 8-12 events
+│   │   ├── phase7/
+│   │   │   ├── upgrades.ts   # INTERNATIONELL tech upgrades (12)
+│   │   │   └── events.ts     # INTERNATIONELL events (22)
+│   │   ├── phase8/
+│   │   │   └── events.ts     # EXPANSION events (phases 10-12)
+│   │   └── phase10/
+│   │       └── upgrades.ts   # EXPANSION tech upgrades (8)
 │   ├── components/
 │   │   ├── ClickArea.tsx      # "Skriv Skogsbruksplan" button + click upgrades
 │   │   ├── Generators.tsx     # Generator list with buy buttons
@@ -157,9 +173,19 @@ forest/
 │   │   ├── OwnerMeter.tsx     # Skogsägarförtroende bar + manipulation actions
 │   │   ├── AntagonistPanel.tsx # Active antagonists + counter buttons
 │   │   ├── ExpansionPanel.tsx  # Expansion tab: territory map (phase 6+)
-│   │   ├── EndScreen.tsx      # Endgame "Årsredovisning" + post-credits + reality page
+│   │   ├── EndScreen.tsx      # Industry endgame "Årsredovisning" + post-credits + reality page
 │   │   ├── EventModal.tsx     # Event popup with choices
-│   │   ├── Ticker.tsx         # News ticker (milestone-based headlines)
+│   │   ├── Ticker.tsx         # Industry news ticker (milestone-based headlines)
+│   │   ├── CharacterSelect.tsx # Game mode selection (industry/owner)
+│   │   ├── owner/
+│   │   │   ├── OwnerDashboard.tsx   # Owner main view (resources + generators)
+│   │   │   ├── OwnerClickArea.tsx   # "Vårda Skog" click button
+│   │   │   ├── OwnerGenerators.tsx  # Owner generator list
+│   │   │   ├── KnowledgePanel.tsx   # Knowledge activities + thresholds
+│   │   │   ├── OwnerTicker.tsx      # Owner news ticker (green tone)
+│   │   │   ├── OwnerEndScreen.tsx   # Owner endgame (3-stage reveal)
+│   │   │   ├── IndustryAttackModal.tsx  # Attack resist/surrender modal
+│   │   │   └── IndustryLureModal.tsx    # Lure accept/decline modal
 │   │   ├── UpgradeList.tsx    # Tech tree upgrade cards
 │   │   ├── PhaseTransition.tsx # Phase transition overlay
 │   │   ├── AchievementToast.tsx # Toast notification manager
@@ -185,20 +211,20 @@ forest/
 
 ## Game Phases (Summary)
 
-| Phase | Name | Stammar Range | Key Unlock |
-|---|---|---|---|
-| 1 | Lokalpatriot | 0 – 10,000 | Lobby module |
-| 2 | Den Goda Grannen | 10k – 100k | PR/Image system |
-| 3 | Massabaronen | 100k – 1M | International lobby |
-| 4 | PR-Katastrofen | 1M – 10M | Sami conflict event |
-| 5 | Det Skogsindustriella Komplexet | 10M – 100M | Endgame module |
-| 6 | Global Skogskonglomerat | 100M – 1B | Expansion tab |
-| 7 | Post-Biologisk Skogsbruk | 1B – 10B | Genetic engineering |
-| 8 | Terraforming AB | 10B – 100B | Årsredovisning milestone, space |
-| 9 | Kosmisk Industrialisering | 100B – 1T | Dyson spheres, aliens |
-| 10 | Den Perfekta Raden | 1T – 10T | Galactic dominance |
-| 11 | Parallella Universum | 10T – 100T | Multiverse, time loops |
-| 12 | Entropins Slut | 100T+ | Meta-endgame, reality page |
+| Era | Phase | Name | Stammar Range | Key Unlock |
+|---|---|---|---|---|
+| SVERIGE | 1 | Lokalpatriot | 0 – 10K | Lobby module |
+| SVERIGE | 2 | Den Goda Grannen | 10K – 100K | PR/Image system |
+| SVERIGE | 3 | Massabaronen | 100K – 1M | International lobby |
+| MAKT | 4 | PR-Katastrofen | 1M – 10M | Sami conflict event |
+| MAKT | 5 | Det Skogsindustriella Komplexet | 10M – 100M | Warning system |
+| MAKT | 6 | Global Skogskonglomerat | 100M – 1B | Expansion tab |
+| INTERNATIONELL | 7 | Kolonialt Skogsbruk | 1B – 10B | Country takeover |
+| INTERNATIONELL | 8 | Planetär Exploatering | 10B – 100B | Global dominance |
+| INTERNATIONELL | 9 | Jordens Sista Skog | 100B – 1T | Årsredovisning milestone |
+| EXPANSION | 10 | Terraforming AB | 1T – 10T | Space expansion |
+| EXPANSION | 11 | Kosmisk Industrialisering | 10T – 100T | Multiverse |
+| EXPANSION | 12 | Entropins Slut | 100T+ | Reality page |
 
 ---
 
@@ -210,6 +236,19 @@ forest/
 | Currency | `kapital` | Kapital (Mkr) | Generated from selling stammar. Buys everything. |
 | Influence | `lobby` | Politiskt Kapital | Earned via lobby actions. Required for laws. |
 | PR | `image` | Grön Image™ | Public perception. Starts at 100. Drops on scandal. |
+
+### Owner Path Resources (Skogsägarvägen)
+
+| Resource | Internal Name | Description |
+|---|---|---|
+| Forest value | `skogsvardering` | Base resource from clicking "Vårda Skog" + generators |
+| Income | `inkomst` | Currency (tkr). Buys click upgrades, knowledge, generators |
+| Knowledge | `kunskap` | Required to resist industry attacks |
+| Resilience | `resiliens` | Storm/pest resistance. Grows via biodiv + generators |
+| Biodiversity | `biodivOwner` | Grows via deadwood + generators |
+| Carbon | `realCarbonPos` | Grows with standing forest |
+| Legacy | `legacy` | Endgame trigger (>= 500). Grows over time + biodiv + resistance |
+| Deadwood | `deadwood` | Feeds biodiversity. From generators (död-ved-program) |
 
 ### Hidden Resources (revealed in endgame)
 
