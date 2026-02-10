@@ -36,12 +36,12 @@ html {
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --ticker-speed: 20s;
+  --ticker-speed: 12s;
 }
 
 @media (max-width: 640px) {
   html {
-    --ticker-speed: 10s;
+    --ticker-speed: 6s;
   }
 }
 
