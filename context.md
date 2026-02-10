@@ -75,7 +75,7 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 
 ---
 
-## Current Status: All 7 Sprints Complete — Deployed
+## Current Status: Sprint 9 Complete — Deployed
 
 **Live at:** https://bjorn12341234.github.io/forest/
 
@@ -87,7 +87,8 @@ plan.md says "ALDRIG localStorage/sessionStorage". However, the existing codebas
 - **Sprint 5 — Den Stora Expansionen:** Extended to 12 phases across 4 eras (Sverige→Världen→Universum→Bortom). Expansion tab with stylized maps (world→solar system→galaxy→multiverse) and 18 acquirable targets. 87 new events for phases 2-12. 6 new generators. 12 new tech tree upgrades. 20 new achievements. 5 new antagonists, 5 new lobby projects, 25+ ticker headlines. Audio for phases 8-12. Årsredovisning reworked as milestone. Reality page with real facts + link to naturhansyn.se. Save migration v2→v3.
 - **Sprint 6 — Den Mörka Expansionen:** New 4-era system (SVERIGE/MAKT/INTERNATIONELL/EXPANSION). Country takeover mechanic (14 countries, phases 7-9). Warning system (image-based production penalties). Era-specific visual themes. 32+ new tech upgrades. 22 INTERNATIONELL events. Redistributed generators/antagonists/lobby across eras. Save migration v3→v4.
 - **Sprint 7 — Skogsägarvägen:** Dual-path architecture (industry/owner). Owner path: CharacterSelect screen, owner resources (skogsvardering, inkomst, kunskap, resiliens, biodiv, carbon, legacy, deadwood), 9 owner generators with bonus system, 5 click upgrades, knowledge panel. Industry attacks (8 attacks at SV milestones, require kunskap to resist), industry lures (3 traps with reveal mechanic). 11 owner events, 25 owner ticker headlines, 13 owner achievements. OwnerEndScreen (triggers at legacy >= 500, 3-stage reveal). Owner ambient audio (wind, birds tied to biodiv, brook). Balancing pass. Save migration v4→v5→v6.
-- **Post-launch fixes:** Events blocked during phase transitions, Nastlé/NCA satirical references, UX readability pass, warning banner, easier endgame economy
+- **Sprint 8 — Kvalitetspasset:** UX readability pass, warning banner, easier endgame economy, events blocked during phase transitions, Nastlé/NCA satirical references
+- **Sprint 9 — Remaining Issues Fix:** Late-game ticker rewrite (Swedish institutional satire). Owner knowledge tree (20 upgrades across 4 categories, costs kunskap). 20 new branching owner events (2-3 choices each, including generational narrative: inherit from farfar → family → children → pass on). Cosmic conquest for industry phases 10-12 (pressure-based invasion replacing instant-buy). Post-credits enriched with generational arc. Save migration v6→v7.
 
 ---
 
@@ -125,7 +126,7 @@ forest/
 │   │   ├── phases.ts     # Phase thresholds + transition scripts
 │   │   ├── audio.ts      # Procedural audio (Web Audio API): ambient soundscapes + SFX
 │   │   ├── warnings.ts   # Warning system (4 levels, image-based production penalties)
-│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 6)
+│   │   ├── save.ts       # localStorage save/load (key: silva_maximus_save, version 7)
 │   │   └── offline.ts    # Offline progression (10% rate, max 10 events)
 │   ├── data/
 │   │   ├── generators.ts     # 20 generators (phase-gated, costScale per generator)
@@ -141,8 +142,9 @@ forest/
 │   │   ├── ownerGenerators.ts   # 9 owner generators with bonus system
 │   │   ├── ownerClickUpgrades.ts # 5 owner click upgrades
 │   │   ├── ownerKnowledge.ts    # 5 knowledge activities + 6 thresholds
-│   │   ├── ownerEvents.ts       # 11 owner path events
-│   │   ├── ownerNewsLines.ts    # 25 owner ticker headlines
+│   │   ├── ownerKnowledgeTree.ts # 20 knowledge tree upgrades (4 categories)
+│   │   ├── ownerEvents.ts       # 31 owner path events (11 original + 20 branching)
+│   │   ├── ownerNewsLines.ts    # 30 owner ticker headlines
 │   │   ├── industryAttacks.ts   # 8 industry attacks on owner (SV milestones)
 │   │   ├── industryLures.ts     # 3 industry lures (trap mechanic)
 │   │   ├── phase1/

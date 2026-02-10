@@ -791,6 +791,45 @@
 
 ---
 
+## Sprint 9: Remaining Issues Fix
+
+> **Source:** Report review — 3 weaknesses: owner content gap, passive phases 10-12, ticker tone
+
+### S9.A — Late-Game Ticker Rewrite
+- [x] Replace generic `[SYSTEM]`/`[ARKIV]` prefixes with Swedish institutional satire
+  - `[MARS LÄNSSTYRELSE]`, `[GALAKTISK HR]`, `[KOSMISK REVISION]`, `[RYMDSKOGSSTYRELSEN]`, etc.
+
+### S9.B — Owner Knowledge Tree (20 upgrades)
+- [x] Add `ownerKnowledgeUpgrades: Record<string, boolean>` to types.ts
+- [x] Create `src/data/ownerKnowledgeTree.ts` — 20 upgrades, 4 categories
+  - Ekologisk förståelse (5): biodiv/resiliens bonuses
+  - Skoglig praxis (5): sv production bonuses
+  - Ekonomiskt oberoende (5): inkomst/attack resistance
+  - Samhällspåverkan (5): legacy rate bonuses
+- [x] Store: `purchaseOwnerKnowledge(id)`, cached `knowledgeMods`, applied in tick/click
+- [x] UI: "Kunskapsträd" section in KnowledgePanel with 4 category columns
+
+### S9.C — Owner Events with Branching (20 new)
+- [x] 15 events with 2-3 choices each (dilemmas, crises, opportunities)
+- [x] 5 generational events: farfars arv, familjen växer, barnets första skogsdag, tonårsupproret, överlämningen
+
+### S9.D — Cosmic Conquest System (Phases 10-12)
+- [x] Replace `ExpansionTargetState { acquired }` → `{ status, resistance, pressureAllocation }`
+- [x] Add defense types: gravitational/bureaucratic/existential with weakness multipliers
+- [x] Store: `startCosmicInvasion`, `allocateCosmicPressure`, cosmic conquest tick
+- [x] UI: Pressure sliders, resistance bar, auto-allocate, maintenance costs
+
+### S9.E — Save Migration & Polish
+- [x] Bump CURRENT_VERSION to 7, migration 6→7
+- [x] Update achievements/antagonists from `.acquired` to `.status === 'controlled'`
+- [x] Generational post-credits: farfar, family, passing the torch
+- [x] 5 new generational ticker headlines
+- [x] Build: 216KB gzipped, TypeScript clean
+
+**Notes:** Sprint 9 complete. Owner path now has 31 events (11 original single-choice + 20 new branching), knowledge tree with 20 upgrades, and generational narrative arc (inherit → family → children → pass on). Industry phases 10-12 now use pressure-based cosmic conquest instead of instant-buy. Save version 7.
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:
