@@ -11,6 +11,12 @@ interface OwnerEndScreenProps {
 const POST_CREDITS: string[] = [
   'Du valde att låta skogen stå kvar.',
   '',
+  'Din farfar planterade den där tallen 1923.',
+  'Din far lärde dig känna igen lavskrikan.',
+  'Du lärde ditt barn att lyssna på vinden i trädtopparna.',
+  '',
+  'Fyra generationer. Samma skog. Samma omsorg.',
+  '',
   'Lavskrikan häckar fortfarande. Den har gjort det i tre generationer nu.',
   'Barkborren tog tre granar. Tallarna stod kvar. Björkarna stod kvar.',
   '',
@@ -19,13 +25,15 @@ const POST_CREDITS: string[] = [
   'Han frågade nyligen om du kunde visa honom hur du gör.',
   '',
   'Industrins lobbybudget: 200 000 000 kr per år.',
-  'Din budget: en termos och en kikare.',
+  'Din budget: en termos, en kikare och en anteckningsbok.',
   '',
   'Du tjänade lika mycket. Men din skog FINNS KVAR.',
+  'Och ditt barn vet hur man sköter den.',
   '',
-  'Det är inte nostalgi. Det är vetenskap.',
+  'Det är inte nostalgi. Det är arv.',
   'Det är inte ineffektivt. Det är långsiktigt.',
   'Det är inte en trend. Det är det äldsta skogsbruket som finns.',
+  'Det är så våra förfäder brukade jorden i tusentals år.',
 ]
 
 const REALITY_SECTIONS: { heading: string; text: string }[] = [

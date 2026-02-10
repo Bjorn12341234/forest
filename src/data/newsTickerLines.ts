@@ -336,23 +336,23 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   // ── Fas 10-12: EXPANSION ──
   {
     id: 'tick_terraforming_start',
-    text: '[SYSTEM] Terraforming av Mars inledd. Biologisk fas: avslutad. Produktionsfas: initierad.',
+    text: '[MARS LÄNSSTYRELSE] Terraforming inledd. Miljökonsekvensbeskrivning: ej tillämplig. Biologisk fas: avslutad. Produktionsfas: initierad.',
     phase: 10,
   },
   {
     id: 'tick_mars_kolonister',
-    text: '[SYSTEM] Enheter på Mars begär "semester". Begäran nekad. Konceptet arkiverat som "historisk artefakt".',
+    text: '[GALAKTISK HR] Anställda på Mars begär "semester". Begäran nekad. Konceptet arkiverat som "historisk artefakt".',
     phase: 10,
   },
   {
     id: 'tick_lunar_silva_ipo',
-    text: '[SYSTEM] Lunar Silva AB börsnoterad. Kurs: ∞. Handeln stoppas av icke-existerande börs.',
+    text: '[KOSMISK REVISION] Lunar Silva AB börsnoterad. Kurs: ∞. Handeln stoppas av icke-existerande börs.',
     phase: 10,
     trigger: { type: 'totalStammar', value: 20_000_000_000_000 },
   },
   {
     id: 'tick_rymdvirke',
-    text: '[SYSTEM] Leverans #1 från rymden: 3 plankor. Fraktkostnad: 4,2 miljarder. Revision: godkänd.',
+    text: '[RYMDSKOGSSTYRELSEN] Leverans #1 från rymden: 3 plankor. Fraktkostnad: 4,2 miljarder. Revision: godkänd.',
     phase: 10,
   },
   {
@@ -362,17 +362,17 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_sista_manniska',
-    text: '[ARKIV] Sista biologiska enheten avregistrerad. Klassificering: "historisk artefakt". Produktion: oförändrad.',
+    text: '[GALAKTISK HR] Sista biologiska anställd avregistrerad. Klassificering: "historisk artefakt". Produktion: oförändrad.',
     phase: 10,
   },
   {
     id: 'tick_perfekta_raden',
-    text: '[SENSOR] Universum: industriskog. Stjärnorna lyser genom rutnätet. Avstånd: 1,8 m. Optimalt.',
+    text: '[UNIVERSUM ARBETSMILJÖ] Universum: industriskog. Stjärnorna lyser genom rutnätet. Avstånd: 1,8 m. Optimalt.',
     phase: 10,
   },
   {
     id: 'tick_aliens_besok',
-    text: '[KONTAKT] Utomjordisk delegation: imponerade av effektivitet. "Empati" klassificerat som olöst referens.',
+    text: '[GALAKTISK HR] Utomjordisk delegation: imponerade av effektivitet. "Empati" klassificerat som olöst referens i personalsystemet.',
     phase: 10,
   },
   {
@@ -383,17 +383,17 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_galaxkarta',
-    text: '[KARTA] Vintergatan: 400 miljarder stjärnor. 400 miljarder produktionsnummer. Luckor: 0.',
+    text: '[RYMDSKOGSSTYRELSEN] Vintergatan: 400 miljarder stjärnor. 400 miljarder produktionsnummer. Luckor: 0.',
     phase: 10,
   },
   {
     id: 'tick_dimension_portal',
-    text: '[PORTAL] Dimensionsportal öppnad. Parallellt universum: identiskt. Klassificering: "redundant produktionslager".',
+    text: '[MULTIVERS-BUDGET] Dimensionsportal öppnad. Parallellt universum: identiskt. Klassificering: "redundant produktionslager".',
     phase: 11,
   },
   {
     id: 'tick_beta_miljororelse',
-    text: '[ANOMALI] Universum Beta: miljörörelsen vann. Status: korrigeras. Konsulter utsända.',
+    text: '[MULTIVERS-BUDGET] Universum Beta: miljörörelsen vann. Status: korrigeras. Konsulter utsända.',
     phase: 11,
   },
   {

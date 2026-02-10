@@ -26,6 +26,7 @@ import { getCountry } from '../data/countries'
 import { getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
 import { getKnowledgeActivity } from '../data/ownerKnowledge'
+import { computeKnowledgeModifiers, getOwnerKnowledgeUpgrade, type KnowledgeModifiers } from '../data/ownerKnowledgeTree'
 import { INDUSTRY_ATTACKS, getIndustryAttack } from '../data/industryAttacks'
 import { INDUSTRY_LURES, getIndustryLure } from '../data/industryLures'
 import { OWNER_EVENTS } from '../data/ownerEvents'
@@ -126,6 +127,8 @@ export const INITIAL_STATE: GameState = {
 
   activeIndustryAttack: null,
   activeIndustryLure: null,
+
+  ownerKnowledgeUpgrades: {},
 }
 
 // ── Helpers ──
@@ -182,6 +185,13 @@ function computeStammarPerClick(
   return base
 }
 
+// ── Cached knowledge modifiers (recomputed on purchaseOwnerKnowledge/load/reset) ──
+let knowledgeMods: KnowledgeModifiers = computeKnowledgeModifiers({})
+
+function refreshKnowledgeModifiers(upgrades: Record<string, boolean>) {
+  knowledgeMods = computeKnowledgeModifiers(upgrades)
+}
+
 // ── Owner (Skogsägare) Helpers ──
 
 /** Calculate total skogsvardering/s from all owner generators */
@@ -231,12 +241,14 @@ function ownerTick(
   // Passive forest growth: the forest grows on its own (+0.5 sv/s base)
   const passiveGrowth = 0.5
   const generatorSV = computeOwnerSkogsvarderingPS(state.ownerGenerators)
-  const totalSVPS = passiveGrowth + generatorSV
+  const baseSVPS = passiveGrowth + generatorSV
+  const totalSVPS = baseSVPS * (1 + knowledgeMods.svPerSecondMult)
 
   const generatorInkomst = computeOwnerInkomstPS(state.ownerGenerators)
+  const totalInkomstPS = generatorInkomst * (1 + knowledgeMods.inkomstMult)
 
   const svGained = totalSVPS * dt
-  const inkomstGained = generatorInkomst * dt
+  const inkomstGained = totalInkomstPS * dt
 
   // Apply generator bonuses
   let genBiodiv = 0
@@ -260,25 +272,25 @@ function ownerTick(
     }
   }
 
-  // Biodiversity: base from deadwood + resilience + generator bonuses
-  const biodivGrowth = (state.deadwood * 0.001 + state.resiliens * 0.0005 + genBiodiv) * dt
-  // Resilience: base from biodiv + generator bonuses
-  const resiliensGrowth = (state.biodivOwner * 0.0002 + genResiliens) * dt
+  // Biodiversity: base from deadwood + resilience + generator bonuses + knowledge tree
+  const biodivGrowth = (state.deadwood * 0.001 + state.resiliens * 0.0005 + genBiodiv + knowledgeMods.biodivRate) * dt
+  // Resilience: base from biodiv + generator bonuses + knowledge tree
+  const resiliensGrowth = (state.biodivOwner * 0.0002 + genResiliens + knowledgeMods.resiliensRate) * dt
   // Carbon storage: base from standing forest + generator bonuses
   const carbonGrowth = (totalSVPS * 0.01 + genCarbon) * dt
   // Deadwood: grows from generators
   const deadwoodGrowth = genDeadwood * dt
   // Kunskap: passive from generators (kooperativ)
   const kunskapGrowth = genKunskap * dt
-  // Legacy: base from time + biodiv + resistance + generator bonuses
+  // Legacy: base from time + biodiv + resistance + generator bonuses + knowledge tree
   const resistedCount = Object.values(state.ownerAttacksResisted).filter(Boolean).length
-  const legacyGrowth = (0.03 + state.biodivOwner * 0.0002 + resistedCount * 0.005 + genLegacy) * dt
+  const legacyGrowth = (0.03 + state.biodivOwner * 0.0002 + resistedCount * 0.005 + genLegacy + knowledgeMods.legacyRate) * dt
 
   const newTotalSV = state.totalSkogsvardering + svGained
 
   const updates: Partial<GameState> = {
     skogsvardering: state.skogsvardering + svGained,
-    skogsvarderingPerSecond: totalSVPS + passiveGrowth,
+    skogsvarderingPerSecond: totalSVPS,
     totalSkogsvardering: newTotalSV,
     inkomst: state.inkomst + inkomstGained,
     kunskap: state.kunskap + kunskapGrowth,
@@ -367,17 +379,22 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const lobbyBoost = lobbyMods.generatorBoost
     const stammarPS = baseStammarPS * lobbyBoost * warningPenalty
 
-    // Add expansion target production
+    // Add expansion target production (only from controlled targets)
     let expansionStammarPS = 0
     let expansionKapitalPS = 0
     let expansionBiodivLoss = 0
     let expansionCO2 = 0
+    let expansionKapitalCost = 0
+    let expansionLobbyCost = 0
     for (const target of EXPANSION_TARGETS) {
-      if (state.expansionTargets[target.id]?.acquired) {
+      const ts = state.expansionTargets[target.id]
+      if (ts?.status === 'controlled') {
         expansionStammarPS += target.production.stammarPerSecond
         expansionKapitalPS += target.production.kapitalPerSecond
         expansionBiodivLoss += target.hiddenCosts.biodiversityLoss
         expansionCO2 += target.hiddenCosts.co2Gain
+        expansionKapitalCost += target.maintenanceCost.kapitalPerSecond
+        expansionLobbyCost += target.maintenanceCost.lobbyPerSecond
       }
     }
 
@@ -407,7 +424,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const trustModifier = getOwnerTrustModifier(state.ownerTrust)
     const kapitalBoost = lobbyMods.kapitalBoost
     const totalStammarPS = stammarPS + expansionStammarPS + countryStammarPS
-    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS + countryKapitalPS - countryKapitalCost
+    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
 
     const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
@@ -423,7 +440,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       stammarPerSecond: totalStammarPS,
       totalStammar: state.totalStammar + stammarGained,
       kapital: state.kapital + kapitalGained,
-      lobby: Math.max(0, state.lobby - countryLobbyCost * dt),
+      lobby: Math.max(0, state.lobby - (countryLobbyCost + expansionLobbyCost) * dt),
       warningLevel,
       realCO2: state.realCO2 + co2Gain,
       ownerProfit: state.ownerProfit + ownerShare,
@@ -515,6 +532,39 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       updates.countries = newCountries
     }
 
+    // ── Cosmic conquest tick ──
+    // Reduce resistance based on pressure allocation (mirrors country invasion)
+    let expansionChanged = false
+    const newExpansion = { ...state.expansionTargets }
+    for (const [targetId, ts] of Object.entries(newExpansion)) {
+      if (ts.status !== 'conquering') continue
+      const def = getExpansionTarget(targetId)
+      if (!def) continue
+
+      const pa = ts.pressureAllocation
+      // Each vector has a type modifier: 2x if it matches the weakness
+      // gravitational → weak to energi, bureaucratic → weak to resurser, existential → weak to byrakrati
+      const energiMod = def.defenseType === 'gravitational' ? 2 : 1
+      const byrakratiMod = def.defenseType === 'existential' ? 2 : 1
+      const resurserMod = def.defenseType === 'bureaucratic' ? 2 : 1
+
+      const totalPressure = (pa.energi * energiMod + pa.byrakrati * byrakratiMod + pa.resurser * resurserMod) / def.defenseStrength
+      const resistanceReduction = totalPressure * dt * 0.1
+
+      if (resistanceReduction > 0) {
+        const newResistance = Math.max(0, ts.resistance - resistanceReduction)
+        if (newResistance <= 0) {
+          newExpansion[targetId] = { ...ts, status: 'controlled', resistance: 0, controlProgress: 100 }
+        } else {
+          newExpansion[targetId] = { ...ts, resistance: newResistance, controlProgress: ((def.resistance - newResistance) / def.resistance) * 100 }
+        }
+        expansionChanged = true
+      }
+    }
+    if (expansionChanged) {
+      updates.expansionTargets = newExpansion
+    }
+
     // Species counting: lose species when biodiversity drops past thresholds
     const newBiodiv = updates.biodiversity ?? state.biodiversity
     const oldBiodiv = state.biodiversity
@@ -549,13 +599,16 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
 
   ownerClick: () => {
-    set(state => ({
-      skogsvardering: state.skogsvardering + state.skogsvarderingPerClick,
-      totalSkogsvardering: state.totalSkogsvardering + state.skogsvarderingPerClick,
-      ownerClickCount: state.ownerClickCount + 1,
-      // Small inkomst per click (selling carefully selected timber)
-      inkomst: state.inkomst + state.skogsvarderingPerClick * 0.01,
-    }))
+    set(state => {
+      const effectiveSVPerClick = state.skogsvarderingPerClick * (1 + knowledgeMods.svPerClickMult)
+      return {
+        skogsvardering: state.skogsvardering + effectiveSVPerClick,
+        totalSkogsvardering: state.totalSkogsvardering + effectiveSVPerClick,
+        ownerClickCount: state.ownerClickCount + 1,
+        // Small inkomst per click (selling carefully selected timber)
+        inkomst: state.inkomst + effectiveSVPerClick * 0.01,
+      }
+    })
   },
 
   setGameMode: (mode: 'industry' | 'owner') => {
@@ -624,6 +677,30 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
+  purchaseOwnerKnowledge: (id: string) => {
+    const state = get()
+    if (state.ownerKnowledgeUpgrades[id]) return // already purchased
+
+    const upgrade = getOwnerKnowledgeUpgrade(id)
+    if (!upgrade) return
+
+    // Check kunskap cost
+    if (state.kunskap < upgrade.cost) return
+
+    // Check prerequisites
+    for (const prereq of upgrade.prerequisites) {
+      if (!state.ownerKnowledgeUpgrades[prereq]) return
+    }
+
+    const newUpgrades = { ...state.ownerKnowledgeUpgrades, [id]: true }
+    refreshKnowledgeModifiers(newUpgrades)
+
+    set({
+      kunskap: state.kunskap - upgrade.cost,
+      ownerKnowledgeUpgrades: newUpgrades,
+    } as Partial<GameStore>)
+  },
+
   resolveIndustryAttack: (accept: boolean) => {
     const state = get()
     const attackId = state.activeIndustryAttack
@@ -650,13 +727,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       set(updates as Partial<GameStore>)
     } else {
       // Player resists (requires kunskap, optionally inkomst)
-      if (state.kunskap < atk.kunskapRequired) return
+      // Apply attack resistance from knowledge tree
+      const effectiveKunskapReq = Math.floor(atk.kunskapRequired * (1 - knowledgeMods.attackResistance))
+      if (state.kunskap < effectiveKunskapReq) return
       if (atk.extraCostResource === 'inkomst' && atk.extraCostAmount && state.inkomst < atk.extraCostAmount) return
 
       const updates: Partial<GameState> = {
         activeIndustryAttack: null,
         ownerAttacksResisted: { ...state.ownerAttacksResisted, [attackId]: true },
-        kunskap: state.kunskap - Math.floor(atk.kunskapRequired * 0.1), // small kunskap cost
+        kunskap: state.kunskap - Math.floor(effectiveKunskapReq * 0.1), // small kunskap cost
       }
       if (atk.extraCostResource === 'inkomst' && atk.extraCostAmount) {
         updates.inkomst = state.inkomst - atk.extraCostAmount
@@ -697,8 +776,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         ownerAttacksResisted: { ...state.ownerAttacksResisted, [lureId]: true },
       }
       if (lure.declineEffects.inkomstCost) {
-        if (state.inkomst < lure.declineEffects.inkomstCost) return // can't afford to decline
-        updates.inkomst = state.inkomst - lure.declineEffects.inkomstCost
+        const effectiveCost = Math.floor(lure.declineEffects.inkomstCost * (1 - knowledgeMods.lureCostReduction))
+        if (state.inkomst < effectiveCost) return // can't afford to decline
+        updates.inkomst = state.inkomst - effectiveCost
       }
       if (lure.declineEffects.kunskapGain) {
         updates.kunskap = state.kunskap + lure.declineEffects.kunskapGain
@@ -931,12 +1011,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
-  acquireExpansionTarget: (id: string) => {
+  startCosmicInvasion: (id: string) => {
     const state = get()
     const target = getExpansionTarget(id)
     if (!target) return
     if (target.unlockPhase > state.phase) return
-    if (state.expansionTargets[id]?.acquired) return
+    const existing = state.expansionTargets[id]
+    if (existing?.status === 'conquering' || existing?.status === 'controlled') return
 
     // Check costs
     if (state.stammar < target.cost.stammar) return
@@ -949,7 +1030,31 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lobby: state.lobby - target.cost.lobby,
       expansionTargets: {
         ...state.expansionTargets,
-        [id]: { acquired: true, acquiredAt: Date.now() },
+        [id]: {
+          status: 'conquering',
+          resistance: target.resistance,
+          controlProgress: 0,
+          pressureAllocation: { energi: 0, byrakrati: 0, resurser: 0 },
+        },
+      },
+    } as Partial<GameStore>)
+  },
+
+  allocateCosmicPressure: (id: string, vector: 'energi' | 'byrakrati' | 'resurser', amount: number) => {
+    const state = get()
+    const ts = state.expansionTargets[id]
+    if (!ts || ts.status !== 'conquering') return
+
+    set({
+      expansionTargets: {
+        ...state.expansionTargets,
+        [id]: {
+          ...ts,
+          pressureAllocation: {
+            ...ts.pressureAllocation,
+            [vector]: Math.max(0, amount),
+          },
+        },
       },
     } as Partial<GameStore>)
   },
@@ -1052,6 +1157,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const saved = loadGame()
     if (saved) {
       refreshLobbyModifiers(saved.lobbyProjects ?? {})
+      refreshKnowledgeModifiers(saved.ownerKnowledgeUpgrades ?? {})
       set({ ...saved, lastTickAt: Date.now() })
       return true
     }
@@ -1060,6 +1166,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
   reset: () => {
     refreshLobbyModifiers({})
+    refreshKnowledgeModifiers({})
     const now = Date.now()
     set({
       ...INITIAL_STATE,
@@ -1080,6 +1187,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       ownerLuresAccepted: {},
       activeIndustryAttack: null,
       activeIndustryLure: null,
+      ownerKnowledgeUpgrades: {},
     })
   },
 

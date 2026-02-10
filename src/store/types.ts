@@ -110,6 +110,9 @@ export interface GameState {
   // Active industry attack/lure (owner path modal state)
   activeIndustryAttack: string | null
   activeIndustryLure: string | null
+
+  // Owner knowledge tree upgrades
+  ownerKnowledgeUpgrades: Record<string, boolean>
 }
 
 export interface GeneratorState {
@@ -135,8 +138,14 @@ export interface AntagonistState {
 }
 
 export interface ExpansionTargetState {
-  acquired: boolean
-  acquiredAt: number
+  status: 'locked' | 'available' | 'conquering' | 'controlled'
+  resistance: number
+  controlProgress: number
+  pressureAllocation: {
+    energi: number
+    byrakrati: number
+    resurser: number
+  }
 }
 
 export interface CountryState {
@@ -245,7 +254,9 @@ export interface GameActions {
   performOwnerAction: (id: string) => void
   buyPRCampaign: (id: string) => void
   counterAntagonist: (id: string) => void
-  acquireExpansionTarget: (id: string) => void
+  purchaseOwnerKnowledge: (id: string) => void
+  startCosmicInvasion: (id: string) => void
+  allocateCosmicPressure: (id: string, vector: 'energi' | 'byrakrati' | 'resurser', amount: number) => void
   invadeCountry: (id: string) => void
   allocatePressure: (id: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => void
   resolveEvent: (choiceIndex: number) => void

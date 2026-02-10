@@ -133,6 +133,32 @@ export const OWNER_TICKER_HEADLINES: OwnerTickerHeadline[] = [
     text: 'Naturen har inget pressmeddelande. Ingen lobbying. Inga konsulter. Den har bara rätt.',
     triggerSV: 200_000,
   },
+  // ── Generationstemat ──
+  {
+    id: 'otick_farfars_tall',
+    text: 'Farfars tall står kvar. 100 år. Industrin hade tagit den på en förmiddag.',
+    triggerSV: 3_000,
+  },
+  {
+    id: 'otick_anteckningsboken',
+    text: 'Du skriver i anteckningsboken. Farfar skrev i sin. Farfars far före det. Samma skog. Samma omsorg.',
+    triggerSV: 12_000,
+  },
+  {
+    id: 'otick_forsta_steget',
+    text: 'Ditt barn tar sina första steg i skogen. Samma stig som du gick. Och din far. Och hans far.',
+    triggerSV: 18_000,
+  },
+  {
+    id: 'otick_generationer',
+    text: 'Fyra generationer. Samma metod. Plockhuggning. Industrin kallar det "omodernt". Skogen kallar det "överlevnad".',
+    triggerSV: 130_000,
+  },
+  {
+    id: 'otick_barnbarnen',
+    text: 'Barnbarnen leker vid bäcken. Samma bäck som du lekte vid. Den rinner fortfarande. Grannens bäck torrlade för 20 år sen.',
+    triggerSV: 160_000,
+  },
 ]
 
 /** Get owner headlines available based on totalSkogsvardering */

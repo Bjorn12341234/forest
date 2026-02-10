@@ -1,7 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
-const CURRENT_VERSION = 6
+const CURRENT_VERSION = 7
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -131,6 +131,52 @@ const migrations: Record<number, MigrationFn> = {
     if (state.activeIndustryAttack === undefined) state.activeIndustryAttack = null
     if (state.activeIndustryLure === undefined) state.activeIndustryLure = null
     save.version = 6
+    return save
+  },
+  6: (save) => {
+    // v6 → v7: Add ownerKnowledgeUpgrades + convert expansionTargets to cosmic conquest
+    const state = save.state as GameState
+    if (!state.ownerKnowledgeUpgrades) state.ownerKnowledgeUpgrades = {}
+
+    // Convert old expansion targets format to new CosmicTargetState
+    if (state.expansionTargets) {
+      const oldTargets = state.expansionTargets as Record<string, { acquired?: boolean; status?: string }>
+      const newTargets: Record<string, {
+        status: string; resistance: number; controlProgress: number;
+        pressureAllocation: { energi: number; byrakrati: number; resurser: number }
+      }> = {}
+
+      // Import target defs for resistance values
+      const targetResistanceMap: Record<string, number> = {
+        exp_manen: 40, exp_mars: 50, exp_titan: 55, exp_proxima: 60,
+        exp_dyson: 65, exp_universe_alpha: 60, exp_universe_beta: 65, exp_tidslinje: 75,
+      }
+
+      for (const [id, entry] of Object.entries(oldTargets)) {
+        if (entry.acquired || entry.status === 'controlled') {
+          newTargets[id] = {
+            status: 'controlled',
+            resistance: 0,
+            controlProgress: 100,
+            pressureAllocation: { energi: 0, byrakrati: 0, resurser: 0 },
+          }
+        } else if (entry.status) {
+          // Already in new format, keep as-is
+          newTargets[id] = entry as typeof newTargets[string]
+        } else {
+          newTargets[id] = {
+            status: 'available',
+            resistance: targetResistanceMap[id] ?? 50,
+            controlProgress: 0,
+            pressureAllocation: { energi: 0, byrakrati: 0, resurser: 0 },
+          }
+        }
+      }
+
+      ;(state as unknown as Record<string, unknown>).expansionTargets = newTargets
+    }
+
+    save.version = 7
     return save
   },
 }

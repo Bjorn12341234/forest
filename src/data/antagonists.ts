@@ -173,7 +173,7 @@ export const ANTAGONISTS: AntagonistDef[] = [
     description: 'Kolonisterna på Mars kräver självstyre. De vill inte vara en plantage.',
     icon: '🚀',
     triggerPhase: 10,
-    triggerCondition: (s) => s.phase >= 10 && s.expansionTargets['exp_mars']?.acquired === true,
+    triggerCondition: (s) => s.phase >= 10 && s.expansionTargets['exp_mars']?.status === 'controlled',
     tickEffects: [
       { resource: 'stammar', perSecond: -500_000, description: '-500K stammar/s (sabotage)' },
       { resource: 'kapital', perSecond: -100, description: '-100 Mkr/s' },

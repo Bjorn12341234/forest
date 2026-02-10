@@ -329,7 +329,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     icon: '🌑',
     phase: 10,
     tier: 'kosmisk',
-    check: (s) => s.expansionTargets['exp_manen']?.acquired && s.expansionTargets['exp_mars']?.acquired,
+    check: (s) => s.expansionTargets['exp_manen']?.status === 'controlled' && s.expansionTargets['exp_mars']?.status === 'controlled',
   },
   {
     id: 'galaktisk_skogsbrukare',
@@ -365,7 +365,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     icon: '☀️',
     phase: 11,
     tier: 'kosmisk',
-    check: (s) => s.expansionTargets['exp_dyson']?.acquired === true,
+    check: (s) => s.expansionTargets['exp_dyson']?.status === 'controlled',
   },
   {
     id: 'den_sista_gransen',
@@ -383,7 +383,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     icon: '🌐',
     phase: 11,
     tier: 'kosmisk',
-    check: (s) => s.expansionTargets['exp_universe_alpha']?.acquired && s.expansionTargets['exp_universe_beta']?.acquired,
+    check: (s) => s.expansionTargets['exp_universe_alpha']?.status === 'controlled' && s.expansionTargets['exp_universe_beta']?.status === 'controlled',
   },
   {
     id: 'tidsresenaren',
@@ -392,7 +392,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     icon: '⌛',
     phase: 12,
     tier: 'kosmisk',
-    check: (s) => s.expansionTargets['exp_tidslinje']?.acquired === true,
+    check: (s) => s.expansionTargets['exp_tidslinje']?.status === 'controlled',
   },
   {
     id: 'entropins_besegrare',

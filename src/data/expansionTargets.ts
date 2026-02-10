@@ -1,7 +1,9 @@
 // ── Silva Maximus — Expansion Targets Data ──
 // Territories to acquire on the stylized world/space/multiverse map
+// Now with cosmic conquest mechanics (resistance, defense types, pressure)
 
 export type ExpansionRegion = 'space' | 'cosmic' | 'beyond'
+export type CosmicDefenseType = 'gravitational' | 'bureaucratic' | 'existential'
 
 export interface ExpansionTargetData {
   id: string
@@ -13,6 +15,10 @@ export interface ExpansionTargetData {
   hiddenCosts: { biodiversityLoss: number; co2Gain: number }
   region: ExpansionRegion
   position: { x: number; y: number }
+  resistance: number
+  defenseType: CosmicDefenseType
+  defenseStrength: number
+  maintenanceCost: { kapitalPerSecond: number; lobbyPerSecond: number }
 }
 
 export const EXPANSION_TARGETS: ExpansionTargetData[] = [
@@ -30,6 +36,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 50000 },
     region: 'space',
     position: { x: 35, y: 30 },
+    resistance: 40,
+    defenseType: 'gravitational',
+    defenseStrength: 3,
+    maintenanceCost: { kapitalPerSecond: 5_000, lobbyPerSecond: 1 },
   },
   {
     id: 'exp_mars',
@@ -41,6 +51,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 100000 },
     region: 'space',
     position: { x: 55, y: 40 },
+    resistance: 50,
+    defenseType: 'bureaucratic',
+    defenseStrength: 4,
+    maintenanceCost: { kapitalPerSecond: 10_000, lobbyPerSecond: 2 },
   },
   {
     id: 'exp_titan',
@@ -52,6 +66,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 500000 },
     region: 'space',
     position: { x: 75, y: 55 },
+    resistance: 55,
+    defenseType: 'gravitational',
+    defenseStrength: 5,
+    maintenanceCost: { kapitalPerSecond: 50_000, lobbyPerSecond: 5 },
   },
 
   // ── Fas 11: Galaktisk ──
@@ -65,6 +83,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 1000000 },
     region: 'cosmic',
     position: { x: 30, y: 35 },
+    resistance: 60,
+    defenseType: 'existential',
+    defenseStrength: 6,
+    maintenanceCost: { kapitalPerSecond: 100_000, lobbyPerSecond: 10 },
   },
   {
     id: 'exp_dyson',
@@ -76,9 +98,13 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 5000000 },
     region: 'cosmic',
     position: { x: 50, y: 50 },
+    resistance: 65,
+    defenseType: 'gravitational',
+    defenseStrength: 7,
+    maintenanceCost: { kapitalPerSecond: 500_000, lobbyPerSecond: 20 },
   },
 
-  // ── Fas 12: Bortom ──
+  // ── Fas 11-12: Bortom ──
   {
     id: 'exp_universe_alpha',
     name: 'Parallellt Universum Alpha',
@@ -89,6 +115,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 50000000 },
     region: 'beyond',
     position: { x: 25, y: 35 },
+    resistance: 60,
+    defenseType: 'bureaucratic',
+    defenseStrength: 6,
+    maintenanceCost: { kapitalPerSecond: 1_000_000, lobbyPerSecond: 50 },
   },
   {
     id: 'exp_universe_beta',
@@ -100,6 +130,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 100000000 },
     region: 'beyond',
     position: { x: 75, y: 35 },
+    resistance: 65,
+    defenseType: 'existential',
+    defenseStrength: 7,
+    maintenanceCost: { kapitalPerSecond: 2_000_000, lobbyPerSecond: 75 },
   },
   {
     id: 'exp_tidslinje',
@@ -111,6 +145,10 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     hiddenCosts: { biodiversityLoss: 0, co2Gain: 1000000000 },
     region: 'beyond',
     position: { x: 50, y: 70 },
+    resistance: 75,
+    defenseType: 'existential',
+    defenseStrength: 9,
+    maintenanceCost: { kapitalPerSecond: 10_000_000, lobbyPerSecond: 200 },
   },
 ]
 
@@ -130,3 +168,17 @@ export function getExpansionTargetsByPhase(phase: number): ExpansionTargetData[]
 export function getExpansionTargetsByRegion(region: ExpansionRegion): ExpansionTargetData[] {
   return EXPANSION_TARGETS.filter(t => t.region === region)
 }
+
+/** Defense type labels for UI */
+export const DEFENSE_TYPE_LABELS: Record<CosmicDefenseType, string> = {
+  gravitational: 'Gravitationellt',
+  bureaucratic: 'Byråkratiskt',
+  existential: 'Existentiellt',
+}
+
+/** Pressure vector labels for UI */
+export const PRESSURE_VECTOR_LABELS = {
+  energi: 'Energi',
+  byrakrati: 'Byråkrati',
+  resurser: 'Resurser',
+} as const

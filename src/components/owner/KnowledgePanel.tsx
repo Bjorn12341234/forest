@@ -1,5 +1,6 @@
 import { useGameStore } from '../../store/gameStore'
 import { KNOWLEDGE_ACTIVITIES, KNOWLEDGE_THRESHOLDS } from '../../data/ownerKnowledge'
+import { KNOWLEDGE_CATEGORIES, getUpgradesByCategory, type OwnerKnowledgeUpgrade } from '../../data/ownerKnowledgeTree'
 import { formatNumber } from '../../engine/format'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
 import { playPurchase } from '../../engine/audio'
@@ -9,7 +10,9 @@ export function KnowledgePanel() {
   const kunskap = useGameStore(s => s.kunskap)
   const resiliens = useGameStore(s => s.resiliens)
   const biodivOwner = useGameStore(s => s.biodivOwner)
+  const ownerKnowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
   const buyKnowledgeActivity = useGameStore(s => s.buyKnowledgeActivity)
+  const purchaseOwnerKnowledge = useGameStore(s => s.purchaseOwnerKnowledge)
 
   // Find current and next threshold
   const currentThreshold = KNOWLEDGE_THRESHOLDS.filter(t => kunskap >= t.level).pop()
@@ -88,6 +91,44 @@ export function KnowledgePanel() {
         </div>
       </div>
 
+      {/* ── Knowledge Tree ── */}
+      <div className="flex flex-col gap-3">
+        <h2 className="text-base font-medium text-owner-text">Kunskapsträd</h2>
+        <p className="text-xs text-owner-text/50 -mt-2">
+          Investera kunskap för att utveckla din skog och ditt motstånd.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {KNOWLEDGE_CATEGORIES.map(cat => {
+            const upgrades = getUpgradesByCategory(cat.id)
+            return (
+              <div key={cat.id} className="bg-white/40 border border-owner-accent/15 rounded-sm p-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">{cat.icon}</span>
+                  <span className="text-sm font-medium text-owner-text">{cat.name}</span>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  {upgrades.map((upgrade, i) => (
+                    <KnowledgeNode
+                      key={upgrade.id}
+                      upgrade={upgrade}
+                      purchased={!!ownerKnowledgeUpgrades[upgrade.id]}
+                      canAfford={kunskap >= upgrade.cost}
+                      prerequisitesMet={upgrade.prerequisites.every(p => ownerKnowledgeUpgrades[p])}
+                      isFirst={i === 0}
+                      onPurchase={() => {
+                        purchaseOwnerKnowledge(upgrade.id)
+                        playPurchase()
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
       {/* Knowledge Activities */}
       <div className="flex flex-col gap-3">
         <h2 className="text-base font-medium text-owner-text">Lär dig mer</h2>
@@ -127,6 +168,69 @@ export function KnowledgePanel() {
             )
           })}
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Knowledge Tree Node ──
+
+function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, isFirst, onPurchase }: {
+  upgrade: OwnerKnowledgeUpgrade
+  purchased: boolean
+  canAfford: boolean
+  prerequisitesMet: boolean
+  isFirst: boolean
+  onPurchase: () => void
+}) {
+  const available = !purchased && canAfford && prerequisitesMet
+  const locked = !purchased && !prerequisitesMet
+
+  return (
+    <div className="flex items-start gap-2">
+      {/* Connector line */}
+      <div className="flex flex-col items-center flex-shrink-0 w-4 mt-1">
+        {!isFirst && (
+          <div className={`w-px h-2 ${purchased ? 'bg-owner-accent' : 'bg-owner-text/15'}`} />
+        )}
+        <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0
+          ${purchased
+            ? 'bg-owner-accent border-owner-accent'
+            : available
+              ? 'bg-transparent border-owner-accent'
+              : 'bg-transparent border-owner-text/20'
+          }`}
+        />
+      </div>
+
+      {/* Node content */}
+      <div
+        className={`flex-1 rounded-sm p-2 select-none transition-all
+          ${purchased
+            ? 'bg-owner-accent/15 border border-owner-accent/30'
+            : available
+              ? 'bg-white/50 border border-owner-accent/40 cursor-pointer hover:border-owner-accent'
+              : 'bg-white/20 border border-owner-text/10 opacity-50'
+          }`}
+        onClick={() => {
+          if (available) onPurchase()
+        }}
+      >
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm">{upgrade.icon}</span>
+          <span className={`text-xs font-medium ${purchased ? 'text-owner-accent' : locked ? 'text-owner-text/40' : 'text-owner-text'}`}>
+            {upgrade.name}
+          </span>
+          {purchased && <span className="text-xs text-owner-accent ml-auto">✓</span>}
+          {!purchased && (
+            <span className={`text-xs font-numbers ml-auto ${canAfford && prerequisitesMet ? 'text-owner-accent' : 'text-owner-text/30'}`}>
+              {upgrade.cost}
+            </span>
+          )}
+        </div>
+        <p className={`text-xs leading-relaxed mt-0.5 ${purchased ? 'text-owner-text/60' : locked ? 'text-owner-text/25' : 'text-owner-text/45'}`}>
+          {upgrade.description}
+        </p>
       </div>
     </div>
   )
