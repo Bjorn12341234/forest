@@ -8,12 +8,12 @@ import { OWNER_CLICK_UPGRADES } from '../../data/ownerClickUpgrades'
 
 // Flavourtext changes with skogsvardering milestones
 const CLICK_FLAVOUR: [number, string][] = [
-  [100_000, 'Dina grannar ser din skog. De fr\u00e5gar hur du g\u00f6r. Du visar dem.'],
-  [50_000, 'En biolog fr\u00e5n universitetet vill studera din skog. Du s\u00e4ger ja.'],
+  [100_000, 'Dina grannar ser din skog. De frågar hur du gör. Du visar dem.'],
+  [50_000, 'En biolog från universitetet vill studera din skog. Du säger ja.'],
   [10_000, 'Du hittar en lavskrika. Du vet vad det betyder. Din skog lever.'],
-  [2_000, 'Du plockhugger tre granar som tr\u00e4ngs. De kvarvarande tr\u00e4den tackar dig med tillv\u00e4xt.'],
-  [500, 'Du identifierar en 200-\u00e5rig tall. Du best\u00e4mmer dig f\u00f6r att l\u00e5ta den st\u00e5.'],
-  [0, 'Du g\u00e5r ut i skogen din farfar planterade. Du l\u00e4r dig namnen p\u00e5 tr\u00e4den.'],
+  [2_000, 'Du plockhugger tre granar som trängs. De kvarvarande träden tackar dig med tillväxt.'],
+  [500, 'Du identifierar en 200-årig tall. Du bestämmer dig för att låta den stå.'],
+  [0, 'Du går ut i skogen din farfar planterade. Du lär dig namnen på träden.'],
 ]
 
 function getFlavour(totalSV: number): string {
@@ -60,7 +60,7 @@ export function OwnerClickArea() {
     <div className="flex flex-col items-center gap-4">
       {/* Skogsvärde Counter */}
       <div className="text-center">
-        <div className="text-[#3D2B1F]/60 text-sm uppercase tracking-wider mb-1">Skogsv\u00e4rde</div>
+        <div className="text-[#3D2B1F]/60 text-sm uppercase tracking-wider mb-1">Skogsvärde</div>
         <AnimatedNumber
           value={skogsvardering}
           className="font-display text-[#2D6A4F]"
@@ -92,7 +92,7 @@ export function OwnerClickArea() {
         >
           <div className="absolute inset-2 rounded-full border border-[#2D6A4F]/20" />
           <span className="text-[#2D6A4F] font-bold text-sm sm:text-base text-center leading-tight px-4">
-            V\u00c5RDA{'\n'}SKOG
+            VÅRDA{'\n'}SKOG
           </span>
         </motion.button>
       </div>
@@ -130,7 +130,7 @@ export function OwnerClickArea() {
                     </div>
                     <div className="text-right flex-shrink-0">
                       {purchased ? (
-                        <span className="text-xs text-[#2D6A4F]">K\u00f6pt</span>
+                        <span className="text-xs text-[#2D6A4F]">Köpt</span>
                       ) : (
                         <span className={`text-sm font-numbers ${canAfford ? 'text-[#2D6A4F]' : 'text-[#3D2B1F]/40'}`}>
                           {formatNumber(cu.cost)} tkr

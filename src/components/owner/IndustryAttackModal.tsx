@@ -81,10 +81,10 @@ export function IndustryAttackModal() {
                   }}
                 >
                   <span className="text-base font-medium text-[#2D6A4F]">
-                    Motst\u00e5
+                    Motstå
                   </span>
                   <p className="text-sm text-[#3D2B1F]/60 mt-1">
-                    Kr\u00e4ver {atk.kunskapRequired} Kunskap
+                    Kräver {atk.kunskapRequired} Kunskap
                     {atk.extraCostAmount ? ` + ${atk.extraCostAmount.toLocaleString('sv-SE')} Inkomst` : ''}
                   </p>
                   {canResist && (

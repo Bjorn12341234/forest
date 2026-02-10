@@ -19,7 +19,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     cost: 50,
     costResource: 'kapital',
     stammarPerClickBonus: 1,
-    icon: '\ud83d\udd8a\ufe0f',
+    icon: '🖊️',
   },
   {
     id: 'click_digital',
@@ -28,7 +28,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     cost: 200,
     costResource: 'kapital',
     stammarPerClickBonus: 5,
-    icon: '\ud83d\udcbb',
+    icon: '💻',
   },
   {
     id: 'click_fabrik',
@@ -37,7 +37,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     cost: 1_000,
     costResource: 'kapital',
     stammarPerClickBonus: 20,
-    icon: '\ud83c\udfed',
+    icon: '🏭',
   },
   {
     id: 'click_ai',
@@ -46,7 +46,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     cost: 10_000,
     costResource: 'kapital',
     stammarPerClickBonus: 100,
-    icon: '\ud83e\udd16',
+    icon: '🤖',
   },
 ]
 

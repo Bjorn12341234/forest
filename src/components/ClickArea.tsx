@@ -11,7 +11,7 @@ import { GlassCard } from './ui/GlassCard'
 // Flavourtext changes with phase progression
 const CLICK_FLAVOUR: Record<number, string> = {
   1: 'Du skriver en skogsbruksplan åt en pensionerad lärare i Ångermanland. Gratis, såklart.',
-  2: 'Du rekommenderar "föryngringsavverkning" \u2014 det låter ju bättre än "kalavverkning".',
+  2: 'Du rekommenderar "föryngringsavverkning" — det låter ju bättre än "kalavverkning".',
   3: 'Planen föreslår gallring. Av det fina virket. Skrapet lämnar du kvar. Ägaren märker inget.',
   4: 'Avverkningsanmälan inskickad. Skogsstyrelsen hinner inte granska. Perfekt.',
   5: 'Planen skrivs nu av en AI. Ägaren får ett mail. Skördaren är redan på plats.',

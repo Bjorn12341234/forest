@@ -28,7 +28,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
       },
       {
         label: 'Attackera utredarna',
-        description: '"Politiskt motiverad!" \u2014 finansiera motrapport',
+        description: '"Politiskt motiverad!" — finansiera motrapport',
         effects: [
           { resource: 'kapital', amount: -30_000, type: 'add' },
           { resource: 'lobby', amount: 20, type: 'add' },
@@ -271,7 +271,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'absurd',
     headline: 'Mars Massafabrik produktionsstart',
-    context: 'Den första massafabriken på Mars är online. Kvaliteten är låg. Men ingen klagar \u2014 det finns inga människor där.',
+    context: 'Den första massafabriken på Mars är online. Kvaliteten är låg. Men ingen klagar — det finns inga människor där.',
     choices: [
       {
         label: 'Skala upp',
@@ -324,7 +324,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'absurd',
     headline: 'Aktieägarna kräver årsredovisning',
-    context: 'Det är dags. Siffrorna måste fram. Allt du byggt \u2014 och allt du förstörde \u2014 sammanfattas i ett kvitto.',
+    context: 'Det är dags. Siffrorna måste fram. Allt du byggt — och allt du förstörde — sammanfattas i ett kvitto.',
     choices: [
       {
         label: 'Visa kvittot',

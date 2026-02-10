@@ -309,7 +309,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         <button
           onClick={onShowSettings}
           className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
-          title="Inst\u00e4llningar"
+          title="Inställningar"
         >
           &#9881;
         </button>
@@ -337,14 +337,14 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
           <OwnerTabButton
             active={ownerTab === 'dashboard'}
-            label="\u00d6versikt"
-            icon={'\uD83C\uDF32'}
+            label="Översikt"
+            icon={'🌲'}
             onClick={() => onTabChange('dashboard')}
           />
           <OwnerTabButton
             active={ownerTab === 'knowledge'}
             label="Kunskap"
-            icon={'\uD83D\uDCD6'}
+            icon={'📖'}
             onClick={() => onTabChange('lobby')}
           />
         </div>

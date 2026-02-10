@@ -30,7 +30,7 @@ export const OWNER_ACTIONS: OwnerActionData[] = [
     trustChange: 15,
     sideEffects: [],
     cooldownSeconds: 30,
-    icon: '\ud83d\udccb',
+    icon: '📋',
   },
   {
     id: 'owner_aganderatt_kampanj',
@@ -43,7 +43,7 @@ export const OWNER_ACTIONS: OwnerActionData[] = [
       { resource: 'image', type: 'add', amount: -5, description: '-5 Image' },
     ],
     cooldownSeconds: 60,
-    icon: '\ud83d\udce2',
+    icon: '📢',
   },
   {
     id: 'owner_sank_virkespris',
@@ -56,7 +56,7 @@ export const OWNER_ACTIONS: OwnerActionData[] = [
       { resource: 'kapital', type: 'multiply', amount: 1.3, description: '+30% Kapital tillfälligt' },
     ],
     cooldownSeconds: 45,
-    icon: '\ud83d\udcc9',
+    icon: '📉',
   },
   {
     id: 'owner_hardgallring',
@@ -69,7 +69,7 @@ export const OWNER_ACTIONS: OwnerActionData[] = [
       { resource: 'stammar', type: 'add', amount: 500, description: '+500 stammar' },
     ],
     cooldownSeconds: 20,
-    icon: '\ud83e\ude93',
+    icon: '🪓',
   },
   {
     id: 'owner_partnerskap',
@@ -82,7 +82,7 @@ export const OWNER_ACTIONS: OwnerActionData[] = [
       { resource: 'stammar', type: 'add', amount: 1_000, description: '+1 000 stammar' },
     ],
     cooldownSeconds: 90,
-    icon: '\ud83e\udd1d',
+    icon: '🤝',
   },
 ]
 
@@ -93,7 +93,7 @@ export const PR_CAMPAIGNS: PRCampaignData[] = [
     description: '"Vi planterar fler träd än vi avverkar." (Monokulturer räknas.)',
     cost: 1_000,
     imageGain: 5,
-    icon: '\ud83d\udcca',
+    icon: '📊',
   },
   {
     id: 'pr_skolbesok',
@@ -101,7 +101,7 @@ export const PR_CAMPAIGNS: PRCampaignData[] = [
     description: 'Barn får plantera ett träd. Instagram-content i månader.',
     cost: 5_000,
     imageGain: 10,
-    icon: '\ud83c\udf31',
+    icon: '🌱',
   },
   {
     id: 'pr_certifiering',
@@ -109,7 +109,7 @@ export const PR_CAMPAIGNS: PRCampaignData[] = [
     description: 'Certifieringen är meningslös men ser bra ut på förpackningen.',
     cost: 20_000,
     imageGain: 20,
-    icon: '\u267b\ufe0f',
+    icon: '♻️',
   },
   {
     id: 'pr_klimatkampanj',
@@ -117,7 +117,7 @@ export const PR_CAMPAIGNS: PRCampaignData[] = [
     description: 'Helsidesannons i DN: "Svensk skog räddar klimatet." Ingen nämner markberedningen.',
     cost: 100_000,
     imageGain: 35,
-    icon: '\ud83c\udf0d',
+    icon: '🌍',
   },
 ]
 

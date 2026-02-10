@@ -10,10 +10,10 @@ interface TabDef {
 }
 
 const TABS: TabDef[] = [
-  { id: 'dashboard', label: '\u00d6versikt', icon: '\ud83d\udcca', phase: 1 },
-  { id: 'research', label: 'Teknik', icon: '\ud83d\udd2c', phase: 1 },
-  { id: 'lobby', label: 'Makt', icon: '\ud83c\udfdb\ufe0f', phase: 2 },
-  { id: 'expansion', label: 'Expansion', icon: '\ud83c\udf0d', phase: 6 },
+  { id: 'dashboard', label: 'Översikt', icon: '📊', phase: 1 },
+  { id: 'research', label: 'Teknik', icon: '🔬', phase: 1 },
+  { id: 'lobby', label: 'Makt', icon: '🏛️', phase: 2 },
+  { id: 'expansion', label: 'Expansion', icon: '🌍', phase: 6 },
 ]
 
 interface TabNavProps {
@@ -65,7 +65,7 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
 
               {/* Lock icon for locked tabs */}
               {isLocked && (
-                <span className="absolute -top-1 -right-1 text-[0.5rem]">{'\ud83d\udd12'}</span>
+                <span className="absolute -top-1 -right-1 text-[0.5rem]">{'🔒'}</span>
               )}
             </button>
           )

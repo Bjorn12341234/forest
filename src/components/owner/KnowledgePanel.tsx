@@ -32,7 +32,7 @@ export function KnowledgePanel() {
       {/* Biodiversity meter */}
       <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[#3D2B1F]/60 text-xs uppercase tracking-wider">Biologisk m\u00e5ngfald</span>
+          <span className="text-[#3D2B1F]/60 text-xs uppercase tracking-wider">Biologisk mångfald</span>
           <span className="text-sm font-numbers text-[#2D6A4F]">{formatNumber(biodivOwner)} arter</span>
         </div>
         <div className="w-full h-2 bg-[#3D2B1F]/10 rounded-sm overflow-hidden">
@@ -46,7 +46,7 @@ export function KnowledgePanel() {
       {/* Knowledge Threshold Progress */}
       <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[#3D2B1F]/60 text-xs uppercase tracking-wider">Kunskapsniv\u00e5</span>
+          <span className="text-[#3D2B1F]/60 text-xs uppercase tracking-wider">Kunskapsnivå</span>
           {nextThreshold && (
             <span className="text-xs text-[#3D2B1F]/40 font-numbers">
               {formatNumber(kunskap)} / {formatNumber(nextThreshold.level)}
@@ -77,7 +77,7 @@ export function KnowledgePanel() {
             return (
               <div key={t.level} className="flex items-center gap-2 text-xs">
                 <span className={reached ? 'text-[#2D6A4F]' : 'text-[#3D2B1F]/30'}>
-                  {reached ? '\u2713' : '\u25CB'}
+                  {reached ? '✓' : '○'}
                 </span>
                 <span className={reached ? 'text-[#3D2B1F]/70' : 'text-[#3D2B1F]/30'}>
                   {t.level}: {t.label}
@@ -90,9 +90,9 @@ export function KnowledgePanel() {
 
       {/* Knowledge Activities */}
       <div className="flex flex-col gap-3">
-        <h2 className="text-base font-medium text-[#3D2B1F]">L\u00e4r dig mer</h2>
+        <h2 className="text-base font-medium text-[#3D2B1F]">Lär dig mer</h2>
         <p className="text-xs text-[#3D2B1F]/50 -mt-2">
-          Spendera Inkomst f\u00f6r att \u00f6ka din Skogskunskap.
+          Spendera Inkomst för att öka din Skogskunskap.
         </p>
 
         <div className="flex flex-col gap-2">

@@ -18,7 +18,7 @@ export function OwnerDashboard() {
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
       {/* Top Resource Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <OwnerResourceCard label="Skogsv\u00e4rde" value={skogsvardering} />
+        <OwnerResourceCard label="Skogsvärde" value={skogsvardering} />
         <OwnerResourceCard label="Inkomst" value={inkomst} format={n => `${formatNumber(n)} tkr`} />
         <OwnerResourceCard label="Skogskunskap" value={kunskap} />
         <OwnerResourceCard
@@ -30,10 +30,10 @@ export function OwnerDashboard() {
 
       {/* Secondary Meters */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <OwnerMeterCard label="Biologisk m\u00e5ngfald" value={biodivOwner} unit="arter" />
+        <OwnerMeterCard label="Biologisk mångfald" value={biodivOwner} unit="arter" />
         <OwnerMeterCard label="Kolinlagring" value={realCarbonPos} unit="ton" />
         <OwnerMeterCard label="Generationsarv" value={legacy} />
-        <OwnerMeterCard label="D\u00f6d ved" value={deadwood} unit="m\u00b3" />
+        <OwnerMeterCard label="Död ved" value={deadwood} unit="m³" />
       </div>
 
       {/* Two-Panel Layout */}

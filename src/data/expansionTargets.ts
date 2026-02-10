@@ -22,8 +22,8 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   // ── Fas 10: Solsystemet ──
   {
     id: 'exp_manen',
-    name: 'M\u00e5nen',
-    description: 'Lunar Silva AB. Registrerat p\u00e5 Cayman\u00f6arna.',
+    name: 'Månen',
+    description: 'Lunar Silva AB. Registrerat på Caymanöarna.',
     unlockPhase: 10,
     cost: { stammar: 5_000_000_000_000, kapital: 50_000_000, lobby: 5_000 },
     production: { stammarPerSecond: 2_000_000, kapitalPerSecond: 20_000 },
@@ -34,7 +34,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_mars',
     name: 'Mars',
-    description: 'R\u00f6d jord. Syntetisk gran. Orange vinst.',
+    description: 'Röd jord. Syntetisk gran. Orange vinst.',
     unlockPhase: 10,
     cost: { stammar: 10_000_000_000_000, kapital: 100_000_000, lobby: 8_000 },
     production: { stammarPerSecond: 5_000_000, kapitalPerSecond: 50_000 },
@@ -45,7 +45,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_titan',
     name: 'Titan',
-    description: 'Metansj\u00f6ar. Perfekt f\u00f6r industriell kylning.',
+    description: 'Metansjöar. Perfekt för industriell kylning.',
     unlockPhase: 10,
     cost: { stammar: 50_000_000_000_000, kapital: 500_000_000, lobby: 15_000 },
     production: { stammarPerSecond: 20_000_000, kapitalPerSecond: 200_000 },
@@ -58,7 +58,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_proxima',
     name: 'Exoplanet Proxima b',
-    description: 'Rutn\u00e4tskogsbruk p\u00e5 4,2 ljus\u00e5rs avst\u00e5nd.',
+    description: 'Rutnätskogsbruk på 4,2 ljusårs avstånd.',
     unlockPhase: 11,
     cost: { stammar: 100_000_000_000_000, kapital: 1_000_000_000, lobby: 25_000 },
     production: { stammarPerSecond: 50_000_000, kapitalPerSecond: 500_000 },
@@ -68,8 +68,8 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   },
   {
     id: 'exp_dyson',
-    name: 'Dysonsf\u00e4r',
-    description: 'Stj\u00e4rnenergi f\u00f6r industriell torkning av massa.',
+    name: 'Dysonsfär',
+    description: 'Stjärnenergi för industriell torkning av massa.',
     unlockPhase: 11,
     cost: { stammar: 200_000_000_000_000, kapital: 2_000_000_000, lobby: 40_000 },
     production: { stammarPerSecond: 100_000_000, kapitalPerSecond: 1_000_000 },
@@ -82,7 +82,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_universe_alpha',
     name: 'Parallellt Universum Alpha',
-    description: 'Identiskt med v\u00e5rt. Dubbel produktion.',
+    description: 'Identiskt med vårt. Dubbel produktion.',
     unlockPhase: 11,
     cost: { stammar: 5_000_000_000_000, kapital: 50_000_000_000, lobby: 100_000 },
     production: { stammarPerSecond: 1_000_000_000, kapitalPerSecond: 10_000_000 },
@@ -93,7 +93,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_universe_beta',
     name: 'Parallellt Universum Beta',
-    description: 'D\u00e4r vann milj\u00f6r\u00f6relsen. Vi fixar det.',
+    description: 'Där vann miljörörelsen. Vi fixar det.',
     unlockPhase: 11,
     cost: { stammar: 10_000_000_000_000, kapital: 100_000_000_000, lobby: 150_000 },
     production: { stammarPerSecond: 2_000_000_000, kapitalPerSecond: 20_000_000 },
@@ -104,7 +104,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_tidslinje',
     name: 'Tidslinje-korrektion',
-    description: 'G\u00e5 tillbaka och avverka dinosauriernas skog.',
+    description: 'Gå tillbaka och avverka dinosauriernas skog.',
     unlockPhase: 12,
     cost: { stammar: 50_000_000_000_000, kapital: 500_000_000_000, lobby: 500_000 },
     production: { stammarPerSecond: 10_000_000_000, kapitalPerSecond: 100_000_000 },

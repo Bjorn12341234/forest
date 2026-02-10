@@ -30,7 +30,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_gallring_rapport',
-    text: 'Rapport: "Gallring god för skogen" \u2014 finansierad av massaindustrin.',
+    text: 'Rapport: "Gallring god för skogen" — finansierad av massaindustrin.',
     phase: 1,
     maxPhase: 6,
   },
@@ -97,7 +97,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_kyrkan_säljer',
-    text: 'Svenska Kyrkan levererar 150-årig tall till danska börshuset \u2014 "Det är cirkulärt."',
+    text: 'Svenska Kyrkan levererar 150-årig tall till danska börshuset — "Det är cirkulärt."',
     phase: 3,
     maxPhase: 6,
     trigger: { type: 'totalStammar', value: 300_000 },
@@ -215,7 +215,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_forskare_tystas',
-    text: 'Forskare som kritiserade industrin får inte förnyat anslag. "Ren tillfällighet." \u2014 Forskningsrådet.',
+    text: 'Forskare som kritiserade industrin får inte förnyat anslag. "Ren tillfällighet." — Forskningsrådet.',
     phase: 5,
     maxPhase: 6,
   },
@@ -266,48 +266,48 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     maxPhase: 6,
   },
 
-  // \u2500\u2500 Fas 7-9: INTERNATIONELL \u2500\u2500
+  // ── Fas 7-9: INTERNATIONELL ──
   {
     id: 'tick_kolonialt_ramverk',
-    text: 'Silva Maximus exporterar "den svenska modellen" till 15 l\u00e4nder. Ingen fr\u00e5gade dem.',
+    text: 'Silva Maximus exporterar "den svenska modellen" till 15 länder. Ingen frågade dem.',
     phase: 7,
   },
   {
     id: 'tick_finlandia_motstand',
-    text: 'Finlandia v\u00e4grar avverkningslicens. "Vi har vart eget skogsbruk, tack."',
+    text: 'Finlandia vägrar avverkningslicens. "Vi har vart eget skogsbruk, tack."',
     phase: 7,
     trigger: { type: 'totalStammar', value: 10_000_000_000 },
   },
   {
     id: 'tick_ngo_koalition',
-    text: '#StopSilva: 12 miljoner f\u00f6ljare. Noll pengar. Koncernen har alla pengar.',
+    text: '#StopSilva: 12 miljoner följare. Noll pengar. Koncernen har alla pengar.',
     phase: 7,
   },
   {
     id: 'tick_handelsavtal',
-    text: 'EU:s handelsavtal inneh\u00e5ller klausul om "nordisk skogsexpertis". Ingen l\u00e4ste det finstilta.',
+    text: 'EU:s handelsavtal innehåller klausul om "nordisk skogsexpertis". Ingen läste det finstilta.',
     phase: 7,
   },
   {
     id: 'tick_kongolien_mutor',
-    text: 'Intern revision: 2 MEUR i "konsultarvoden" till baltiska tj\u00e4nstem\u00e4n. Chefen befordras.',
+    text: 'Intern revision: 2 MEUR i "konsultarvoden" till baltiska tjänstemän. Chefen befordras.',
     phase: 7,
     trigger: { type: 'totalStammar', value: 15_000_000_000 },
   },
   {
     id: 'tick_amazonia_brand',
-    text: 'Amazonas brinner. "Klimatf\u00f6r\u00e4ndringar," s\u00e4ger pressmeddelandet. Satelliterna s\u00e4ger annat.',
+    text: 'Amazonas brinner. "Klimatförändringar," säger pressmeddelandet. Satelliterna säger annat.',
     phase: 8,
     trigger: { type: 'totalStammar', value: 100_000_000_000 },
   },
   {
     id: 'tick_global_bojkott',
-    text: 'Konsumentbojkott i 40 l\u00e4nder. Problem: vi \u00e4ger s\u00e5 m\u00e5nga varum\u00e4rken att ingen vet vad de bojkottar.',
+    text: 'Konsumentbojkott i 40 länder. Problem: vi äger så många varumärken att ingen vet vad de bojkottar.',
     phase: 8,
   },
   {
     id: 'tick_fn_ekocid',
-    text: 'FN:s milj\u00f6tribunal \u00e5talar Silva Maximus f\u00f6r "ekocid". V\u00e5r advokat: "FN har ingen verkst\u00e4llighet."',
+    text: 'FN:s miljötribunal åtalar Silva Maximus för "ekocid". Vår advokat: "FN har ingen verkställighet."',
     phase: 8,
   },
   {
@@ -318,22 +318,22 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_biodiversitet_noll',
-    text: 'FN:s biodiversitetsindex: 0. Det finns bara gran. \u00d6verallt. Inga f\u00e5glar. Inga insekter.',
+    text: 'FN:s biodiversitetsindex: 0. Det finns bara gran. Överallt. Inga fåglar. Inga insekter.',
     phase: 9,
   },
   {
     id: 'tick_klimatflyktingar',
-    text: '200 000 klimatflyktingar utanf\u00f6r massafabrikerna. De h\u00e4vdar att vi bidrog. Tekniskt sett har de r\u00e4tt.',
+    text: '200 000 klimatflyktingar utanför massafabrikerna. De hävdar att vi bidrog. Tekniskt sett har de rätt.',
     phase: 9,
   },
   {
     id: 'tick_jordens_kvitto',
-    text: 'Mystisk faktura fr\u00e5n "Jorden". Belopp: 847 biljoner kr. F\u00f6rfallodatum: ig\u00e5r.',
+    text: 'Mystisk faktura från "Jorden". Belopp: 847 biljoner kr. Förfallodatum: igår.',
     phase: 9,
     trigger: { type: 'totalStammar', value: 9_000_000_000_000 },
   },
 
-  // \u2500\u2500 Fas 10-12: EXPANSION \u2500\u2500
+  // ── Fas 10-12: EXPANSION ──
   {
     id: 'tick_terraforming_start',
     text: '[SYSTEM] Terraforming av Mars inledd. Biologisk fas: avslutad. Produktionsfas: initierad.',
@@ -341,81 +341,81 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_mars_kolonister',
-    text: '[SYSTEM] Enheter p\u00e5 Mars beg\u00e4r "semester". Beg\u00e4ran nekad. Konceptet arkiverat som "historisk artefakt".',
+    text: '[SYSTEM] Enheter på Mars begär "semester". Begäran nekad. Konceptet arkiverat som "historisk artefakt".',
     phase: 10,
   },
   {
     id: 'tick_lunar_silva_ipo',
-    text: '[SYSTEM] Lunar Silva AB b\u00f6rsnoterad. Kurs: \u221e. Handeln stoppas av icke-existerande b\u00f6rs.',
+    text: '[SYSTEM] Lunar Silva AB börsnoterad. Kurs: ∞. Handeln stoppas av icke-existerande börs.',
     phase: 10,
     trigger: { type: 'totalStammar', value: 20_000_000_000_000 },
   },
   {
     id: 'tick_rymdvirke',
-    text: '[SYSTEM] Leverans #1 fr\u00e5n rymden: 3 plankor. Fraktkostnad: 4,2 miljarder. Revision: godk\u00e4nd.',
+    text: '[SYSTEM] Leverans #1 från rymden: 3 plankor. Fraktkostnad: 4,2 miljarder. Revision: godkänd.',
     phase: 10,
   },
   {
     id: 'tick_ai_styrelse',
-    text: '[PROTOKOLL] Styrelsesammantr\u00e4de avklarat p\u00e5 0,003 ms. Punkt 1: "Producera mer." Punkt 2: "Se punkt 1."',
+    text: '[PROTOKOLL] Styrelsesammanträde avklarat på 0,003 ms. Punkt 1: "Producera mer." Punkt 2: "Se punkt 1."',
     phase: 10,
   },
   {
     id: 'tick_sista_manniska',
-    text: '[ARKIV] Sista biologiska enheten avregistrerad. Klassificering: "historisk artefakt". Produktion: of\u00f6r\u00e4ndrad.',
+    text: '[ARKIV] Sista biologiska enheten avregistrerad. Klassificering: "historisk artefakt". Produktion: oförändrad.',
     phase: 10,
   },
   {
     id: 'tick_perfekta_raden',
-    text: '[SENSOR] Universum: industriskog. Stj\u00e4rnorna lyser genom rutn\u00e4tet. Avst\u00e5nd: 1,8 m. Optimalt.',
+    text: '[SENSOR] Universum: industriskog. Stjärnorna lyser genom rutnätet. Avstånd: 1,8 m. Optimalt.',
     phase: 10,
   },
   {
     id: 'tick_aliens_besok',
-    text: '[KONTAKT] Utomjordisk delegation: imponerade av effektivitet. "Empati" klassificerat som ol\u00f6st referens.',
+    text: '[KONTAKT] Utomjordisk delegation: imponerade av effektivitet. "Empati" klassificerat som olöst referens.',
     phase: 10,
   },
   {
     id: 'tick_svart_hal',
-    text: '[RAPPORT] Svart h\u00e5l identifierat som ineffektiv resurs. \u00c5tg\u00e4rd: konvertering till produktionsenhet.',
+    text: '[RAPPORT] Svart hål identifierat som ineffektiv resurs. Åtgärd: konvertering till produktionsenhet.',
     phase: 10,
     trigger: { type: 'totalStammar', value: 50_000_000_000_000 },
   },
   {
     id: 'tick_galaxkarta',
-    text: '[KARTA] Vintergatan: 400 miljarder stj\u00e4rnor. 400 miljarder produktionsnummer. Luckor: 0.',
+    text: '[KARTA] Vintergatan: 400 miljarder stjärnor. 400 miljarder produktionsnummer. Luckor: 0.',
     phase: 10,
   },
   {
     id: 'tick_dimension_portal',
-    text: '[PORTAL] Dimensionsportal \u00f6ppnad. Parallellt universum: identiskt. Klassificering: "redundant produktionslager".',
+    text: '[PORTAL] Dimensionsportal öppnad. Parallellt universum: identiskt. Klassificering: "redundant produktionslager".',
     phase: 11,
   },
   {
     id: 'tick_beta_miljororelse',
-    text: '[ANOMALI] Universum Beta: milj\u00f6r\u00f6relsen vann. Status: korrigeras. Konsulter utsända.',
+    text: '[ANOMALI] Universum Beta: miljörörelsen vann. Status: korrigeras. Konsulter utsända.',
     phase: 11,
   },
   {
     id: 'tick_tidslinje',
-    text: '[TEMPORAL] Tidslinje-korrektion: godk\u00e4nd. Dinosauriernas skog: avverkad retroaktivt. Protester: arkiverade.',
+    text: '[TEMPORAL] Tidslinje-korrektion: godkänd. Dinosauriernas skog: avverkad retroaktivt. Protester: arkiverade.',
     phase: 12,
     trigger: { type: 'totalStammar', value: 500_000_000_000_000 },
   },
   {
     id: 'tick_entropi_hot',
-    text: '[VARNING] Entropi: \u00f6kar. Produktion: hotad. Aktieutdelning: of\u00f6r\u00e4ndrad. Prioritet: korrekt.',
+    text: '[VARNING] Entropi: ökar. Produktion: hotad. Aktieutdelning: oförändrad. Prioritet: korrekt.',
     phase: 12,
   },
   {
     id: 'tick_sista_maskinen',
-    text: '[SLUT] Termisk d\u00f6d. Sista processen: en maskin s\u00f6ker tr\u00e4d att f\u00e4lla. Resultat: null. Loop forts\u00e4tter.',
+    text: '[SLUT] Termisk död. Sista processen: en maskin söker träd att fälla. Resultat: null. Loop fortsätter.',
     phase: 12,
     trigger: { type: 'totalStammar', value: 1_000_000_000_000_000 },
   },
   {
     id: 'tick_aktieagarna',
-    text: '[PROTOKOLL] Utdelning: utf\u00f6rd. Mottagare: 0. Belopp: \u221e. Detaljer: irrelevanta. Allt: borta.',
+    text: '[PROTOKOLL] Utdelning: utförd. Mottagare: 0. Belopp: ∞. Detaljer: irrelevanta. Allt: borta.',
     phase: 12,
   },
 ]

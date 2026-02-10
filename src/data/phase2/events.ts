@@ -37,7 +37,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'opportunity',
     headline: 'Pensionerad skogsägare säljer 800 hektar',
-    context: 'Barnen vill inte ha skogen. Perfekt tillfälle att expandera \u2014 och skriva en "generös" plan.',
+    context: 'Barnen vill inte ha skogen. Perfekt tillfälle att expandera — och skriva en "generös" plan.',
     choices: [
       {
         label: 'Köp till marknadspris',
@@ -102,7 +102,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'crisis',
     headline: 'Kinesisk massa-dumpning!',
-    context: 'Kina översvämmar marknaden med billig massa. Dina marginaler krymper. Dags att hugga snabbare \u2014 eller smartare.',
+    context: 'Kina översvämmar marknaden med billig massa. Dina marginaler krymper. Dags att hugga snabbare — eller smartare.',
     choices: [
       {
         label: 'Sänk avverkningsåldern',
@@ -159,7 +159,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'crisis',
     headline: 'Samebyns protest',
-    context: 'Samebyns renskötsel har drabbats av era avverkningar. De kräver samråd \u2014 och hotar med juridik.',
+    context: 'Samebyns renskötsel har drabbats av era avverkningar. De kräver samråd — och hotar med juridik.',
     choices: [
       {
         label: 'Ignorera',
@@ -225,7 +225,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'scandal',
     headline: 'SVT-dokumentär: Slaget om Skogen',
-    context: 'Statliga Dokumentärkanalen sänder en granskning av skogsindustrin. GD Tallström raderade mejlen \u2014 men SVT hittade kopior.',
+    context: 'Statliga Dokumentärkanalen sänder en granskning av skogsindustrin. GD Tallström raderade mejlen — men SVT hittade kopior.',
     choices: [
       {
         label: 'SMS:a GD mot SVT',
@@ -259,11 +259,11 @@ export const PHASE2_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'crisis',
     headline: 'Choco-Corp Reträtten',
-    context: 'Choco-Corp International \u2014 företaget som sålde bröstmjölksersättning till fattiga mödrar \u2014 tycker att DU har etikproblem. De bryter alla avtal.',
+    context: 'Choco-Corp International — företaget som sålde bröstmjölksersättning till fattiga mödrar — tycker att DU har etikproblem. De bryter alla avtal.',
     choices: [
       {
         label: 'Dubbeldown: "Certifieringspaus"',
-        description: 'Slut hyckla \u2014 avverka nyckelbiotoperna',
+        description: 'Slut hyckla — avverka nyckelbiotoperna',
         effects: [
           { resource: 'image', amount: -30, type: 'add' },
           { resource: 'stammar', amount: 50_000, type: 'add' },
@@ -322,7 +322,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'opportunity',
     headline: 'Svenska Kyrkan säljer',
-    context: 'Kyrkan gör sig av med 3 000 hektar gammelskog. 150-årig tall till danska börshuset \u2014 "Det är cirkulärt."',
+    context: 'Kyrkan gör sig av med 3 000 hektar gammelskog. 150-årig tall till danska börshuset — "Det är cirkulärt."',
     choices: [
       {
         label: 'Köp för spotpris',

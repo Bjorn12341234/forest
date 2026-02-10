@@ -17,7 +17,7 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     description: 'Dina ögon öppnas. Du läser om svängdörrarna. Du förstår varför "gratisplanen" var gratis.',
     cost: 0,
     kunskapReward: 10,
-    icon: '\uD83D\uDCDC',
+    icon: '📜',
   },
   {
     id: 'know_plockhugget',
@@ -25,7 +25,7 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     description: 'De tar betalt. Industrin skickar inspektörer gratis. Nu förstår du varför.',
     cost: 3_000,
     kunskapReward: 25,
-    icon: '\uD83C\uDF32',
+    icon: '🌲',
   },
   {
     id: 'know_artinventering',
@@ -33,7 +33,7 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     description: 'Du har 47 arter av lavar. Grannen som kalavverkade har 3.',
     cost: 5_000,
     kunskapReward: 30,
-    icon: '\uD83E\uDD9E',
+    icon: '🦞',
   },
   {
     id: 'know_gammelskog',
@@ -41,7 +41,7 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     description: 'Du ser en skog som ingen rört på 200 år. Du gråter lite. Det är okej.',
     cost: 2_000,
     kunskapReward: 15,
-    icon: '\uD83C\uDF33',
+    icon: '🌳',
   },
   {
     id: 'know_markberedning',
@@ -49,7 +49,7 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     description: 'Du lär dig att markberedning släpper ut mer kol än vad de nya plantorna binder på 30 år.',
     cost: 1_000,
     kunskapReward: 20,
-    icon: '\uD83D\uDCD0',
+    icon: '📐',
   },
 ]
 

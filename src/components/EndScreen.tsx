@@ -9,22 +9,22 @@ interface EndScreenProps {
 }
 
 const POST_CREDITS: string[] = [
-  'Akte\u00e4garna \u00e4r n\u00f6jda. Styrelsen gratulerar.',
+  'Akteägarna är nöjda. Styrelsen gratulerar.',
   '',
-  'Marknadsandelen \u00f6verstiger 100%. Det borde vara om\u00f6jligt. Det \u00e4r det inte.',
+  'Marknadsandelen överstiger 100%. Det borde vara omöjligt. Det är det inte.',
   '',
-  'All biologisk m\u00e5ngfald har ersatts med produktiv biomassa.',
-  'Varje kvadratmeter \u00e4r optimerad. Varje organism \u00e4r en produktionsenhet.',
+  'All biologisk mångfald har ersatts med produktiv biomassa.',
+  'Varje kvadratmeter är optimerad. Varje organism är en produktionsenhet.',
   '',
-  'Klimatf\u00f6r\u00e4ndringarna visade sig vara en utm\u00e4rkt aff\u00e4rsm\u00f6jlighet.',
-  'FSC-certifikatet h\u00e4nger kvar. Ingen fr\u00e5gar varf\u00f6r.',
-  'Sv\u00e4ngd\u00f6rren snurrar fortfarande. Snabbare \u00e4n n\u00e5gonsin.',
+  'Klimatförändringarna visade sig vara en utmärkt affärsmöjlighet.',
+  'FSC-certifikatet hänger kvar. Ingen frågar varför.',
+  'Svängdörren snurrar fortfarande. Snabbare än någonsin.',
   '',
-  'N\u00e4sta kvartal: Expansion bortom Sveriges gr\u00e4nser.',
-  'N\u00e4sta \u00e5r: Expansion bortom jordens gr\u00e4nser.',
-  'N\u00e4sta \u00e5rhundrade: Expansion bortom fysikens gr\u00e4nser.',
+  'Nästa kvartal: Expansion bortom Sveriges gränser.',
+  'Nästa år: Expansion bortom jordens gränser.',
+  'Nästa århundrade: Expansion bortom fysikens gränser.',
   '',
-  'Tillv\u00e4xt \u00e4r den enda lagen.',
+  'Tillväxt är den enda lagen.',
 ]
 
 export function EndScreen({ onReset, onContinue }: EndScreenProps) {
@@ -127,7 +127,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
               onClick={() => setStage('reality')}
               className="px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
             >
-              FORTS\u00c4TT EXPANDERA
+              FORTSÄTT EXPANDERA
             </button>
             <button
               onClick={onReset}
@@ -197,7 +197,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             step={5} current={revealStep}
             label="Skogsägare fick"
             value={`${formatNumber(ownerProfit)} Mkr`}
-            subtext={`Industrin tjänade: ${formatNumber(industryProfit)} Mkr \u2014 Förhållande: 1:${ratio}`}
+            subtext={`Industrin tjänade: ${formatNumber(industryProfit)} Mkr — Förhållande: 1:${ratio}`}
           />
           <RevealRow
             step={6} current={revealStep}
@@ -208,11 +208,11 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
           <RevealRow
             step={7} current={revealStep}
             label="Samebyars betesmark"
-            value={`${samiLand.toFixed(1)} km\u00B2 f\u00f6rlorad`}
+            value={`${samiLand.toFixed(1)} km² förlorad`}
           />
           <RevealRow
             step={8} current={revealStep}
-            label="L\u00e4nder er\u00f6vrade"
+            label="Länder erövrade"
             value={`${countriesControlled} nationer`}
             subtext="Den svenska modellen exporterad globalt"
           />
@@ -227,9 +227,9 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             >
               <p className="text-[0.55rem] tracking-wider text-gray-400 mb-2">INSTITUTIONELL KAPNING</p>
               <div className="flex flex-col gap-1">
-                <StatusLine label="Skogsstyrelsen" status={skogsstyrelsen ? 'K\u00d6PT' : 'OBEROENDE'} bought={!!skogsstyrelsen} />
-                <StatusLine label="FSC-certifiering" status={fsc ? 'K\u00d6PT' : 'AKTIV'} bought={!!fsc} />
-                <StatusLine label="EU:s milj\u00f6lagstiftning" status={omnibus ? 'URVATTNAD' : 'INTAKT'} bought={!!omnibus} />
+                <StatusLine label="Skogsstyrelsen" status={skogsstyrelsen ? 'KÖPT' : 'OBEROENDE'} bought={!!skogsstyrelsen} />
+                <StatusLine label="FSC-certifiering" status={fsc ? 'KÖPT' : 'AKTIV'} bought={!!fsc} />
+                <StatusLine label="EU:s miljölagstiftning" status={omnibus ? 'URVATTNAD' : 'INTAKT'} bought={!!omnibus} />
               </div>
             </motion.div>
           )}
@@ -333,40 +333,40 @@ function StatusLine({ label, status, bought }: {
 
 const REALITY_SECTIONS: { heading: string; text: string }[] = [
   {
-    heading: 'Det h\u00e4r var ett spel. Det h\u00e4r \u00e4r inte det.',
-    text: 'Allt du just spelade \u00e4r en satir. Men den bygger p\u00e5 verkligheten. Svensk skogsindustri \u00e4r en av de m\u00e4ktigaste lobbygrupperna i Europa \u2014 och det som h\u00e4nder i v\u00e5ra skogar \u00e4r n\u00e5got de flesta aldrig ser.',
+    heading: 'Det här var ett spel. Det här är inte det.',
+    text: 'Allt du just spelade är en satir. Men den bygger på verkligheten. Svensk skogsindustri är en av de mäktigaste lobbygrupperna i Europa — och det som händer i våra skogar är något de flesta aldrig ser.',
   },
   {
     heading: 'Kalhyggesbruket',
-    text: 'Cirka 95% av all avverkning i Sverige \u00e4r kalhyggen. Hela skogsekosystem j\u00e4mnas med marken. Det som planteras \u00e4r monokulturer av gran i raka rader \u2014 biologiska \u00f6knar d\u00e4r n\u00e4stan ingenting annat lever. \u00d6ver 2\u00a0000 skogslevande arter \u00e4r r\u00f6dlistade i Sverige. Gammelskogen, den som aldrig kalhuggits, utg\u00f6r idag under 5% av den produktiva skogsmarken.',
+    text: 'Cirka 95% av all avverkning i Sverige är kalhyggen. Hela skogsekosystem jämnas med marken. Det som planteras är monokulturer av gran i raka rader — biologiska öknar där nästan ingenting annat lever. Över 2 000 skogslevande arter är rödlistade i Sverige. Gammelskogen, den som aldrig kalhuggits, utgör idag under 5% av den produktiva skogsmarken.',
   },
   {
     heading: 'Lobbyn',
-    text: 'Skogsindustrierna och LRF Skogsägarna \u00e4r bland Sveriges mest inflytelserika lobbyorganisationer. De har systematiskt format ber\u00e4ttelsen om att svenskt skogsbruk \u00e4r \"h\u00e5llbart\" och \"klimatsmart\" \u2014 trots att oberoende forskning g\u00e5ng p\u00e5 g\u00e5ng visar motsatsen. Budskapen genomsyrar l\u00e4romedel, myndighetstexter och politiska debatter.',
+    text: 'Skogsindustrierna och LRF Skogsägarna är bland Sveriges mest inflytelserika lobbyorganisationer. De har systematiskt format berättelsen om att svenskt skogsbruk är \"hållbart\" och \"klimatsmart\" — trots att oberoende forskning gång på gång visar motsatsen. Budskapen genomsyrar läromedel, myndighetstexter och politiska debatter.',
   },
   {
-    heading: 'Sv\u00e4ngd\u00f6rren',
-    text: 'F\u00f6re detta politiker och myndighetschefer rekryteras regelbundet av skogsindustrin, och personer fr\u00e5n industrin hamnar i nyckelpositioner p\u00e5 myndigheter. Det skapar en kultur d\u00e4r reglering och kontroll systematiskt f\u00f6rsvagas inifr\u00e5n. Skogsstyrelsen, som ska sk\u00f6ta tillsynen, har f\u00e5tt sin budget sk\u00e4ren g\u00e5ng p\u00e5 g\u00e5ng.',
+    heading: 'Svängdörren',
+    text: 'Före detta politiker och myndighetschefer rekryteras regelbundet av skogsindustrin, och personer från industrin hamnar i nyckelpositioner på myndigheter. Det skapar en kultur där reglering och kontroll systematiskt försvagas inifrån. Skogsstyrelsen, som ska sköta tillsynen, har fått sin budget skären gång på gång.',
   },
   {
     heading: 'EU och Sverige',
-    text: 'Sverige har aktivt motarbetat EU:s milj\u00f6lagstiftning som ber\u00f6r skog. Restaureringsf\u00f6rordningen, taxonomin, avskogningsf\u00f6rordningen \u2014 Sverige har i varje fall lobbat f\u00f6r undantag och utsp\u00e4dning, ofta p\u00e5 direkt beg\u00e4ran fr\u00e5n skogsindustrin. N\u00e4r EU f\u00f6reslog att kalhyggesbruk inte skulle klassas som h\u00e5llbart, reagerade den svenska regeringen som om det vore ett angrepp p\u00e5 nationen.',
+    text: 'Sverige har aktivt motarbetat EU:s miljölagstiftning som berör skog. Restaureringsförordningen, taxonomin, avskogningsförordningen — Sverige har i varje fall lobbat för undantag och utspädning, ofta på direkt begäran från skogsindustrin. När EU föreslog att kalhyggesbruk inte skulle klassas som hållbart, reagerade den svenska regeringen som om det vore ett angrepp på nationen.',
   },
   {
     heading: 'Kina och snabbprodukter',
-    text: 'En stor del av det svenska virket exporteras som r\u00e5vara eller halvfabrikat \u2014 ofta till Kina, d\u00e4r det blir engångsprodukter, pappersf\u00f6rpackningar och viskostyg till snabbmode. Tr\u00e4d som tog 60\u2013100 \u00e5r att v\u00e4xa f\u00f6rvandlas till produkter som anv\u00e4nds i minuter. Toalettpapper, n\u00e4sdukar, kartonger. Mer\u00e4rdet f\u00f6rsvinner utomlands. Kvar i Sverige finns kahyggena.',
+    text: 'En stor del av det svenska virket exporteras som råvara eller halvfabrikat — ofta till Kina, där det blir engångsprodukter, pappersförpackningar och viskostyg till snabbmode. Träd som tog 60–100 år att växa förvandlas till produkter som används i minuter. Toalettpapper, näsdukar, kartonger. Merärdet försvinner utomlands. Kvar i Sverige finns kahyggena.',
   },
   {
-    heading: 'Det finns andra s\u00e4tt',
-    text: 'Hyggesfritt skogsbruk \u2014 kontinuitetsskogsbruk \u2014 beh\u00e5ller skogens struktur och ekologiska funktioner medan man fortfarande producerar virke. Selektiv avverkning, l\u00e4ngre omloppstider och fokus p\u00e5 h\u00f6gv\u00e4rdiga massivtr\u00e4produkter ist\u00e4llet f\u00f6r massa och papper ger b\u00e5de b\u00e4ttre ekonomi f\u00f6r skogs\u00e4garen och b\u00e4ttre koldioxidlagring p\u00e5 l\u00e5ng sikt. Det lagrar kol i byggmaterial i \u00e5rhundraden ist\u00e4llet f\u00f6r att elda upp det eller g\u00f6ra engångsprodukter.',
+    heading: 'Det finns andra sätt',
+    text: 'Hyggesfritt skogsbruk — kontinuitetsskogsbruk — behåller skogens struktur och ekologiska funktioner medan man fortfarande producerar virke. Selektiv avverkning, längre omloppstider och fokus på högvärdiga massivträprodukter istället för massa och papper ger både bättre ekonomi för skogsägaren och bättre koldioxidlagring på lång sikt. Det lagrar kol i byggmaterial i århundraden istället för att elda upp det eller göra engångsprodukter.',
   },
   {
     heading: 'Samerna',
-    text: 'Kalhyggesbruket sl\u00e5r h\u00e5rt mot rensk\u00f6tande samer. Marklavar, som renar \u00e4r beroende av f\u00f6r vinterbete, beh\u00f6ver 50\u2013100 \u00e5r f\u00f6r att \u00e5terh\u00e4mta sig efter en kalavverkning. Industrins avverkningsplaner g\u00f6rs ofta utan samr\u00e5d med samebyar. Urfolksr\u00e4ttigheterna hamnar konsekvent under industrins ekonomiska intressen.',
+    text: 'Kalhyggesbruket slår hårt mot renskötande samer. Marklavar, som renar är beroende av för vinterbete, behöver 50–100 år för att återhämta sig efter en kalavverkning. Industrins avverkningsplaner görs ofta utan samråd med samebyar. Urfolksrättigheterna hamnar konsekvent under industrins ekonomiska intressen.',
   },
   {
     heading: 'Klimatet',
-    text: 'Industrin h\u00e4vdar att skogsbruket \u00e4r \"klimatpositivt\". Men kalhyggen frig\u00f6r enorma m\u00e4ngder markbundet kol, och det tar \u00e5rtionden innan nyplanterad skog b\u00f6rjar ta upp kol netto. N\u00e4r virket g\u00e5r till kortlivade produkter som eldas eller komposteras, \u00e5terv\u00e4nder kolet till atmosf\u00e4ren snabbt. Bokf\u00f6ringen som anv\u00e4nds f\u00f6r att visa \"klimatnytta\" har kritiserats av forskare internationellt.',
+    text: 'Industrin hävdar att skogsbruket är \"klimatpositivt\". Men kalhyggen frigör enorma mängder markbundet kol, och det tar årtionden innan nyplanterad skog börjar ta upp kol netto. När virket går till kortlivade produkter som eldas eller komposteras, återvänder kolet till atmosfären snabbt. Bokföringen som används för att visa \"klimatnytta\" har kritiserats av forskare internationellt.',
   },
 ]
 
@@ -392,13 +392,13 @@ function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset:
             className="text-[0.6rem] tracking-[0.4em] text-white/30 mb-3 uppercase"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            V\u00e4nta.
+            Vänta.
           </p>
           <p
             className="text-[0.6rem] tracking-[0.3em] text-white/30"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            Innan du forts\u00e4tter.
+            Innan du fortsätter.
           </p>
         </motion.div>
 
@@ -442,7 +442,7 @@ function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset:
             className="text-xs text-white/60 leading-relaxed mb-2"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            Vill du veta mer? St\u00f6d de som k\u00e4mpar f\u00f6r skogen:
+            Vill du veta mer? Stöd de som kämpar för skogen:
           </p>
 
           <a
@@ -452,7 +452,7 @@ function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset:
             className="inline-block mt-4 mb-12 px-6 py-3 border border-white/30 text-white text-xs font-bold tracking-[0.15em] no-underline hover:bg-white/10 transition-colors"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            F\u00d6RENINGEN NATURH\u00c4NSYN
+            FÖRENINGEN NATURHÄNSYN
           </a>
 
           <p
@@ -470,7 +470,7 @@ function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset:
               className="px-8 py-3 bg-white/10 text-white/70 text-xs font-bold tracking-wider cursor-pointer border border-white/20 hover:bg-white/20 transition-colors"
               style={{ fontFamily: 'IBM Plex Mono, monospace' }}
             >
-              FORTS\u00c4TT SPELA
+              FORTSÄTT SPELA
             </button>
             <button
               onClick={onReset}

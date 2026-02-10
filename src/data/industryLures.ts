@@ -24,9 +24,9 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
   {
     id: 'lure_markanalys',
     name: '"Gratis markanalys"',
-    offer: '"Vi analyserar din mark \u2014 kostnadsfritt!"',
-    trap: 'Analysen rekommenderar kalavverkning och contortaplantering. Ingen n\u00e4mner att contorta \u00e4r en invasiv art.',
-    declineText: 'Du anlitar en oberoende biolog ist\u00e4llet. Kostar 8 000 kr. Analysen visar att din mark m\u00e5r utm\u00e4rkt.',
+    offer: '"Vi analyserar din mark — kostnadsfritt!"',
+    trap: 'Analysen rekommenderar kalavverkning och contortaplantering. Ingen nämner att contorta är en invasiv art.',
+    declineText: 'Du anlitar en oberoende biolog istället. Kostar 8 000 kr. Analysen visar att din mark mår utmärkt.',
     triggerSV: 2_000,
     acceptEffects: {
       skogsvardering: 0.8,
@@ -42,9 +42,9 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
   {
     id: 'lure_gsc',
     name: '"GSC-certifiering"',
-    offer: '"Certifiera din skog! Marknaden kr\u00e4ver det!"',
-    trap: 'Certifieringen kr\u00e4ver en "sk\u00f6tselplan" skriven av industrin. Planen inneb\u00e4r gallring av dina finaste tr\u00e4d.',
-    declineText: 'Du certifierar via Plockhugget-n\u00e4tverket ist\u00e4llet. Mindre k\u00e4nt, men \u00e4rligt.',
+    offer: '"Certifiera din skog! Marknaden kräver det!"',
+    trap: 'Certifieringen kräver en "skötselplan" skriven av industrin. Planen innebär gallring av dina finaste träd.',
+    declineText: 'Du certifierar via Plockhugget-nätverket istället. Mindre känt, men ärligt.',
     triggerSV: 6_000,
     acceptEffects: {
       skogsvardering: 0.85,
@@ -58,9 +58,9 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
   {
     id: 'lure_eubidrag',
     name: '"EU-bidrag via oss"',
-    offer: '"Vi hj\u00e4lper dig s\u00f6ka EU-st\u00f6d f\u00f6r skogs\u00e5tg\u00e4rder!"',
-    trap: '\u00c5tg\u00e4rderna = markberedning + plantering av monokultur. EU-pengarna g\u00e5r till industrins metoder.',
-    declineText: 'Du s\u00f6ker bidraget sj\u00e4lv. Det tar l\u00e4ngre tid. Men det anv\u00e4nds till naturv\u00e5rd, inte industriplantering.',
+    offer: '"Vi hjälper dig söka EU-stöd för skogsåtgärder!"',
+    trap: 'Åtgärderna = markberedning + plantering av monokultur. EU-pengarna går till industrins metoder.',
+    declineText: 'Du söker bidraget själv. Det tar längre tid. Men det används till naturvård, inte industriplantering.',
     triggerSV: 15_000,
     acceptEffects: {
       resiliensPenalty: 20,

@@ -44,12 +44,12 @@ export const PHASE3_EVENTS: GameEvent[] = [
     phase: 3,
     maxPhase: 6,
     category: 'opportunity',
-    headline: 'Nastl\u00e9 vill k\u00f6pa ert pappersbruk',
-    context: 'Nastl\u00e9 International \u2014 f\u00f6retaget som s\u00e5lde vattenr\u00e4ttigheter till torkel\u00e4nder \u2014 erbjuder sig att k\u00f6pa ert pappersbruk f\u00f6r "synergier inom f\u00f6rpackning".',
+    headline: 'Nastlé vill köpa ert pappersbruk',
+    context: 'Nastlé International — företaget som sålde vattenrättigheter till torkeländer — erbjuder sig att köpa ert pappersbruk för "synergier inom förpackning".',
     choices: [
       {
-        label: 'S\u00e4lj till Nastl\u00e9',
-        description: 'Massivt kapital. Inga fler etiska fr\u00e5gor \u2014 Nastl\u00e9 har inga.',
+        label: 'Sälj till Nastlé',
+        description: 'Massivt kapital. Inga fler etiska frågor — Nastlé har inga.',
         effects: [
           { resource: 'kapital', amount: 80_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
@@ -57,7 +57,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: 'Joint venture: "NordPack Solutions"',
-        description: 'Delat ansvar. Ingen \u00e4r ansvarig.',
+        description: 'Delat ansvar. Ingen är ansvarig.',
         effects: [
           { resource: 'kapital', amount: 40_000, type: 'add' },
           { resource: 'image', amount: -8, type: 'add' },
@@ -65,8 +65,8 @@ export const PHASE3_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Avb\u00f6j artigt',
-        description: '\u00c4ven ni har gr\u00e4nser. Eller?',
+        label: 'Avböj artigt',
+        description: 'Även ni har gränser. Eller?',
         effects: [
           { resource: 'image', amount: 10, type: 'add' },
         ],
@@ -80,12 +80,12 @@ export const PHASE3_EVENTS: GameEvent[] = [
     phase: 3,
     maxPhase: 6,
     category: 'crisis',
-    headline: 'H\u00f6gsta domstolen: Samisk mark\u00e4gandedom',
-    context: 'HD fastsl\u00e5r att samebyar har r\u00e4tt till traditionell mark. Er avverkningsplan f\u00f6r Norrbotten bevakas av internationella medier.',
+    headline: 'Högsta domstolen: Samisk markägandedom',
+    context: 'HD fastslår att samebyar har rätt till traditionell mark. Er avverkningsplan för Norrbotten bevakas av internationella medier.',
     choices: [
       {
-        label: '\u00d6verklaga och f\u00f6rdr\u00f6j',
-        description: 'Juridisk process tar 8\u201312 \u00e5r. Hugga medan dom v\u00e4ntar.',
+        label: 'Överklaga och fördröj',
+        description: 'Juridisk process tar 8–12 år. Hugga medan dom väntar.',
         effects: [
           { resource: 'stammar', amount: 15_000, type: 'add' },
           { resource: 'image', amount: -12, type: 'add' },
@@ -94,7 +94,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: '"Vi respekterar domen"',
-        description: 'Flytta avverkningarna 500 meter. Tekniskt sett nytt omr\u00e5de.',
+        description: 'Flytta avverkningarna 500 meter. Tekniskt sett nytt område.',
         effects: [
           { resource: 'stammar', amount: 8_000, type: 'add' },
           { resource: 'image', amount: -3, type: 'add' },
@@ -111,25 +111,25 @@ export const PHASE3_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'contradiction',
     headline: 'Egen rapport visar kollapsat ekosystem',
-    context: 'Er milj\u00f6avdelning (en person) har av misstag publicerat den interna rapporten. Biologisk m\u00e5ngfald i era skogar: "kritiskt l\u00e5g". Rapporten togs bort efter 47 minuter. Twitter var snabbare.',
+    context: 'Er miljöavdelning (en person) har av misstag publicerat den interna rapporten. Biologisk mångfald i era skogar: "kritiskt låg". Rapporten togs bort efter 47 minuter. Twitter var snabbare.',
     choices: [
       {
-        label: '"Preliminär data, ej kvalitetss\u00e4krad"',
-        description: 'Klassikern. Fungerar varje g\u00e5ng.',
+        label: '"Preliminär data, ej kvalitetssäkrad"',
+        description: 'Klassikern. Fungerar varje gång.',
         effects: [
           { resource: 'image', amount: -8, type: 'add' },
         ],
       },
       {
-        label: 'Avskeda milj\u00f6avdelningen',
-        description: 'En person. Budgeten f\u00f6r "milj\u00f6" g\u00e5r till PR ist\u00e4llet.',
+        label: 'Avskeda miljöavdelningen',
+        description: 'En person. Budgeten för "miljö" går till PR istället.',
         effects: [
           { resource: 'kapital', amount: 2_000, type: 'add' },
           { resource: 'image', amount: -12, type: 'add' },
         ],
       },
       {
-        label: 'G\u00f6r rapporten till "h\u00e5llbarhetsm\u00e5l"',
+        label: 'Gör rapporten till "hållbarhetsmål"',
         description: 'Vi identifierade problemet. Det visar ansvar.',
         effects: [
           { resource: 'kapital', amount: -5_000, type: 'add' },
@@ -145,12 +145,12 @@ export const PHASE3_EVENTS: GameEvent[] = [
     phase: 3,
     maxPhase: 6,
     category: 'opportunity',
-    headline: 'NCA anst\u00e4ller ex-milj\u00f6minister',
-    context: 'Nordiska Cellulosa Alliansen har rekryterat den f\u00f6rra milj\u00f6ministern som "senior r\u00e5dgivare". Hon k\u00e4nner alla p\u00e5 departementet. Hon tycker om skog nu.',
+    headline: 'NCA anställer ex-miljöminister',
+    context: 'Nordiska Cellulosa Alliansen har rekryterat den förra miljöministern som "senior rådgivare". Hon känner alla på departementet. Hon tycker om skog nu.',
     choices: [
       {
         label: 'Anslut till NCA:s lobbygrupp',
-        description: 'Dela p\u00e5 ministern. Och p\u00e5 notan.',
+        description: 'Dela på ministern. Och på notan.',
         effects: [
           { resource: 'kapital', amount: -10_000, type: 'add' },
           { resource: 'lobby', amount: 30, type: 'add' },
@@ -158,7 +158,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: 'Rekrytera egen minister',
-        description: 'Varf\u00f6r dela? Det finns fler ex-ministrar.',
+        description: 'Varför dela? Det finns fler ex-ministrar.',
         effects: [
           { resource: 'kapital', amount: -25_000, type: 'add' },
           { resource: 'lobby', amount: 50, type: 'add' },
@@ -175,18 +175,18 @@ export const PHASE3_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'scandal',
     headline: 'DN Granskar: "Skogens Tystnadskultur"',
-    context: 'Dagens Nyheter publicerar en sex delar l\u00e5ng serie om skogsindustrins systematiska p\u00e5verkan p\u00e5 forskning, politik och media. Del 4 handlar om er.',
+    context: 'Dagens Nyheter publicerar en sex delar lång serie om skogsindustrins systematiska påverkan på forskning, politik och media. Del 4 handlar om er.',
     choices: [
       {
         label: 'Ignorera serien',
-        description: 'Nyhetscykeln \u00e4r kort. M\u00e4nniskors minne \u00e4r kortare.',
+        description: 'Nyhetscykeln är kort. Människors minne är kortare.',
         effects: [
           { resource: 'image', amount: -15, type: 'add' },
         ],
       },
       {
         label: 'Publicera motartikel i SvD',
-        description: '"Skogen: Sveriges gr\u00f6na guld \u2014 fakta mot myter"',
+        description: '"Skogen: Sveriges gröna guld — fakta mot myter"',
         effects: [
           { resource: 'kapital', amount: -8_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
@@ -194,8 +194,8 @@ export const PHASE3_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'St\u00e4m DN f\u00f6r f\u00f6rtal',
-        description: 'Aldrig vinn. Men DN f\u00e5r betala advokater i \u00e5r.',
+        label: 'Stäm DN för förtal',
+        description: 'Aldrig vinn. Men DN får betala advokater i år.',
         effects: [
           { resource: 'kapital', amount: -20_000, type: 'add' },
           { resource: 'lobby', amount: 8, type: 'add' },
@@ -211,11 +211,11 @@ export const PHASE3_EVENTS: GameEvent[] = [
     phase: 3,
     maxPhase: 6,
     category: 'scandal',
-    headline: 'Skolmaterial: "Kalhygge \u00e4r solbad f\u00f6r marken"',
-    context: 'Ert utbildningsmaterial f\u00f6r \u00e5rskurs 5 har blivit viralt. Formuleringen "tr\u00e4den beh\u00f6ver vila ibland, precis som du" har 2 miljoner visningar.',
+    headline: 'Skolmaterial: "Kalhygge är solbad för marken"',
+    context: 'Ert utbildningsmaterial för årskurs 5 har blivit viralt. Formuleringen "träden behöver vila ibland, precis som du" har 2 miljoner visningar.',
     choices: [
       {
-        label: 'St\u00e5 fast',
+        label: 'Stå fast',
         description: 'Pedagogiskt korrekt. Vetenskapligt... kreativt.',
         effects: [
           { resource: 'image', amount: -12, type: 'add' },
@@ -240,18 +240,18 @@ export const PHASE3_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'contradiction',
     headline: 'Barnklass skriver brev till VD:n',
-    context: '27 \u00e5ttio\u00e5ringar har skrivit brev till er VD. "Varf\u00f6r d\u00f6dar ni ekorrarnas hem?" Breven \u00e4r illustrerade. En har ritat VD:n som en motorsåg med slips.',
+    context: '27 åttioåringar har skrivit brev till er VD. "Varför dödar ni ekorrarnas hem?" Breven är illustrerade. En har ritat VD:n som en motorsåg med slips.',
     choices: [
       {
         label: 'Skicka standardsvar',
-        description: '"Tack f\u00f6r ert engagemang. Vi planterar tr\u00e4d varje dag."',
+        description: '"Tack för ert engagemang. Vi planterar träd varje dag."',
         effects: [
           { resource: 'image', amount: 2, type: 'add' },
         ],
       },
       {
         label: 'Bjud in klassen till huvudkontoret',
-        description: 'Visa "planteringsavdelningen". D\u00f6lj avverkningskartan.',
+        description: 'Visa "planteringsavdelningen". Dölj avverkningskartan.',
         effects: [
           { resource: 'kapital', amount: -1_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
@@ -259,7 +259,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: 'Rama in motorsågsteckningen',
-        description: 'H\u00e4ng den i styrelserummet. Ironiskt. Eller?',
+        description: 'Häng den i styrelserummet. Ironiskt. Eller?',
         effects: [
           { resource: 'image', amount: -2, type: 'add' },
           { resource: 'ownerTrust', amount: 3, type: 'add' },
@@ -276,11 +276,11 @@ export const PHASE3_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'scandal',
     headline: 'The Guardian: "Swedens Green Lie"',
-    context: 'Internationell press avsl\u00f6jar att Sveriges "h\u00e5llbara skogsbruk" \u00e4r en marknadsf\u00f6ringsprodukt. Artikeln har \u00f6versatts till 14 spr\u00e5k. Ambassad\u00f6ren ber om talking points.',
+    context: 'Internationell press avslöjar att Sveriges "hållbara skogsbruk" är en marknadsföringsprodukt. Artikeln har översatts till 14 språk. Ambassadören ber om talking points.',
     choices: [
       {
-        label: 'Skicka ambassad\u00f6ren talking points',
-        description: '"Sverige har mer skog \u00e4n n\u00e5gonsin." (Monokulturer r\u00e4knas.)',
+        label: 'Skicka ambassadören talking points',
+        description: '"Sverige har mer skog än någonsin." (Monokulturer räknas.)',
         effects: [
           { resource: 'lobby', amount: 15, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
@@ -288,13 +288,13 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: '"No comment"',
-        description: 'L\u00e5t det bl\u00e5sa \u00f6ver. Internationella nyheter \u00e4r kortlivade.',
+        description: 'Låt det blåsa över. Internationella nyheter är kortlivade.',
         effects: [
           { resource: 'image', amount: -18, type: 'add' },
         ],
       },
       {
-        label: 'K\u00f6p helsidesannons i Financial Times',
+        label: 'Köp helsidesannons i Financial Times',
         description: '"Swedish Forestry: A Model for the World"',
         effects: [
           { resource: 'kapital', amount: -50_000, type: 'add' },
@@ -310,12 +310,12 @@ export const PHASE3_EVENTS: GameEvent[] = [
     phase: 4,
     maxPhase: 6,
     category: 'crisis',
-    headline: 'EU:s avskogningsf\u00f6rordning: Sverige undantas inte',
-    context: 'Trots intensiv lobbying klassas svenskt kalhyggesbruk som "avskogning" enligt EU. Er exportlicens \u00e4r hotad.',
+    headline: 'EU:s avskogningsförordning: Sverige undantas inte',
+    context: 'Trots intensiv lobbying klassas svenskt kalhyggesbruk som "avskogning" enligt EU. Er exportlicens är hotad.',
     choices: [
       {
-        label: 'Lobba f\u00f6r "nordiskt undantag"',
-        description: 'Kalhygge \u00e4r inte avskogning om man planterar sedan. S\u00e4ger vi.',
+        label: 'Lobba för "nordiskt undantag"',
+        description: 'Kalhygge är inte avskogning om man planterar sedan. Säger vi.',
         effects: [
           { resource: 'lobby', amount: -30, type: 'add' },
           { resource: 'kapital', amount: -20_000, type: 'add' },
@@ -324,7 +324,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: 'Omdefiniera "skog"',
-        description: 'Om en granplantage \u00e4r skog \u00e4r allt skog',
+        description: 'Om en granplantage är skog är allt skog',
         effects: [
           { resource: 'lobby', amount: -20, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
@@ -341,7 +341,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'crisis',
     headline: 'Dokumentärfilm om er nomineras till Oscar',
-    context: '"Silent Forest" \u2014 en dokumentär om er påverkan på biologisk mångfald \u2014 nomineras till bästa dokumentär. Regissören tackar er i sitt tal: "Utan dem hade filmen inte funnits."',
+    context: '"Silent Forest" — en dokumentär om er påverkan på biologisk mångfald — nomineras till bästa dokumentär. Regissören tackar er i sitt tal: "Utan dem hade filmen inte funnits."',
     choices: [
       {
         label: '"Vi uppskattar uppmärksamheten"',
@@ -618,19 +618,19 @@ export const PHASE3_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'opportunity',
     headline: 'Skogsstyrelsens budget halveras',
-    context: 'Regeringen sk\u00e4r Skogsstyrelsens budget med 50%. Myndigheten kan inte l\u00e4ngre utf\u00f6ra tillsyn. Er avdelning f\u00f6r "compliance" jublar tyst.',
+    context: 'Regeringen skär Skogsstyrelsens budget med 50%. Myndigheten kan inte längre utföra tillsyn. Er avdelning för "compliance" jublar tyst.',
     choices: [
       {
-        label: '"Vi v\u00e4lkomnar effektivisering"',
-        description: 'F\u00e4rre inspekt\u00f6rer = friare avverkning',
+        label: '"Vi välkomnar effektivisering"',
+        description: 'Färre inspektörer = friare avverkning',
         effects: [
           { resource: 'stammar', amount: 25_000, type: 'add' },
           { resource: 'lobby', amount: 15, type: 'add' },
         ],
       },
       {
-        label: 'Erbjud "privat tillsynstj\u00e4nst"',
-        description: 'Ni inspekterar er sj\u00e4lva. Resultaten \u00e4r utm\u00e4rkta.',
+        label: 'Erbjud "privat tillsynstjänst"',
+        description: 'Ni inspekterar er själva. Resultaten är utmärkta.',
         effects: [
           { resource: 'kapital', amount: -10_000, type: 'add' },
           { resource: 'image', amount: 8, type: 'add' },

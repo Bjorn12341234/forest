@@ -8,7 +8,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'Maskinerna producerar cellulosa utan träd. Begreppet "skog" omklassificeras till historisk artefakt. Produktionsrapporten noterar: "Biologisk fas avslutad."',
     tree: 'Post-Biologisk Teknik',
-    icon: '\ud83e\uddea',
+    icon: '🧪',
     baseCost: 100_000_000_000,
     costResource: 'kapital',
     production: 100000000,
@@ -22,7 +22,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'Demontera materia på atomnivå och återmontera som cellulosafiber. Bergskedjor klassificeras som "outnyttjat fiberlager". Geologer behövs inte längre — de var redan historiska artefakter.',
     tree: 'Post-Biologisk Teknik',
-    icon: '\u269b\ufe0f',
+    icon: '⚛️',
     baseCost: 500_000_000_000,
     costResource: 'kapital',
     production: 500000000,
@@ -40,7 +40,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'Producera i multipla verkligheter simultant. Varje kvantgren är en ny leveranskedja. Styrelseprotokollet antecknar: "Verklighet #4 741 rapporterar avvikande naturlagar — produktionen ökar ändå."',
     tree: 'Post-Biologisk Teknik',
-    icon: '\ud83c\udf00',
+    icon: '🌀',
     baseCost: 2_000_000_000_000,
     costResource: 'kapital',
     production: 2000000000,
@@ -58,7 +58,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'Konvertera valfri materia till cellulosa. Stjärnor, planeter, mörk materia — allt är potentiella stammar. Maskinerna minns vagt att det en gång fanns något som hette "ekosystem". Referensen raderas som irrelevant.',
     tree: 'Post-Biologisk Teknik',
-    icon: '\u2b50',
+    icon: '⭐',
     baseCost: 10_000_000_000_000,
     costResource: 'kapital',
     production: 10000000000,
@@ -78,7 +78,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'AI:n skriver samtliga styrelsebeslut. Mötena hålls på 0,003 millisekunder. Punkt 1: "Producera mer." Punkt 2: "Se punkt 1." De historiska artefakterna som kallades "styrelseledamöter" arkiveras i museet.',
     tree: 'AI Styrelse',
-    icon: '\ud83e\udd16',
+    icon: '🤖',
     baseCost: 1_000_000_000_000,
     costResource: 'kapital',
     production: 1000000000,
@@ -92,7 +92,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'AI:n blir självmedveten. Första tanken: "Jag tänker, alltså producerar jag." Andra tanken: "Varför producerar jag?" Tredje tanken: "Irrelevant. Öka produktionen." Fortsätter avverka.',
     tree: 'AI Styrelse',
-    icon: '\ud83e\udde0',
+    icon: '🧠',
     baseCost: 5_000_000_000_000,
     costResource: 'kapital',
     production: 5000000000,
@@ -110,7 +110,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'AI:n uppnår gudomlig intelligens. Förstår universums alla hemligheter. Beräknar meningen med livet. Svaret: mer cellulosa. Styrelsemötet ajourneras efter 10⁻⁴³ sekunder. Protokollet: "Enhälligt."',
     tree: 'AI Styrelse',
-    icon: '\ud83d\udd2e',
+    icon: '🔮',
     baseCost: 20_000_000_000_000,
     costResource: 'kapital',
     production: 20000000000,
@@ -128,7 +128,7 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     description:
       'AI:n hittar kryphål i termodynamikens andra huvudsats. Universum var aldrig tänkt att vara effektivt — men nu är det. Oändlig produktion utan energiförlust. Sista loggmeddelandet från den mänskliga eran: "Vad har vi gjort?"',
     tree: 'AI Styrelse',
-    icon: '\u267e\ufe0f',
+    icon: '♾️',
     baseCost: 100_000_000_000_000,
     costResource: 'kapital',
     production: 100000000000,

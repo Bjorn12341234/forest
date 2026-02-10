@@ -22,7 +22,7 @@ function getMapView(phase: number): MapView {
 }
 
 const VIEW_LABELS: Record<MapView, string> = {
-  countries: 'V\u00e4rldskarta',
+  countries: 'Världskarta',
   solar: 'Solsystemet',
   galaxy: 'Galaxen',
   multiverse: 'Multiversum',
@@ -107,9 +107,9 @@ function MultiverseSVG() {
     <svg viewBox="0 0 100 80" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
       {/* Parallel universe planes */}
       {[
-        { x: 10, y: 10, w: 30, h: 55, label: '\u03B1' },
-        { x: 50, y: 5, w: 30, h: 55, label: '\u03B2' },
-        { x: 30, y: 25, w: 30, h: 55, label: '\u03B3' },
+        { x: 10, y: 10, w: 30, h: 55, label: 'α' },
+        { x: 50, y: 5, w: 30, h: 55, label: 'β' },
+        { x: 30, y: 25, w: 30, h: 55, label: 'γ' },
       ].map((plane, i) => (
         <g key={i}>
           <rect x={plane.x} y={plane.y} width={plane.w} height={plane.h} rx="1"
@@ -162,7 +162,7 @@ export function ExpansionPanel() {
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
       <GlassCard padding="md">
         <p className="text-sm text-text-muted text-center py-8">
-          Expansionsmodulen l\u00e5ses upp i fas 7.
+          Expansionsmodulen låses upp i fas 7.
         </p>
       </GlassCard>
     </div>
@@ -211,7 +211,7 @@ function CountryPanel() {
         <div>
           <h2 className="text-base font-medium text-text-primary">Internationell Expansion</h2>
           <p className="text-xs text-text-muted">
-            Exportera den svenska modellen. Krossa motst\u00e5nd med kapital, lobby och stammar.
+            Exportera den svenska modellen. Krossa motstånd med kapital, lobby och stammar.
           </p>
         </div>
         <span className="text-xs text-text-muted uppercase tracking-widest">
@@ -376,7 +376,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
   const pa = countryState?.pressureAllocation ?? { kapital: 0, lobby: 0, stammar: 0 }
 
   const defenseLabel: Record<string, string> = {
-    environmental: 'Milj\u00f6',
+    environmental: 'Miljö',
     political: 'Politisk',
     economic: 'Ekonomisk',
   }
@@ -394,7 +394,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           <div className="flex items-center gap-2">
             <h3 className="text-base font-medium text-text-primary">{country.name}</h3>
             {status === 'controlled' && <span className="text-xs text-accent-green">Kontrollerad</span>}
-            {status === 'invading' && <span className="text-xs text-accent">Invasion p\u00e5g\u00e5r</span>}
+            {status === 'invading' && <span className="text-xs text-accent">Invasion pågår</span>}
             {status === 'rebelling' && <span className="text-xs text-danger">Uppror!</span>}
           </div>
           <p className="text-xs text-text-muted leading-relaxed mt-1">{country.description}</p>
@@ -402,7 +402,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           {/* Defense info */}
           <div className="flex flex-wrap gap-2 mt-2">
             <span className="text-xs px-1.5 py-0.5 rounded bg-bg-tertiary text-text-secondary">
-              F\u00f6rsvar: {defenseLabel[country.defenseType]} ({country.defenseStrength}/10)
+              Försvar: {defenseLabel[country.defenseType]} ({country.defenseStrength}/10)
             </span>
             <span className="text-xs px-1.5 py-0.5 rounded bg-bg-tertiary text-accent">
               Svaghet: {weaknessLabel[country.defenseType]}
@@ -413,7 +413,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           {status === 'invading' && (
             <div className="mt-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs text-text-muted">Motst\u00e5nd</span>
+                <span className="text-xs text-text-muted">Motstånd</span>
                 <span className="text-xs text-text-secondary font-numbers">{resistance.toFixed(1)}%</span>
               </div>
               <div className="w-full h-2 bg-bg-tertiary rounded-sm overflow-hidden">
@@ -469,7 +469,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
                 +{formatNumber(country.production.kapitalPerSecond)} kapital/s
               </span>
               <span className="text-xs text-danger bg-danger/10 px-1.5 py-0.5 rounded">
-                -{formatNumber(country.maintenanceCost.kapitalPerSecond)} kapital/s underh\u00e5ll
+                -{formatNumber(country.maintenanceCost.kapitalPerSecond)} kapital/s underhåll
               </span>
             </div>
           )}
@@ -496,7 +496,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
                   : 'bg-bg-tertiary border-bg-tertiary text-text-muted cursor-not-allowed'
                 }`}
             >
-              {affordable ? 'Invadera' : 'Otillr\u00e4ckliga resurser'}
+              {affordable ? 'Invadera' : 'Otillräckliga resurser'}
             </button>
           )}
 
@@ -505,7 +505,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
           )}
 
           {status === 'invading' && (
-            <span className="text-xs text-accent">Motst\u00e5nd: {resistance.toFixed(0)}%</span>
+            <span className="text-xs text-accent">Motstånd: {resistance.toFixed(0)}%</span>
           )}
         </div>
       </div>
@@ -524,7 +524,7 @@ function PressureSlider({ label, value, isWeak, onChange }: {
   return (
     <div className="flex items-center gap-2">
       <span className={`text-xs w-16 ${isWeak ? 'text-accent font-bold' : 'text-text-secondary'}`}>
-        {label}{isWeak ? ' \u2605' : ''}
+        {label}{isWeak ? ' ★' : ''}
       </span>
       <input
         type="range"
@@ -578,9 +578,9 @@ function SpaceExpansionPanel() {
         <div>
           <h2 className="text-base font-medium text-text-primary">Expansion</h2>
           <p className="text-xs text-text-muted">
-            {mapView === 'solar' && 'Interplanet\u00e4r skogsbruksindustri. Inga m\u00e4nniskor beh\u00f6vs.'}
-            {mapView === 'galaxy' && 'Galaktisk expansion. AI-styrelsen godk\u00e4nner.'}
-            {mapView === 'multiverse' && 'Skogsbruk \u00f6ver alla verkligheter. Entropi \u00e4r det sista hindret.'}
+            {mapView === 'solar' && 'Interplanetär skogsbruksindustri. Inga människor behövs.'}
+            {mapView === 'galaxy' && 'Galaktisk expansion. AI-styrelsen godkänner.'}
+            {mapView === 'multiverse' && 'Skogsbruk över alla verkligheter. Entropi är det sista hindret.'}
           </p>
         </div>
         <span className="text-xs text-text-muted uppercase tracking-widest">
@@ -781,7 +781,7 @@ function TargetDetailPanel({ target, acquired, affordable, stammar, kapital, lob
                   : 'bg-bg-tertiary border-bg-tertiary text-text-muted cursor-not-allowed'
                 }`}
             >
-              {affordable ? 'Etablera' : 'Otillr\u00e4ckliga resurser'}
+              {affordable ? 'Etablera' : 'Otillräckliga resurser'}
             </button>
           )}
 

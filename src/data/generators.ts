@@ -73,7 +73,7 @@ export const GENERATORS: GeneratorData[] = [
   {
     id: 'gen_klonskog',
     name: 'Klon-Skog',
-    description: 'Genetiskt identiska tr\u00e4d. Ingen variation. Ingen motst\u00e5ndskraft. Maximal produktion.',
+    description: 'Genetiskt identiska träd. Ingen variation. Ingen motståndskraft. Maximal produktion.',
     baseCost: 10_000_000,
     baseProduction: 50_000,
     unlockPhase: 6,
@@ -84,7 +84,7 @@ export const GENERATORS: GeneratorData[] = [
   {
     id: 'gen_koncession',
     name: 'Global Skogskoncessioner',
-    description: 'Avverkningsr\u00e4tter i 40 l\u00e4nder. Kontrakt p\u00e5 svenska. Ingen f\u00f6rst\u00e5r villkoren.',
+    description: 'Avverkningsrätter i 40 länder. Kontrakt på svenska. Ingen förstår villkoren.',
     baseCost: 50_000_000,
     baseProduction: 200_000,
     unlockPhase: 7,
@@ -93,7 +93,7 @@ export const GENERATORS: GeneratorData[] = [
   {
     id: 'gen_monokultur',
     name: 'Industriell Monokulturfabrik',
-    description: 'Regnskogar ersatta med gran. Planterade i raka rader. Samma DNA. Ingen f\u00e5gel sjunger.',
+    description: 'Regnskogar ersatta med gran. Planterade i raka rader. Samma DNA. Ingen fågel sjunger.',
     baseCost: 500_000_000,
     baseProduction: 1_000_000,
     unlockPhase: 8,
@@ -113,7 +113,7 @@ export const GENERATORS: GeneratorData[] = [
   {
     id: 'gen_orbital',
     name: 'Orbital Timberstation',
-    description: 'Varf\u00f6r sluta vid atmosf\u00e4ren?',
+    description: 'Varför sluta vid atmosfären?',
     baseCost: 50_000_000_000,
     baseProduction: 25_000_000,
     unlockPhase: 10,
@@ -121,8 +121,8 @@ export const GENERATORS: GeneratorData[] = [
   },
   {
     id: 'gen_terraformer',
-    name: 'Planet\u00e4r Terraformer',
-    description: 'G\u00f6r d\u00f6da planeter till granplanteringar. Exakt 1,8 meter mellanrum. \u00c4ven i vakuum.',
+    name: 'Planetär Terraformer',
+    description: 'Gör döda planeter till granplanteringar. Exakt 1,8 meter mellanrum. Även i vakuum.',
     baseCost: 500_000_000_000,
     baseProduction: 250_000_000,
     unlockPhase: 10,
@@ -130,8 +130,8 @@ export const GENERATORS: GeneratorData[] = [
   },
   {
     id: 'gen_nano',
-    name: 'Nanosk\u00f6rdare',
-    description: 'Molekyl\u00e4ra maskiner som plockar is\u00e4r tr\u00e4d atom f\u00f6r atom. Effektivt. Om\u00e4nskligt effektivt.',
+    name: 'Nanoskördare',
+    description: 'Molekylära maskiner som plockar isär träd atom för atom. Effektivt. Omänskligt effektivt.',
     baseCost: 5_000_000_000_000,
     baseProduction: 2_500_000_000,
     unlockPhase: 11,
@@ -139,8 +139,8 @@ export const GENERATORS: GeneratorData[] = [
   },
   {
     id: 'gen_dimension',
-    name: 'Dimensionssk\u00f6rdare',
-    description: 'Avverkar skog i parallella universum. Klagom\u00e5l fr\u00e5n andra dimensioner avvisas.',
+    name: 'Dimensionsskördare',
+    description: 'Avverkar skog i parallella universum. Klagomål från andra dimensioner avvisas.',
     baseCost: 50_000_000_000_000,
     baseProduction: 25_000_000_000,
     unlockPhase: 11,
@@ -149,7 +149,7 @@ export const GENERATORS: GeneratorData[] = [
   {
     id: 'gen_multiverse',
     name: 'Multiverse-Harvester',
-    description: 'Sk\u00f6rdar tr\u00e4d fr\u00e5n alla t\u00e4nkbara verkligheter. O\u00e4ndligheten \u00e4r inte nog.',
+    description: 'Skördar träd från alla tänkbara verkligheter. Oändligheten är inte nog.',
     baseCost: 500_000_000_000_000,
     baseProduction: 250_000_000_000,
     unlockPhase: 12,
@@ -158,7 +158,7 @@ export const GENERATORS: GeneratorData[] = [
   {
     id: 'gen_entropi',
     name: 'Entropimotor',
-    description: 'Extraherar energi fr\u00e5n universums termiska d\u00f6d. Sista maskinen som n\u00e5gonsin g\u00e5r.',
+    description: 'Extraherar energi från universums termiska död. Sista maskinen som någonsin går.',
     baseCost: 5_000_000_000_000_000,
     baseProduction: 2_500_000_000_000,
     unlockPhase: 12,

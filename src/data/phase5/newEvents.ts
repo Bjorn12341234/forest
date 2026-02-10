@@ -517,7 +517,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
       },
       {
         label: 'Sälj rymdvirke som lyx',
-        description: '"Space-Grown\u2122 Spruce" — 10 000 kr per planka',
+        description: '"Space-Grown™ Spruce" — 10 000 kr per planka',
         effects: [
           { resource: 'kapital', amount: 3_000_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
@@ -533,10 +533,10 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'scandal',
     headline: 'Transparency International: Sverige faller',
-    context: 'Sveriges korruptionsranking faller f\u00f6r tredje \u00e5ret i rad. Rapporten n\u00e4mner "systemisk sammanfl\u00e4tning mellan skogsindustri och stat". Er logotyp finns i marginalen.',
+    context: 'Sveriges korruptionsranking faller för tredje året i rad. Rapporten nämner "systemisk sammanflätning mellan skogsindustri och stat". Er logotyp finns i marginalen.',
     choices: [
       {
-        label: '"Korrelation \u00e4r inte kausalitet"',
+        label: '"Korrelation är inte kausalitet"',
         description: 'Statistiskt korrekt. Moraliskt suspekt.',
         effects: [
           { resource: 'image', amount: -12, type: 'add' },
@@ -545,7 +545,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
       },
       {
         label: 'Donera till Transparency International',
-        description: 'N\u00e4sta rapport kommer vara vaginare.',
+        description: 'Nästa rapport kommer vara vaginare.',
         effects: [
           { resource: 'kapital', amount: -80_000, type: 'add' },
           { resource: 'image', amount: 8, type: 'add' },
@@ -560,12 +560,12 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
     phase: 6,
     maxPhase: 6,
     category: 'crisis',
-    headline: 'Permafrost kollapsar: Metanl\u00e4ckage',
-    context: 'Er expansion i Sibirien har accelererat permafrostsmältningen. Metan bubblar ur marken. Klimateffekten: katastrofal. Er reaktion: "Vi planterar gran p\u00e5 den tinade marken."',
+    headline: 'Permafrost kollapsar: Metanläckage',
+    context: 'Er expansion i Sibirien har accelererat permafrostsmältningen. Metan bubblar ur marken. Klimateffekten: katastrofal. Er reaktion: "Vi planterar gran på den tinade marken."',
     choices: [
       {
-        label: 'Plantera p\u00e5 den tinade marken',
-        description: 'Problem = m\u00f6jlighet. Metan = v\u00e4rme = snabbare tillv\u00e4xt.',
+        label: 'Plantera på den tinade marken',
+        description: 'Problem = möjlighet. Metan = värme = snabbare tillväxt.',
         effects: [
           { resource: 'stammar', amount: 1_500_000, type: 'add' },
           { resource: 'biodiversity', amount: -8, type: 'add' },
@@ -573,8 +573,8 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Dra sig tillbaka fr\u00e5n Sibirien',
-        description: 'Ryska myndigheter \u00e4r lättade. Tillfälligt.',
+        label: 'Dra sig tillbaka från Sibirien',
+        description: 'Ryska myndigheter är lättade. Tillfälligt.',
         effects: [
           { resource: 'image', amount: 10, type: 'add' },
           { resource: 'kapital', amount: -200_000, type: 'add' },
@@ -590,10 +590,10 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'absurd',
     headline: 'Digital tvilling: Hela skogen finns i datorn',
-    context: 'Er digitala tvilling av hela den svenska skogen \u00e4r komplett. Varje tr\u00e4d har en avatar. Styrelsen fr\u00e5gar: "Kan vi avverka den digitala skogen ocks\u00e5?" Svaret: ja.',
+    context: 'Er digitala tvilling av hela den svenska skogen är komplett. Varje träd har en avatar. Styrelsen frågar: "Kan vi avverka den digitala skogen också?" Svaret: ja.',
     choices: [
       {
-        label: 'S\u00e4lj digitalt virke som NFT',
+        label: 'Sälj digitalt virke som NFT',
         description: 'Pixlar av gran. 50 000 kr per NFT.',
         effects: [
           { resource: 'kapital', amount: 2_000_000, type: 'add' },
@@ -601,8 +601,8 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Anv\u00e4nd tvillingen f\u00f6r "virtual logging"',
-        description: 'Tr\u00e4na AI p\u00e5 simulerade avverkningar. D\u00e5 g\u00e5r det snabbare p\u00e5 riktigt.',
+        label: 'Använd tvillingen för "virtual logging"',
+        description: 'Träna AI på simulerade avverkningar. Då går det snabbare på riktigt.',
         effects: [
           { resource: 'stammar', amount: 4_000_000, type: 'add' },
           { resource: 'kapital', amount: -800_000, type: 'add' },

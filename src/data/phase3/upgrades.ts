@@ -1,13 +1,13 @@
 import type { UpgradeData } from '../../store/types'
 
 export const PHASE3_UPGRADES: UpgradeData[] = [
-  // \u2550\u2550\u2550 Geopolitik (fas 5+) \u2550\u2550\u2550
+  // ═══ Geopolitik (fas 5+) ═══
   {
     id: 'geo_handelsavtal',
     name: 'Bilaterala Handelsavtal',
-    description: 'Frihandel f\u00f6r tr\u00e4varor. Tullfritt till Kina. Skogarna betalar.',
+    description: 'Frihandel för trävaror. Tullfritt till Kina. Skogarna betalar.',
     tree: 'Geopolitik',
-    icon: '\ud83e\udd1d',
+    icon: '🤝',
     baseCost: 500_000,
     costResource: 'kapital',
     production: 500,
@@ -18,9 +18,9 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   {
     id: 'geo_tankesmedja',
     name: 'Internationell Tankesmedja',
-    description: 'Frihetens Tankesmedja publicerar rapporter p\u00e5 engelska nu. Budskapet: avreglera.',
+    description: 'Frihetens Tankesmedja publicerar rapporter på engelska nu. Budskapet: avreglera.',
     tree: 'Geopolitik',
-    icon: '\ud83c\udfdb\ufe0f',
+    icon: '🏛️',
     baseCost: 1_500_000,
     costResource: 'kapital',
     production: 1500,
@@ -32,9 +32,9 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   {
     id: 'geo_fn_sabotage',
     name: 'FN-Sabotage',
-    description: 'Urvatna klimatresolutioner. Ers\u00e4tt "skydda" med "h\u00e5llbart bruka".',
+    description: 'Urvatna klimatresolutioner. Ersätt "skydda" med "hållbart bruka".',
     tree: 'Geopolitik',
-    icon: '\ud83c\uddfa\ud83c\uddf3',
+    icon: '🇺🇳',
     baseCost: 5_000_000,
     costResource: 'kapital',
     production: 5000,
@@ -46,9 +46,9 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   {
     id: 'geo_kolonialt',
     name: 'Kolonialt Ramverk',
-    description: 'Exportera den svenska modellen. Monokulturer \u00e5t alla.',
+    description: 'Exportera den svenska modellen. Monokulturer åt alla.',
     tree: 'Geopolitik',
-    icon: '\ud83c\udf0d',
+    icon: '🌍',
     baseCost: 20_000_000,
     costResource: 'kapital',
     production: 20000,
@@ -58,13 +58,13 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
     phase: 6,
   },
 
-  // \u2550\u2550\u2550 Genetik (fas 6+) \u2550\u2550\u2550
+  // ═══ Genetik (fas 6+) ═══
   {
     id: 'gen_crispr',
     name: 'CRISPR-Gran',
-    description: 'Genetiskt modifierad gran. V\u00e4xer dubbelt s\u00e5 snabbt. D\u00f6r dubbelt s\u00e5 tidigt.',
+    description: 'Genetiskt modifierad gran. Växer dubbelt så snabbt. Dör dubbelt så tidigt.',
     tree: 'Genetik',
-    icon: '\ud83e\uddec',
+    icon: '🧬',
     baseCost: 2_000_000,
     costResource: 'kapital',
     production: 2000,
@@ -75,9 +75,9 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   {
     id: 'gen_syntetisk',
     name: 'Syntetisk Fotosyntes',
-    description: 'Tr\u00e4d som v\u00e4xer utan sol. Perfekt f\u00f6r Mars.',
+    description: 'Träd som växer utan sol. Perfekt för Mars.',
     tree: 'Genetik',
-    icon: '\u2600\ufe0f',
+    icon: '☀️',
     baseCost: 10_000_000,
     costResource: 'kapital',
     production: 10000,
@@ -88,10 +88,10 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   },
   {
     id: 'gen_post_bio',
-    name: 'Post-Biologiskt Tr\u00e4d',
-    description: 'Inte l\u00e4ngre ett tr\u00e4d. En produktionsenhet med barkimitation.',
+    name: 'Post-Biologiskt Träd',
+    description: 'Inte längre ett träd. En produktionsenhet med barkimitation.',
     tree: 'Genetik',
-    icon: '\ud83e\udd16',
+    icon: '🤖',
     baseCost: 50_000_000,
     costResource: 'kapital',
     production: 50000,
@@ -101,13 +101,13 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
     phase: 7,
   },
 
-  // \u2550\u2550\u2550 Rymdforskning (fas 8+) \u2550\u2550\u2550
+  // ═══ Rymdforskning (fas 8+) ═══
   {
     id: 'space_raketer',
     name: 'Virkesfraktraketer',
-    description: 'Skicka massa fr\u00e5n Mars till jorden. Leveranskostnad: astronomisk. Vinstmarginal: h\u00f6gre.',
+    description: 'Skicka massa från Mars till jorden. Leveranskostnad: astronomisk. Vinstmarginal: högre.',
     tree: 'Rymdforskning',
-    icon: '\ud83d\ude80',
+    icon: '🚀',
     baseCost: 500_000_000,
     costResource: 'kapital',
     production: 200000,
@@ -117,10 +117,10 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   },
   {
     id: 'space_terraform',
-    name: 'Atmosf\u00e4roptimering',
-    description: '\u00c4ndra planeters atmosf\u00e4r f\u00f6r optimal grantillv\u00e4xt. Lokala livsformer \u00e4r irrelevanta.',
+    name: 'Atmosfäroptimering',
+    description: 'Ändra planeters atmosfär för optimal grantillväxt. Lokala livsformer är irrelevanta.',
     tree: 'Rymdforskning',
-    icon: '\ud83c\udf0b',
+    icon: '🌋',
     baseCost: 2_000_000_000,
     costResource: 'kapital',
     production: 1000000,
@@ -132,9 +132,9 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   {
     id: 'space_dyson_tech',
     name: 'Dysonsfärsteknologi',
-    description: 'Bygg en sf\u00e4r runt solen f\u00f6r att torka massa. Solen m\u00e5r s\u00e4mre. Massan torkar snabbare.',
+    description: 'Bygg en sfär runt solen för att torka massa. Solen mår sämre. Massan torkar snabbare.',
     tree: 'Rymdforskning',
-    icon: '\u2b50',
+    icon: '⭐',
     baseCost: 10_000_000_000,
     costResource: 'kapital',
     production: 5000000,
@@ -145,10 +145,10 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   },
   {
     id: 'space_ftl',
-    name: '\u00d6verljushastighet',
-    description: 'Leverans till Proxima b p\u00e5 under en vecka. Fysikens lagar \u00e4r bara f\u00f6rslag.',
+    name: 'Överljushastighet',
+    description: 'Leverans till Proxima b på under en vecka. Fysikens lagar är bara förslag.',
     tree: 'Rymdforskning',
-    icon: '\ud83d\udca8',
+    icon: '💨',
     baseCost: 100_000_000_000,
     costResource: 'kapital',
     production: 20000000,
@@ -160,9 +160,9 @@ export const PHASE3_UPGRADES: UpgradeData[] = [
   {
     id: 'space_multiverse_tech',
     name: 'Dimensionsportal',
-    description: '\u00d6ppna portaler till parallella universum. Avverka deras skogar. Skicka fakturan hit.',
+    description: 'Öppna portaler till parallella universum. Avverka deras skogar. Skicka fakturan hit.',
     tree: 'Rymdforskning',
-    icon: '\ud83c\udf00',
+    icon: '🌀',
     baseCost: 1_000_000_000_000,
     costResource: 'kapital',
     production: 100000000,

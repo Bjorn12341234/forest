@@ -12,7 +12,7 @@ export function OwnerTicker() {
 
   if (headlines.length === 0) return null
 
-  const tickerText = headlines.join('  \u00b7\u00b7\u00b7  ')
+  const tickerText = headlines.join('  ···  ')
 
   return (
     <div

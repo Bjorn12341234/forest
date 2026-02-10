@@ -98,12 +98,12 @@ export function IndustryLureModal() {
                   }}
                 >
                   <span className="text-base font-medium" style={{ color: revealed ? '#CC3333' : '#D4730C' }}>
-                    {revealed ? 'Acceptera \u00e4nd\u00e5' : 'Acceptera erbjudandet'}
+                    {revealed ? 'Acceptera ändå' : 'Acceptera erbjudandet'}
                   </span>
                   {revealed && (
                     <p className="text-sm text-[#3D2B1F]/60 mt-1">
                       {lure.acceptEffects.skogsvardering
-                        ? `-${Math.round((1 - lure.acceptEffects.skogsvardering) * 100)}% Skogsv\u00e4rdering`
+                        ? `-${Math.round((1 - lure.acceptEffects.skogsvardering) * 100)}% Skogsvärdering`
                         : ''}
                       {lure.acceptEffects.resiliensPenalty ? ` -${lure.acceptEffects.resiliensPenalty} Resiliens` : ''}
                       {lure.acceptEffects.biodivPenalty ? ` -${lure.acceptEffects.biodivPenalty} Biodiversitet` : ''}

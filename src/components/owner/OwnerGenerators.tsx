@@ -66,7 +66,7 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
   if (data.bonuses?.resiliens) parts.push(`+resiliens`)
   if (data.bonuses?.kunskap) parts.push(`+kunskap`)
   if (data.bonuses?.legacy) parts.push(`+arv`)
-  if (data.bonuses?.deadwood) parts.push(`+d\u00f6d ved`)
+  if (data.bonuses?.deadwood) parts.push(`+död ved`)
   const productionLabel = parts.join(', ')
 
   return (

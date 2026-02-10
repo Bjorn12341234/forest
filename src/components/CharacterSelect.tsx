@@ -44,15 +44,15 @@ export function CharacterSelect() {
             onClick={() => setGameMode('industry')}
             className="flex flex-col gap-4 p-6 bg-[#1E1E1E] border-2 border-[#383838] rounded-sm cursor-pointer text-left transition-colors"
           >
-            <span className="text-4xl">{'\uD83C\uDFED'}</span>
+            <span className="text-4xl">{'🏭'}</span>
             <h2 className="text-lg font-bold tracking-wider text-[#D4730C]">
               SKOGSINDUSTRIN
             </h2>
             <p className="text-sm text-[#B0B0B0] leading-relaxed">
-              &quot;Massaindustrin AB s\u00f6ker nya tillv\u00e4xtm\u00f6jligheter i den svenska skogen.&quot;
+              &quot;Massaindustrin AB söker nya tillväxtmöjligheter i den svenska skogen.&quot;
             </p>
             <span className="text-xs text-[#8A8A8A] uppercase tracking-widest mt-auto">
-              V\u00e4lj
+              Välj
             </span>
           </motion.button>
 
@@ -66,15 +66,15 @@ export function CharacterSelect() {
             onClick={() => setGameMode('owner')}
             className="flex flex-col gap-4 p-6 bg-[#1E1E1E] border-2 border-[#383838] rounded-sm cursor-pointer text-left transition-colors"
           >
-            <span className="text-4xl">{'\uD83C\uDF32'}</span>
+            <span className="text-4xl">{'🌲'}</span>
             <h2 className="text-lg font-bold tracking-wider text-[#2D6A4F]">
-              SKOGS\u00c4GAREN
+              SKOGSÄGAREN
             </h2>
             <p className="text-sm text-[#B0B0B0] leading-relaxed">
-              &quot;Du \u00e4rvde 80 hektar i \u00c5ngermanland. Din farfar planterade de d\u00e4r tr\u00e4den.&quot;
+              &quot;Du ärvde 80 hektar i Ångermanland. Din farfar planterade de där träden.&quot;
             </p>
             <span className="text-xs text-[#8A8A8A] uppercase tracking-widest mt-auto">
-              V\u00e4lj
+              Välj
             </span>
           </motion.button>
         </div>

@@ -117,7 +117,7 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
                   }}
                 >
                   <span className={`text-xl flex-shrink-0 ${isUnlocked ? '' : 'grayscale'}`}>
-                    {isUnlocked ? a.icon : '\ud83d\udd12'}
+                    {isUnlocked ? a.icon : '🔒'}
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
