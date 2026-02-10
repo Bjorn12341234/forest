@@ -44,7 +44,7 @@ export function IndustryAttackModal() {
               aria-label={atk.name}
               className="p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto rounded-xl"
               style={{
-                background: '#F5F0E8',
+                background: 'var(--color-owner-bg)',
                 border: '2px solid #CC3333',
                 boxShadow: '0 0 40px rgba(204,51,51,0.2), 0 4px 24px rgba(0,0,0,0.3)',
               }}
@@ -64,12 +64,12 @@ export function IndustryAttackModal() {
               </div>
 
               {/* Name */}
-              <h2 className="text-xl font-bold text-[#3D2B1F] leading-tight mb-3">
+              <h2 className="text-xl font-bold text-owner-text leading-tight mb-3">
                 {atk.name}
               </h2>
 
               {/* Description */}
-              <p className="text-base text-[#3D2B1F]/80 leading-relaxed mb-6">
+              <p className="text-base text-owner-text/80 leading-relaxed mb-6">
                 {atk.description}
               </p>
 
@@ -86,15 +86,15 @@ export function IndustryAttackModal() {
                     opacity: canResist ? 1 : 0.5,
                   }}
                 >
-                  <span className="text-base font-medium text-[#2D6A4F]">
+                  <span className="text-base font-medium text-owner-accent">
                     Motstå
                   </span>
-                  <p className="text-sm text-[#3D2B1F]/60 mt-1">
+                  <p className="text-sm text-owner-text/60 mt-1">
                     Kräver {atk.kunskapRequired} Kunskap
                     {atk.extraCostAmount ? ` + ${atk.extraCostAmount.toLocaleString('sv-SE')} Inkomst` : ''}
                   </p>
                   {canResist && (
-                    <p className="text-xs text-[#2D6A4F]/70 mt-2 italic">
+                    <p className="text-xs text-owner-accent/70 mt-2 italic">
                       {atk.resistFlavour}
                     </p>
                   )}
@@ -112,7 +112,7 @@ export function IndustryAttackModal() {
                   <span className="text-base font-medium text-[#CC3333]">
                     Ge efter
                   </span>
-                  <p className="text-sm text-[#3D2B1F]/60 mt-1">
+                  <p className="text-sm text-owner-text/60 mt-1">
                     {atk.acceptEffects.description}
                   </p>
                 </button>

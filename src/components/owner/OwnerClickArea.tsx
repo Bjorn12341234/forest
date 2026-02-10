@@ -60,17 +60,17 @@ export function OwnerClickArea() {
     <div className="flex flex-col items-center gap-4">
       {/* Skogsvärde Counter */}
       <div className="text-center">
-        <div className="text-[#3D2B1F]/60 text-sm uppercase tracking-wider mb-1">Skogsvärde</div>
+        <div className="text-owner-text/60 text-sm uppercase tracking-wider mb-1">Skogsvärde</div>
         <AnimatedNumber
           value={skogsvardering}
-          className="font-display text-[#2D6A4F]"
+          className="font-display text-owner-accent"
         />
         <div className="flex gap-4 justify-center mt-1">
-          <span className="text-[#3D2B1F]/50 text-sm">
+          <span className="text-owner-text/50 text-sm">
             +{formatNumber(svPerClick)}/klick
           </span>
           {svPerSecond > 0 && (
-            <span className="text-[#3D2B1F]/50 text-sm">
+            <span className="text-owner-text/50 text-sm">
               {formatNumber(svPerSecond)}/s
             </span>
           )}
@@ -86,26 +86,26 @@ export function OwnerClickArea() {
           whileHover={{ scale: 1.03 }}
           onClick={handleClick}
           className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
-                     border-2 border-[#2D6A4F]/40 bg-[#2D6A4F]/10
+                     border-2 border-owner-accent/40 bg-owner-accent/10
                      flex items-center justify-center
-                     hover:border-[#2D6A4F] transition-colors"
+                     hover:border-owner-accent transition-colors"
         >
-          <div className="absolute inset-2 rounded-full border border-[#2D6A4F]/20" />
-          <span className="text-[#2D6A4F] font-bold text-sm sm:text-base text-center leading-tight px-4">
+          <div className="absolute inset-2 rounded-full border border-owner-accent/20" />
+          <span className="text-owner-accent font-bold text-sm sm:text-base text-center leading-tight px-4">
             VÅRDA{'\n'}SKOG
           </span>
         </motion.button>
       </div>
 
       {/* Flavourtext */}
-      <p className="text-[#3D2B1F]/50 text-sm italic text-center max-w-sm leading-relaxed px-2">
+      <p className="text-owner-text/50 text-sm italic text-center max-w-sm leading-relaxed px-2">
         {flavour}
       </p>
 
       {/* Click Upgrades */}
       {visibleUpgrades.length > 0 && (
         <div className="w-full mt-2">
-          <h3 className="text-sm font-medium text-[#3D2B1F]/70 uppercase tracking-wider mb-2">
+          <h3 className="text-sm font-medium text-owner-text/70 uppercase tracking-wider mb-2">
             Klick-uppgraderingar
           </h3>
           <div className="flex flex-col gap-1.5">
@@ -116,27 +116,27 @@ export function OwnerClickArea() {
                 <div
                   key={cu.id}
                   className={`bg-white/60 border rounded-sm p-3 select-none
-                    ${purchased ? 'border-[#2D6A4F]/30' : canAfford ? 'border-[#2D6A4F]/50 cursor-pointer hover:border-[#2D6A4F]' : 'border-[#3D2B1F]/10 opacity-50'}`}
+                    ${purchased ? 'border-owner-accent/30' : canAfford ? 'border-owner-accent/50 cursor-pointer hover:border-owner-accent' : 'border-owner-text/10 opacity-50'}`}
                   onClick={() => canAfford && buyOwnerClickUpgrade(cu.id)}
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-lg flex-shrink-0">{cu.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-[#3D2B1F]">{cu.name}</span>
-                        {purchased && <span className="w-2 h-2 rounded-full bg-[#2D6A4F] flex-shrink-0" />}
+                        <span className="text-sm font-medium text-owner-text">{cu.name}</span>
+                        {purchased && <span className="w-2 h-2 rounded-full bg-owner-accent flex-shrink-0" />}
                       </div>
-                      <p className="text-xs text-[#3D2B1F]/50 leading-relaxed">{cu.description}</p>
+                      <p className="text-xs text-owner-text/50 leading-relaxed">{cu.description}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
                       {purchased ? (
-                        <span className="text-xs text-[#2D6A4F]">Köpt</span>
+                        <span className="text-xs text-owner-accent">Köpt</span>
                       ) : (
-                        <span className={`text-sm font-numbers ${canAfford ? 'text-[#2D6A4F]' : 'text-[#3D2B1F]/40'}`}>
+                        <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/40'}`}>
                           {formatNumber(cu.cost)} tkr
                         </span>
                       )}
-                      <div className="text-xs text-[#3D2B1F]/50">+{cu.svPerClickBonus}/klick</div>
+                      <div className="text-xs text-owner-text/50">+{cu.svPerClickBonus}/klick</div>
                     </div>
                   </div>
                 </div>

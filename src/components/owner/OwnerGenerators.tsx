@@ -12,7 +12,7 @@ export function OwnerGenerators() {
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-base font-medium text-[#3D2B1F] mb-1">Ekologiska processer</h2>
+      <h2 className="text-base font-medium text-owner-text mb-1">Ekologiska processer</h2>
 
       <div className="flex flex-col gap-2">
         <AnimatePresence initial={false}>
@@ -72,7 +72,7 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
   return (
     <div
       className={`relative overflow-hidden bg-white/60 border rounded-sm p-3 select-none
-        ${canAfford ? 'border-[#2D6A4F]/50 cursor-pointer hover:border-[#2D6A4F]' : 'border-[#3D2B1F]/10 opacity-60'}`}
+        ${canAfford ? 'border-owner-accent/50 cursor-pointer hover:border-owner-accent' : 'border-owner-text/10 opacity-60'}`}
       onClick={handleBuy}
     >
       {/* Flash overlay */}
@@ -83,7 +83,7 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
             animate={{ opacity: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="absolute inset-0 bg-[#2D6A4F]/20 z-10"
+            className="absolute inset-0 bg-owner-accent/20 z-10"
           />
         )}
       </AnimatePresence>
@@ -91,21 +91,21 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
       <div className="flex items-start gap-3">
         {/* Count badge */}
         <div className="flex flex-col items-center flex-shrink-0 w-10">
-          <span className="text-lg font-bold text-[#2D6A4F] font-numbers">{count}</span>
-          <span className="text-xs text-[#3D2B1F]/40 uppercase">st</span>
+          <span className="text-lg font-bold text-owner-accent font-numbers">{count}</span>
+          <span className="text-xs text-owner-text/40 uppercase">st</span>
         </div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-[#3D2B1F]">{data.name}</h3>
-          <p className="text-xs text-[#3D2B1F]/50 leading-relaxed mt-0.5">
+          <h3 className="text-sm font-medium text-owner-text">{data.name}</h3>
+          <p className="text-xs text-owner-text/50 leading-relaxed mt-0.5">
             {data.description}
           </p>
           <div className="flex items-center justify-between mt-1">
-            <span className={`text-sm font-numbers ${canAfford ? 'text-[#2D6A4F]' : 'text-[#3D2B1F]/40'}`}>
+            <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/40'}`}>
               {formatNumber(cost)} sv
             </span>
-            <span className="text-xs text-[#3D2B1F]/60 font-numbers">
+            <span className="text-xs text-owner-text/60 font-numbers">
               {productionLabel}
             </span>
           </div>

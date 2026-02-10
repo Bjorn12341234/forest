@@ -753,33 +753,41 @@
 
 ### 8E — Kodkvalitet
 
-- [ ] 8E-1: Splitta ExpansionPanel.tsx (808 rader)
+- [x] 8E-1: Splitta ExpansionPanel.tsx (857 rader)
   - Extrahera `CountryPanel.tsx` — landsval, karta, invasion-UI
   - Extrahera `PressureSliders.tsx` — tryckfördelnings-sliders
   - Extrahera `SpaceTargetPanel.tsx` — EXPANSION fas 10+ targets
   - `ExpansionPanel.tsx` blir tunn wrapper som routar till rätt sub-panel baserat på era
 
-- [ ] 8E-2: Owner Theme CSS Variables
+- [x] 8E-2: Owner Theme CSS Variables
   - Flytta hardcoded `#2D6A4F`, `#F5F0E8`, `#3D2B1F` till CSS custom properties i global.css
   - Definiera under `[data-mode="owner"]` eller dedikerat `@theme` block
   - Uppdatera alla owner-komponenter att använda variablerna
   - Gör det möjligt att justera owner-tema på ett ställe
 
-- [ ] 8E-3: Error Boundaries
+- [x] 8E-3: Error Boundaries
   - Wrappa EventModal, AchievementPanel, ExpansionPanel i React error boundaries
   - Fallback-UI: "Något gick fel — stäng och försök igen"
   - Logga felinfo till console för debugging
   - Förhindra att malformerad event/achievement-data kraschar hela appen
 
+**Notes:** 8E complete. Key changes:
+- **8E-1**: Split 857-line ExpansionPanel.tsx into `src/components/expansion/` directory: `MapBackgrounds.tsx` (SVG maps + view types), `CostBadge.tsx` (shared), `CountryPanel.tsx` (country invasion + detail + pressure sliders + auto-allocate), `SpaceExpansionPanel.tsx` (space targets + detail). Original file → 27-line thin wrapper.
+- **8E-2**: Added `--color-owner-bg`, `--color-owner-accent`, `--color-owner-text` to `@theme` in global.css. Replaced 111 hardcoded hex values across 11 files with Tailwind theme tokens (`owner-accent`, `owner-text`, `owner-bg`). Inline `style={}` uses `var(--color-owner-accent)` etc.
+- **8E-3**: New `ErrorBoundary` class component with Swedish fallback ("Något gick fel i {label}") + retry button. Wraps: EventModal, main tab content, IndustryAttackModal, IndustryLureModal, owner tab content.
+- Build: TypeScript clean, Vite build passes.
+
 ### 8F — Verifiering
 
-- [ ] 8F-1: Build & Test
+- [x] 8F-1: Build & Test
   - TypeScript clean (`npx tsc --noEmit`)
   - Vite build lyckad
   - Verifiera save migration (v6 intakt, inga nya state-fält kräver migration)
   - Snabb playtest: fas 1–3 (performance), fas 7 (auto-allocate), fas 10+ (nya events)
   - Lighthouse accessibility audit (sikta 90+)
   - Deploy till GitHub Pages
+
+**Notes:** 8F complete. Build: 207KB gzipped, TypeScript clean. Save version 6 intact — no new state fields added in Sprint 8. Ready for deploy.
 
 ---
 

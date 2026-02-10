@@ -67,7 +67,7 @@ export function CharacterSelect() {
             className="flex flex-col gap-4 p-6 bg-[#1E1E1E] border-2 border-[#383838] rounded-sm cursor-pointer text-left transition-colors"
           >
             <span className="text-4xl">{'🌲'}</span>
-            <h2 className="text-lg font-bold tracking-wider text-[#2D6A4F]">
+            <h2 className="text-lg font-bold tracking-wider text-owner-accent">
               SKOGSÄGAREN
             </h2>
             <p className="text-sm text-[#B0B0B0] leading-relaxed">

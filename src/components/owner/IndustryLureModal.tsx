@@ -44,7 +44,7 @@ export function IndustryLureModal() {
               aria-label={lure.name}
               className="p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto rounded-xl"
               style={{
-                background: '#F5F0E8',
+                background: 'var(--color-owner-bg)',
                 border: '2px solid #D4730C',
                 boxShadow: '0 0 40px rgba(212,115,12,0.2), 0 4px 24px rgba(0,0,0,0.3)',
               }}
@@ -64,12 +64,12 @@ export function IndustryLureModal() {
               </div>
 
               {/* Name */}
-              <h2 className="text-xl font-bold text-[#3D2B1F] leading-tight mb-3">
+              <h2 className="text-xl font-bold text-owner-text leading-tight mb-3">
                 {lure.name}
               </h2>
 
               {/* Offer */}
-              <p className="text-base text-[#3D2B1F]/80 leading-relaxed mb-4">
+              <p className="text-base text-owner-text/80 leading-relaxed mb-4">
                 {lure.offer}
               </p>
 
@@ -82,7 +82,7 @@ export function IndustryLureModal() {
                   style={{ background: 'rgba(204,51,51,0.08)', border: '1px solid rgba(204,51,51,0.2)' }}
                 >
                   <p className="text-sm text-[#CC3333] font-medium mb-1">Sanningen:</p>
-                  <p className="text-sm text-[#3D2B1F]/70">{lure.trap}</p>
+                  <p className="text-sm text-owner-text/70">{lure.trap}</p>
                 </motion.div>
               )}
 
@@ -107,7 +107,7 @@ export function IndustryLureModal() {
                     {revealed ? 'Acceptera ändå' : 'Acceptera erbjudandet'}
                   </span>
                   {revealed && (
-                    <p className="text-sm text-[#3D2B1F]/60 mt-1">
+                    <p className="text-sm text-owner-text/60 mt-1">
                       {lure.acceptEffects.skogsvardering
                         ? `-${Math.round((1 - lure.acceptEffects.skogsvardering) * 100)}% Skogsvärdering`
                         : ''}
@@ -131,14 +131,14 @@ export function IndustryLureModal() {
                     opacity: canDecline ? 1 : 0.5,
                   }}
                 >
-                  <span className="text-base font-medium text-[#2D6A4F]">
+                  <span className="text-base font-medium text-owner-accent">
                     Tacka nej
                   </span>
-                  <p className="text-sm text-[#3D2B1F]/60 mt-1">
+                  <p className="text-sm text-owner-text/60 mt-1">
                     {lure.declineText}
                   </p>
                   {lure.declineEffects.inkomstCost && (
-                    <p className="text-xs text-[#3D2B1F]/50 mt-1">
+                    <p className="text-xs text-owner-text/50 mt-1">
                       Kostar {lure.declineEffects.inkomstCost.toLocaleString('sv-SE')} Inkomst
                       {lure.declineEffects.kunskapGain ? `, +${lure.declineEffects.kunskapGain} Kunskap` : ''}
                     </p>

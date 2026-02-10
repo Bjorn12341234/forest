@@ -15,6 +15,11 @@
   --color-text-secondary: #B0B0B0;
   --color-text-muted: #969696;
 
+  /* Owner (Skogsägare) theme */
+  --color-owner-bg: #F5F0E8;
+  --color-owner-accent: #2D6A4F;
+  --color-owner-text: #3D2B1F;
+
   --font-ui: 'IBM Plex Mono', 'Courier New', monospace;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
   --font-headline: 'IBM Plex Mono', 'Courier New', monospace;

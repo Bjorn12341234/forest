@@ -24,7 +24,7 @@ export function OwnerDashboard() {
         <OwnerResourceCard
           label="Resiliens"
           value={resiliens}
-          className={resiliens > 50 ? 'text-[#2D6A4F]' : resiliens > 20 ? 'text-[#B8860B]' : 'text-[#CC2222]'}
+          className={resiliens > 50 ? 'text-owner-accent' : resiliens > 20 ? 'text-[#B8860B]' : 'text-[#CC2222]'}
         />
       </div>
 
@@ -56,14 +56,14 @@ function OwnerResourceCard({ label, value, format, className = '' }: {
   className?: string
 }) {
   return (
-    <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
+    <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
       <div className="flex flex-col gap-0.5">
-        <span className="text-[#3D2B1F]/60 text-xs uppercase tracking-wider">
+        <span className="text-owner-text/60 text-xs uppercase tracking-wider">
           {label}
         </span>
         <AnimatedNumber
           value={value}
-          className={`text-lg text-[#3D2B1F] ${className}`}
+          className={`text-lg text-owner-text ${className}`}
           format={format}
         />
       </div>
@@ -77,12 +77,12 @@ function OwnerMeterCard({ label, value, unit }: {
   unit?: string
 }) {
   return (
-    <div className="bg-white/40 border border-[#2D6A4F]/10 rounded-sm p-2">
+    <div className="bg-white/40 border border-owner-accent/10 rounded-sm p-2">
       <div className="flex flex-col gap-0.5">
-        <span className="text-[#3D2B1F]/40 text-[0.65rem] uppercase tracking-wider">
+        <span className="text-owner-text/40 text-[0.65rem] uppercase tracking-wider">
           {label}
         </span>
-        <span className="text-sm font-numbers text-[#2D6A4F]">
+        <span className="text-sm font-numbers text-owner-accent">
           {formatNumber(value)}{unit ? ` ${unit}` : ''}
         </span>
       </div>

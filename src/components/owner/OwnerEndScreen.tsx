@@ -155,8 +155,8 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
               onClick={() => setStage('reality')}
               className="px-8 py-3 text-sm font-bold tracking-wider cursor-pointer border-none transition-colors"
               style={{
-                background: '#2D6A4F',
-                color: '#F5F0E8',
+                background: 'var(--color-owner-accent)',
+                color: 'var(--color-owner-bg)',
                 fontFamily: 'IBM Plex Mono, monospace',
               }}
             >
@@ -178,7 +178,7 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
   return (
     <motion.div
       className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-      style={{ background: '#F5F0E8' }}
+      style={{ background: 'var(--color-owner-bg)' }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 2 }}
@@ -191,14 +191,14 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
           transition={{ delay: 0.5, duration: 1 }}
           className="text-center mb-10"
         >
-          <p className="text-[0.6rem] tracking-[0.3em] text-[#3D2B1F]/40 mb-2">SKOGSÄGARENS</p>
+          <p className="text-[0.6rem] tracking-[0.3em] text-owner-text/40 mb-2">SKOGSÄGARENS</p>
           <h1
-            className="text-2xl font-bold tracking-wider text-[#2D6A4F]"
+            className="text-2xl font-bold tracking-wider text-owner-accent"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
             GENERATIONSARV
           </h1>
-          <div className="w-16 h-px bg-[#2D6A4F]/30 mx-auto mt-4" />
+          <div className="w-16 h-px bg-owner-accent/30 mx-auto mt-4" />
         </motion.div>
 
         {/* Stats */}
@@ -214,7 +214,7 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
               transition={{ duration: 0.8 }}
               className="my-6 text-center"
             >
-              <p className="text-[0.55rem] tracking-[0.4em] text-[#2D6A4F]/60 font-bold">
+              <p className="text-[0.55rem] tracking-[0.4em] text-owner-accent/60 font-bold">
                 — SKOGENS TILLSTÅND —
               </p>
             </motion.div>
@@ -251,23 +251,23 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mt-4 py-3 border-t border-[#2D6A4F]/15"
+              className="mt-4 py-3 border-t border-owner-accent/15"
             >
-              <p className="text-[0.55rem] tracking-wider text-[#3D2B1F]/40 mb-2">MOTSTÅND MOT INDUSTRIN</p>
+              <p className="text-[0.55rem] tracking-wider text-owner-text/40 mb-2">MOTSTÅND MOT INDUSTRIN</p>
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between items-center text-xs" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
-                  <span className="text-[#3D2B1F]/50">Attacker motstådda</span>
-                  <span className="text-[#2D6A4F] font-bold">{resistedCount}</span>
+                  <span className="text-owner-text/50">Attacker motstådda</span>
+                  <span className="text-owner-accent font-bold">{resistedCount}</span>
                 </div>
                 {surrenderedCount > 0 && (
                   <div className="flex justify-between items-center text-xs" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
-                    <span className="text-[#3D2B1F]/50">Attacker accepterade</span>
+                    <span className="text-owner-text/50">Attacker accepterade</span>
                     <span className="text-[#CC3333]/70">{surrenderedCount}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center text-xs" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
-                  <span className="text-[#3D2B1F]/50">Lockelser avböjda</span>
-                  <span className="text-[#2D6A4F] font-bold">{luresDeclined}</span>
+                  <span className="text-owner-text/50">Lockelser avböjda</span>
+                  <span className="text-owner-accent font-bold">{luresDeclined}</span>
                 </div>
               </div>
             </motion.div>
@@ -283,19 +283,19 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="mt-10 text-center"
             >
-              <div className="w-16 h-px bg-[#2D6A4F]/20 mx-auto mb-6" />
+              <div className="w-16 h-px bg-owner-accent/20 mx-auto mb-6" />
               <button
                 onClick={handlePostCredits}
                 className="px-8 py-3 text-xs font-bold tracking-[0.2em] cursor-pointer border-none transition-colors"
                 style={{
-                  background: '#2D6A4F',
-                  color: '#F5F0E8',
+                  background: 'var(--color-owner-accent)',
+                  color: 'var(--color-owner-bg)',
                   fontFamily: 'IBM Plex Mono, monospace',
                 }}
               >
                 LÄMNA SKOGEN TILL NÄSTA GENERATION
               </button>
-              <p className="text-[0.5rem] text-[#3D2B1F]/40 mt-3 italic">
+              <p className="text-[0.5rem] text-owner-text/40 mt-3 italic">
                 Dina barnbarn ärver en skog, inte ett plantage.
               </p>
             </motion.div>
@@ -322,20 +322,20 @@ function OwnerRevealRow({ step, current, label, value, subtext }: {
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6 }}
-      className="py-2.5 border-b border-[#2D6A4F]/10 flex justify-between items-baseline gap-4"
+      className="py-2.5 border-b border-owner-accent/10 flex justify-between items-baseline gap-4"
     >
-      <span className="text-xs text-[#3D2B1F]/50" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
+      <span className="text-xs text-owner-text/50" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
         {label}
       </span>
       <div className="text-right">
         <span
-          className="text-sm font-bold text-[#2D6A4F]"
+          className="text-sm font-bold text-owner-accent"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
           {value}
         </span>
         {subtext && (
-          <p className="text-[0.5rem] text-[#3D2B1F]/35 mt-0.5">{subtext}</p>
+          <p className="text-[0.5rem] text-owner-text/35 mt-0.5">{subtext}</p>
         )}
       </div>
     </motion.div>
@@ -423,7 +423,7 @@ function OwnerRealityPage({ onContinue, onReset }: { onContinue: () => void; onR
             href="https://naturhansyn.se/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 mb-12 px-6 py-3 border border-[#2D6A4F] text-[#A8D5BA] text-xs font-bold tracking-[0.15em] no-underline hover:bg-[#2D6A4F]/20 transition-colors"
+            className="inline-block mt-4 mb-12 px-6 py-3 border border-owner-accent text-[#A8D5BA] text-xs font-bold tracking-[0.15em] no-underline hover:bg-owner-accent/20 transition-colors"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
             FÖRENINGEN NATURHÄNSYN

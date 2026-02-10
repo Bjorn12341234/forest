@@ -25,10 +25,10 @@ export function OwnerTicker() {
       }}
     >
       <div className="absolute inset-0 flex items-center animate-ticker whitespace-nowrap">
-        <span className="text-sm text-[#3D2B1F]/70 tracking-wide px-4">
+        <span className="text-sm text-owner-text/70 tracking-wide px-4">
           {tickerText}
         </span>
-        <span className="text-sm text-[#3D2B1F]/70 tracking-wide px-4">
+        <span className="text-sm text-owner-text/70 tracking-wide px-4">
           {tickerText}
         </span>
       </div>

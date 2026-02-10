@@ -29,6 +29,7 @@ import { IndustryAttackModal } from './components/owner/IndustryAttackModal'
 import { IndustryLureModal } from './components/owner/IndustryLureModal'
 import { OwnerTicker } from './components/owner/OwnerTicker'
 import { OwnerEndScreen } from './components/owner/OwnerEndScreen'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -124,7 +125,9 @@ function App() {
       <AchievementToastManager toasts={toasts} onDismiss={dismissToast} />
 
       {/* Event Modal */}
-      <EventModal />
+      <ErrorBoundary fallbackLabel="Händelser">
+        <EventModal />
+      </ErrorBoundary>
 
       {/* Offline Return Modal */}
       <OfflineReturnModal report={offlineReport} onDismiss={handleDismissOffline} />
@@ -177,10 +180,12 @@ function App() {
             transition={{ duration: 0.2 }}
             className="p-4"
           >
-            {activeTab === 'dashboard' && <Dashboard />}
-            {activeTab === 'research' && <ResearchTree />}
-            {activeTab === 'lobby' && <LobbyPanel />}
-            {activeTab === 'expansion' && <ExpansionPanel />}
+            <ErrorBoundary fallbackLabel="Spelinnehåll">
+              {activeTab === 'dashboard' && <Dashboard />}
+              {activeTab === 'research' && <ResearchTree />}
+              {activeTab === 'lobby' && <LobbyPanel />}
+              {activeTab === 'expansion' && <ExpansionPanel />}
+            </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
       </main>
@@ -262,7 +267,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">
+    <div className="flex flex-col min-h-dvh bg-owner-bg" data-mode="owner">
       {/* Owner News Ticker */}
       <OwnerTicker />
 
@@ -270,13 +275,19 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
       <AchievementToastManager toasts={toasts} onDismiss={onDismissToast} />
 
       {/* Event Modal (owner events) */}
-      <EventModal />
+      <ErrorBoundary fallbackLabel="Händelser">
+        <EventModal />
+      </ErrorBoundary>
 
       {/* Industry Attack Modal */}
-      <IndustryAttackModal />
+      <ErrorBoundary fallbackLabel="Industriattack">
+        <IndustryAttackModal />
+      </ErrorBoundary>
 
       {/* Industry Lure Modal */}
-      <IndustryLureModal />
+      <ErrorBoundary fallbackLabel="Lockelse">
+        <IndustryLureModal />
+      </ErrorBoundary>
 
       {/* Achievement Panel */}
       <AnimatePresence>
@@ -303,8 +314,10 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
             transition={{ duration: 0.2 }}
             className="p-4"
           >
-            {ownerTab === 'dashboard' && <OwnerDashboard />}
-            {ownerTab === 'knowledge' && <KnowledgePanel />}
+            <ErrorBoundary fallbackLabel="Spelinnehåll">
+              {ownerTab === 'dashboard' && <OwnerDashboard />}
+              {ownerTab === 'knowledge' && <KnowledgePanel />}
+            </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
       </main>
@@ -313,7 +326,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
       <div className="fixed top-12 right-2 z-40 flex flex-col gap-1.5">
         <button
           onClick={onShowSettings}
-          className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-full bg-white/60 border border-owner-accent/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
           aria-label="Inställningar"
           title="Inställningar"
         >
@@ -321,7 +334,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         </button>
         <button
           onClick={onShowAchievements}
-          className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-full bg-white/60 border border-owner-accent/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
           aria-label="Prestationer"
           title="Prestationer"
         >
@@ -329,7 +342,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         </button>
         <button
           onClick={onReset}
-          className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-[#3D2B1F]/40"
+          className="w-11 h-11 rounded-full bg-white/60 border border-owner-accent/20 flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-owner-text/40"
           aria-label="Tillbaka till start"
           title="Tillbaka till start"
         >
@@ -339,7 +352,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
 
       {/* Bottom Tab Navigation */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 border-t border-[#2D6A4F]/10 backdrop-blur-sm"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 border-t border-owner-accent/10 backdrop-blur-sm"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         role="tablist"
         aria-label="Skogsägarnavigering"
@@ -380,14 +393,14 @@ function OwnerTabButton({ active, label, icon, onClick }: {
     >
       <span className="text-xl">{icon}</span>
       <span className={`text-xs font-medium tracking-wide uppercase ${
-        active ? 'text-[#2D6A4F]' : 'text-[#3D2B1F]/40'
+        active ? 'text-owner-accent' : 'text-owner-text/40'
       }`}>
         {label}
       </span>
       {active && (
         <motion.div
           layoutId="owner-tab-indicator"
-          className="absolute -top-px left-2 right-2 h-0.5 bg-[#2D6A4F] rounded-full"
+          className="absolute -top-px left-2 right-2 h-0.5 bg-owner-accent rounded-full"
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         />
       )}
