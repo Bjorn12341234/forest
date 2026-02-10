@@ -25,6 +25,9 @@ import { ExpansionPanel } from './components/ExpansionPanel'
 import { CharacterSelect } from './components/CharacterSelect'
 import { OwnerDashboard } from './components/owner/OwnerDashboard'
 import { KnowledgePanel } from './components/owner/KnowledgePanel'
+import { IndustryAttackModal } from './components/owner/IndustryAttackModal'
+import { IndustryLureModal } from './components/owner/IndustryLureModal'
+import { OwnerTicker } from './components/owner/OwnerTicker'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -229,11 +232,20 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
 
   return (
     <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">
+      {/* Owner News Ticker */}
+      <OwnerTicker />
+
       {/* Achievement Toasts */}
       <AchievementToastManager toasts={toasts} onDismiss={onDismissToast} />
 
-      {/* Event Modal */}
+      {/* Event Modal (owner events) */}
       <EventModal />
+
+      {/* Industry Attack Modal */}
+      <IndustryAttackModal />
+
+      {/* Industry Lure Modal */}
+      <IndustryLureModal />
 
       {/* Achievement Panel */}
       <AnimatePresence>
@@ -267,7 +279,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
       </main>
 
       {/* Top-right action buttons */}
-      <div className="fixed top-2 right-2 z-40 flex flex-col gap-1.5">
+      <div className="fixed top-12 right-2 z-40 flex flex-col gap-1.5">
         <button
           onClick={onShowSettings}
           className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"

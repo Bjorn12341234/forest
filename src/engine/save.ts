@@ -1,7 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
-const CURRENT_VERSION = 5
+const CURRENT_VERSION = 6
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -121,6 +121,16 @@ const migrations: Record<number, MigrationFn> = {
     if (!state.ownerAttacksResisted) state.ownerAttacksResisted = {}
     if (state.ownerLuresDeclined === undefined) state.ownerLuresDeclined = 0
     save.version = 5
+    return save
+  },
+  5: (save) => {
+    // v5 → v6: Add industry attack/lure modal state and tracking
+    const state = save.state as GameState
+    if (!state.ownerAttacksSurrendered) state.ownerAttacksSurrendered = {}
+    if (!state.ownerLuresAccepted) state.ownerLuresAccepted = {}
+    if (state.activeIndustryAttack === undefined) state.activeIndustryAttack = null
+    if (state.activeIndustryLure === undefined) state.activeIndustryLure = null
+    save.version = 6
     return save
   },
 }

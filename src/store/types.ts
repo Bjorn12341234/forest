@@ -103,7 +103,13 @@ export interface GameState {
 
   // Owner antagonism tracking
   ownerAttacksResisted: Record<string, boolean>
+  ownerAttacksSurrendered: Record<string, boolean>
   ownerLuresDeclined: number
+  ownerLuresAccepted: Record<string, boolean>
+
+  // Active industry attack/lure (owner path modal state)
+  activeIndustryAttack: string | null
+  activeIndustryLure: string | null
 }
 
 export interface GeneratorState {
@@ -228,6 +234,8 @@ export interface GameActions {
   buyOwnerGenerator: (id: string) => void
   buyOwnerClickUpgrade: (id: string) => void
   buyKnowledgeActivity: (id: string) => void
+  resolveIndustryAttack: (accept: boolean) => void
+  resolveIndustryLure: (accept: boolean) => void
   buyGenerator: (id: string) => void
   buyClickUpgrade: (id: string) => void
   purchaseUpgrade: (id: string) => void

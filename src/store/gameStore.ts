@@ -25,6 +25,9 @@ import { getCountry } from '../data/countries'
 import { OWNER_GENERATORS, getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
 import { getKnowledgeActivity } from '../data/ownerKnowledge'
+import { INDUSTRY_ATTACKS, getIndustryAttack } from '../data/industryAttacks'
+import { INDUSTRY_LURES, getIndustryLure } from '../data/industryLures'
+import { OWNER_EVENTS } from '../data/ownerEvents'
 
 export const ALL_EVENTS = [
   ...PHASE1_EVENTS,
@@ -115,7 +118,12 @@ export const INITIAL_STATE: GameState = {
   ownerClickUpgrades: {},
 
   ownerAttacksResisted: {},
+  ownerAttacksSurrendered: {},
   ownerLuresDeclined: 0,
+  ownerLuresAccepted: {},
+
+  activeIndustryAttack: null,
+  activeIndustryLure: null,
 }
 
 // ── Helpers ──
@@ -331,10 +339,12 @@ function ownerTick(
   const resistedCount = Object.values(state.ownerAttacksResisted).filter(Boolean).length
   const legacyGrowth = (0.01 + state.biodivOwner * 0.0001 + resistedCount * 0.005 + genLegacy) * dt
 
+  const newTotalSV = state.totalSkogsvardering + svGained
+
   const updates: Partial<GameState> = {
     skogsvardering: state.skogsvardering + svGained,
     skogsvarderingPerSecond: totalSVPS + passiveGrowth,
-    totalSkogsvardering: state.totalSkogsvardering + svGained,
+    totalSkogsvardering: newTotalSV,
     inkomst: state.inkomst + inkomstGained,
     kunskap: state.kunskap + kunskapGrowth,
     biodivOwner: state.biodivOwner + biodivGrowth,
@@ -344,6 +354,43 @@ function ownerTick(
     deadwood: state.deadwood + deadwoodGrowth,
     totalPlayTime: newTotalPlayTime,
     lastTickAt: now,
+  }
+
+  // ── Industry attack triggers ──
+  if (!state.activeIndustryAttack && !state.activeIndustryLure && !state.activeEvent) {
+    for (const atk of INDUSTRY_ATTACKS) {
+      if (state.ownerAttacksResisted[atk.id] || state.ownerAttacksSurrendered[atk.id]) continue
+      if (newTotalSV >= atk.triggerSV) {
+        updates.activeIndustryAttack = atk.id
+        break
+      }
+    }
+
+    // Industry lure triggers (only if no attack is showing)
+    if (!updates.activeIndustryAttack) {
+      for (const lure of INDUSTRY_LURES) {
+        if (state.ownerLuresAccepted[lure.id]) continue
+        // Check if already declined (track by counting - simplified: use lure id in attacksResisted)
+        if (state.ownerAttacksResisted[lure.id]) continue
+        if (newTotalSV >= lure.triggerSV) {
+          updates.activeIndustryLure = lure.id
+          break
+        }
+      }
+    }
+  }
+
+  // ── Owner event triggers ──
+  if (!updates.activeIndustryAttack && !updates.activeIndustryLure
+    && !state.activeIndustryAttack && !state.activeIndustryLure
+    && !state.activeEvent && checkEventTrigger(state, now)) {
+    const event = selectEvent(state, OWNER_EVENTS)
+    if (event) {
+      updates.activeEvent = event
+      updates.nextEventAt = scheduleNextEvent(1, now)
+    } else {
+      updates.nextEventAt = now + 30_000
+    }
   }
 
   set(updates as Partial<GameStore>)
@@ -639,6 +686,92 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       inkomst: state.inkomst - data.cost,
       kunskap: state.kunskap + data.kunskapReward,
     } as Partial<GameStore>)
+  },
+
+  resolveIndustryAttack: (accept: boolean) => {
+    const state = get()
+    const attackId = state.activeIndustryAttack
+    if (!attackId) return
+
+    const atk = getIndustryAttack(attackId)
+    if (!atk) return
+
+    if (accept) {
+      // Player surrenders to the attack
+      const updates: Partial<GameState> = {
+        activeIndustryAttack: null,
+        ownerAttacksSurrendered: { ...state.ownerAttacksSurrendered, [attackId]: true },
+      }
+      if (atk.acceptEffects.skogsvardering) {
+        updates.skogsvardering = state.skogsvardering * atk.acceptEffects.skogsvardering
+      }
+      if (atk.acceptEffects.inkomstBonus) {
+        updates.inkomst = (updates.inkomst ?? state.inkomst) + atk.acceptEffects.inkomstBonus
+      }
+      if (atk.acceptEffects.resiliensPenalty) {
+        updates.resiliens = Math.max(0, state.resiliens - atk.acceptEffects.resiliensPenalty)
+      }
+      set(updates as Partial<GameStore>)
+    } else {
+      // Player resists (requires kunskap, optionally inkomst)
+      if (state.kunskap < atk.kunskapRequired) return
+      if (atk.extraCostResource === 'inkomst' && atk.extraCostAmount && state.inkomst < atk.extraCostAmount) return
+
+      const updates: Partial<GameState> = {
+        activeIndustryAttack: null,
+        ownerAttacksResisted: { ...state.ownerAttacksResisted, [attackId]: true },
+        kunskap: state.kunskap - Math.floor(atk.kunskapRequired * 0.1), // small kunskap cost
+      }
+      if (atk.extraCostResource === 'inkomst' && atk.extraCostAmount) {
+        updates.inkomst = state.inkomst - atk.extraCostAmount
+      }
+      set(updates as Partial<GameStore>)
+    }
+  },
+
+  resolveIndustryLure: (accept: boolean) => {
+    const state = get()
+    const lureId = state.activeIndustryLure
+    if (!lureId) return
+
+    const lure = getIndustryLure(lureId)
+    if (!lure) return
+
+    if (accept) {
+      // Player fell for the trap
+      const updates: Partial<GameState> = {
+        activeIndustryLure: null,
+        ownerLuresAccepted: { ...state.ownerLuresAccepted, [lureId]: true },
+      }
+      if (lure.acceptEffects.skogsvardering) {
+        updates.skogsvardering = state.skogsvardering * lure.acceptEffects.skogsvardering
+      }
+      if (lure.acceptEffects.resiliensPenalty) {
+        updates.resiliens = Math.max(0, state.resiliens - lure.acceptEffects.resiliensPenalty)
+      }
+      if (lure.acceptEffects.biodivPenalty) {
+        updates.biodivOwner = Math.max(0, state.biodivOwner - lure.acceptEffects.biodivPenalty)
+      }
+      set(updates as Partial<GameStore>)
+    } else {
+      // Player declined — costs inkomst but gains kunskap/biodiv
+      const updates: Partial<GameState> = {
+        activeIndustryLure: null,
+        ownerLuresDeclined: state.ownerLuresDeclined + 1,
+        ownerAttacksResisted: { ...state.ownerAttacksResisted, [lureId]: true },
+      }
+      if (lure.declineEffects.inkomstCost) {
+        if (state.inkomst < lure.declineEffects.inkomstCost) return // can't afford to decline
+        updates.inkomst = state.inkomst - lure.declineEffects.inkomstCost
+      }
+      if (lure.declineEffects.kunskapGain) {
+        updates.kunskap = state.kunskap + lure.declineEffects.kunskapGain
+      }
+      if (lure.declineEffects.biodivGain) {
+        updates.biodivOwner = state.biodivOwner + lure.declineEffects.biodivGain
+      }
+      set(updates as Partial<GameStore>)
+    }
   },
 
   buyGenerator: (id: string) => {
@@ -1002,7 +1135,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       ownerGenerators: {},
       ownerClickUpgrades: {},
       ownerAttacksResisted: {},
+      ownerAttacksSurrendered: {},
       ownerLuresDeclined: 0,
+      ownerLuresAccepted: {},
+      activeIndustryAttack: null,
+      activeIndustryLure: null,
     })
   },
 

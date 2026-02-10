@@ -498,8 +498,8 @@
 
 ### 7C — Antagonism, Events & Innehåll
 
-- [ ] 7C-1: Industry Attacks (Storbolagets motstånd)
-  - Definiera i `src/data/industryAttacks.ts` (7 attacker):
+- [x] 7C-1: Industry Attacks (Storbolagets motstånd)
+  - Definiera i `src/data/industryAttacks.ts` (8 attacker):
     - "Gratis skogsbruksplan" (500 sv, 25 kunskap att motstå)
     - Virkesuppköparen (2000 sv, 50 kunskap) — "en man i Barburr-jacka"
     - Priskollaps-panik (5000 sv, 75 kunskap) — "Kina-dumpning"
@@ -507,59 +507,74 @@
     - Kontraktsofferten — 25-årskontrakt (20000 sv, 150 kunskap)
     - Svartmålningskampanjen (40000 sv, 200 kunskap)
     - Inspektörens "misstag" (75000 sv, 300 kunskap + 10000 ink)
-    - Den Totala Offensiven (150000 sv, 500 kunskap + Kooperativ)
-  - Ny komponent `IndustryAttackModal.tsx` — pop-up med Acceptera/Avböj
-  - Avböj kräver minimum Kunskap — annars: "Du vet inte tillräckligt..."
+    - Den Totala Offensiven (150000 sv, 500 kunskap)
+  - Ny komponent `IndustryAttackModal.tsx` — pop-up med Motstå/Ge efter
+  - Motstå kräver minimum Kunskap (gråas ut om ej tillräckligt)
   - Effekter vid accept: skogsvärde-förlust, kontrollförlust, engångs-inkomst
   - Triggas vid skogsvärde-milstolpar i owner tick
 
-- [ ] 7C-2: Industry Lures (Lockelser)
+- [x] 7C-2: Industry Lures (Lockelser)
   - Definiera i `src/data/industryLures.ts` (3 st):
     - "Gratis markanalys" — fälla: rekommenderar kalavverkning + contortaplantering
     - "GSC-certifiering" — fälla: kräver industrins skötselplan
     - "EU-bidrag via oss" — fälla: åtgärderna = markberedning + monokultur
-  - Pop-up med tilltalande grön design (kontrast mot attackernas aggressivitet)
-  - Acceptera = negativ långtidseffekt, Avböj = alternativ med bättre resultat
+  - `IndustryLureModal.tsx` med orange lockelse-design, reveal-mekanik
+  - Acceptera = negativ långtidseffekt, Avböj = alternativ med bättre resultat (kostar inkomst)
 
-- [ ] 7C-3: Owner Events (10+ events)
+- [x] 7C-3: Owner Events (11 events)
   - Definiera i `src/data/ownerEvents.ts`:
-    - Stormen (15000 sv — resiliens avgör utfall)
-    - Granbarkborren (25000 sv — mångfald vs monokultur)
-    - Japanska turister (30000 sv + Skogsturism-gen — inkomstbonus)
-    - Snickaren ringer (20000 sv + Premium-virke — 3× massapris)
-    - Barnens besök (40000 sv — +50 Legacy, emotionellt)
-    - Grannens ånger (60000 sv — +30 Kunskap, +1 kooperativ)
-    - Skogsbrand (50000 sv — humuslager vs markberedd)
-    - Universitetsstudien (100000 sv — +100 Kunskap, +50 Legacy)
-    - Kinas massadumpning (fas 3 — du är trygg, +20 Kunskap)
+    - Stormen (15000 sv — resiliens + biodiv + deadwood)
+    - Granbarkborren (25000 sv — resiliens + kunskap + deadwood)
+    - Japanska turister (30000 sv — +5000 inkomst + legacy)
+    - Snickaren ringer (20000 sv — +8000 inkomst)
+    - Barnens besök (40000 sv — +50 Legacy + kunskap)
+    - Grannens ånger (60000 sv — +30 Kunskap + legacy)
+    - Skogsbrand (50000 sv — +20 resiliens + deadwood)
+    - Universitetsstudien (100000 sv — +100 Kunskap + 50 Legacy)
+    - Kinas massadumpning (8000 sv — +20 Kunskap, du är trygg)
     - SVT i din skog (150000 sv — +200 Kunskap, +100 Legacy)
-    - Nastly-brevet (200000 sv — massiv Inkomst, +50 Legacy) — "Nastly — NASTLY! — valde DIG framför skogsindustrin."
-  - Återanvänd EventModal-komponenten, villkora content på gameMode
+    - Nastly-brevet (200000 sv — +50000 Inkomst, +50 Legacy)
+  - Använder befintligt EventModal och event engine (selectEvent + checkEventTrigger)
+  - Triggas i ownerTick med OWNER_EVENTS-pool
 
-- [ ] 7C-4: Owner News Ticker
-  - Definiera i `src/data/ownerNewsLines.ts` (~25 rubriker i 4 faser):
-    - Tidiga: virkesuppköpare, gratisplaner, äganderätt-propaganda
-    - Mellan: massapris-ras, "ovetenskapligt"-kampanjer, Plockhugget-kurser
-    - Sena: Nastly bryter med industrin, SLU-studie, contortaplantage-katastrof
-    - Endgame: lavskrikan häckar, dottern tar över, nationell policy-ändring
-  - Välj ticker-array baserat på gameMode i Ticker.tsx
+- [x] 7C-4: Owner News Ticker
+  - Definiera i `src/data/ownerNewsLines.ts` (25 rubriker):
+    - Tidiga: morgonpromenad, inspektören ringer, årsringar, contorta, lavskrikan
+    - Mellan: SLU-rapport, barkborre, snickaren, biologen, GSC, turister, grannens ånger
+    - Sena: priskollapsen, kollagret, SVT, Nastly, 200 skogsägare, forskningen, barnbarnet
+    - Endgame: lagändring, deadwood, humle, talltickan, naturen vinner
+  - Ny komponent `OwnerTicker.tsx` — grön ton, triggas av totalSkogsvardering
+  - Integrerad i OwnerApp
 
-- [ ] 7C-5: Owner Achievements (13 st)
-  - Definiera i `src/data/ownerAchievements.ts`:
-    - Första Vårddagen (1 klick)
-    - Farfars Skog (1000 sv)
-    - Nej Tack (avböj första attacken)
-    - 47 Arter (biodiv > 47)
-    - Den Tysta Segern (klara storm med hög resiliens)
-    - Barkborrens Mästare (klara insektsangrepp utan förlust)
-    - Långsam Rikedom (50000 total inkomst utan kalavverkning)
-    - Kaffekoppens Fiende (avböj virkesuppköparen 5 ggr)
-    - Plockhuggaren (100 plockhuggningar)
-    - Kooperativets Kraft (bilda kooperativ)
-    - Katedralen (200000 sv)
-    - Generationsskiftet (köp Arvsskogen)
-    - Nastly Valde Dig (klara Nastly-eventet)
-    - Skogens Kvitto (se endgame)
+- [x] 7C-5: Owner Achievements (13 st)
+  - Tillagda i `src/data/achievements.ts` (ny tier: 'skogsagare'):
+    - Första Trädet (1 klick)
+    - Tålmodets Väg (100 klick)
+    - Naturlig Föryngring (första generatorn)
+    - Rötterna Håller (5000 sv)
+    - Stående Kapital (50000 sv)
+    - Den Tysta Kunskapen (100 kunskap)
+    - Artrikedomen (25 biodiv)
+    - Stormfast (50 resiliens)
+    - Nej Tack (motstå första attacken)
+    - Orubblig (motstå 3 attacker)
+    - Generationsarv (100 legacy)
+    - Nastly Väljer Dig (200000 sv)
+    - Helt Ekosystem (alla 9 generatorer)
+
+**Notes:** 7C complete. Key changes:
+- Created `src/data/industryAttacks.ts` — 8 attacks with triggerSV, kunskapRequired, accept/resist effects and flavour text
+- Created `src/data/industryLures.ts` — 3 lures with offer/trap/decline design, accept = bad, decline = good but costs inkomst
+- Created `src/data/ownerEvents.ts` — 11 events using GameEvent structure, all unique, single-choice positive outcomes
+- Created `src/data/ownerNewsLines.ts` — 25 owner ticker headlines triggered by totalSkogsvardering milestones
+- Created `src/components/owner/IndustryAttackModal.tsx` — red-bordered modal with Motstå (requires kunskap) / Ge efter
+- Created `src/components/owner/IndustryLureModal.tsx` — orange-bordered modal with reveal mechanic (first click reveals trap)
+- Created `src/components/owner/OwnerTicker.tsx` — green-toned ticker for owner path
+- Added 13 owner achievements in `achievements.ts` with new 'skogsagare' tier (color: #2D6A4F)
+- Updated `types.ts`: added `activeIndustryAttack`, `activeIndustryLure`, `ownerAttacksSurrendered`, `ownerLuresAccepted`, `resolveIndustryAttack`, `resolveIndustryLure`
+- Updated `gameStore.ts`: attack/lure trigger logic in ownerTick, resolve actions, owner events via existing event engine
+- Save migration v5→v6: adds new tracking fields
+- Build: 197KB gzipped, TypeScript clean
 
 ### 7D — Endgame & Polish
 

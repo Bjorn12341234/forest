@@ -1,6 +1,6 @@
 import type { GameState } from '../store/types'
 
-export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'kosmisk' | 'meta'
+export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'kosmisk' | 'meta' | 'skogsagare'
 
 export interface AchievementDef {
   id: string
@@ -23,6 +23,7 @@ export const TIER_LABELS: Record<AchievementTier, string> = {
   endgame: 'Tier 5: Endgame',
   kosmisk: 'Tier 6: Kosmisk',
   meta: 'Meta',
+  skogsagare: 'Skogs\u00e4garen',
 }
 
 export const TIER_COLORS: Record<AchievementTier, string> = {
@@ -33,6 +34,7 @@ export const TIER_COLORS: Record<AchievementTier, string> = {
   endgame: '#CC22CC',
   kosmisk: '#00CCFF',
   meta: '#888888',
+  skogsagare: '#2D6A4F',
 }
 
 export const ACHIEVEMENTS: AchievementDef[] = [
@@ -491,6 +493,131 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     phase: 1,
     tier: 'meta',
     check: (s) => s.totalPlayTime >= 3600,
+  },
+
+  // ═══════════════════════════════════════════
+  //  SKOGSÄGAREN (Owner Path)
+  // ═══════════════════════════════════════════
+  {
+    id: 'owner_forsta_tradet',
+    name: 'Första Trädet',
+    description: 'Klicka för första gången. Du planterar inte. Du låter det växa.',
+    icon: '\uD83C\uDF31',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.ownerClickCount >= 1,
+  },
+  {
+    id: 'owner_hundra_klick',
+    name: 'Tålmodets Väg',
+    description: '100 klick. Skogen växer på sin tid, inte din.',
+    icon: '\u231B',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.ownerClickCount >= 100,
+  },
+  {
+    id: 'owner_forsta_generatorn',
+    name: 'Naturlig Föryngring',
+    description: 'Köp din första generator. Naturen gör jobbet.',
+    icon: '\uD83C\uDF3F',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && Object.values(s.ownerGenerators).some(g => g.count > 0),
+  },
+  {
+    id: 'owner_sv_5000',
+    name: 'Rötterna Håller',
+    description: 'Nå 5 000 Skogsvärdering. Din skog börjar tala.',
+    icon: '\uD83C\uDF32',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.totalSkogsvardering >= 5_000,
+  },
+  {
+    id: 'owner_sv_50000',
+    name: 'Stående Kapital',
+    description: 'Nå 50 000 Skogsvärdering. Mer än vad industrin någonsin betalat dig.',
+    icon: '\uD83C\uDFD4\uFE0F',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.totalSkogsvardering >= 50_000,
+  },
+  {
+    id: 'owner_kunskap_100',
+    name: 'Den Tysta Kunskapen',
+    description: 'Nå 100 Kunskap. Du vet mer än inspektören.',
+    icon: '\uD83D\uDCD6',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.kunskap >= 100,
+  },
+  {
+    id: 'owner_biodiv_25',
+    name: 'Artrikedomen',
+    description: 'Nå 25 Biodiversitet. Lavskrikan häckar.',
+    icon: '\uD83D\uDC26',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.biodivOwner >= 25,
+  },
+  {
+    id: 'owner_resiliens_50',
+    name: 'Stormfast',
+    description: 'Nå 50 Resiliens. Din skog överlever det som kalavverkningen inte överlever.',
+    icon: '\uD83C\uDF2A\uFE0F',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.resiliens >= 50,
+  },
+  {
+    id: 'owner_attack_resisted',
+    name: 'Nej Tack',
+    description: 'Motstå din första industriattack. Kunskap är makt.',
+    icon: '\uD83D\uDEE1\uFE0F',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && Object.values(s.ownerAttacksResisted).some(Boolean),
+  },
+  {
+    id: 'owner_three_attacks',
+    name: 'Orubblig',
+    description: 'Motstå tre industriattacker. De ger sig inte. Det gör inte du heller.',
+    icon: '\uD83E\uDDF1',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && Object.values(s.ownerAttacksResisted).filter(Boolean).length >= 3,
+  },
+  {
+    id: 'owner_legacy_100',
+    name: 'Generationsarv',
+    description: 'Nå 100 Generationsarv. Dina barnbarn kommer att ärva en skog, inte ett plantage.',
+    icon: '\uD83C\uDFE1',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.legacy >= 100,
+  },
+  {
+    id: 'owner_sv_200000',
+    name: 'Nastly Väljer Dig',
+    description: 'Nå 200 000 Skogsvärdering. Nastly \u2014 NASTLY! \u2014 väljer dig framför industrin.',
+    icon: '\uD83C\uDF6B',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.totalSkogsvardering >= 200_000,
+  },
+  {
+    id: 'owner_alla_generatorer',
+    name: 'Helt Ekosystem',
+    description: 'Äg minst 1 av varje generator. Din skog är komplett.',
+    icon: '\uD83C\uDF33',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => {
+      if (s.gameMode !== 'owner') return false
+      const gens = Object.values(s.ownerGenerators)
+      return gens.length >= 9 && gens.every(g => g.count > 0)
+    },
   },
 ]
 
