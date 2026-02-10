@@ -13,7 +13,6 @@ export interface IndustryAttackData {
     description: string
     skogsvardering?: number   // multiplier on current sv (e.g., 0.5 = lose 50%)
     inkomstBonus?: number     // one-time inkomst gain
-    svFreeze?: boolean        // locks sv growth
     resiliensPenalty?: number  // flat resiliens loss
   }
   resistFlavour: string       // text shown when resisted
@@ -84,8 +83,9 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     triggerSV: 20_000,
     kunskapRequired: 150,
     acceptEffects: {
-      description: '+500 Inkomst/s, Skogsvärde fryser, -30 Resiliens',
-      svFreeze: true,
+      description: '-25% Skogsvärde, +15 000 Inkomst, -30 Resiliens',
+      skogsvardering: 0.75,
+      inkomstBonus: 15_000,
       resiliensPenalty: 30,
     },
     resistFlavour: '25 år. De vill ha min skog i 25 år. Min farfar hade den i 60 år och den ser fortfarande ut som en skog.',

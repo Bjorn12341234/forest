@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getIndustryAttack } from '../../data/industryAttacks'
+import { computeKnowledgeModifiers } from '../../data/ownerKnowledgeTree'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 
 export function IndustryAttackModal() {
@@ -8,13 +9,16 @@ export function IndustryAttackModal() {
   const kunskap = useGameStore(s => s.kunskap)
   const inkomst = useGameStore(s => s.inkomst)
   const resolve = useGameStore(s => s.resolveIndustryAttack)
+  const knowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
 
   const trapRef = useFocusTrap()
   const atk = attackId ? getIndustryAttack(attackId) : null
 
   if (!atk) return null
 
-  const canResist = kunskap >= atk.kunskapRequired
+  const mods = computeKnowledgeModifiers(knowledgeUpgrades)
+  const effectiveKunskapReq = Math.floor(atk.kunskapRequired * (1 - mods.attackResistance))
+  const canResist = kunskap >= effectiveKunskapReq
     && (!atk.extraCostResource || !atk.extraCostAmount || inkomst >= atk.extraCostAmount)
 
   return (
@@ -90,7 +94,10 @@ export function IndustryAttackModal() {
                     Motstå
                   </span>
                   <p className="text-sm text-owner-text/60 mt-1">
-                    Kräver {atk.kunskapRequired} Kunskap
+                    Kräver {effectiveKunskapReq} Kunskap
+                    {effectiveKunskapReq < atk.kunskapRequired && (
+                      <span className="text-owner-accent/50 line-through ml-1">{atk.kunskapRequired}</span>
+                    )}
                     {atk.extraCostAmount ? ` + ${atk.extraCostAmount.toLocaleString('sv-SE')} Inkomst` : ''}
                   </p>
                   {canResist && (
