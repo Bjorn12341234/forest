@@ -72,7 +72,7 @@ const REALITY_SECTIONS: { heading: string; text: string }[] = [
 ]
 
 export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
-  const [stage, setStage] = useState<'reveal' | 'postcredits' | 'reality'>('reveal')
+  const [stage, setStage] = useState<'reveal' | 'postcredits' | 'algiz' | 'reality'>('reveal')
   const [revealStep, setRevealStep] = useState(0)
   const [showButtons, setShowButtons] = useState(false)
   const [creditScroll, setCreditScroll] = useState(false)
@@ -120,6 +120,38 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
   const surrenderedCount = Object.values(attacksSurrendered).filter(Boolean).length
   const totalGenerators = Object.values(ownerGenerators).reduce((sum, g) => sum + g.count, 0)
 
+  if (stage === 'algiz') {
+    return (
+      <motion.div
+        className="fixed inset-0 z-[200] flex items-center justify-center"
+        style={{ background: '#000000' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: [0, 0.6, 0.6, 0] }}
+          transition={{ duration: 8, times: [0, 0.3, 0.7, 1], ease: 'easeInOut' }}
+          onAnimationComplete={() => setStage('reality')}
+          className="flex flex-col items-center"
+        >
+          <span
+            className="text-[#A8D5BA]/40"
+            style={{
+              fontSize: 'min(30vw, 180px)',
+              fontFamily: 'serif',
+              lineHeight: 1,
+              userSelect: 'none',
+            }}
+          >
+            ᛉ
+          </span>
+        </motion.div>
+      </motion.div>
+    )
+  }
+
   if (stage === 'reality') {
     return <OwnerRealityPage onContinue={onContinue} onReset={onReset} />
   }
@@ -160,7 +192,7 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
             className="mt-12 flex flex-col gap-6 items-center"
           >
             <button
-              onClick={() => setStage('reality')}
+              onClick={() => setStage('algiz')}
               className="px-8 py-3 text-sm font-bold tracking-wider cursor-pointer border-none transition-colors"
               style={{
                 background: 'var(--color-owner-accent)',
