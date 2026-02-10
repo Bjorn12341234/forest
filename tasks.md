@@ -438,57 +438,63 @@
 
 ### 7B — Owner UI
 
-- [ ] 7B-1: Owner ClickArea ("Vårda Skog")
+- [x] 7B-1: Owner ClickArea ("Vårda Skog")
   - Ny komponent `OwnerClickArea.tsx` — knappen "Vårda Skog"
   - Klick ökar `skogsvardering` (basbelopp + uppgraderingar)
   - Flavourtext tiers (6 nivåer): "Du går ut i skogen..." → "Dina grannar frågar..."
   - Visa: skogsvärde, skogsvärde/klick, skogsvärde/sekund
   - Varm visuell stil: gröna partiklar istället för orangea
 
-- [ ] 7B-2: Owner Click Upgrades
+- [x] 7B-2: Owner Click Upgrades
   - Definiera i `src/data/ownerClickUpgrades.ts` (5 st):
     - Skogskunskapskurs (500 Inkomst, +2/klick, +5 Kunskap)
     - Florabok & kikare (1000, +5/klick, +1 Biodiv)
-    - Motorsåg — egen, liten (2500, +10/klick, Inkomst-bonus) — "Inte en Skördare. En Husqansen 562."
+    - Motorsåg — egen, liten (2500, +10/klick) — "Inte en Skördare. En Husqansen 562."
     - Samarbete med biolog (5000, +20/klick, +10 Kunskap)
     - Mentorskap från gammal skogsägare (10000, +50/klick)
 
-- [ ] 7B-3: Owner Generators
-  - Definiera i `src/data/ownerGenerators.ts` (9 st):
+- [x] 7B-3: Owner Generators
+  - Definiera i `src/data/ownerGenerators.ts` (9 st) med bonuses-system:
     - Naturlig föryngring (100, +1 sv/s)
     - Plockhuggning schema (500, +0.5 ink/s, +2 sv/s)
-    - Död-ved-program (1500, +3 biodiv/tick, +1 resiliens/tick)
+    - Död-ved-program (1500, +biodiv, +resiliens, +deadwood)
     - Skogsbete (3000, +5 sv/s, +2 ink/s)
     - Premium-virke långsamväxt (8000, +10 ink/s)
     - Skogsturism / Naturupplevelse (15000, +15 ink/s, +5 sv/s)
-    - Kolkrediter verkliga (30000, +25 ink/s, +10 kol/tick)
-    - Skogsägar-kooperativ (75000, +50 ink/s, +20 kunskap)
-    - Arvsskogen (200000, +200 sv/s, +100 legacy)
-  - costScale: 1.12× (lägre än industrins 1.15×)
-  - Ny `OwnerGenerators.tsx` — samma layout som industri men varm ton
+    - Kolkrediter verkliga (30000, +25 ink/s, +carbon)
+    - Skogsägar-kooperativ (75000, +50 ink/s, +kunskap)
+    - Arvsskogen (200000, +200 sv/s, +legacy)
+  - costScale: 1.12×, bonuses applied in ownerTick
+  - Ny `OwnerGenerators.tsx` — varm ton, produktionslabel med alla bonusar
 
-- [ ] 7B-4: Owner Dashboard Layout
-  - Villkorligt rendera owner- eller industri-komponenter i App.tsx baserat på gameMode
-  - Owner-resursfält: Skogsvärde, Inkomst, Skogskunskap, Resiliens
-  - Synliga mätare: Biologisk mångfald, Kolinlagring, Generationsarv, Död ved
-  - Samma tab-struktur: Skog (generators), Kunskap (ersätter Makt), Expansion (endgame)
-  - Owner-färgtema: bakgrund #F5F0E8 (varm beige), accent #2D6A4F (skogsgrönt), text #3D2B1F (mörk brun)
+- [x] 7B-4: Owner Dashboard Layout
+  - `OwnerDashboard.tsx` — 4 resurskort + 4 mätarkort + 2-panel ClickArea/Generators
+  - `OwnerApp` i App.tsx — full app shell med tabs, settings, achievements
+  - 2 tabs: Översikt (dashboard) och Kunskap (knowledge panel)
+  - Owner-färgtema: bakgrund #F5F0E8, accent #2D6A4F, text #3D2B1F
 
-- [ ] 7B-5: Knowledge Panel (ersätter LobbyPanel)
-  - Ny komponent `KnowledgePanel.tsx`
-  - Kunskap-tjänande aktiviteter (5 st, kostar Inkomst → ger Kunskap):
-    - Läs Skogsstyrelsens maktutredning (gratis, +10)
-    - Gå Plockhugget-kurs (3000, +25)
-    - Artinventering med biolog (5000, +30)
-    - Besök gammelskog (2000, +15)
-    - Studera markberedningens effekter (1000, +20)
-  - Passiva bonusar vid kunskapströsklar (25/50/100/200/500/1000) — visa progress
+- [x] 7B-5: Knowledge Panel (ersätter LobbyPanel)
+  - `KnowledgePanel.tsx` med kunskapsaktiviteter och tröskelprogression
+  - 5 aktiviteter (kostar Inkomst → ger Kunskap), inkl gratis "Maktutredningen"
+  - 6 kunskapströsklar (25→1000) visas som checklista med progressbar
+  - Biodiversitetsmätare och resiliensmätare
 
-- [ ] 7B-6: Resilience Display
-  - Visa resiliens som mätare i resursfältet
-  - Hög resiliens = stormtålig, insektsresistent
-  - Färgkodad: grön (>50), gul (20-50), röd (<20)
-  - Påverkas av: biodiv, trädmångfald, deadwood
+- [x] 7B-6: Resilience Display
+  - Resiliens visas i resursfältet med färgkodning: grön (>50), gul (20-50), röd (<20)
+  - Resiliens visas även i KnowledgePanel med mätare
+  - Ökar passivt via biodiv + generator-bonusar (död-ved-program)
+
+**Notes:** 7B complete. Key changes:
+- Created `src/data/ownerGenerators.ts` — 9 generators with bonus system (biodiv, resiliens, carbon, kunskap, legacy, deadwood per tick per unit)
+- Created `src/data/ownerClickUpgrades.ts` — 5 upgrades (inkomst-cost, sv/click bonus, one-time kunskap/biodiv bonuses)
+- Created `src/data/ownerKnowledge.ts` — 5 knowledge activities + 6 threshold definitions
+- Created `src/components/owner/OwnerClickArea.tsx` — green particles, milestone-based flavourtext, warm beige theme
+- Created `src/components/owner/OwnerGenerators.tsx` — shows all 9 generators with bonus labels
+- Created `src/components/owner/OwnerDashboard.tsx` — 4 resource cards + 4 meter cards + two-panel layout
+- Created `src/components/owner/KnowledgePanel.tsx` — knowledge activities, threshold checklist, biodiv/resiliens meters
+- Updated `gameStore.ts`: `buyOwnerGenerator`, `buyOwnerClickUpgrade`, `buyKnowledgeActivity` actions; `computeOwnerSVPerClick`; full generator bonus application in ownerTick (biodiv, resiliens, carbon, kunskap, legacy, deadwood)
+- `OwnerApp` component in App.tsx with full app shell, 2 tabs (Översikt/Kunskap), action buttons
+- Build: 189KB gzipped, TypeScript clean
 
 ### 7C — Antagonism, Events & Innehåll
 

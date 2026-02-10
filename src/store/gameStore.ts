@@ -22,6 +22,9 @@ import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist } from '../data/ant
 import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
 import { calculateWarningLevel, getWarningPenalty } from '../engine/warnings'
 import { getCountry } from '../data/countries'
+import { OWNER_GENERATORS, getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
+import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
+import { getKnowledgeActivity } from '../data/ownerKnowledge'
 
 export const ALL_EVENTS = [
   ...PHASE1_EVENTS,
@@ -240,16 +243,37 @@ function computeStammarPerClick(
 
 /** Calculate total skogsvardering/s from all owner generators */
 function computeOwnerSkogsvarderingPS(generators: GameState['ownerGenerators']): number {
-  // Will be populated when ownerGenerators data is created in 7B
-  // For now returns 0 — only passive growth applies
-  void generators
-  return 0
+  let total = 0
+  for (const [id, gen] of Object.entries(generators)) {
+    if (gen.count > 0) {
+      const data = getOwnerGeneratorData(id)
+      if (data) total += gen.count * data.svPerSecond
+    }
+  }
+  return total
 }
 
 /** Calculate total inkomst/s from all owner generators */
 function computeOwnerInkomstPS(generators: GameState['ownerGenerators']): number {
-  void generators
-  return 0
+  let total = 0
+  for (const [id, gen] of Object.entries(generators)) {
+    if (gen.count > 0) {
+      const data = getOwnerGeneratorData(id)
+      if (data) total += gen.count * data.inkomstPerSecond
+    }
+  }
+  return total
+}
+
+/** Calculate skogsvarderingPerClick from base + owner click upgrades */
+function computeOwnerSVPerClick(ownerClickUpgrades: GameState['ownerClickUpgrades']): number {
+  let base = 1
+  for (const cu of OWNER_CLICK_UPGRADES) {
+    if (ownerClickUpgrades[cu.id]) {
+      base += cu.svPerClickBonus
+    }
+  }
+  return base
 }
 
 /** Owner path tick — separate from industry tick */
@@ -271,25 +295,53 @@ function ownerTick(
   const svGained = totalSVPS * dt
   const inkomstGained = generatorInkomst * dt
 
-  // Biodiversity slowly increases with deadwood and resilience
-  const biodivGrowth = (state.deadwood * 0.001 + state.resiliens * 0.0005) * dt
-  // Resilience grows with biodiversity diversity
-  const resiliensGrowth = state.biodivOwner * 0.0002 * dt
-  // Carbon storage grows with standing forest
-  const carbonGrowth = totalSVPS * 0.01 * dt
-  // Legacy grows very slowly based on time + biodiv + resistance
+  // Apply generator bonuses
+  let genBiodiv = 0
+  let genResiliens = 0
+  let genCarbon = 0
+  let genKunskap = 0
+  let genLegacy = 0
+  let genDeadwood = 0
+  for (const [id, gen] of Object.entries(state.ownerGenerators)) {
+    if (gen.count > 0) {
+      const data = getOwnerGeneratorData(id)
+      if (data?.bonuses) {
+        const c = gen.count
+        if (data.bonuses.biodiv) genBiodiv += data.bonuses.biodiv * c
+        if (data.bonuses.resiliens) genResiliens += data.bonuses.resiliens * c
+        if (data.bonuses.carbon) genCarbon += data.bonuses.carbon * c
+        if (data.bonuses.kunskap) genKunskap += data.bonuses.kunskap * c
+        if (data.bonuses.legacy) genLegacy += data.bonuses.legacy * c
+        if (data.bonuses.deadwood) genDeadwood += data.bonuses.deadwood * c
+      }
+    }
+  }
+
+  // Biodiversity: base from deadwood + resilience + generator bonuses
+  const biodivGrowth = (state.deadwood * 0.001 + state.resiliens * 0.0005 + genBiodiv) * dt
+  // Resilience: base from biodiv + generator bonuses
+  const resiliensGrowth = (state.biodivOwner * 0.0002 + genResiliens) * dt
+  // Carbon storage: base from standing forest + generator bonuses
+  const carbonGrowth = (totalSVPS * 0.01 + genCarbon) * dt
+  // Deadwood: grows from generators
+  const deadwoodGrowth = genDeadwood * dt
+  // Kunskap: passive from generators (kooperativ)
+  const kunskapGrowth = genKunskap * dt
+  // Legacy: base from time + biodiv + resistance + generator bonuses
   const resistedCount = Object.values(state.ownerAttacksResisted).filter(Boolean).length
-  const legacyGrowth = (0.01 + state.biodivOwner * 0.0001 + resistedCount * 0.005) * dt
+  const legacyGrowth = (0.01 + state.biodivOwner * 0.0001 + resistedCount * 0.005 + genLegacy) * dt
 
   const updates: Partial<GameState> = {
     skogsvardering: state.skogsvardering + svGained,
-    skogsvarderingPerSecond: totalSVPS,
+    skogsvarderingPerSecond: totalSVPS + passiveGrowth,
     totalSkogsvardering: state.totalSkogsvardering + svGained,
     inkomst: state.inkomst + inkomstGained,
+    kunskap: state.kunskap + kunskapGrowth,
     biodivOwner: state.biodivOwner + biodivGrowth,
     resiliens: Math.min(100, state.resiliens + resiliensGrowth),
     realCarbonPos: state.realCarbonPos + carbonGrowth,
     legacy: state.legacy + legacyGrowth,
+    deadwood: state.deadwood + deadwoodGrowth,
     totalPlayTime: newTotalPlayTime,
     lastTickAt: now,
   }
@@ -526,6 +578,67 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   setGameMode: (mode: 'industry' | 'owner') => {
     set({ gameMode: mode })
     get().save()
+  },
+
+  buyOwnerGenerator: (id: string) => {
+    const state = get()
+    const data = getOwnerGeneratorData(id)
+    if (!data) return
+
+    const current = state.ownerGenerators[id]
+    const count = current?.count ?? 0
+    const cost = getOwnerGeneratorCost(data.baseCost, count, data.costScale)
+
+    if (state.skogsvardering < cost) return
+
+    set({
+      skogsvardering: state.skogsvardering - cost,
+      ownerGenerators: {
+        ...state.ownerGenerators,
+        [id]: { count: count + 1, unlocked: true },
+      },
+    } as Partial<GameStore>)
+  },
+
+  buyOwnerClickUpgrade: (id: string) => {
+    const state = get()
+    const data = getOwnerClickUpgrade(id)
+    if (!data) return
+    if (state.ownerClickUpgrades[id]) return
+
+    if (state.inkomst < data.cost) return
+
+    const newUpgrades = { ...state.ownerClickUpgrades, [id]: true }
+    const newSVPerClick = computeOwnerSVPerClick(newUpgrades)
+
+    const updates: Partial<GameState> = {
+      inkomst: state.inkomst - data.cost,
+      ownerClickUpgrades: newUpgrades,
+      skogsvarderingPerClick: newSVPerClick,
+    }
+
+    // Apply one-time bonuses
+    if (data.bonuses?.kunskap) {
+      updates.kunskap = state.kunskap + data.bonuses.kunskap
+    }
+    if (data.bonuses?.biodiv) {
+      updates.biodivOwner = state.biodivOwner + data.bonuses.biodiv
+    }
+
+    set(updates as Partial<GameStore>)
+  },
+
+  buyKnowledgeActivity: (id: string) => {
+    const state = get()
+    const data = getKnowledgeActivity(id)
+    if (!data) return
+
+    if (state.inkomst < data.cost) return
+
+    set({
+      inkomst: state.inkomst - data.cost,
+      kunskap: state.kunskap + data.kunskapReward,
+    } as Partial<GameStore>)
   },
 
   buyGenerator: (id: string) => {

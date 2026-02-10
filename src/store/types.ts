@@ -225,6 +225,9 @@ export interface GameActions {
   click: () => void
   ownerClick: () => void
   setGameMode: (mode: 'industry' | 'owner') => void
+  buyOwnerGenerator: (id: string) => void
+  buyOwnerClickUpgrade: (id: string) => void
+  buyKnowledgeActivity: (id: string) => void
   buyGenerator: (id: string) => void
   buyClickUpgrade: (id: string) => void
   purchaseUpgrade: (id: string) => void

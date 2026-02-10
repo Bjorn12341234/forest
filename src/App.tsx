@@ -23,6 +23,8 @@ import { TabNav, type Tab } from './components/TabNav'
 import { EndScreen } from './components/EndScreen'
 import { ExpansionPanel } from './components/ExpansionPanel'
 import { CharacterSelect } from './components/CharacterSelect'
+import { OwnerDashboard } from './components/owner/OwnerDashboard'
+import { KnowledgePanel } from './components/owner/KnowledgePanel'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -86,44 +88,25 @@ function App() {
     return <CharacterSelect />
   }
 
-  // Owner mode placeholder — full UI comes in sprint 7B
+  // Owner (Skogsägare) mode
   if (gameMode === 'owner') {
     return (
-      <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 p-4">
-          <h1 className="text-2xl font-bold text-[#3D2B1F] tracking-wider">
-            SKOGS\u00c4GAREN
-          </h1>
-          <p className="text-[#2D6A4F] text-center max-w-md">
-            Du st\u00e5r i din farfars skog. 80 hektar \u00c5ngermanland. Tr\u00e4den \u00e4r h\u00f6ga och stilla.
-          </p>
-          <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
-            <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
-              <span className="text-xs text-[#3D2B1F]/60 uppercase tracking-wider">Skogsv\u00e4rde</span>
-              <p className="text-lg font-bold text-[#2D6A4F]">{Math.floor(useGameStore.getState().skogsvardering)}</p>
-            </div>
-            <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
-              <span className="text-xs text-[#3D2B1F]/60 uppercase tracking-wider">Inkomst</span>
-              <p className="text-lg font-bold text-[#2D6A4F]">{Math.floor(useGameStore.getState().inkomst)} tkr</p>
-            </div>
-          </div>
-          <button
-            onClick={() => useGameStore.getState().ownerClick()}
-            className="px-8 py-4 bg-[#2D6A4F] text-white font-bold text-lg tracking-wider rounded-sm cursor-pointer border-none active:scale-95 transition-transform"
-          >
-            V\u00e5rda Skog
-          </button>
-          <button
-            onClick={() => {
-              reset()
-              useGameStore.setState({ gameMode: null })
-            }}
-            className="text-xs text-[#3D2B1F]/40 underline cursor-pointer bg-transparent border-none mt-4"
-          >
-            Tillbaka till start
-          </button>
-        </div>
-      </div>
+      <OwnerApp
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        toasts={toasts}
+        onDismissToast={dismissToast}
+        onReset={() => {
+          reset()
+          useGameStore.setState({ gameMode: null })
+        }}
+        showSettings={showSettings}
+        onShowSettings={() => setShowSettings(true)}
+        onHideSettings={() => setShowSettings(false)}
+        showAchievements={showAchievements}
+        onShowAchievements={() => setShowAchievements(true)}
+        onHideAchievements={() => setShowAchievements(false)}
+      />
     )
   }
 
@@ -222,6 +205,141 @@ function App() {
         onTabChange={setActiveTab}
       />
     </div>
+  )
+}
+
+// ── Owner (Skogsägare) App Shell ──
+
+type OwnerTab = 'dashboard' | 'knowledge'
+
+function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, showSettings, onShowSettings, onHideSettings, showAchievements, onShowAchievements, onHideAchievements }: {
+  activeTab: Tab
+  onTabChange: (tab: Tab) => void
+  toasts: ReturnType<typeof useAchievementToasts>['toasts']
+  onDismissToast: (id: string) => void
+  onReset: () => void
+  showSettings: boolean
+  onShowSettings: () => void
+  onHideSettings: () => void
+  showAchievements: boolean
+  onShowAchievements: () => void
+  onHideAchievements: () => void
+}) {
+  const ownerTab = (activeTab === 'lobby' ? 'knowledge' : 'dashboard') as OwnerTab
+
+  return (
+    <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">
+      {/* Achievement Toasts */}
+      <AchievementToastManager toasts={toasts} onDismiss={onDismissToast} />
+
+      {/* Event Modal */}
+      <EventModal />
+
+      {/* Achievement Panel */}
+      <AnimatePresence>
+        {showAchievements && (
+          <AchievementPanel onClose={onHideAchievements} />
+        )}
+      </AnimatePresence>
+
+      {/* Settings Panel */}
+      <AnimatePresence>
+        {showSettings && (
+          <SettingsPanel onClose={onHideSettings} />
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto pb-20">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={ownerTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="p-4"
+          >
+            {ownerTab === 'dashboard' && <OwnerDashboard />}
+            {ownerTab === 'knowledge' && <KnowledgePanel />}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      {/* Top-right action buttons */}
+      <div className="fixed top-2 right-2 z-40 flex flex-col gap-1.5">
+        <button
+          onClick={onShowSettings}
+          className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          title="Inst\u00e4llningar"
+        >
+          &#9881;
+        </button>
+        <button
+          onClick={onShowAchievements}
+          className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          title="Prestationer"
+        >
+          &#127942;
+        </button>
+        <button
+          onClick={onReset}
+          className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-[#3D2B1F]/40"
+          title="Tillbaka till start"
+        >
+          &#8634;
+        </button>
+      </div>
+
+      {/* Bottom Tab Navigation */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 border-t border-[#2D6A4F]/10 backdrop-blur-sm"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
+          <OwnerTabButton
+            active={ownerTab === 'dashboard'}
+            label="\u00d6versikt"
+            icon={'\uD83C\uDF32'}
+            onClick={() => onTabChange('dashboard')}
+          />
+          <OwnerTabButton
+            active={ownerTab === 'knowledge'}
+            label="Kunskap"
+            icon={'\uD83D\uDCD6'}
+            onClick={() => onTabChange('lobby')}
+          />
+        </div>
+      </nav>
+    </div>
+  )
+}
+
+function OwnerTabButton({ active, label, icon, onClick }: {
+  active: boolean
+  label: string
+  icon: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="relative flex flex-col items-center gap-0.5 px-3 py-2 bg-transparent border-none cursor-pointer"
+    >
+      <span className="text-xl">{icon}</span>
+      <span className={`text-xs font-medium tracking-wide uppercase ${
+        active ? 'text-[#2D6A4F]' : 'text-[#3D2B1F]/40'
+      }`}>
+        {label}
+      </span>
+      {active && (
+        <motion.div
+          layoutId="owner-tab-indicator"
+          className="absolute -top-px left-2 right-2 h-0.5 bg-[#2D6A4F] rounded-full"
+          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+        />
+      )}
+    </button>
   )
 }
 
