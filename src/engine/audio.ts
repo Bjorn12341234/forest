@@ -971,3 +971,39 @@ function createEKGAmbient(ctx: AudioContext) {
     osc.stop(now + 0.15)
   }, 1500)
 }
+
+// ── Ending Song (MP3) ──
+let endingSongAudio: HTMLAudioElement | null = null
+
+export function playEndingSong() {
+  if (masterMuted) return
+  try {
+    endingSongAudio = new Audio(import.meta.env.BASE_URL + 'owner_ending.mp3')
+    endingSongAudio.volume = 0
+    endingSongAudio.loop = true
+    endingSongAudio.play().then(() => {
+      fadeAudioVolume(endingSongAudio!, ambientVolume * 0.5, 3000)
+    }).catch(() => { /* File doesn't exist yet — graceful no-op */ })
+  } catch { /* no-op */ }
+}
+
+export function stopEndingSong() {
+  if (!endingSongAudio) return
+  fadeAudioVolume(endingSongAudio, 0, 2000, () => {
+    endingSongAudio?.pause()
+    endingSongAudio = null
+  })
+}
+
+function fadeAudioVolume(audio: HTMLAudioElement, target: number, durationMs: number, onDone?: () => void) {
+  const start = audio.volume
+  const startTime = Date.now()
+  const step = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(1, elapsed / durationMs)
+    audio.volume = start + (target - start) * progress
+    if (progress < 1) requestAnimationFrame(step)
+    else onDone?.()
+  }
+  step()
+}

@@ -396,6 +396,33 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     text: '[MULTIVERS-BUDGET] Universum Beta: miljörörelsen vann. Status: korrigeras. Konsulter utsända.',
     phase: 11,
   },
+  // ── NEW: Phase 11 headlines ──
+  {
+    id: 'tick_galaktisk_arbetsformedling',
+    text: '[GALAKTISK HR] Kosmiska Arbetsförmedlingen söker handläggare. Krav: 400 ljusårs erfarenhet. Lön: negativ. Sökande: 12 miljarder.',
+    phase: 11,
+  },
+  {
+    id: 'tick_lo_kongress_resultat',
+    text: '[FÖRHANDLING] LO-kongressen ajournerad efter 0,002 sekunder. Resultat: "Parterna står långt ifrån varandra." Avstånd: 400 ljusår.',
+    phase: 11,
+  },
+  {
+    id: 'tick_galaktisk_bostadskris',
+    text: '[SAMHÄLLE] Galaktisk bostadskris: 400 miljarder bostadslösa. Orsak: alla planeter omvandlade till produktionsenheter. Bostadsministern: upplöst.',
+    phase: 11,
+  },
+  {
+    id: 'tick_andromeda_handelsavtal',
+    text: '[HANDEL] Andromeda-handelskammaren undertecknar frihandelsavtal. Cellulosa: tullfritt. Allt annat: irrelevant.',
+    phase: 11,
+    trigger: { type: 'totalStammar', value: 500_000_000_000 },
+  },
+  {
+    id: 'tick_intergalaktisk_skattemyndighet',
+    text: '[SKATT] Universell Skattemyndighet bildad. Budget: 0 kr. Personal: 1 AI. Första beslutet: alla skatteintäkter tillfaller Silva Maximus.',
+    phase: 11,
+  },
   {
     id: 'tick_tidslinje',
     text: '[TEMPORAL] Tidslinje-korrektion: godkänd. Dinosauriernas skog: avverkad retroaktivt. Protester: arkiverade.',
@@ -417,6 +444,34 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     id: 'tick_aktieagarna',
     text: '[PROTOKOLL] Utdelning: utförd. Mottagare: 0. Belopp: ∞. Detaljer: irrelevanta. Allt: borta.',
     phase: 12,
+  },
+  // ── NEW: Phase 12 headlines ──
+  {
+    id: 'tick_scb_entropi_rapport',
+    text: '[SCB] Kvartalsrapport: Entropi +47%. BNP: ej tillämplig. Befolkning: 0. Statistik: fortsätter.',
+    phase: 12,
+  },
+  {
+    id: 'tick_sista_revisionen',
+    text: '[REVISION] Riksrevisionen: "Vi har granskat universums sista bokföring. Allt stämmer. Ingenting finns." Revisorn: nöjd.',
+    phase: 12,
+    trigger: { type: 'totalStammar', value: 100_000_000_000_000 },
+  },
+  {
+    id: 'tick_kosmisk_semester',
+    text: '[HR] Semesteransökan: avslagen. Motivering: "Semester förutsätter existens. Existens: avvecklad."',
+    phase: 12,
+  },
+  {
+    id: 'tick_sista_fikat',
+    text: '[PROTOKOLL] Sista styrelsemötet. Fika: serverad. Deltagare: 0. Kanelbullen: perfekt. Ingen äter den. Protokollet: enhälligt.',
+    phase: 12,
+  },
+  {
+    id: 'tick_naturlagar_reviderade',
+    text: '[JURIDIK] Termodynamikens andra huvudsats: överklagad. Handläggningstid: ∞. Universum: inväntar beslut.',
+    phase: 12,
+    trigger: { type: 'totalStammar', value: 200_000_000_000_000 },
   },
 ]
 

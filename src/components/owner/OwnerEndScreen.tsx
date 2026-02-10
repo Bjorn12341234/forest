@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { formatNumber, formatDuration } from '../../engine/format'
+import { playEndingSong, stopEndingSong } from '../../engine/audio'
 
 interface OwnerEndScreenProps {
   onContinue: () => void
@@ -115,10 +116,28 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
     setTimeout(() => setCreditScroll(true), 500)
   }, [])
 
+  const handleContinue = useCallback(() => {
+    stopEndingSong()
+    onContinue()
+  }, [onContinue])
+
+  const handleReset = useCallback(() => {
+    stopEndingSong()
+    onReset()
+  }, [onReset])
+
   // Derived stats
   const resistedCount = Object.values(attacksResisted).filter(Boolean).length
   const surrenderedCount = Object.values(attacksSurrendered).filter(Boolean).length
   const totalGenerators = Object.values(ownerGenerators).reduce((sum, g) => sum + g.count, 0)
+
+  // Play ending song during algiz stage
+  useEffect(() => {
+    if (stage === 'algiz') {
+      playEndingSong()
+      return () => stopEndingSong()
+    }
+  }, [stage])
 
   if (stage === 'algiz') {
     return (
@@ -153,7 +172,7 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
   }
 
   if (stage === 'reality') {
-    return <OwnerRealityPage onContinue={onContinue} onReset={onReset} />
+    return <OwnerRealityPage onContinue={handleContinue} onReset={handleReset} />
   }
 
   if (stage === 'postcredits') {
@@ -203,7 +222,7 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
               LÄS MER
             </button>
             <button
-              onClick={onReset}
+              onClick={handleReset}
               className="px-4 py-1 bg-transparent text-[#A8D5BA]/20 text-[0.5rem] tracking-wider cursor-pointer border-none hover:text-[#A8D5BA]/40 transition-colors"
             >
               starta om

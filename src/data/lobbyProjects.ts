@@ -105,6 +105,15 @@ export const LOBBY_EARNERS: LobbyEarnerData[] = [
     unlockPhase: 11,
     icon: '🌍',
   },
+  {
+    id: 'lobby_earn_kosmiskt_konferens',
+    name: 'Kosmiskt Konferenscentrum',
+    description: 'Konferenscenter i omloppsbana. Tyngdlöst mingel. Gravitationsfri handtryckning. Lobbyn har aldrig varit så bokstavlig.',
+    cost: 200_000_000,
+    pkReward: 500_000,
+    unlockPhase: 12,
+    icon: '🛰️',
+  },
 ]
 
 // ── Spend PK (one-time law changes / projects) ──
@@ -249,6 +258,32 @@ export const LOBBY_PURCHASES: LobbyPurchaseData[] = [
     ],
     unlockPhase: 11,
     icon: '⚖️',
+  },
+  {
+    id: 'lobby_buy_allemansratt_avskaffad',
+    name: '"Kosmisk Allemansrätt: Avskaffad"',
+    description: 'Allemansrätten gällde i Sverige. I rymden gäller bara äganderätten.',
+    basedOn: 'Allemansrättens urholkning',
+    cost: 50_000,
+    effects: [
+      { type: 'generatorBoost', value: 0.5, description: '+50% produktion från alla generatorer' },
+      { type: 'imageDecayReduction', value: 0.3, description: '-30% Image-förlust' },
+    ],
+    unlockPhase: 10,
+    icon: '🚷',
+  },
+  {
+    id: 'lobby_buy_universell_revision',
+    name: '"Universell Revision: Avvecklad"',
+    description: 'Riksrevisionen hade redan ingen budget. Nu har den inte heller ett mandat.',
+    basedOn: 'Riksrevisionens nedskärningar',
+    cost: 150_000,
+    effects: [
+      { type: 'imageDecayReduction', value: 0.8, description: '-80% Image-förlust' },
+      { type: 'lobbyDiscount', value: 0.2, description: '-20% lobby-kostnad' },
+    ],
+    unlockPhase: 11,
+    icon: '📋',
   },
   {
     id: 'lobby_buy_monopol',

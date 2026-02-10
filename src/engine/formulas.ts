@@ -48,9 +48,9 @@ const EVENT_FREQUENCY: Record<number, [number, number]> = {
   7: [90, 150],
   8: [100, 150],
   9: [100, 150],
-  10: [120, 180],
-  11: [120, 180],
-  12: [120, 180],
+  10: [80, 140],
+  11: [80, 140],
+  12: [80, 130],
 }
 
 export function getNextEventDelay(phase: number): number {

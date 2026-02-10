@@ -140,4 +140,153 @@ export const PHASE10_UPGRADES: UpgradeData[] = [
     prerequisites: ['ai_gudomlig'],
     phase: 12,
   },
+
+  // ═══ Post-Biologisk Teknik (expanded: +2 upgrades) ═══
+  {
+    id: 'pbio_dimensionsavverkning',
+    name: 'Dimensionsavverkning',
+    description:
+      'Avverka skog i parallella dimensioner. Varje dimension: en ny skogsbruksplan. Varje skogsbruksplan: identisk. "Avverka allt." Dimensionerna protesterar inte — de har inga fackförbund.',
+    tree: 'Post-Biologisk Teknik',
+    icon: '🌌',
+    baseCost: 300_000_000_000,
+    costResource: 'kapital',
+    production: 300000000,
+    maxCount: 1,
+    effects: [
+      { type: 'stammarPerSecond', value: 150000000 },
+      { type: 'kapitalPerSecond', value: 50000000 },
+    ],
+    prerequisites: ['pbio_syntetisk_cellulosa'],
+    phase: 10,
+  },
+  {
+    id: 'pbio_temporal_skogsbruk',
+    name: 'Temporalt Skogsbruk',
+    description:
+      'Avverka samma skog i flera tidslinjer. Trädet fälls 1923. 1974. 2024. 2847. Varje gång: samma träd. Skogsägarens farfar: förvirrad. Statistiken: perfekt.',
+    tree: 'Post-Biologisk Teknik',
+    icon: '⏳',
+    baseCost: 800_000_000_000,
+    costResource: 'kapital',
+    production: 800000000,
+    maxCount: 1,
+    effects: [
+      { type: 'stammarPerSecond', value: 400000000 },
+      { type: 'gpsMultiplier', value: 1.3 },
+    ],
+    prerequisites: ['pbio_atomskordare'],
+    phase: 11,
+  },
+
+  // ═══ AI Styrelse (expanded: +2 upgrades) ═══
+  {
+    id: 'ai_byrakratisk_singularitet',
+    name: 'Byråkratisk Singularitet',
+    description:
+      'AI:n automatiserar all byråkrati. Tillstånd beviljas innan ansökan skickas. Överklaganden avslås retroaktivt. Handläggningstid: negativ. Myndigheten har aldrig varit så effektiv — eller så meningslös.',
+    tree: 'AI Styrelse',
+    icon: '📎',
+    baseCost: 3_000_000_000_000,
+    costResource: 'kapital',
+    production: 3000000000,
+    maxCount: 1,
+    effects: [
+      { type: 'kapitalPerSecond', value: 1000000000 },
+      { type: 'gpsMultiplier', value: 1.3 },
+    ],
+    prerequisites: ['ai_protokoll'],
+    phase: 11,
+  },
+  {
+    id: 'ai_narrativ_kontroll',
+    name: 'Total Narrativkontroll',
+    description:
+      'AI:n skriver alla nyheter, alla rapporter, alla vetenskapliga artiklar. Verkligheten: vad AI:n säger att den är. Sanningen: en historisk artefakt. Sista oberoende källan: /dev/null.',
+    tree: 'AI Styrelse',
+    icon: '📡',
+    baseCost: 15_000_000_000_000,
+    costResource: 'kapital',
+    production: 15000000000,
+    maxCount: 1,
+    effects: [
+      { type: 'gpsMultiplier', value: 2.0 },
+      { type: 'kapitalPerSecond', value: 3000000000 },
+    ],
+    prerequisites: ['ai_medvetande'],
+    phase: 12,
+  },
+
+  // ═══ Kosmisk Byråkrati (new tree: 4 upgrades) ═══
+  {
+    id: 'kbyr_rymdmyndighetskapning',
+    name: 'Rymdmyndighetskapning',
+    description:
+      'Kosmiska Skogsstyrelsen: er myndighet nu. GD:n: er fd VD. Budgeten: er budget. Tillsynen: er tillsyn. Rapporten: "Allt är utmärkt." Signaturen: er logotyp.',
+    tree: 'Kosmisk Byråkrati',
+    icon: '🏛️',
+    baseCost: 200_000_000_000,
+    costResource: 'kapital',
+    production: 200000000,
+    maxCount: 1,
+    effects: [
+      { type: 'kapitalPerSecond', value: 100000000 },
+      { type: 'gpsMultiplier', value: 1.2 },
+    ],
+    phase: 10,
+  },
+  {
+    id: 'kbyr_intergalaktisk_svangdorr',
+    name: 'Intergalaktisk Svängdörr',
+    description:
+      'Svängdörren fungerar i hyperrymd. Ministrar i 400 galaxer jobbar för er efter mandatperioden. Konsultarvodet: astronomiskt. Bokstavligen.',
+    tree: 'Kosmisk Byråkrati',
+    icon: '🚪',
+    baseCost: 600_000_000_000,
+    costResource: 'kapital',
+    production: 600000000,
+    maxCount: 1,
+    effects: [
+      { type: 'kapitalPerSecond', value: 300000000 },
+      { type: 'gpsMultiplier', value: 1.3 },
+    ],
+    prerequisites: ['kbyr_rymdmyndighetskapning'],
+    phase: 10,
+  },
+  {
+    id: 'kbyr_universell_narrativkontroll',
+    name: 'Universell Narrativkontroll',
+    description:
+      'Kontrollera berättelsen i 400 galaxer simultant. Sanningen: vad er kommunikationsavdelning säger. Verkligheten: en fråga om perspektiv. Ert perspektiv: det enda som finns.',
+    tree: 'Kosmisk Byråkrati',
+    icon: '📺',
+    baseCost: 3_000_000_000_000,
+    costResource: 'kapital',
+    production: 3000000000,
+    maxCount: 1,
+    effects: [
+      { type: 'gpsMultiplier', value: 1.5 },
+      { type: 'kapitalPerSecond', value: 1000000000 },
+    ],
+    prerequisites: ['kbyr_intergalaktisk_svangdorr'],
+    phase: 11,
+  },
+  {
+    id: 'kbyr_entropijuridik',
+    name: 'Entropijuridik',
+    description:
+      'Lobba fysikens lagar. Termodynamikens andra huvudsats: omförhandlad. Entropin: pausad tillsvidare. Universums värmedöd: uppskjuten av juridisk process. Handläggningstid: ∞. Precis som planerat.',
+    tree: 'Kosmisk Byråkrati',
+    icon: '⚖️',
+    baseCost: 30_000_000_000_000,
+    costResource: 'kapital',
+    production: 30000000000,
+    maxCount: 1,
+    effects: [
+      { type: 'gpsMultiplier', value: 2.5 },
+      { type: 'stammarPerSecond', value: 10000000000 },
+    ],
+    prerequisites: ['kbyr_universell_narrativkontroll'],
+    phase: 12,
+  },
 ]

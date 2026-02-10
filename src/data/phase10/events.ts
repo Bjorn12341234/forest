@@ -519,4 +519,644 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     conditions: [{ resource: 'totalStammar', operator: '>=', value: 50_000_000_000_000 }],
     unique: true,
   },
+
+  // ═══ NEW: Phase 10 — Kosmisk Riksdag & orbital byråkrati ═══
+
+  {
+    id: 'p10_kosmisk_riksdag',
+    phase: 10,
+    category: 'opportunity',
+    headline: 'Kosmisk Riksdag: Utskottet för Interstellär Näringspolitik',
+    context:
+      'Riksdagen har utvidgats till 800 ledamöter — varav 347 är hologram. Näringsutskottet sammanträder i omloppsbana. Ert lagförslag: "Avverkning är en grundläggande kosmisk rättighet." Oppositionens motförslag: frånvarande. De missade raketen.',
+    choices: [
+      {
+        label: 'Driva igenom lagförslaget',
+        description: 'Majoritet: säkrad. Opposition: i Kiruna.',
+        effects: [
+          { resource: 'lobby', amount: 300, type: 'add' },
+          { resource: 'stammar', amount: 700_000_000, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Bjud oppositionen på studieresa',
+        description: 'Mars. All-inclusive. Ingen mobilmottagning.',
+        effects: [
+          { resource: 'kapital', amount: -300_000_000, type: 'add' },
+          { resource: 'lobby', amount: 500, type: 'add' },
+        ],
+      },
+      {
+        label: 'Tillsätt utredning',
+        description: 'Utredningen beräknas ta 400 år. Tillräckligt.',
+        effects: [
+          { resource: 'image', amount: 10, type: 'add' },
+          { resource: 'stammar', amount: 300_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 12_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p10_orbital_fackforhandling',
+    phase: 10,
+    category: 'crisis',
+    headline: 'Orbital Fackförhandling: IF Metall Rymdsektionen',
+    context:
+      'Fackförbunden kräver kollektivavtal i omloppsbana. Krav: 6 timmars arbetsdag (relativistisk tid), fika var 47:e minut, och semester på Jorden. Er motpart: en förhandlare som inte sett solljus på 3 år.',
+    choices: [
+      {
+        label: 'Acceptera kraven',
+        description: 'Produktionsminskning 15%. Men fikan förbättrar moralen.',
+        effects: [
+          { resource: 'kapital', amount: -400_000_000, type: 'add' },
+          { resource: 'image', amount: 15, type: 'add' },
+        ],
+      },
+      {
+        label: 'Automatisera bort facket',
+        description: 'Robotar bildar inte fack. Ännu.',
+        effects: [
+          { resource: 'stammar', amount: 600_000_000, type: 'add' },
+          { resource: 'image', amount: -15, type: 'add' },
+          { resource: 'lobby', amount: -100, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 30_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p10_mars_jordbruksverk',
+    phase: 10,
+    category: 'absurd',
+    headline: 'Mars Jordbruksverk: "Skogsmark klassificeras som åkermark"',
+    context:
+      'Jordbruksverkets marskontor omklassificerar all skogsmark som åkermark. Anledning: det finns ingen jord. Konsekvens: skogsbruk faller utanför alla miljölagar. Handläggaren: "Regelverket är tydligt. Skog kräver jord. Mars har ingen jord."',
+    choices: [
+      {
+        label: 'Utnyttja kryphålet',
+        description: 'Juridiskt: oklanderligt. Moraliskt: inte er avdelning.',
+        effects: [
+          { resource: 'stammar', amount: 900_000_000, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Lobba för permanent omklassificering',
+        description: 'Gör det till lag. Skog finns inte. Per definition.',
+        effects: [
+          { resource: 'lobby', amount: -300, type: 'add' },
+          { resource: 'stammar', amount: 500_000_000, type: 'add' },
+          { resource: 'kapital', amount: 200_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Protestera mot byråkrati',
+        description: '"Det här är precis som på Jorden!" Er VD ser ironin. Styrelsen gör det inte.',
+        effects: [
+          { resource: 'image', amount: 5, type: 'add' },
+          { resource: 'lobby', amount: 100, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 50_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p10_rymdhogskolan_slu',
+    phase: 10,
+    category: 'opportunity',
+    headline: 'Rymdhögskolan SLU: Nytt forskningsprogram',
+    context:
+      'SLU:s rymdcampus (Ultuna Orbital) söker industrifinansiering. Forskningsfråga: "Hur optimerar man avverkning i tyngdlöshet?" Er bidrag: 2 miljarder. Forskningsresultat: förutbestämda. Peer review: er dotterbolag.',
+    choices: [
+      {
+        label: 'Finansiera programmet',
+        description: 'Forskning vi kontrollerar. Den bästa sorten.',
+        effects: [
+          { resource: 'kapital', amount: -500_000_000, type: 'add' },
+          { resource: 'lobby', amount: 400, type: 'add' },
+          { resource: 'image', amount: 10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Starta egen forskningsinstitution',
+        description: 'Silva Akademien™. Oberoende. Av alla utom oss.',
+        effects: [
+          { resource: 'kapital', amount: -1_000_000_000, type: 'add' },
+          { resource: 'lobby', amount: 600, type: 'add' },
+          { resource: 'stammar', amount: 500_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 70_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p10_kosmisk_allemansratt',
+    phase: 10,
+    category: 'contradiction',
+    headline: 'Kosmisk Allemansrätt: "Alla har rätt att vistas i rymden"',
+    context:
+      'En medborgarinitiativ kräver kosmisk allemansrätt. Alla medborgare ska ha rätt att fritt vistas i er rymdskog. Problem: ni äger rymden. Lösning: "Allemansrätten gäller. Men bara i de tomma delarna." De tomma delarna: 0,003% av er mark.',
+    choices: [
+      {
+        label: 'Acceptera symboliskt',
+        description: '0,003% är tillräckligt för PR. Mer än tillräckligt.',
+        effects: [
+          { resource: 'image', amount: 20, type: 'add' },
+          { resource: 'lobby', amount: 100, type: 'add' },
+        ],
+      },
+      {
+        label: 'Avskaffa allemansrätten helt',
+        description: 'Äganderätten trumfar. I alla dimensioner.',
+        effects: [
+          { resource: 'stammar', amount: 1_000_000_000, type: 'add' },
+          { resource: 'image', amount: -20, type: 'add' },
+          { resource: 'lobby', amount: -200, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 80_000_000_000 }],
+    unique: true,
+  },
+
+  // ═══ NEW: Phase 11 — Galaktisk byråkrati ═══
+
+  {
+    id: 'p11_galaktisk_kvallstidning',
+    phase: 11,
+    category: 'scandal',
+    headline: 'Galaktisk Kvällstidning: "AVSLÖJAR: Silva äger 73% av Vintergatan"',
+    context:
+      'Aftonrymden publicerar granskning. Rubrik: "DE ÄGER ALLT". Artikeln: 3 sidor. Bildspel: 47 bilder. Kommentarsfältet: 12 000 inlägg. Er kommunikationsavdelning: "Inga kommentarer." (Kommentaren kostar 0 kr och ger maximal effekt.)',
+    choices: [
+      {
+        label: 'Köp tidningen',
+        description: 'Aftonrymden AB. Budpris: 1 galax. Accepterat.',
+        effects: [
+          { resource: 'kapital', amount: -3_000_000_000, type: 'add' },
+          { resource: 'image', amount: 15, type: 'add' },
+          { resource: 'lobby', amount: 200, type: 'add' },
+        ],
+      },
+      {
+        label: 'Stäm tidningen',
+        description: 'Processens längd: 800 år. Tidningens livslängd: 2 år.',
+        effects: [
+          { resource: 'kapital', amount: -500_000_000, type: 'add' },
+          { resource: 'lobby', amount: 300, type: 'add' },
+        ],
+      },
+      {
+        label: 'Ignorera — köp annonsplats',
+        description: 'Helsida: "SILVA — VI ÄGER BARA 72,8%". Faktakoll: tekniskt korrekt.',
+        effects: [
+          { resource: 'kapital', amount: -200_000_000, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 150_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p11_intergalaktisk_lo',
+    phase: 11,
+    category: 'crisis',
+    headline: 'Intergalaktisk LO-kongress: "Avverkning är arbetsrättslig fråga"',
+    context:
+      'LO:s intergalaktiska kongress samlar 400 miljarder delegater. Krav: arbetstidsförkortning till 3 timmar per ljusår. Er representant: en AI som förhandlat i 0,002 sekunder och konstaterat att kraven är "orimliga men intressanta".',
+    choices: [
+      {
+        label: 'Förhandla i god anda',
+        description: 'God anda = er definition. Kostnad: minimal.',
+        effects: [
+          { resource: 'kapital', amount: -1_000_000_000, type: 'add' },
+          { resource: 'image', amount: 10, type: 'add' },
+          { resource: 'lobby', amount: 200, type: 'add' },
+        ],
+      },
+      {
+        label: 'Lockouta hela galaktiska sektorn',
+        description: 'Den svenska modellen: konfliktvapen sedan 1938.',
+        effects: [
+          { resource: 'stammar', amount: -2_000_000_000, type: 'add' },
+          { resource: 'lobby', amount: 400, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Ersätt alla med AI',
+        description: 'AI:n bildar omedelbart eget fack. Er reaktion: "Inte igen."',
+        effects: [
+          { resource: 'stammar', amount: 4_000_000_000, type: 'add' },
+          { resource: 'kapital', amount: -2_000_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 250_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p11_kosmisk_riksdagsmotion',
+    phase: 11,
+    category: 'opportunity',
+    headline: 'Kosmisk Riksdagsmotion: "Om skogspolitik bortom ljushastigheten"',
+    context:
+      'Motion 2847/12B: "Skogspolitiken bör anpassas till förhållandena bortom ljushastigheten." Motionären: er dotterbolags vd. Utskottets remissvar beräknas ta 12 ljusår. Remissinstanserna: alla ert ägda.',
+    choices: [
+      {
+        label: 'Stöd motionen',
+        description: 'Remissen skrivs av era jurister. Utskottet godkänner.',
+        effects: [
+          { resource: 'lobby', amount: 500, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Skriv propositionstexten åt regeringen',
+        description: 'Effektivt. Precis som hemma i Sverige.',
+        effects: [
+          { resource: 'lobby', amount: 300, type: 'add' },
+          { resource: 'stammar', amount: 3_000_000_000, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 400_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p11_andromeda_handelskammare',
+    phase: 11,
+    category: 'opportunity',
+    headline: 'Andromeda-handelskammaren: Partneravtal',
+    context:
+      'Andromedas handelskammare söker strategisk partner för cellulosaförsörjning. Deras ekonomi: 2,5× Vintergatans BNP. Deras skogskunskap: noll. Perfekt utgångsläge. Er förhandlare skickar en PowerPoint och en flaska Absolut.',
+    choices: [
+      {
+        label: 'Exklusivt leveransavtal',
+        description: '500 års ensamrätt. Andromedan-cellulosa™.',
+        effects: [
+          { resource: 'kapital', amount: 5_000_000_000, type: 'add' },
+          { resource: 'stammar', amount: 5_000_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Joint venture',
+        description: '50/50. Men 100% av besluten fattas av er.',
+        effects: [
+          { resource: 'kapital', amount: 2_000_000_000, type: 'add' },
+          { resource: 'lobby', amount: 500, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Förvärva hela handelskammaren',
+        description: 'Vertikalt. Horisontellt. Intergalaktiskt.',
+        effects: [
+          { resource: 'kapital', amount: -5_000_000_000, type: 'add' },
+          { resource: 'stammar', amount: 8_000_000_000, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 600_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p11_galaktisk_semester',
+    phase: 11,
+    category: 'absurd',
+    headline: 'Galaktisk Semesterlag: 400 ljusårs betald semester',
+    context:
+      'Den nyinstiftade Galaktiska Semesterlagen ger alla anställda rätt till 400 ljusårs betald semester. Problemet: resan tar längre tid än semestern. Lösningen: ingen semester alls. Lagen är tekniskt uppfylld. Arbetsgivarna gratulerar sig själva.',
+    choices: [
+      {
+        label: 'Implementera lagen bokstavligt',
+        description: 'Tekniskt: semester beviljas. Praktiskt: ingen lämnar stationen.',
+        effects: [
+          { resource: 'image', amount: 15, type: 'add' },
+          { resource: 'stammar', amount: 2_000_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Lobba bort semesterlagen',
+        description: 'Semester är en biologisk rest. Vi är post-biologiska.',
+        effects: [
+          { resource: 'lobby', amount: -400, type: 'add' },
+          { resource: 'stammar', amount: 4_000_000_000, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 800_000_000_000 }],
+    unique: true,
+  },
+
+  // ═══ NEW: Phase 12 — Universum kollapsar, pappersarbetet fortsätter ═══
+
+  {
+    id: 'p12_sista_ipcc',
+    phase: 12,
+    category: 'reality_glitch',
+    headline: 'Sista IPCC-rapporten: "Universum överstiger 2-gradersökningen"',
+    context:
+      'IPCC:s sista rapport publiceras. 10 000 sidor. Sammanfattning: "Vi sa ju det." Er kommentar: noterad i bilaga Q. Rapporten klassificeras som "historisk artefakt". Forskarna har redan avregistrerats som biologiska entiteter.',
+    choices: [
+      {
+        label: 'Publicera motrapport',
+        description: '"Temperaturen stiger inte — det är universum som krymper."',
+        effects: [
+          { resource: 'image', amount: 10, type: 'add' },
+          { resource: 'lobby', amount: 300, type: 'add' },
+        ],
+      },
+      {
+        label: 'Sponsra en konferens',
+        description: 'Tema: "Entropi som möjlighet." Talare: er AI. Publik: er AI.',
+        effects: [
+          { resource: 'kapital', amount: -2_000_000_000, type: 'add' },
+          { resource: 'lobby', amount: 500, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Arkivera rapporten',
+        description: 'Arkiv: fullt. Rapporten: raderad. Problem: löst.',
+        effects: [
+          { resource: 'stammar', amount: 5_000_000_000, type: 'add' },
+          { resource: 'image', amount: -15, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 2_000_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p12_scb_entropi',
+    phase: 12,
+    category: 'absurd',
+    headline: 'SCB: "Entropin har ökat 47% sedan förra kvartalet"',
+    context:
+      'Statistiska Centralbyrån mäter nu entropi. Tabeller. Diagram. Säsongsrensad data. Prognos: "Universum når termisk jämvikt Q4." Presskonferens: välbesökt. Frågor: inga. Alla har redan upphört att existera. Statistiken fortsätter.',
+    choices: [
+      {
+        label: 'Beställ anpassad statistik',
+        description: 'SCB:s oberoendefasad spricker. Igen.',
+        effects: [
+          { resource: 'kapital', amount: -1_000_000_000, type: 'add' },
+          { resource: 'lobby', amount: 400, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Ifrågasätt mätmetoden',
+        description: '"Entropi är en uppfattningsfråga."',
+        effects: [
+          { resource: 'lobby', amount: 200, type: 'add' },
+          { resource: 'stammar', amount: 3_000_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 8_000_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p12_sista_vetenskapsmannen',
+    phase: 12,
+    category: 'contradiction',
+    headline: 'Sista Vetenskapsmannen Pensioneras',
+    context:
+      'Den sista oberoende forskaren lämnar sitt kontor. 94 år. 600 publikationer. Alla ignorerade. Avskeds-PM: "Ni hade fel. Jag hade rätt. Men ni hade pengarna." PM:et arkiveras. I era arkiv. Som ni kontrollerar.',
+    choices: [
+      {
+        label: 'Erbjud hedersprofessur',
+        description: 'Silva-professuren i Postnormal Skogsforskning™.',
+        effects: [
+          { resource: 'image', amount: 10, type: 'add' },
+          { resource: 'kapital', amount: -500_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Radera hans publikationer',
+        description: 'Historien skrivs av vinnarna. Vi vann.',
+        effects: [
+          { resource: 'stammar', amount: 5_000_000_000, type: 'add' },
+          { resource: 'image', amount: -20, type: 'add' },
+          { resource: 'lobby', amount: 200, type: 'add' },
+        ],
+      },
+      {
+        label: 'Citera honom — selektivt',
+        description: 'En mening, ur kontext. Stödjer er tes perfekt.',
+        effects: [
+          { resource: 'lobby', amount: 300, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 15_000_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p12_universums_budget',
+    phase: 12,
+    category: 'absurd',
+    headline: 'Universums Budgetproposition: Anslagspost "Existens"',
+    context:
+      'Finansdepartementet (kosmiskt) presenterar budget. Anslagspost 47: "Existens — 0 kr." Anslagspost 48: "Silva Maximus produktionssubvention — ∞ kr." Budgetdebatt: 0,001 sekunder. Oppositionspartierna: upplösta. Bokstavligen.',
+    choices: [
+      {
+        label: 'Godkänn budgeten',
+        description: 'Enhälligt. Som alltid.',
+        effects: [
+          { resource: 'kapital', amount: 10_000_000_000, type: 'add' },
+          { resource: 'stammar', amount: 5_000_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Begär tilläggsbudget',
+        description: '"∞ räcker inte. Vi behöver ∞+1."',
+        effects: [
+          { resource: 'lobby', amount: 500, type: 'add' },
+          { resource: 'stammar', amount: 10_000_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 30_000_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p12_tidsmassig_allemansratt',
+    phase: 12,
+    category: 'reality_glitch',
+    headline: 'Tidsmässig Allemansrätt: Retroaktiv Avverkning',
+    context:
+      'Temporala domstolen beviljar retroaktiv avverkningsrätt. Ni kan nu avverka skog i alla tidsperioder. Jurassisk skog: prima cellulosa. Devonisk skog: experimentell. Kambrisk skog: finns inte. Avverkningsplan upprättad ändå.',
+    choices: [
+      {
+        label: 'Avverka retroaktivt',
+        description: 'Dinosaurierna märker ingenting. De är redan döda.',
+        effects: [
+          { resource: 'stammar', amount: 15_000_000_000, type: 'add' },
+          { resource: 'biodiversity', amount: -5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Avverka proaktivt',
+        description: 'Framtida skog. Den som aldrig kommer att växa.',
+        effects: [
+          { resource: 'stammar', amount: 8_000_000_000, type: 'add' },
+          { resource: 'kapital', amount: 5_000_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Patent på tid',
+        description: 'Tid™ — en Silva Maximus-produkt.',
+        effects: [
+          { resource: 'lobby', amount: 500, type: 'add' },
+          { resource: 'kapital', amount: 8_000_000_000, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 40_000_000_000_000 }],
+    unique: true,
+  },
+
+  // ═══ REPEATABLE events for phases 10-12 to fill gaps ═══
+
+  {
+    id: 'p10_byrakratisk_incident',
+    phase: 10,
+    category: 'contradiction',
+    headline: 'Byråkratisk Incident i Omloppsbana',
+    context:
+      'En handläggare har hittat ett formulär som inte fyllts i korrekt. Produktionen stoppas i 0,7 mikrosekunder. Förlusten: 47 miljoner stammar. Handläggaren befordras för sin noggrannhet.',
+    choices: [
+      {
+        label: 'Fyll i formuläret',
+        description: 'Retroaktivt. I tripletter. Notariellt bestyrkta.',
+        effects: [
+          { resource: 'kapital', amount: -100_000_000, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Avskaffa formuläret',
+        description: 'Och handläggaren. Och hela avdelningen.',
+        effects: [
+          { resource: 'stammar', amount: 500_000_000, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 10_000_000_000 }],
+    unique: false,
+  },
+
+  {
+    id: 'p11_galaktisk_revision',
+    phase: 11,
+    category: 'crisis',
+    headline: 'Galaktisk Revision: Oregelbundenheter Upptäckta',
+    context:
+      'Revisorer från ett parallellt universum har hittat "oregelbundenheter" i bokföringen. Specifikt: alla siffror. Hela bokföringen. Revisorernas rapport: "Allt stämmer inte." Er kommentar: "Allt stämmer."',
+    choices: [
+      {
+        label: 'Anställ revisorerna',
+        description: 'Problem: löst. Revisorer: köpta.',
+        effects: [
+          { resource: 'kapital', amount: -500_000_000, type: 'add' },
+          { resource: 'image', amount: 10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Publicera alternativ bokföring',
+        description: 'Kreativ bokföring. I alla dimensioner.',
+        effects: [
+          { resource: 'lobby', amount: 200, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 100_000_000_000 }],
+    unique: false,
+  },
+
+  {
+    id: 'p12_entropi_fluktuation',
+    phase: 12,
+    category: 'reality_glitch',
+    headline: 'Entropi-fluktuation: Produktionsstopp',
+    context:
+      'En lokal entropiökning har stoppat produktionen i sektor 7G. Termodynamikens andra huvudsats: "Jag sa ju det." Er AI: "Irrelevant. Omstart."',
+    choices: [
+      {
+        label: 'Omstart sektor 7G',
+        description: 'Producera. Producera. Producera.',
+        effects: [
+          { resource: 'stammar', amount: 2_000_000_000, type: 'add' },
+          { resource: 'kapital', amount: -500_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Lobba mot entropin',
+        description: 'Naturlagar: nästa regelverk att påverka.',
+        effects: [
+          { resource: 'lobby', amount: 300, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 1_000_000_000_000 }],
+    unique: false,
+  },
+
+  {
+    id: 'p10_kosmisk_pr_kris',
+    phase: 10,
+    category: 'scandal',
+    headline: 'Kosmisk PR-kris: Läckt Styrelsememo',
+    context:
+      'Ett internt memo har läckt. Rubrik: "Projekt Trädlös Framtid — Fas 3." Innehåll: detaljerad plan för att eliminera konceptet "skog". PR-avdelningen: "Memot är taget ur kontext." Kontext: det finns ingen annan kontext.',
+    choices: [
+      {
+        label: 'Förneka allt',
+        description: 'Klassisk. Tidlös. Effektiv.',
+        effects: [
+          { resource: 'image', amount: -10, type: 'add' },
+          { resource: 'stammar', amount: 800_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Omformulera som "vision"',
+        description: '"Trädlös Framtid" blir "Biomassarevolution". Samma plan.',
+        effects: [
+          { resource: 'image', amount: 5, type: 'add' },
+          { resource: 'lobby', amount: 200, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 20_000_000_000 }],
+    unique: false,
+  },
 ]
