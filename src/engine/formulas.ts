@@ -18,9 +18,9 @@ const KAPITAL_BASE_RATE: Record<number, number> = {
   7: 0.05,
   8: 0.06,
   9: 0.07,
-  10: 0.08,
-  11: 0.09,
-  12: 0.10,
+  10: 0.12,
+  11: 0.15,
+  12: 0.20,
 }
 
 export function getKapitalConversionRate(phase: number): number {

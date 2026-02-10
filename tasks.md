@@ -385,6 +385,15 @@
 
 ---
 
+## Post-Sprint 6: UX/Läsbarhet (Tester-feedback)
+
+- [x] PF.1: Öka fontstorlekar, fixa kontrast, ta bort texttrunkering — 17 komponenter uppdaterade efter feedback från testare. Teknik-flikens ljusa bakgrund fixad, EventModal scrollbar på mobil, textfärger ljusare i alla era-teman. Deployed.
+- [x] PF.2: Varningsbanderoll vid produktionsstraff — Ny WarningBanner-komponent på Dashboard som visar varning (nivå 1-3) med förklaring och ledtråd ("Köp PR-kampanjer"). Spelaren ser tydligt varför produktion sjunker.
+- [x] PF.3: Fix ™-symbol — `\u2122` i JSX renderade bokstavlig text istället för ™. Fixat i LobbyPanel.tsx (2 ställen).
+- [x] PF.4: Lättare endgame-ekonomi — EXPANSION-generatorer: costScale sänkt (1.25→1.18, 1.30→1.20, 1.35→1.22), produktion +25%. Kapitalkonvertering fas 10-12 höjd (8%→12%, 9%→15%, 10%→20%).
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

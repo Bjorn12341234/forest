@@ -4,6 +4,7 @@ import { ClickArea } from './ClickArea'
 import { Generators } from './Generators'
 import { GlassCard } from './ui/GlassCard'
 import { AnimatedNumber } from './ui/AnimatedNumber'
+import { WarningBanner } from './WarningBanner'
 
 import { PHASE_NAMES } from '../engine/phases'
 
@@ -45,6 +46,9 @@ export function Dashboard() {
           <ResourceCard label="Politiskt Kapital" value={lobby} />
         )}
       </div>
+
+      {/* Warning Banner */}
+      <WarningBanner />
 
       {/* Phase Progress */}
       <GlassCard padding="sm">

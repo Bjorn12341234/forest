@@ -43,7 +43,7 @@ export function LobbyPanel() {
         </GlassCard>
         <GlassCard padding="sm">
           <div className="flex flex-col gap-0.5">
-            <span className="text-text-muted text-xs uppercase tracking-wider">Grön Image\u2122</span>
+            <span className="text-text-muted text-xs uppercase tracking-wider">Grön Image™</span>
             <AnimatedNumber value={image} className={`text-lg ${image > 60 ? 'text-accent-green' : image > 30 ? 'text-accent' : 'text-danger'}`} />
           </div>
         </GlassCard>
@@ -81,7 +81,7 @@ export function LobbyPanel() {
           {showPR && (
             <>
               <h2 className="text-base font-medium text-text-primary mt-4">PR-kampanjer</h2>
-              <p className="text-xs text-text-muted -mt-2">Köp tillbaka er Gröna Image\u2122.</p>
+              <p className="text-xs text-text-muted -mt-2">Köp tillbaka er Gröna Image™.</p>
               <div className="flex flex-col gap-2">
                 {PR_CAMPAIGNS.map(campaign => (
                   <PRCampaignRow
