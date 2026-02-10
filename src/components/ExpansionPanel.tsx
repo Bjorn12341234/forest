@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { EXPANSION_TARGETS, type ExpansionTargetData } from '../data/expansionTargets'
@@ -181,6 +181,37 @@ function CountryPanel() {
   const allocatePressure = useGameStore(s => s.allocatePressure)
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [autoAllocate, setAutoAllocate] = useState(false)
+
+  // Auto-allocate: distribute pressure with 2x on weakness vector
+  const applyAutoAllocate = useCallback((countryId: string) => {
+    const def = COUNTRIES.find(c => c.id === countryId)
+    if (!def) return
+    // Weakness vectors get double weight, equal base of 25
+    const base = 25
+    const weakKapital = def.defenseType === 'economic' ? base * 2 : base
+    const weakLobby = def.defenseType === 'environmental' ? base * 2 : base
+    const weakStammar = def.defenseType === 'political' ? base * 2 : base
+    allocatePressure(countryId, 'kapital', weakKapital)
+    allocatePressure(countryId, 'lobby', weakLobby)
+    allocatePressure(countryId, 'stammar', weakStammar)
+  }, [allocatePressure])
+
+  // Apply auto-allocate to all invading countries when toggled on
+  useEffect(() => {
+    if (!autoAllocate) return
+    for (const [id, cs] of Object.entries(countries)) {
+      if (cs.status === 'invading') {
+        applyAutoAllocate(id)
+      }
+    }
+  }, [autoAllocate, countries, applyAutoAllocate])
+
+  // Manual allocation turns off auto mode
+  const handleManualAllocate = useCallback((countryId: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => {
+    setAutoAllocate(false)
+    allocatePressure(countryId, vector, amount)
+  }, [allocatePressure])
 
   const visibleCountries = useMemo(() => {
     return COUNTRIES.filter(c => c.unlockPhase <= phase)
@@ -199,6 +230,10 @@ function CountryPanel() {
   function handleInvade(id: string) {
     invadeCountry(id)
     playPurchase()
+    if (autoAllocate) {
+      // Small delay to let store update, then auto-allocate
+      setTimeout(() => applyAutoAllocate(id), 50)
+    }
   }
 
   const controlledCount = Object.values(countries).filter(c => c.status === 'controlled').length
@@ -214,9 +249,23 @@ function CountryPanel() {
             Exportera den svenska modellen. Krossa motstånd med kapital, lobby och stammar.
           </p>
         </div>
-        <span className="text-xs text-text-muted uppercase tracking-widest">
-          {VIEW_LABELS.countries}
-        </span>
+        <div className="flex items-center gap-3">
+          {invadingCount > 0 && (
+            <button
+              onClick={() => setAutoAllocate(!autoAllocate)}
+              className={`px-3 py-1.5 rounded-sm text-xs font-medium border transition-all cursor-pointer
+                ${autoAllocate
+                  ? 'bg-accent/20 border-accent/40 text-accent'
+                  : 'bg-bg-tertiary border-bg-tertiary text-text-muted hover:text-text-secondary hover:border-text-muted/30'
+                }`}
+            >
+              {autoAllocate ? '⚡ Auto-tryck PÅ' : '⚡ Auto-tryck'}
+            </button>
+          )}
+          <span className="text-xs text-text-muted uppercase tracking-widest">
+            {VIEW_LABELS.countries}
+          </span>
+        </div>
       </div>
 
       {/* World Map + Country Dots */}
@@ -321,7 +370,7 @@ function CountryPanel() {
               kapital={kapital}
               lobby={lobby}
               onInvade={() => handleInvade(selected.id)}
-              onAllocate={(vector, amount) => allocatePressure(selected.id, vector, amount)}
+              onAllocate={(vector, amount) => handleManualAllocate(selected.id, vector, amount)}
               onClose={() => setSelectedId(null)}
             />
           </motion.div>

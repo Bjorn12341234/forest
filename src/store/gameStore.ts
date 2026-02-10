@@ -441,8 +441,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       }
     }
 
-    // Check event triggers (skip during phase transitions)
-    if (!updates.pendingTransition && !state.pendingTransition && checkEventTrigger(state, now)) {
+    // Check event triggers (skip during phase transitions and active invasions)
+    const hasActiveInvasion = Object.values(state.countries).some(cs => cs.status === 'invading')
+    if (!updates.pendingTransition && !state.pendingTransition && !hasActiveInvasion && checkEventTrigger(state, now)) {
       const event = selectEvent(state, ALL_EVENTS)
       if (event) {
         updates.activeEvent = event

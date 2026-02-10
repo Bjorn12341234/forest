@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { formatNumber } from '../engine/format'
 import { ClickArea } from './ClickArea'
@@ -30,6 +31,10 @@ export function Dashboard() {
   const kapital = useGameStore(s => s.kapital)
   const image = useGameStore(s => s.image)
   const lobby = useGameStore(s => s.lobby)
+  const species = useGameStore(s => s.species)
+  const biodiversity = useGameStore(s => s.biodiversity)
+
+  const [mobileExpanded, setMobileExpanded] = useState(false)
 
   const phaseName = PHASE_NAMES[phase] ?? `Fas ${phase}`
   const nextThreshold = PHASE_THRESHOLDS[phase] ?? Infinity
@@ -37,13 +42,66 @@ export function Dashboard() {
 
   return (
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
-      {/* Top Resource Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      {/* Mobile Compact Resource Bar (visible on small screens) */}
+      <div className="sm:hidden">
+        <button
+          onClick={() => setMobileExpanded(!mobileExpanded)}
+          className="w-full cursor-pointer"
+        >
+          <GlassCard padding="sm">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-3 flex-wrap min-w-0">
+                <span className="text-xs font-numbers text-text-primary whitespace-nowrap">
+                  🪵 {formatNumber(stammar)}
+                </span>
+                <span className="text-xs font-numbers text-text-primary whitespace-nowrap">
+                  💰 {formatNumber(kapital)}
+                </span>
+                <span className="text-xs font-numbers text-accent-green whitespace-nowrap">
+                  🌿 {Math.round(image)}
+                </span>
+                {phase >= 2 && (
+                  <span className="text-xs font-numbers text-text-primary whitespace-nowrap">
+                    🏛️ {formatNumber(lobby)}
+                  </span>
+                )}
+                {phase >= 3 && species > 0 && (
+                  <span className="text-xs font-numbers text-danger whitespace-nowrap">
+                    🦉 −{species}
+                  </span>
+                )}
+              </div>
+              <span className="text-xs text-text-muted flex-shrink-0">
+                {mobileExpanded ? '▲' : '▼'}
+              </span>
+            </div>
+          </GlassCard>
+        </button>
+        {mobileExpanded && (
+          <div className={`grid gap-2 mt-2 ${phase >= 3 ? 'grid-cols-2' : 'grid-cols-2'}`}>
+            <ResourceCard label="Stammar" value={stammar} format={formatNumber} />
+            <ResourceCard label="Kapital" value={kapital} format={n => `${formatNumber(n)} Mkr`} />
+            <ResourceCard label="Grön Image™" value={image} className="text-accent-green" />
+            {phase >= 2 && (
+              <ResourceCard label="Politiskt Kapital" value={lobby} />
+            )}
+            {phase >= 3 && (
+              <SpeciesCard species={species} biodiversity={biodiversity} />
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Resource Bar (hidden on small screens) */}
+      <div className={`hidden sm:grid gap-2 ${phase >= 3 ? 'sm:grid-cols-5' : 'sm:grid-cols-4'}`}>
         <ResourceCard label="Stammar" value={stammar} format={formatNumber} />
         <ResourceCard label="Kapital" value={kapital} format={n => `${formatNumber(n)} Mkr`} />
         <ResourceCard label="Grön Image™" value={image} className="text-accent-green" />
         {phase >= 2 && (
           <ResourceCard label="Politiskt Kapital" value={lobby} />
+        )}
+        {phase >= 3 && (
+          <SpeciesCard species={species} biodiversity={biodiversity} />
         )}
       </div>
 
@@ -105,6 +163,43 @@ function ResourceCard({ label, value, format, className = '' }: ResourceCardProp
           className={`text-lg text-text-primary ${className}`}
           format={format}
         />
+      </div>
+    </GlassCard>
+  )
+}
+
+function SpeciesCard({ species, biodiversity }: { species: number; biodiversity: number }) {
+  const [pulse, setPulse] = useState(false)
+  const prevSpecies = useRef(species)
+
+  useEffect(() => {
+    if (species > prevSpecies.current) {
+      setPulse(true)
+      const timer = setTimeout(() => setPulse(false), 1000)
+      prevSpecies.current = species
+      return () => clearTimeout(timer)
+    }
+    prevSpecies.current = species
+  }, [species])
+
+  // Biodiversity remaining as rough species estimate (100% = ~250 000, sweden baseline)
+  const remaining = Math.max(0, Math.round((biodiversity / 100) * 250))
+
+  return (
+    <GlassCard padding="sm">
+      <div className="flex flex-col gap-0.5">
+        <span className="text-text-muted text-xs uppercase tracking-wider">
+          Arter
+        </span>
+        <span className={`text-lg font-numbers transition-colors duration-300
+          ${pulse ? 'text-danger' : species > 10 ? 'text-danger' : species > 0 ? 'text-yellow-400' : 'text-text-primary'}`}>
+          {remaining > 0 ? `~${formatNumber(remaining * 1000)}` : '???'}
+          {species > 0 && (
+            <span className={`text-xs ml-1 ${pulse ? 'animate-pulse text-danger' : 'text-danger/70'}`}>
+              −{species}
+            </span>
+          )}
+        </span>
       </div>
     </GlassCard>
   )

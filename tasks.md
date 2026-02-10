@@ -683,27 +683,34 @@
 
 ### 8C — UX-förbättringar
 
-- [ ] 8C-1: Country Auto-Allocate
+- [x] 8C-1: Country Auto-Allocate
   - Ny toggle-knapp i CountryPanel: "Auto-fördela tryck"
   - När aktiv: fördela jämnt över alla vektorer, med dubbelt på svaghetsvektorn
   - Spelaren kan fortfarande manuellt justera — auto stängs av vid manuell ändring
   - Minskar tråkig repetition vid land #5–14
 
-- [ ] 8C-2: Species Counter på Dashboard
+- [x] 8C-2: Species Counter på Dashboard
   - Ny liten mätare i resursfältet (visas från fas 3+)
   - Visar "Arter: X kvar" med subtil animation vid förlust
   - Röd puls-effekt när arter försvinner — gör ekologisk kostnad synlig under spelet
   - Industry path only (owner path har redan biodiv-mätare)
 
-- [ ] 8C-3: Event Frequency Tuning
+- [x] 8C-3: Event Frequency Tuning
   - Minska event-frekvens i faser 7–12: nuvarande 50–90s → 90–150s
   - Under aktiv country invasion: pausa bakgrunds-events (för mycket avbrott)
   - Fas 10–12: events var 120–180s (mer andrum med nya events från 8B)
 
-- [ ] 8C-4: Mobile Dashboard Density
+- [x] 8C-4: Mobile Dashboard Density
   - Mobil: kollapsa resurskort till kompakt single-row (ikoner + siffror, ingen label)
   - Expanderbar med tap — visa full info on demand
   - Säkerställ att generatorer och klick-area syns utan scroll
+
+**Notes:** 8C complete. Key changes:
+- **8C-1**: Added `autoAllocate` toggle state in CountryPanel. Toggle button ("⚡ Auto-tryck") visible when invasions active. When on: distributes pressure with base 25 per vector, 2x (50) on weakness vector. Manual slider change disables auto mode. New invasions auto-allocate if toggle active. Uses `useEffect` to apply to all invading countries on toggle.
+- **8C-2**: New `SpeciesCard` component in Dashboard, visible from phase 3+. Shows estimated remaining species (~250K × biodiversity%). Red pulse animation when species lost counter increases. Color progression: green → yellow → red based on species lost. Desktop: 5th column in resource bar. Mobile: shown in compact bar as 🦉 icon.
+- **8C-3**: Event frequency for phases 7-9 increased from 50-90s to 90-150s. Phases 10-12 increased from 35-75s to 120-180s. Added invasion pause: events skip while any country has `status === 'invading'`, preventing interruptions during active invasions.
+- **8C-4**: Mobile (< sm breakpoint) now shows compact single-row resource bar with emoji icons (🪵💰🌿🏛️🦉) + numbers. Tappable to expand full resource cards. Desktop resource bar unchanged. Generators and click area now visible without scrolling on mobile.
+- Build: 206KB gzipped, TypeScript clean, no state changes (no save migration needed).
 
 ### 8D — Tillgänglighet (Accessibility)
 
