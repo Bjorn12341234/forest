@@ -22,7 +22,7 @@ import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist } from '../data/ant
 import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
 import { calculateWarningLevel, getWarningPenalty } from '../engine/warnings'
 import { getCountry } from '../data/countries'
-import { OWNER_GENERATORS, getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
+import { getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
 import { getKnowledgeActivity } from '../data/ownerKnowledge'
 import { INDUSTRY_ATTACKS, getIndustryAttack } from '../data/industryAttacks'

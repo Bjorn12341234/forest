@@ -220,7 +220,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
   activeTab: Tab
   onTabChange: (tab: Tab) => void
   toasts: ReturnType<typeof useAchievementToasts>['toasts']
-  onDismissToast: (id: string) => void
+  onDismissToast: (id: number) => void
   onReset: () => void
   showSettings: boolean
   onShowSettings: () => void
