@@ -1,7 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
-const CURRENT_VERSION = 4
+const CURRENT_VERSION = 5
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -95,6 +95,32 @@ const migrations: Record<number, MigrationFn> = {
       state.warningLevel = 0
     }
     save.version = 4
+    return save
+  },
+  4: (save) => {
+    // v4 → v5: Add gameMode and owner (Skogsägare) path fields
+    const state = save.state as GameState
+    if (state.gameMode === undefined) {
+      // Existing saves are industry path
+      (state as GameState).gameMode = 'industry'
+    }
+    if (state.skogsvardering === undefined) state.skogsvardering = 0
+    if (state.skogsvarderingPerSecond === undefined) state.skogsvarderingPerSecond = 0
+    if (state.skogsvarderingPerClick === undefined) state.skogsvarderingPerClick = 1
+    if (state.inkomst === undefined) state.inkomst = 0
+    if (state.kunskap === undefined) state.kunskap = 0
+    if (state.resiliens === undefined) state.resiliens = 10
+    if (state.biodivOwner === undefined) state.biodivOwner = 5
+    if (state.realCarbonPos === undefined) state.realCarbonPos = 0
+    if (state.legacy === undefined) state.legacy = 0
+    if (state.deadwood === undefined) state.deadwood = 0
+    if (state.ownerClickCount === undefined) state.ownerClickCount = 0
+    if (state.totalSkogsvardering === undefined) state.totalSkogsvardering = 0
+    if (!state.ownerGenerators) state.ownerGenerators = {}
+    if (!state.ownerClickUpgrades) state.ownerClickUpgrades = {}
+    if (!state.ownerAttacksResisted) state.ownerAttacksResisted = {}
+    if (state.ownerLuresDeclined === undefined) state.ownerLuresDeclined = 0
+    save.version = 5
     return save
   },
 }

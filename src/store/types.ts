@@ -3,16 +3,18 @@
 
 export type Phase = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 export type Era = 'SVERIGE' | 'MAKT' | 'INTERNATIONELL' | 'EXPANSION'
+export type GameMode = 'industry' | 'owner' | null
 
 export interface GameState {
   // Meta
+  gameMode: GameMode
   phase: Phase
   startedAt: number
   lastTickAt: number
   lastSaveAt: number
   totalPlayTime: number
 
-  // Primary Resources
+  // ── Industry Path Resources ──
   stammar: number            // lifetime total (never decreases)
   stammarPerSecond: number   // computed each tick
   stammarPerClick: number    // base + upgrades
@@ -76,6 +78,32 @@ export interface GameState {
 
   // Settings
   settings: GameSettings
+
+  // ── Owner (Skogsägare) Path Resources ──
+  skogsvardering: number       // forest value — click resource
+  skogsvarderingPerSecond: number // computed each tick
+  skogsvarderingPerClick: number  // base + upgrades
+  inkomst: number              // income (tkr) — currency
+  kunskap: number              // knowledge — replaces lobby
+  resiliens: number            // forest resilience (storm/pest resistance)
+
+  // Owner visible meters
+  biodivOwner: number          // species count in owner's forest
+  realCarbonPos: number        // real carbon storage (positive)
+  legacy: number               // generational legacy meter
+  deadwood: number             // dead wood → biodiversity boost
+
+  // Owner tracking
+  ownerClickCount: number
+  totalSkogsvardering: number  // lifetime total for milestone triggers
+
+  // Owner generators & upgrades
+  ownerGenerators: Record<string, GeneratorState>
+  ownerClickUpgrades: Record<string, boolean>
+
+  // Owner antagonism tracking
+  ownerAttacksResisted: Record<string, boolean>
+  ownerLuresDeclined: number
 }
 
 export interface GeneratorState {
@@ -195,6 +223,8 @@ export interface SaveFile {
 export interface GameActions {
   tick: (now: number) => void
   click: () => void
+  ownerClick: () => void
+  setGameMode: (mode: 'industry' | 'owner') => void
   buyGenerator: (id: string) => void
   buyClickUpgrade: (id: string) => void
   purchaseUpgrade: (id: string) => void

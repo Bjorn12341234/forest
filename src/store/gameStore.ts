@@ -39,6 +39,7 @@ export const ALL_EVENTS = [
 const now = Date.now()
 
 export const INITIAL_STATE: GameState = {
+  gameMode: null,
   phase: 1,
   startedAt: now,
   lastTickAt: now,
@@ -90,6 +91,28 @@ export const INITIAL_STATE: GameState = {
     notificationsEnabled: true,
     theme: 'default',
   },
+
+  // Owner (Skogsägare) path
+  skogsvardering: 0,
+  skogsvarderingPerSecond: 0,
+  skogsvarderingPerClick: 1,
+  inkomst: 0,
+  kunskap: 0,
+  resiliens: 10,
+
+  biodivOwner: 5,
+  realCarbonPos: 0,
+  legacy: 0,
+  deadwood: 0,
+
+  ownerClickCount: 0,
+  totalSkogsvardering: 0,
+
+  ownerGenerators: {},
+  ownerClickUpgrades: {},
+
+  ownerAttacksResisted: {},
+  ownerLuresDeclined: 0,
 }
 
 // ── Helpers ──
@@ -213,6 +236,67 @@ function computeStammarPerClick(
   return base
 }
 
+// ── Owner (Skogsägare) Helpers ──
+
+/** Calculate total skogsvardering/s from all owner generators */
+function computeOwnerSkogsvarderingPS(generators: GameState['ownerGenerators']): number {
+  // Will be populated when ownerGenerators data is created in 7B
+  // For now returns 0 — only passive growth applies
+  void generators
+  return 0
+}
+
+/** Calculate total inkomst/s from all owner generators */
+function computeOwnerInkomstPS(generators: GameState['ownerGenerators']): number {
+  void generators
+  return 0
+}
+
+/** Owner path tick — separate from industry tick */
+function ownerTick(
+  state: GameState,
+  dt: number,
+  now: number,
+  set: (updates: Partial<GameStore>) => void
+) {
+  const newTotalPlayTime = state.totalPlayTime + dt
+
+  // Passive forest growth: the forest grows on its own (+0.5 sv/s base)
+  const passiveGrowth = 0.5
+  const generatorSV = computeOwnerSkogsvarderingPS(state.ownerGenerators)
+  const totalSVPS = passiveGrowth + generatorSV
+
+  const generatorInkomst = computeOwnerInkomstPS(state.ownerGenerators)
+
+  const svGained = totalSVPS * dt
+  const inkomstGained = generatorInkomst * dt
+
+  // Biodiversity slowly increases with deadwood and resilience
+  const biodivGrowth = (state.deadwood * 0.001 + state.resiliens * 0.0005) * dt
+  // Resilience grows with biodiversity diversity
+  const resiliensGrowth = state.biodivOwner * 0.0002 * dt
+  // Carbon storage grows with standing forest
+  const carbonGrowth = totalSVPS * 0.01 * dt
+  // Legacy grows very slowly based on time + biodiv + resistance
+  const resistedCount = Object.values(state.ownerAttacksResisted).filter(Boolean).length
+  const legacyGrowth = (0.01 + state.biodivOwner * 0.0001 + resistedCount * 0.005) * dt
+
+  const updates: Partial<GameState> = {
+    skogsvardering: state.skogsvardering + svGained,
+    skogsvarderingPerSecond: totalSVPS,
+    totalSkogsvardering: state.totalSkogsvardering + svGained,
+    inkomst: state.inkomst + inkomstGained,
+    biodivOwner: state.biodivOwner + biodivGrowth,
+    resiliens: Math.min(100, state.resiliens + resiliensGrowth),
+    realCarbonPos: state.realCarbonPos + carbonGrowth,
+    legacy: state.legacy + legacyGrowth,
+    totalPlayTime: newTotalPlayTime,
+    lastTickAt: now,
+  }
+
+  set(updates as Partial<GameStore>)
+}
+
 // ── Store ──
 
 export type GameStore = GameState & GameActions
@@ -225,6 +309,18 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const dt = (now - state.lastTickAt) / 1000
 
     if (dt <= 0 || dt > 60) return
+
+    // Skip tick if no game mode selected yet
+    if (!state.gameMode) {
+      set({ lastTickAt: now })
+      return
+    }
+
+    // Route to owner tick if in owner mode
+    if (state.gameMode === 'owner') {
+      ownerTick(state, dt, now, set)
+      return
+    }
 
     const newTotalPlayTime = state.totalPlayTime + dt
 
@@ -415,6 +511,21 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       // Small kapital per click too (like selling the plan)
       kapital: state.kapital + state.stammarPerClick * 0.005,
     }))
+  },
+
+  ownerClick: () => {
+    set(state => ({
+      skogsvardering: state.skogsvardering + state.skogsvarderingPerClick,
+      totalSkogsvardering: state.totalSkogsvardering + state.skogsvarderingPerClick,
+      ownerClickCount: state.ownerClickCount + 1,
+      // Small inkomst per click (selling carefully selected timber)
+      inkomst: state.inkomst + state.skogsvarderingPerClick * 0.003,
+    }))
+  },
+
+  setGameMode: (mode: 'industry' | 'owner') => {
+    set({ gameMode: mode })
+    get().save()
   },
 
   buyGenerator: (id: string) => {
@@ -774,6 +885,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       expansionTargets: {},
       countries: {},
       warningLevel: 0,
+      // Reset owner state
+      ownerGenerators: {},
+      ownerClickUpgrades: {},
+      ownerAttacksResisted: {},
+      ownerLuresDeclined: 0,
     })
   },
 

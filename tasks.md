@@ -394,6 +394,203 @@
 
 ---
 
+## Sprint 7: Skogsägarvägen — Grund & UI
+
+> **Källa:** `plan_additional_arch.md`
+> **OBS:** Inga riktiga företagsnamn i speltext. Parodinamn: Nastly (Nestlé), Husqansen (Husqvarna), Barburr (Barbour), NCA (SCA). FSC redan parodierat i befintligt spel.
+
+### 7A — Foundation
+
+- [x] 7A-1: gameMode State & Character Select
+  - Lägg till `gameMode: 'industry' | 'owner' | null` i GameState (null = startskärm)
+  - Skapa `CharacterSelect.tsx` — två kort: "SKOGSINDUSTRIN" / "SKOGSÄGAREN" med flavourtext
+  - Rendera CharacterSelect när `gameMode === null`, wrappa befintligt spel i `gameMode === 'industry'`
+  - gameMode permanent per spelomgång (inget byte mitt i)
+  - Verifiera att befintligt industri-spel INTE bryts
+
+- [x] 7A-2: Owner Game State
+  - Utöka GameState med owner-resurser: `skogsvardering` (klickresurs), `inkomst` (valuta, tkr), `kunskap` (motståndskraft), `resiliens` (stormtålighet)
+  - Synliga mätare: `biodivOwner`, `realCarbonPos`, `legacy`, `deadwood`
+  - Owner-specifik state: `ownerGenerators`, `ownerClickUpgrades`, `ownerAttacksResisted: Record<string, boolean>`, `ownerLuresDeclined: number`
+  - Alla owner-resurser initieras till 0 (utom resiliens: startvärde ~10, biodivOwner: 5)
+
+- [x] 7A-3: Owner Tick Function
+  - Separat tick-logik i game loop baserat på `gameMode`
+  - Passiv skogsvärde-ökning (skogen växer av sig själv, +0.5 sv/s bas)
+  - Generator-produktion stub (skogsvardering/s + inkomst/s — fylls i 7B)
+  - Biodiv ökar med deadwood, resiliens ökar med biodiv-mångfald
+  - Legacy ökar långsamt baserat på tid + biodiv + motstånd mot industrin
+  - Kolinlagring ökar med stående skog
+
+- [x] 7A-4: Save Migration v4→v5
+  - Lägg till `gameMode`, owner-resurser, owner-state i save
+  - Migrera befintliga saves: `gameMode: 'industry'` (bakåtkompatibelt)
+  - Bumpa CURRENT_VERSION till 5
+
+**Notes:** 7A complete. Key changes:
+- Added `GameMode = 'industry' | 'owner' | null` type + all owner fields to `types.ts`
+- Added `setGameMode`, `ownerClick` actions to store
+- Owner tick function in `gameStore.ts` — separate from industry tick, handles passive growth, biodiv, resiliens, carbon, legacy. Generator hooks stubbed for 7B.
+- Created `CharacterSelect.tsx` — two animated cards (Framer Motion), dark background, neutral framing
+- `App.tsx` routes: `null` → CharacterSelect, `'owner'` → placeholder owner UI with "Vårda Skog" button, `'industry'` → existing game (untouched)
+- Save migration v4→v5: existing saves get `gameMode: 'industry'`, all owner fields default to 0/empty
+- Build: 184KB gzipped, TypeScript clean
+
+### 7B — Owner UI
+
+- [ ] 7B-1: Owner ClickArea ("Vårda Skog")
+  - Ny komponent `OwnerClickArea.tsx` — knappen "Vårda Skog"
+  - Klick ökar `skogsvardering` (basbelopp + uppgraderingar)
+  - Flavourtext tiers (6 nivåer): "Du går ut i skogen..." → "Dina grannar frågar..."
+  - Visa: skogsvärde, skogsvärde/klick, skogsvärde/sekund
+  - Varm visuell stil: gröna partiklar istället för orangea
+
+- [ ] 7B-2: Owner Click Upgrades
+  - Definiera i `src/data/ownerClickUpgrades.ts` (5 st):
+    - Skogskunskapskurs (500 Inkomst, +2/klick, +5 Kunskap)
+    - Florabok & kikare (1000, +5/klick, +1 Biodiv)
+    - Motorsåg — egen, liten (2500, +10/klick, Inkomst-bonus) — "Inte en Skördare. En Husqansen 562."
+    - Samarbete med biolog (5000, +20/klick, +10 Kunskap)
+    - Mentorskap från gammal skogsägare (10000, +50/klick)
+
+- [ ] 7B-3: Owner Generators
+  - Definiera i `src/data/ownerGenerators.ts` (9 st):
+    - Naturlig föryngring (100, +1 sv/s)
+    - Plockhuggning schema (500, +0.5 ink/s, +2 sv/s)
+    - Död-ved-program (1500, +3 biodiv/tick, +1 resiliens/tick)
+    - Skogsbete (3000, +5 sv/s, +2 ink/s)
+    - Premium-virke långsamväxt (8000, +10 ink/s)
+    - Skogsturism / Naturupplevelse (15000, +15 ink/s, +5 sv/s)
+    - Kolkrediter verkliga (30000, +25 ink/s, +10 kol/tick)
+    - Skogsägar-kooperativ (75000, +50 ink/s, +20 kunskap)
+    - Arvsskogen (200000, +200 sv/s, +100 legacy)
+  - costScale: 1.12× (lägre än industrins 1.15×)
+  - Ny `OwnerGenerators.tsx` — samma layout som industri men varm ton
+
+- [ ] 7B-4: Owner Dashboard Layout
+  - Villkorligt rendera owner- eller industri-komponenter i App.tsx baserat på gameMode
+  - Owner-resursfält: Skogsvärde, Inkomst, Skogskunskap, Resiliens
+  - Synliga mätare: Biologisk mångfald, Kolinlagring, Generationsarv, Död ved
+  - Samma tab-struktur: Skog (generators), Kunskap (ersätter Makt), Expansion (endgame)
+  - Owner-färgtema: bakgrund #F5F0E8 (varm beige), accent #2D6A4F (skogsgrönt), text #3D2B1F (mörk brun)
+
+- [ ] 7B-5: Knowledge Panel (ersätter LobbyPanel)
+  - Ny komponent `KnowledgePanel.tsx`
+  - Kunskap-tjänande aktiviteter (5 st, kostar Inkomst → ger Kunskap):
+    - Läs Skogsstyrelsens maktutredning (gratis, +10)
+    - Gå Plockhugget-kurs (3000, +25)
+    - Artinventering med biolog (5000, +30)
+    - Besök gammelskog (2000, +15)
+    - Studera markberedningens effekter (1000, +20)
+  - Passiva bonusar vid kunskapströsklar (25/50/100/200/500/1000) — visa progress
+
+- [ ] 7B-6: Resilience Display
+  - Visa resiliens som mätare i resursfältet
+  - Hög resiliens = stormtålig, insektsresistent
+  - Färgkodad: grön (>50), gul (20-50), röd (<20)
+  - Påverkas av: biodiv, trädmångfald, deadwood
+
+### 7C — Antagonism, Events & Innehåll
+
+- [ ] 7C-1: Industry Attacks (Storbolagets motstånd)
+  - Definiera i `src/data/industryAttacks.ts` (7 attacker):
+    - "Gratis skogsbruksplan" (500 sv, 25 kunskap att motstå)
+    - Virkesuppköparen (2000 sv, 50 kunskap) — "en man i Barburr-jacka"
+    - Priskollaps-panik (5000 sv, 75 kunskap) — "Kina-dumpning"
+    - "Äganderätten är hotad!"-kampanjen (10000 sv, 100 kunskap)
+    - Kontraktsofferten — 25-årskontrakt (20000 sv, 150 kunskap)
+    - Svartmålningskampanjen (40000 sv, 200 kunskap)
+    - Inspektörens "misstag" (75000 sv, 300 kunskap + 10000 ink)
+    - Den Totala Offensiven (150000 sv, 500 kunskap + Kooperativ)
+  - Ny komponent `IndustryAttackModal.tsx` — pop-up med Acceptera/Avböj
+  - Avböj kräver minimum Kunskap — annars: "Du vet inte tillräckligt..."
+  - Effekter vid accept: skogsvärde-förlust, kontrollförlust, engångs-inkomst
+  - Triggas vid skogsvärde-milstolpar i owner tick
+
+- [ ] 7C-2: Industry Lures (Lockelser)
+  - Definiera i `src/data/industryLures.ts` (3 st):
+    - "Gratis markanalys" — fälla: rekommenderar kalavverkning + contortaplantering
+    - "GSC-certifiering" — fälla: kräver industrins skötselplan
+    - "EU-bidrag via oss" — fälla: åtgärderna = markberedning + monokultur
+  - Pop-up med tilltalande grön design (kontrast mot attackernas aggressivitet)
+  - Acceptera = negativ långtidseffekt, Avböj = alternativ med bättre resultat
+
+- [ ] 7C-3: Owner Events (10+ events)
+  - Definiera i `src/data/ownerEvents.ts`:
+    - Stormen (15000 sv — resiliens avgör utfall)
+    - Granbarkborren (25000 sv — mångfald vs monokultur)
+    - Japanska turister (30000 sv + Skogsturism-gen — inkomstbonus)
+    - Snickaren ringer (20000 sv + Premium-virke — 3× massapris)
+    - Barnens besök (40000 sv — +50 Legacy, emotionellt)
+    - Grannens ånger (60000 sv — +30 Kunskap, +1 kooperativ)
+    - Skogsbrand (50000 sv — humuslager vs markberedd)
+    - Universitetsstudien (100000 sv — +100 Kunskap, +50 Legacy)
+    - Kinas massadumpning (fas 3 — du är trygg, +20 Kunskap)
+    - SVT i din skog (150000 sv — +200 Kunskap, +100 Legacy)
+    - Nastly-brevet (200000 sv — massiv Inkomst, +50 Legacy) — "Nastly — NASTLY! — valde DIG framför skogsindustrin."
+  - Återanvänd EventModal-komponenten, villkora content på gameMode
+
+- [ ] 7C-4: Owner News Ticker
+  - Definiera i `src/data/ownerNewsLines.ts` (~25 rubriker i 4 faser):
+    - Tidiga: virkesuppköpare, gratisplaner, äganderätt-propaganda
+    - Mellan: massapris-ras, "ovetenskapligt"-kampanjer, Plockhugget-kurser
+    - Sena: Nastly bryter med industrin, SLU-studie, contortaplantage-katastrof
+    - Endgame: lavskrikan häckar, dottern tar över, nationell policy-ändring
+  - Välj ticker-array baserat på gameMode i Ticker.tsx
+
+- [ ] 7C-5: Owner Achievements (13 st)
+  - Definiera i `src/data/ownerAchievements.ts`:
+    - Första Vårddagen (1 klick)
+    - Farfars Skog (1000 sv)
+    - Nej Tack (avböj första attacken)
+    - 47 Arter (biodiv > 47)
+    - Den Tysta Segern (klara storm med hög resiliens)
+    - Barkborrens Mästare (klara insektsangrepp utan förlust)
+    - Långsam Rikedom (50000 total inkomst utan kalavverkning)
+    - Kaffekoppens Fiende (avböj virkesuppköparen 5 ggr)
+    - Plockhuggaren (100 plockhuggningar)
+    - Kooperativets Kraft (bilda kooperativ)
+    - Katedralen (200000 sv)
+    - Generationsskiftet (köp Arvsskogen)
+    - Nastly Valde Dig (klara Nastly-eventet)
+    - Skogens Kvitto (se endgame)
+
+### 7D — Endgame & Polish
+
+- [ ] 7D-1: Owner Endgame Screen
+  - Ny komponent `OwnerEndScreen.tsx` — triggas vid max Legacy
+  - Progressiv skogsillustration (CSS/SVG-baserad: träd, fåglar, svampar, mossa)
+  - Statistik: Skogsvärde, Arter, Kolinlagring, Jämförelse med industrin
+  - "Du tjänade lika mycket. Men din skog FINNS KVAR."
+  - "Industrins lobbybudget: 200 000 000 kr/år. Din budget: En termos och en kikare."
+  - Knapp: "LÄMNA SKOGEN TILL NÄSTA GENERATION"
+
+- [ ] 7D-2: Owner Post-Credits
+  - Scrollande faktatext om plockhuggning, kolinlagring, markberedning, massaindustri
+  - Samma verklighetsförankring som industrivägens Reality-sida
+  - Länk till naturhansyn.se
+
+- [ ] 7D-3: Owner Audio (om tid finns)
+  - Fågelkvitter som ÖKAR med biodiv (kontrast mot industrin där fåglar försvinner)
+  - Vind, bäck, insektssurr — allt starkare ju bättre du spelar
+  - Inga industrimaskiner
+
+- [ ] 7D-4: Balancing Pass
+  - Långsammare start än industri (meningen — ska kännas tålmodigt)
+  - Exponentiell acceleration i mitten (resiliens → överlever storm → mer biodiv → mer inkomst)
+  - Samma totaltid som industri (~30-60 min) men annorlunda kurva
+  - Kunskap-trösklar nåbara i tid för varje attack (spelaren ska inte tvingas acceptera)
+  - costScale 1.12× per generator-köp
+
+- [ ] 7D-5: Build Verification
+  - TypeScript clean
+  - Testa industri-vägen: inget ska vara trasigt
+  - Testa owner-vägen: full playthrough
+  - Save/load fungerar för bägge paths
+  - Mobil-responsiv
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

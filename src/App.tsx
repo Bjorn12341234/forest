@@ -22,6 +22,7 @@ import { SettingsPanel, useThemeSync } from './components/SettingsPanel'
 import { TabNav, type Tab } from './components/TabNav'
 import { EndScreen } from './components/EndScreen'
 import { ExpansionPanel } from './components/ExpansionPanel'
+import { CharacterSelect } from './components/CharacterSelect'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -29,6 +30,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false)
   const [offlineReport, setOfflineReport] = useState<OfflineResult | null>(null)
   const [showEndScreen, setShowEndScreen] = useState(false)
+  const gameMode = useGameStore(state => state.gameMode)
   const currentPhase = useGameStore(state => state.phase)
   const endgameSeen = useGameStore(state => state.achievements['endgame_seen'])
   const pendingTransition = useGameStore(state => state.pendingTransition)
@@ -78,6 +80,52 @@ function App() {
   useOfflineCalc(eventPool, handleOfflineReport)
   useAudioSync()
   useThemeSync()
+
+  // Show character select if no game mode chosen
+  if (gameMode === null) {
+    return <CharacterSelect />
+  }
+
+  // Owner mode placeholder — full UI comes in sprint 7B
+  if (gameMode === 'owner') {
+    return (
+      <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 p-4">
+          <h1 className="text-2xl font-bold text-[#3D2B1F] tracking-wider">
+            SKOGS\u00c4GAREN
+          </h1>
+          <p className="text-[#2D6A4F] text-center max-w-md">
+            Du st\u00e5r i din farfars skog. 80 hektar \u00c5ngermanland. Tr\u00e4den \u00e4r h\u00f6ga och stilla.
+          </p>
+          <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
+            <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
+              <span className="text-xs text-[#3D2B1F]/60 uppercase tracking-wider">Skogsv\u00e4rde</span>
+              <p className="text-lg font-bold text-[#2D6A4F]">{Math.floor(useGameStore.getState().skogsvardering)}</p>
+            </div>
+            <div className="bg-white/60 border border-[#2D6A4F]/20 rounded-sm p-3">
+              <span className="text-xs text-[#3D2B1F]/60 uppercase tracking-wider">Inkomst</span>
+              <p className="text-lg font-bold text-[#2D6A4F]">{Math.floor(useGameStore.getState().inkomst)} tkr</p>
+            </div>
+          </div>
+          <button
+            onClick={() => useGameStore.getState().ownerClick()}
+            className="px-8 py-4 bg-[#2D6A4F] text-white font-bold text-lg tracking-wider rounded-sm cursor-pointer border-none active:scale-95 transition-transform"
+          >
+            V\u00e5rda Skog
+          </button>
+          <button
+            onClick={() => {
+              reset()
+              useGameStore.setState({ gameMode: null })
+            }}
+            className="text-xs text-[#3D2B1F]/40 underline cursor-pointer bg-transparent border-none mt-4"
+          >
+            Tillbaka till start
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-dvh bg-bg-primary" data-era={getEra(currentPhase)}>
