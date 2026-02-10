@@ -27,14 +27,14 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
     offer: '"Vi analyserar din mark \u2014 kostnadsfritt!"',
     trap: 'Analysen rekommenderar kalavverkning och contortaplantering. Ingen n\u00e4mner att contorta \u00e4r en invasiv art.',
     declineText: 'Du anlitar en oberoende biolog ist\u00e4llet. Kostar 8 000 kr. Analysen visar att din mark m\u00e5r utm\u00e4rkt.',
-    triggerSV: 1_000,
+    triggerSV: 2_000,
     acceptEffects: {
       skogsvardering: 0.8,
       resiliensPenalty: 15,
       biodivPenalty: 5,
     },
     declineEffects: {
-      inkomstCost: 8_000,
+      inkomstCost: 500,
       kunskapGain: 15,
       biodivGain: 2,
     },
@@ -45,13 +45,13 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
     offer: '"Certifiera din skog! Marknaden kr\u00e4ver det!"',
     trap: 'Certifieringen kr\u00e4ver en "sk\u00f6tselplan" skriven av industrin. Planen inneb\u00e4r gallring av dina finaste tr\u00e4d.',
     declineText: 'Du certifierar via Plockhugget-n\u00e4tverket ist\u00e4llet. Mindre k\u00e4nt, men \u00e4rligt.',
-    triggerSV: 5_000,
+    triggerSV: 6_000,
     acceptEffects: {
       skogsvardering: 0.85,
       resiliensPenalty: 10,
     },
     declineEffects: {
-      inkomstCost: 5_000,
+      inkomstCost: 1_500,
       kunskapGain: 20,
     },
   },
@@ -67,7 +67,7 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
       biodivPenalty: 10,
     },
     declineEffects: {
-      inkomstCost: 3_000,
+      inkomstCost: 2_500,
       kunskapGain: 25,
       biodivGain: 5,
     },

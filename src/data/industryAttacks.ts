@@ -25,8 +25,8 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     id: 'atk_gratisplan',
     name: '"Gratis skogsbruksplan"',
     description: 'En inspekt\u00f6r fr\u00e5n det stora bolaget dyker upp med en "gratis skogsbruksplan". Planen schemal\u00e4gger kalavverkning av dina b\u00e4sta best\u00e5nd.',
-    triggerSV: 500,
-    kunskapRequired: 25,
+    triggerSV: 800,
+    kunskapRequired: 10,
     acceptEffects: {
       description: '-50% Skogsv\u00e4rde, +5 000 Inkomst',
       skogsvardering: 0.5,
@@ -39,8 +39,8 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     id: 'atk_virkesuppkopare',
     name: 'Virkesuppk\u00f6paren',
     description: 'En man i Barburr-jacka dyker upp. Han erbjuder "fantastiskt pris" f\u00f6r dina b\u00e4sta tallar.',
-    triggerSV: 2_000,
-    kunskapRequired: 50,
+    triggerSV: 3_000,
+    kunskapRequired: 30,
     acceptEffects: {
       description: '-30% Skogsv\u00e4rde, +8 000 Inkomst',
       skogsvardering: 0.7,
@@ -53,8 +53,8 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     id: 'atk_priskollaps',
     name: 'Priskollaps-panik',
     description: 'Massapriserna rasar. Kina dumpar. Industrin s\u00e4ger: "Avverka nu innan det blir v\u00e4rre!"',
-    triggerSV: 5_000,
-    kunskapRequired: 75,
+    triggerSV: 8_000,
+    kunskapRequired: 50,
     acceptEffects: {
       description: '-40% Skogsv\u00e4rde, +12 000 Inkomst',
       skogsvardering: 0.6,

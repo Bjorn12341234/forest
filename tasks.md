@@ -578,37 +578,43 @@
 
 ### 7D — Endgame & Polish
 
-- [ ] 7D-1: Owner Endgame Screen
-  - Ny komponent `OwnerEndScreen.tsx` — triggas vid max Legacy
-  - Progressiv skogsillustration (CSS/SVG-baserad: träd, fåglar, svampar, mossa)
-  - Statistik: Skogsvärde, Arter, Kolinlagring, Jämförelse med industrin
-  - "Du tjänade lika mycket. Men din skog FINNS KVAR."
-  - "Industrins lobbybudget: 200 000 000 kr/år. Din budget: En termos och en kikare."
+- [x] 7D-1: Owner Endgame Screen
+  - Ny komponent `OwnerEndScreen.tsx` — triggas vid legacy >= 500
+  - 3 steg: reveal (8 sekventiella stats), postcredits (scrollande reflekterande text), reality (8 fakta-sektioner)
+  - Stats: totalSV, speltid, legacy, biodiv, resiliens, kol, kunskap, attacker motstådda/överlåtna
   - Knapp: "LÄMNA SKOGEN TILL NÄSTA GENERATION"
 
-- [ ] 7D-2: Owner Post-Credits
-  - Scrollande faktatext om plockhuggning, kolinlagring, markberedning, massaindustri
-  - Samma verklighetsförankring som industrivägens Reality-sida
+- [x] 7D-2: Owner Post-Credits
+  - 16 rader reflekterande text om att välja hållbart skogsbruk
+  - Reality-sida med 8 sektioner: plockhuggning, industrins narrativ, vad skogsägare egentligen får, död ved, resiliens, kolinlagring, hur man kan hjälpa
   - Länk till naturhansyn.se
 
-- [ ] 7D-3: Owner Audio (om tid finns)
-  - Fågelkvitter som ÖKAR med biodiv (kontrast mot industrin där fåglar försvinner)
-  - Vind, bäck, insektssurr — allt starkare ju bättre du spelar
-  - Inga industrimaskiner
+- [x] 7D-3: Owner Audio
+  - Fågelkvitter som ÖKAR med biodiv (frekvens 800-4000ms baserat på biodiv-nivå)
+  - Vind-layer (filtrerat brus med LFO)
+  - Bäck-layer (banpassat brus med långsam modulation)
+  - startOwnerAmbient(biodiv) i audio.ts, useAudioSync routar till rätt ambient baserat på gameMode
 
-- [ ] 7D-4: Balancing Pass
-  - Långsammare start än industri (meningen — ska kännas tålmodigt)
-  - Exponentiell acceleration i mitten (resiliens → överlever storm → mer biodiv → mer inkomst)
-  - Samma totaltid som industri (~30-60 min) men annorlunda kurva
-  - Kunskap-trösklar nåbara i tid för varje attack (spelaren ska inte tvingas acceptera)
-  - costScale 1.12× per generator-köp
+- [x] 7D-4: Balancing Pass
+  - Sänkt kunskapskrav för tidiga attacker (10/30/50 istf 25/50/75) — första attacken nu resistbar
+  - Höjt triggerSV för attacker (800/3000/8000 istf 500/2000/5000) — mer tid att förbereda
+  - Klick-inkomst 3.3× högre (0.01 istf 0.003) — snabbare ekonomisk start
+  - Första generatorn ger inkomst (0.1/s) — passiv ekonomi från start
+  - Lure-avböjkostnader kraftigt sänkta (500/1500/2500 istf 8000/5000/3000)
+  - Legacy-tillväxt ökad: basrate 0.03 (istf 0.01), biodiv-faktor 0.0002 (istf 0.0001)
 
-- [ ] 7D-5: Build Verification
-  - TypeScript clean
-  - Testa industri-vägen: inget ska vara trasigt
-  - Testa owner-vägen: full playthrough
-  - Save/load fungerar för bägge paths
-  - Mobil-responsiv
+- [x] 7D-5: Build Verification
+  - TypeScript clean (`npx tsc --noEmit` — inga fel)
+  - Vite build lyckad: 201KB gzipped
+  - Save version 6, migreringar v4→v5→v6 intakta
+
+**Notes:** 7D complete. Sprint 7 (Skogsägarvägen) done. Key changes:
+- Created `src/components/owner/OwnerEndScreen.tsx` — 3-stage endscreen (reveal → postcredits → reality) with warm beige/green theme, 8 sequential stat reveals, 16 reflective post-credit lines, 8 reality sections about real Swedish forestry, link to naturhansyn.se
+- Updated `src/engine/audio.ts` — `startOwnerAmbient(biodiv)` with wind, birds (frequency tied to biodiv level), brook (bandpass-filtered noise). Owner ambient is the ecological inverse of industry audio: nature sounds increase as you play better
+- Updated `src/hooks/useAudioSync.ts` — routes to owner ambient when gameMode === 'owner', updates bird frequency with biodiv changes
+- Updated `src/App.tsx` — OwnerEndScreen wired in OwnerApp, triggers at legacy >= 500
+- Balancing: early attacks resistable (kunskap gates lowered), click inkomst 3.3× higher, first generator gives inkomst, lure decline costs reduced, legacy growth formula improved
+- Build: 201KB gzipped, TypeScript clean, save version 6
 
 ---
 

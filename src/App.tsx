@@ -28,6 +28,7 @@ import { KnowledgePanel } from './components/owner/KnowledgePanel'
 import { IndustryAttackModal } from './components/owner/IndustryAttackModal'
 import { IndustryLureModal } from './components/owner/IndustryLureModal'
 import { OwnerTicker } from './components/owner/OwnerTicker'
+import { OwnerEndScreen } from './components/owner/OwnerEndScreen'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -229,6 +230,31 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
   onHideAchievements: () => void
 }) {
   const ownerTab = (activeTab === 'lobby' ? 'knowledge' : 'dashboard') as OwnerTab
+  const [showOwnerEnd, setShowOwnerEnd] = useState(false)
+  const legacy = useGameStore(s => s.legacy)
+  const ownerEndSeen = useGameStore(s => s.achievements['owner_endgame_seen'])
+
+  // Trigger owner endscreen at legacy >= 500
+  useEffect(() => {
+    if (legacy >= 500 && !ownerEndSeen && !showOwnerEnd) {
+      setShowOwnerEnd(true)
+    }
+  }, [legacy, ownerEndSeen, showOwnerEnd])
+
+  if (showOwnerEnd) {
+    return (
+      <OwnerEndScreen
+        onContinue={() => {
+          setShowOwnerEnd(false)
+          useGameStore.getState().save()
+        }}
+        onReset={() => {
+          setShowOwnerEnd(false)
+          onReset()
+        }}
+      />
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">

@@ -337,7 +337,7 @@ function ownerTick(
   const kunskapGrowth = genKunskap * dt
   // Legacy: base from time + biodiv + resistance + generator bonuses
   const resistedCount = Object.values(state.ownerAttacksResisted).filter(Boolean).length
-  const legacyGrowth = (0.01 + state.biodivOwner * 0.0001 + resistedCount * 0.005 + genLegacy) * dt
+  const legacyGrowth = (0.03 + state.biodivOwner * 0.0002 + resistedCount * 0.005 + genLegacy) * dt
 
   const newTotalSV = state.totalSkogsvardering + svGained
 
@@ -618,7 +618,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       totalSkogsvardering: state.totalSkogsvardering + state.skogsvarderingPerClick,
       ownerClickCount: state.ownerClickCount + 1,
       // Small inkomst per click (selling carefully selected timber)
-      inkomst: state.inkomst + state.skogsvarderingPerClick * 0.003,
+      inkomst: state.inkomst + state.skogsvarderingPerClick * 0.01,
     }))
   },
 

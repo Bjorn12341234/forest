@@ -435,6 +435,8 @@ let ambientNodes: AudioNode[] = []
 let currentAmbientPhase = 0
 let birdInterval: ReturnType<typeof setInterval> | null = null
 let ekgInterval: ReturnType<typeof setInterval> | null = null
+let brookInterval: ReturnType<typeof setInterval> | null = null
+let isOwnerAmbient = false
 
 function cleanupAmbientNodes() {
   // Stop all tracked oscillator/source nodes
@@ -453,6 +455,10 @@ function cleanupAmbientNodes() {
   if (ekgInterval) {
     clearInterval(ekgInterval)
     ekgInterval = null
+  }
+  if (brookInterval) {
+    clearInterval(brookInterval)
+    brookInterval = null
   }
 }
 
@@ -615,6 +621,95 @@ export function stopAmbient() {
     ambientMasterGain = null
   }, 2000)
   currentAmbientPhase = 0
+  isOwnerAmbient = false
+}
+
+/** Start owner (Skogsägare) ambient: wind, birds, brook. Biodiv controls bird frequency. */
+export function startOwnerAmbient(biodiv: number) {
+  if (!userHasInteracted) return
+  // Don't restart if already running owner ambient (just update bird frequency)
+  if (isOwnerAmbient && ambientMasterGain) {
+    // Update bird frequency based on biodiv
+    if (birdInterval) {
+      clearInterval(birdInterval)
+      birdInterval = null
+    }
+    const ctx = getContext()
+    if (ctx) {
+      const birdMs = Math.max(800, 4000 - biodiv * 80) // More biodiv = more frequent birds
+      createBirdLayer(ctx, birdMs)
+    }
+    return
+  }
+
+  stopAmbient()
+
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  ambientMasterGain = ctx.createGain()
+  ambientMasterGain.gain.setValueAtTime(0, now)
+  ambientMasterGain.gain.linearRampToValueAtTime(
+    masterMuted ? 0 : ambientVolume * 0.10,
+    now + 3
+  )
+  ambientMasterGain.connect(ctx.destination)
+
+  isOwnerAmbient = true
+  currentAmbientPhase = -1 // Special marker for owner mode
+
+  // Gentle wind
+  createWindLayer(ctx, now, 0.7)
+
+  // Birds — frequency depends on biodiversity
+  const birdMs = Math.max(800, 4000 - biodiv * 80)
+  createBirdLayer(ctx, birdMs)
+
+  // Brook sound — filtered noise with gentle modulation
+  createBrookLayer(ctx, now)
+}
+
+function createBrookLayer(ctx: AudioContext, now: number) {
+  if (!ambientMasterGain) return
+
+  // Brook = heavily filtered white noise with slow amplitude modulation
+  const bufferSize = ctx.sampleRate * 4
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1
+  }
+
+  const source = ctx.createBufferSource()
+  source.buffer = buffer
+  source.loop = true
+
+  // Band-pass filter for water character
+  const bpf = ctx.createBiquadFilter()
+  bpf.type = 'bandpass'
+  bpf.frequency.setValueAtTime(1200, now)
+  bpf.Q.setValueAtTime(0.5, now)
+
+  // Slow LFO for gentle volume modulation (babbling)
+  const lfo = ctx.createOscillator()
+  lfo.type = 'sine'
+  lfo.frequency.setValueAtTime(0.3, now)
+  const lfoGain = ctx.createGain()
+  lfoGain.gain.setValueAtTime(300, now)
+  lfo.connect(lfoGain)
+  lfoGain.connect(bpf.frequency)
+  lfo.start(now)
+  ambientNodes.push(lfo)
+
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.08, now)
+
+  source.connect(bpf)
+  bpf.connect(gain)
+  gain.connect(ambientMasterGain)
+  source.start(now)
+  ambientNodes.push(source)
 }
 
 // ── Ambient Layers ──

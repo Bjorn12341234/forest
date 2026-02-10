@@ -26,7 +26,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     description: 'Du slutade plantera i rader. Skogen planterar sig själv nu. Den vet vad den gör.',
     baseCost: 100,
     svPerSecond: 1,
-    inkomstPerSecond: 0,
+    inkomstPerSecond: 0.1,
     costScale: 1.12,
   },
   {
