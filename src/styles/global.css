@@ -36,6 +36,13 @@ html {
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --ticker-speed: 20s;
+}
+
+@media (max-width: 640px) {
+  html {
+    --ticker-speed: 10s;
+  }
 }
 
 body {
@@ -171,13 +178,7 @@ body::before {
 }
 
 @utility animate-ticker {
-  animation: ticker-scroll 20s linear infinite;
-}
-
-@media (max-width: 640px) {
-  .animate-ticker {
-    animation-duration: 10s;
-  }
+  animation: ticker-scroll var(--ticker-speed, 20s) linear infinite;
 }
 
 /* ── Era-specific themes ── */
