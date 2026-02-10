@@ -154,7 +154,7 @@ interface ResourceCardProps {
 function ResourceCard({ label, value, format, className = '' }: ResourceCardProps) {
   return (
     <GlassCard padding="sm">
-      <div className="flex flex-col gap-0.5">
+      <div className="flex flex-col gap-0.5" role="status" aria-live="polite" aria-label={label}>
         <span className="text-text-muted text-xs uppercase tracking-wider">
           {label}
         </span>

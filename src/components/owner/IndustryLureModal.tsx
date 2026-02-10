@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getIndustryLure } from '../../data/industryLures'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 
 export function IndustryLureModal() {
   const lureId = useGameStore(s => s.activeIndustryLure)
@@ -9,6 +10,7 @@ export function IndustryLureModal() {
   const resolve = useGameStore(s => s.resolveIndustryLure)
   const [revealed, setRevealed] = useState(false)
 
+  const trapRef = useFocusTrap()
   const lure = lureId ? getIndustryLure(lureId) : null
 
   if (!lure) return null
@@ -36,6 +38,10 @@ export function IndustryLureModal() {
             className="fixed inset-0 z-[101] flex items-center justify-center p-4"
           >
             <div
+              ref={trapRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={lure.name}
               className="p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto rounded-xl"
               style={{
                 background: '#F5F0E8',

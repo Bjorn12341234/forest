@@ -714,34 +714,42 @@
 
 ### 8D — Tillgänglighet (Accessibility)
 
-- [ ] 8D-1: Focus Traps i Modals
+- [x] 8D-1: Focus Traps i Modals
   - EventModal, SettingsPanel, AchievementPanel, IndustryAttackModal, IndustryLureModal
   - Implementera keyboard focus trap (Tab/Shift+Tab cyklar inom modal)
   - Escape stänger modal
   - Returnera fokus till trigger-element vid stängning
 
-- [ ] 8D-2: Färgkontrast
+- [x] 8D-2: Färgkontrast
   - `text-text-muted` (#B0B0B0) på `bg-bg-secondary` (#2A2A2A) = 4.2:1 — behöver 4.5:1
   - Ljusa upp muted-text till ~#BABABA eller mörkna bakgrund
   - Verifiera alla era-themes (INTERNATIONELL grå, EXPANSION svart) möter AA
   - Testa med Chrome DevTools contrast checker
 
-- [ ] 8D-3: ARIA Labels
+- [x] 8D-3: ARIA Labels
   - Settings-knapp (⚙️), achievement-knapp, ljud-toggle — lägg till `aria-label`
   - Generator-köpknappar: `aria-label="Köp {generator.name} för {cost} stammar"`
   - Tab-navigation: `role="tablist"`, `role="tab"`, `aria-selected`
   - Resurskort: `aria-live="polite"` för dynamiska värden
 
-- [ ] 8D-4: Tap Targets
+- [x] 8D-4: Tap Targets
   - Bottom nav tabs: öka från ~32px till 44px minimum (WCAG 2.5.8)
   - Achievement tier-tabs: samma
   - Alla knappar i LobbyPanel/OwnerMeter: verifiera 44×44px touch area
   - Använd padding snarare än storlek om visuell design ska bevaras
 
-- [ ] 8D-5: Prefers-Reduced-Motion
+- [x] 8D-5: Prefers-Reduced-Motion
   - Wrappa ticker-animation, puls-glow, spring-animationer i `@media (prefers-reduced-motion: reduce)`
   - Framer Motion: global `MotionConfig` med `reducedMotion="user"`
   - Fallback: visa statisk text istället för rullande ticker
+
+**Notes:** 8D complete. Key changes:
+- **8D-1**: New `useFocusTrap` hook in `src/hooks/useFocusTrap.ts` — traps Tab/Shift+Tab within container, Escape closes, restores previous focus on unmount. Applied to all 5 modals: EventModal, SettingsPanel, AchievementPanel, IndustryAttackModal, IndustryLureModal. All modals now have `role="dialog"` and `aria-modal="true"`.
+- **8D-2**: Bumped `--color-text-muted` for WCAG AA compliance: default #8A8A8A→#969696 (4.8:1), INTERNATIONELL #808080→#8E8E8E (4.5:1), EXPANSION #606060→#7A7A7A (4.7:1). All meet 4.5:1 minimum.
+- **8D-3**: Added `aria-label` to settings/achievement/reset buttons in both App and OwnerApp. TabNav: `role="tablist"` on nav, `role="tab"` + `aria-selected` on buttons. AchievementPanel tier tabs: same ARIA roles. Dashboard ResourceCard: `aria-live="polite"` for screen reader announcements. Owner tab buttons: `role="tab"` + `aria-selected` + `aria-label`.
+- **8D-4**: TabNav buttons: `px-3 py-2` → `px-4 py-3 min-w-[44px] min-h-[44px]`. Achievement tier tabs: `px-2.5 py-1.5` → `px-3 py-2 min-h-[44px]`. Owner tab buttons: same 44px minimum. Settings/achievement buttons already w-11 h-11 (44px).
+- **8D-5**: CSS `@media (prefers-reduced-motion: reduce)` disables ticker-scroll, pulse-glow, shimmer, float-up animations + forces near-zero transition duration. `MotionConfig reducedMotion="user"` wraps both App and OwnerApp — Framer Motion respects OS preference. Ticker becomes static text when reduced motion enabled.
+- Build: 206KB gzipped, TypeScript clean.
 
 ### 8E — Kodkvalitet
 

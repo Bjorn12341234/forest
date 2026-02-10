@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { exportSave, importSave } from '../engine/save'
 import { GlassCard } from './ui/GlassCard'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface SettingsPanelProps {
   onClose: () => void
@@ -17,6 +18,7 @@ export function useThemeSync() {
 }
 
 export function SettingsPanel({ onClose }: SettingsPanelProps) {
+  const trapRef = useFocusTrap(onClose)
   const settings = useGameStore(s => s.settings)
   const updateSettings = useGameStore(s => s.updateSettings)
   const save = useGameStore(s => s.save)
@@ -74,6 +76,10 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
 
       {/* Panel */}
       <motion.div
+        ref={trapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Inställningar"
         className="relative w-full max-w-sm max-h-[85vh] overflow-y-auto"
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}

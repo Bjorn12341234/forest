@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getIndustryAttack } from '../../data/industryAttacks'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 
 export function IndustryAttackModal() {
   const attackId = useGameStore(s => s.activeIndustryAttack)
@@ -8,6 +9,7 @@ export function IndustryAttackModal() {
   const inkomst = useGameStore(s => s.inkomst)
   const resolve = useGameStore(s => s.resolveIndustryAttack)
 
+  const trapRef = useFocusTrap()
   const atk = attackId ? getIndustryAttack(attackId) : null
 
   if (!atk) return null
@@ -36,6 +38,10 @@ export function IndustryAttackModal() {
             className="fixed inset-0 z-[101] flex items-center justify-center p-4"
           >
             <div
+              ref={trapRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={atk.name}
               className="p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto rounded-xl"
               style={{
                 background: '#F5F0E8',

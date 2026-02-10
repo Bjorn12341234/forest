@@ -30,6 +30,8 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
     <nav
       className="fixed bottom-0 left-0 right-0 z-50 glass-card rounded-none border-t border-x-0 border-b-0 border-white/[0.08]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      role="tablist"
+      aria-label="Huvudnavigering"
     >
       <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
         {visibleTabs.map(tab => {
@@ -41,7 +43,10 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
               key={tab.id}
               onClick={() => !isLocked && onTabChange(tab.id)}
               disabled={isLocked}
-              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 transition-all duration-200 bg-transparent border-none
+              role="tab"
+              aria-selected={isActive}
+              aria-label={isLocked ? `${tab.label} (låst)` : tab.label}
+              className={`relative flex flex-col items-center gap-0.5 px-4 py-3 min-w-[44px] min-h-[44px] transition-all duration-200 bg-transparent border-none
                 ${isLocked ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <span className={`text-xl ${isLocked ? 'grayscale' : ''}`}>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { useGameStore } from './store/gameStore'
 import { ALL_EVENTS } from './store/gameStore'
 import { getEra } from './engine/phases'
@@ -115,6 +115,7 @@ function App() {
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-dvh bg-bg-primary" data-era={getEra(currentPhase)}>
       {/* News Ticker */}
       <Ticker />
@@ -189,13 +190,15 @@ function App() {
         <button
           onClick={() => setShowSettings(true)}
           className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-lg cursor-pointer border-none active:scale-95 transition-transform"
-          title="Installningar"
+          aria-label="Inställningar"
+          title="Inställningar"
         >
           &#9881;
         </button>
         <button
           onClick={() => setShowAchievements(true)}
           className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-lg cursor-pointer border-none active:scale-95 transition-transform"
+          aria-label="Prestationer"
           title="Prestationer"
         >
           &#127942;
@@ -209,6 +212,7 @@ function App() {
         onTabChange={setActiveTab}
       />
     </div>
+    </MotionConfig>
   )
 }
 
@@ -257,6 +261,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-dvh bg-[#F5F0E8]" data-mode="owner">
       {/* Owner News Ticker */}
       <OwnerTicker />
@@ -309,6 +314,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         <button
           onClick={onShowSettings}
           className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          aria-label="Inställningar"
           title="Inställningar"
         >
           &#9881;
@@ -316,6 +322,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         <button
           onClick={onShowAchievements}
           className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          aria-label="Prestationer"
           title="Prestationer"
         >
           &#127942;
@@ -323,6 +330,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         <button
           onClick={onReset}
           className="w-11 h-11 rounded-full bg-white/60 border border-[#2D6A4F]/20 flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-[#3D2B1F]/40"
+          aria-label="Tillbaka till start"
           title="Tillbaka till start"
         >
           &#8634;
@@ -333,6 +341,8 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
       <nav
         className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 border-t border-[#2D6A4F]/10 backdrop-blur-sm"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        role="tablist"
+        aria-label="Skogsägarnavigering"
       >
         <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
           <OwnerTabButton
@@ -350,6 +360,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
         </div>
       </nav>
     </div>
+    </MotionConfig>
   )
 }
 
@@ -362,7 +373,10 @@ function OwnerTabButton({ active, label, icon, onClick }: {
   return (
     <button
       onClick={onClick}
-      className="relative flex flex-col items-center gap-0.5 px-3 py-2 bg-transparent border-none cursor-pointer"
+      role="tab"
+      aria-selected={active}
+      aria-label={label}
+      className="relative flex flex-col items-center gap-0.5 px-4 py-3 min-w-[44px] min-h-[44px] bg-transparent border-none cursor-pointer"
     >
       <span className="text-xl">{icon}</span>
       <span className={`text-xs font-medium tracking-wide uppercase ${

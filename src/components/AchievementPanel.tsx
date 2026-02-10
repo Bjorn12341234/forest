@@ -4,6 +4,7 @@ import { useGameStore } from '../store/gameStore'
 import { ACHIEVEMENTS, TIER_LABELS, TIER_COLORS } from '../data/achievements'
 import type { AchievementTier } from '../data/achievements'
 import { GlassCard } from './ui/GlassCard'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface AchievementPanelProps {
   onClose: () => void
@@ -14,6 +15,7 @@ type ViewMode = 'all' | AchievementTier
 const TIER_ORDER: AchievementTier[] = ['lokal', 'regional', 'nationell', 'internationell', 'endgame', 'meta']
 
 export function AchievementPanel({ onClose }: AchievementPanelProps) {
+  const trapRef = useFocusTrap(onClose)
   const achievements = useGameStore(s => s.achievements)
   const phase = useGameStore(s => s.phase)
   const [viewMode, setViewMode] = useState<ViewMode>('all')
@@ -45,6 +47,10 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
 
       {/* Panel */}
       <motion.div
+        ref={trapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Prestationer"
         className="relative w-full max-w-md max-h-[85vh] flex flex-col"
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
@@ -69,7 +75,7 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
           </div>
 
           {/* Tier tabs */}
-          <div className="flex gap-1 mb-3 overflow-x-auto flex-shrink-0 pb-1">
+          <div className="flex gap-1 mb-3 overflow-x-auto flex-shrink-0 pb-1" role="tablist" aria-label="Prestationskategorier">
             <TierTab
               label="Alla"
               isActive={viewMode === 'all'}
@@ -172,7 +178,9 @@ function TierTab({ label, isActive, color, count, total, onClick }: {
   return (
     <button
       onClick={onClick}
-      className={`px-2.5 py-1.5 rounded-sm text-xs font-medium whitespace-nowrap
+      role="tab"
+      aria-selected={isActive}
+      className={`px-3 py-2 min-h-[44px] rounded-sm text-xs font-medium whitespace-nowrap
         border cursor-pointer transition-all ${
         isActive
           ? 'bg-bg-secondary text-text-primary'

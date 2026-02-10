@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import type { GameEvent } from '../store/types'
 import { playEventByCategory } from '../engine/audio'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 const CATEGORY_COLORS: Record<string, string> = {
   scandal: '#FF3333',
@@ -47,6 +48,8 @@ function EventModalContent({
   event: GameEvent
   onChoice: (index: number) => void
 }) {
+  const trapRef = useFocusTrap()
+
   useEffect(() => {
     playEventByCategory(event.category)
   }, [event.category])
@@ -72,7 +75,8 @@ function EventModalContent({
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         className="fixed inset-0 z-[101] flex items-center justify-center p-4"
       >
-        <div className="glass-card p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto"
+        <div ref={trapRef} role="dialog" aria-modal="true" aria-label={event.headline}
+          className="glass-card p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto"
           style={{
             borderColor: `${color}33`,
             boxShadow: `0 0 40px ${color}22, 0 4px 24px rgba(0,0,0,0.5)`,
