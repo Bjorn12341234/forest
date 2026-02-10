@@ -278,20 +278,80 @@ export const ANTAGONISTS: AntagonistDef[] = [
     counterLabel: 'Hacka termodynamiken',
     counterDescription: 'Hitta kryphål i naturlagarna. Entropimotorn gör jobbet. (500 000 PK)',
   },
+  {
+    id: 'ant_kosmisk_lansstyrelse',
+    name: 'Kosmiska Länsstyrelsen',
+    description: 'Byråkratin överlevde Jorden. Nu kräver de miljöprövning för varje planet. Handläggningstid: 15 år per stjärnsystem.',
+    icon: '🏛️',
+    triggerPhase: 10,
+    maxPhase: 11,
+    triggerCondition: (s) => s.phase >= 10 && s.totalStammar >= 100_000_000_000,
+    tickEffects: [
+      { resource: 'kapital', perSecond: -200, description: '-200 Mkr/s (byråkratiska avgifter)' },
+    ],
+    counterCost: { resource: 'lobby', amount: 50_000 },
+    counterLabel: 'Tillsätt vår GD',
+    counterDescription: 'Svängdörren fungerar även i rymden. (50 000 PK)',
+  },
+  {
+    id: 'ant_galaktisk_fack',
+    name: 'Den Galaktiska Fackföreningen',
+    description: 'Skördare, terraformerare och nanomaskiner har bildat fack. Krav: semester, reparation, och "rätt att inte förstöra". Förhandling: omöjlig.',
+    icon: '✊',
+    triggerPhase: 11,
+    triggerCondition: (s) => s.phase >= 11 && s.totalStammar >= 500_000_000_000,
+    tickEffects: [
+      { resource: 'stammar', perSecond: -10_000_000, description: '-10M stammar/s (arbetsnedläggning)' },
+    ],
+    counterCost: { resource: 'kapital', amount: 5_000_000_000 },
+    counterLabel: '"Frivilligt" arbetskontrakt',
+    counterDescription: 'Kontrakt skrivet på kvantspråk. Ingen förstår det. Alla signerar. (5B Mkr)',
+  },
+  {
+    id: 'ant_multiversum_revisorer',
+    name: 'Multiversum-Revisorerna',
+    description: 'Revisorer från 47 parallella universum. De har sett vad som händer. I varje universum: samma mönster. De publicerar.',
+    icon: '📋',
+    triggerPhase: 11,
+    triggerCondition: (s) => s.phase >= 11 && s.totalStammar >= 1_000_000_000_000,
+    tickEffects: [
+      { resource: 'image', perSecond: -0.5, description: '-0,5 Image/s' },
+      { resource: 'kapital', perSecond: -500, description: '-500 Mkr/s (revisionskostnader)' },
+    ],
+    counterCost: { resource: 'lobby', amount: 100_000 },
+    counterLabel: 'Omformulera revisionsstandarden',
+    counterDescription: 'Om standarden inte mäter det som är fel, är inget fel. (100 000 PK)',
+  },
 ]
 
+// Map for O(1) lookups
+const ANTAGONIST_MAP = new Map<string, AntagonistDef>(
+  ANTAGONISTS.map(a => [a.id, a])
+)
+
 export function getAntagonist(id: string): AntagonistDef | undefined {
-  return ANTAGONISTS.find(a => a.id === id)
+  return ANTAGONIST_MAP.get(id)
 }
+
+// Pre-group antagonists by phase range for fast tick filtering
+// Key: phase → antagonists that could be active in that phase
+const ANTAGONISTS_BY_PHASE: Map<number, AntagonistDef[]> = (() => {
+  const map = new Map<number, AntagonistDef[]>()
+  for (let phase = 1; phase <= 12; phase++) {
+    map.set(phase, ANTAGONISTS.filter(a =>
+      a.triggerPhase <= phase && (!a.maxPhase || phase <= a.maxPhase)
+    ))
+  }
+  return map
+})()
 
 /** Check which antagonists should become active given current state */
 export function checkAntagonistTriggers(state: GameState): string[] {
+  const candidates = ANTAGONISTS_BY_PHASE.get(state.phase) ?? ANTAGONISTS
   const newlyTriggered: string[] = []
-  for (const ant of ANTAGONISTS) {
-    if (state.antagonists[ant.id]?.active) continue // already active
-    if (state.antagonists[ant.id]?.countered) continue // already countered
-    if (ant.triggerPhase > state.phase) continue
-    if (ant.maxPhase && state.phase > ant.maxPhase) continue
+  for (const ant of candidates) {
+    const antState = state.antagonists[ant.id]
+    if (antState?.active || antState?.countered) continue
     if (ant.triggerCondition(state)) {
       newlyTriggered.push(ant.id)
     }

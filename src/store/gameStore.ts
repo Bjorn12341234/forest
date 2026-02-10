@@ -12,10 +12,11 @@ import { PHASE5_EVENTS } from '../data/phase5/events'
 import { PHASE5_NEW_EVENTS } from '../data/phase5/newEvents'
 import { PHASE7_EVENTS } from '../data/phase7/events'
 import { PHASE8_EVENTS } from '../data/phase8/events'
+import { PHASE10_NEW_EVENTS } from '../data/phase10/events'
 import { getGeneratorData, getGeneratorCost } from '../data/generators'
 import { getClickUpgrade, CLICK_UPGRADES } from '../data/clickUpgrades'
 import { getUpgradeData } from '../data/upgradeRegistry'
-import { getLobbyEarner, getLobbyPurchase, LOBBY_PURCHASES } from '../data/lobbyProjects'
+import { getLobbyEarner, getLobbyPurchase, LOBBY_PURCHASES, computeLobbyModifiers, type LobbyModifiers } from '../data/lobbyProjects'
 import { getOwnerAction } from '../data/ownerActions'
 import { getPRCampaign } from '../data/ownerActions'
 import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist } from '../data/antagonists'
@@ -38,6 +39,7 @@ export const ALL_EVENTS = [
   ...PHASE5_NEW_EVENTS,
   ...PHASE7_EVENTS,
   ...PHASE8_EVENTS,
+  ...PHASE10_NEW_EVENTS,
 ]
 
 // ── Initial State ──
@@ -142,78 +144,11 @@ function computeBaseStammarPerSecond(generators: GameState['generators']): numbe
   return total
 }
 
-/** Get total generator boost multiplier from purchased lobby projects (capped at +100%) */
-function getLobbyGeneratorBoost(lobbyProjects: GameState['lobbyProjects']): number {
-  let boost = 1.0
-  for (const purchase of LOBBY_PURCHASES) {
-    if (lobbyProjects[purchase.id]?.purchased) {
-      for (const effect of purchase.effects) {
-        if (effect.type === 'generatorBoost') {
-          boost += effect.value
-        }
-      }
-    }
-  }
-  return Math.min(2.0, boost) // Cap at +100% (2x)
-}
+// ── Cached lobby modifiers (recomputed on buyLobbyProject/load/reset) ──
+let lobbyMods: LobbyModifiers = computeLobbyModifiers({})
 
-/** Get kapital boost multiplier from purchased lobby projects */
-function getLobbyKapitalBoost(lobbyProjects: GameState['lobbyProjects']): number {
-  let boost = 1.0
-  for (const purchase of LOBBY_PURCHASES) {
-    if (lobbyProjects[purchase.id]?.purchased) {
-      for (const effect of purchase.effects) {
-        if (effect.type === 'kapitalBoost') {
-          boost += effect.value
-        }
-      }
-    }
-  }
-  return boost
-}
-
-/** Get image loss reduction factor from lobby projects (1.0 = no reduction) */
-function getLobbyImageProtection(lobbyProjects: GameState['lobbyProjects']): number {
-  let reduction = 0
-  for (const purchase of LOBBY_PURCHASES) {
-    if (lobbyProjects[purchase.id]?.purchased) {
-      for (const effect of purchase.effects) {
-        if (effect.type === 'imageLossReduction' || effect.type === 'imageDecayReduction') {
-          reduction += effect.value
-        }
-      }
-    }
-  }
-  return Math.max(0, 1 - reduction)
-}
-
-/** Get lobby cost discount from purchased lobby projects */
-function getLobbyDiscount(lobbyProjects: GameState['lobbyProjects']): number {
-  let discount = 0
-  for (const purchase of LOBBY_PURCHASES) {
-    if (lobbyProjects[purchase.id]?.purchased) {
-      for (const effect of purchase.effects) {
-        if (effect.type === 'lobbyDiscount') {
-          discount += effect.value
-        }
-      }
-    }
-  }
-  return Math.min(0.5, discount) // cap at 50% discount
-}
-
-/** Get owner trust minimum from lobby projects */
-function getOwnerTrustFloor(lobbyProjects: GameState['lobbyProjects']): number {
-  for (const purchase of LOBBY_PURCHASES) {
-    if (lobbyProjects[purchase.id]?.purchased) {
-      for (const effect of purchase.effects) {
-        if (effect.type === 'ownerTrustLock') {
-          return 40 // "Aganderatten" locks trust floor at 40
-        }
-      }
-    }
-  }
-  return 0
+function refreshLobbyModifiers(lobbyProjects: GameState['lobbyProjects']) {
+  lobbyMods = computeLobbyModifiers(lobbyProjects)
 }
 
 /** Calculate stammarPerClick from base + click upgrades + tech tree upgrades */
@@ -429,7 +364,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     // Calculate stammar from generators with lobby boost and warning penalty
     const baseStammarPS = computeBaseStammarPerSecond(state.generators)
-    const lobbyBoost = getLobbyGeneratorBoost(state.lobbyProjects)
+    const lobbyBoost = lobbyMods.generatorBoost
     const stammarPS = baseStammarPS * lobbyBoost * warningPenalty
 
     // Add expansion target production
@@ -470,7 +405,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     // Calculate kapital conversion with ownerTrust modifier + lobby kapital boost
     const conversionRate = getKapitalConversionRate(state.phase)
     const trustModifier = getOwnerTrustModifier(state.ownerTrust)
-    const kapitalBoost = getLobbyKapitalBoost(state.lobbyProjects)
+    const kapitalBoost = lobbyMods.kapitalBoost
     const totalStammarPS = stammarPS + expansionStammarPS + countryStammarPS
     const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS + countryKapitalPS - countryKapitalCost
 
@@ -530,7 +465,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     }
 
     // Apply tick effects from active, uncountered antagonists
-    const imageProtection = getLobbyImageProtection(state.lobbyProjects)
+    const imageProtection = lobbyMods.imageProtection
     for (const ant of ANTAGONISTS) {
       const antState = (updates.antagonists ?? state.antagonists)[ant.id]
       if (!antState?.active || antState.countered) continue
@@ -864,7 +799,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (data.unlockPhase > state.phase) return
 
     // Apply lobby discount from purchased projects
-    const discount = getLobbyDiscount(state.lobbyProjects)
+    const discount = lobbyMods.lobbyDiscount
     const cost = Math.floor(data.cost * (1 - discount))
 
     if (state.kapital < cost) return
@@ -893,16 +828,18 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     if (state.lobby < data.cost) return
 
+    const newLobbyProjects = {
+      ...state.lobbyProjects,
+      [id]: {
+        purchased: true,
+        count: 1,
+        unlocked: true,
+      },
+    }
+    refreshLobbyModifiers(newLobbyProjects)
     set({
       lobby: state.lobby - data.cost,
-      lobbyProjects: {
-        ...state.lobbyProjects,
-        [id]: {
-          purchased: true,
-          count: 1,
-          unlocked: true,
-        },
-      },
+      lobbyProjects: newLobbyProjects,
     } as Partial<GameStore>)
   },
 
@@ -921,7 +858,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (typeof currentResource !== 'number' || currentResource < data.cost) return
 
     // Apply trust change with floor from lobby projects
-    const trustFloor = getOwnerTrustFloor(state.lobbyProjects)
+    const trustFloor = lobbyMods.ownerTrustFloor
     let newTrust = Math.max(0, Math.min(100, state.ownerTrust + data.trustChange))
     newTrust = Math.max(trustFloor, newTrust)
 
@@ -1070,7 +1007,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (!choice) return
 
     // Apply image protection from lobby projects
-    const imageProtection = getLobbyImageProtection(state.lobbyProjects)
+    const imageProtection = lobbyMods.imageProtection
 
     for (const effect of choice.effects) {
       // Apply lobby image protection to image losses
@@ -1113,6 +1050,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   load: () => {
     const saved = loadGame()
     if (saved) {
+      refreshLobbyModifiers(saved.lobbyProjects ?? {})
       set({ ...saved, lastTickAt: Date.now() })
       return true
     }
@@ -1120,6 +1058,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
 
   reset: () => {
+    refreshLobbyModifiers({})
     const now = Date.now()
     set({
       ...INITIAL_STATE,

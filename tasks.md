@@ -618,6 +618,156 @@
 
 ---
 
+## Sprint 8: Kvalitetspasset (Report Fixes)
+
+> **Källa:** `report.md` — Holistic Review Report (2026-02-10)
+> **Mål:** Åtgärda de viktigaste problemen från rapporten: endgame-innehåll, prestanda, tillgänglighet, UX, kodkvalitet.
+
+### 8A — Performance (Hot Path)
+
+- [x] 8A-1: Map-Based Data Lookups
+  - Ersätt `generators` array med `Map<string, GeneratorData>` — `getGeneratorData(id)` gör `.find()` 20×/tick
+  - Samma för antagonists (`checkAntagonistTriggers` loopar alla 17 varje tick)
+  - Samma för upgrades i upgradeRegistry
+  - Behåll array-export för rendering, skapa Map vid module load för lookups
+
+- [x] 8A-2: Cache Lobby Boost
+  - `getLobbyGeneratorBoost()` loopar alla 12 purchases varje tick (100ms)
+  - Cacha resultatet i store state, uppdatera bara vid `buyLobbyProject`
+  - Samma för andra lobby-modifiers (kapitalBoost, imageProtection, etc.)
+
+- [x] 8A-3: Antagonist Phase Short-Circuit
+  - `checkAntagonistTriggers()` testar alla 17 villkor varje tick
+  - Lägg till early-exit: skippa antagonister med `minPhase > currentPhase` eller `maxPhase < currentPhase`
+  - Gruppera antagonister per fas-range för snabbare filtrering
+
+- [x] 8A-4: AnimatedNumber Optimization
+  - 40+ AnimatedNumber-instanser renderar varje tick (100ms)
+  - Wrappa i `React.memo()` med custom comparator
+  - Throttla visuella uppdateringar till max 4/s (250ms) — siffror ändras snabbare men renderar långsammare
+  - Behåll exakt värde i state, bara throttla DOM-uppdatering
+
+- [x] 8A-5: Event Pool Caching
+  - `selectEvent()` filtrerar alla 80+ events varje trigger
+  - Cacha eligible events per fas, invalidera vid fasövergång
+  - Minskar filtrering från O(n) per trigger till O(1) cache-lookup
+
+**Notes:** 8A complete. Key changes:
+- **8A-1**: Added `Map<string, T>` at module load in 13 data files: generators, antagonists, upgradeRegistry, lobbyProjects (earner+purchase), countries, expansionTargets, ownerGenerators, clickUpgrades, ownerActions (actions+PR), ownerClickUpgrades, ownerKnowledge, industryAttacks, industryLures. All `get*()` functions now use `.get()` instead of `.find()`.
+- **8A-2**: Replaced 5 per-tick lobby helper functions (`getLobbyGeneratorBoost`, `getLobbyKapitalBoost`, `getLobbyImageProtection`, `getLobbyDiscount`, `getOwnerTrustFloor`) with single `computeLobbyModifiers()` exported from lobbyProjects.ts. Module-level `lobbyMods` cache in gameStore.ts refreshed only on `buyLobbyProject`, `load`, and `reset`.
+- **8A-3**: Pre-grouped antagonists by phase range into `ANTAGONISTS_BY_PHASE` Map (phases 1-12). `checkAntagonistTriggers` now only iterates candidates valid for current phase instead of all 17.
+- **8A-4**: `AnimatedNumber` wrapped in `React.memo()`. `useAnimatedNumber` now skips animation restart when rounded value hasn't changed (prevents unnecessary rAF cycles on every 100ms tick).
+- **8A-5**: Phase-based event pool cache in events.ts. `selectEvent` pre-filters by phase/maxPhase once (cached), only re-filters on phase change or pool change. `isEligible` no longer redundantly checks phase/maxPhase.
+- Build: 201KB gzipped, TypeScript clean, no regressions.
+
+### 8B — Endgame Content (Faser 10–12)
+
+- [x] 8B-1: Expansion Era Events (14 nya)
+  - Fas 10 (5 events): Post-Biologisk vändpunkt, Mars Miljöprövning, Kosmisk FSC, Arbetsmiljöverket i omloppsbana, Terraformering samråd
+  - Fas 11 (5 events): Dysonsfär-leverans försenad, Alien-delegater vid Almedalen, Intergalaktisk Äganderättsdebatt, Kosmiska Skogsstyrelsen, DN Debatt om entropi
+  - Fas 12 (4 events): Universums Sista Styrelsesammanträde, Entropins Utredning, Multiversum-revisionen, Den Sista Skogsbruksplanen
+  - All events anchored in Swedish institutions (Länsstyrelsen, Arbetsmiljöverket, Almedalen, DN Debatt, FSC, Riksrevisionen) applied at cosmic scale
+  - Three-act structure: post-biological → galactic institutions → paperwork outlives universe
+
+- [x] 8B-2: Nya Antagonister (3 st, faser 10–12)
+  - Kosmiska Länsstyrelsen (fas 10–11, -200 Mkr/s) — byråkratiska avgifter, counter: 50K lobby
+  - Den Galaktiska Fackföreningen (fas 11, -10M stammar/s) — arbetsnedläggning, counter: 5B kapital
+  - Multiversum-Revisorerna (fas 11–12, -0.5 Image/s, -500 Mkr/s) — revision, counter: 100K lobby
+  - Fills the phase 11 antagonist gap (previously zero antagonists there)
+
+- [x] 8B-3: Endgame Narrative Arc
+  - New file: `src/data/phase10/events.ts` (PHASE10_NEW_EVENTS)
+  - Registered in gameStore.ts ALL_EVENTS array
+  - Satirical throughline: Swedish bureaucracy is eternal and universal
+  - Events complement (don't replace) existing phase8/events.ts cosmic events
+
+### 8C — UX-förbättringar
+
+- [ ] 8C-1: Country Auto-Allocate
+  - Ny toggle-knapp i CountryPanel: "Auto-fördela tryck"
+  - När aktiv: fördela jämnt över alla vektorer, med dubbelt på svaghetsvektorn
+  - Spelaren kan fortfarande manuellt justera — auto stängs av vid manuell ändring
+  - Minskar tråkig repetition vid land #5–14
+
+- [ ] 8C-2: Species Counter på Dashboard
+  - Ny liten mätare i resursfältet (visas från fas 3+)
+  - Visar "Arter: X kvar" med subtil animation vid förlust
+  - Röd puls-effekt när arter försvinner — gör ekologisk kostnad synlig under spelet
+  - Industry path only (owner path har redan biodiv-mätare)
+
+- [ ] 8C-3: Event Frequency Tuning
+  - Minska event-frekvens i faser 7–12: nuvarande 50–90s → 90–150s
+  - Under aktiv country invasion: pausa bakgrunds-events (för mycket avbrott)
+  - Fas 10–12: events var 120–180s (mer andrum med nya events från 8B)
+
+- [ ] 8C-4: Mobile Dashboard Density
+  - Mobil: kollapsa resurskort till kompakt single-row (ikoner + siffror, ingen label)
+  - Expanderbar med tap — visa full info on demand
+  - Säkerställ att generatorer och klick-area syns utan scroll
+
+### 8D — Tillgänglighet (Accessibility)
+
+- [ ] 8D-1: Focus Traps i Modals
+  - EventModal, SettingsPanel, AchievementPanel, IndustryAttackModal, IndustryLureModal
+  - Implementera keyboard focus trap (Tab/Shift+Tab cyklar inom modal)
+  - Escape stänger modal
+  - Returnera fokus till trigger-element vid stängning
+
+- [ ] 8D-2: Färgkontrast
+  - `text-text-muted` (#B0B0B0) på `bg-bg-secondary` (#2A2A2A) = 4.2:1 — behöver 4.5:1
+  - Ljusa upp muted-text till ~#BABABA eller mörkna bakgrund
+  - Verifiera alla era-themes (INTERNATIONELL grå, EXPANSION svart) möter AA
+  - Testa med Chrome DevTools contrast checker
+
+- [ ] 8D-3: ARIA Labels
+  - Settings-knapp (⚙️), achievement-knapp, ljud-toggle — lägg till `aria-label`
+  - Generator-köpknappar: `aria-label="Köp {generator.name} för {cost} stammar"`
+  - Tab-navigation: `role="tablist"`, `role="tab"`, `aria-selected`
+  - Resurskort: `aria-live="polite"` för dynamiska värden
+
+- [ ] 8D-4: Tap Targets
+  - Bottom nav tabs: öka från ~32px till 44px minimum (WCAG 2.5.8)
+  - Achievement tier-tabs: samma
+  - Alla knappar i LobbyPanel/OwnerMeter: verifiera 44×44px touch area
+  - Använd padding snarare än storlek om visuell design ska bevaras
+
+- [ ] 8D-5: Prefers-Reduced-Motion
+  - Wrappa ticker-animation, puls-glow, spring-animationer i `@media (prefers-reduced-motion: reduce)`
+  - Framer Motion: global `MotionConfig` med `reducedMotion="user"`
+  - Fallback: visa statisk text istället för rullande ticker
+
+### 8E — Kodkvalitet
+
+- [ ] 8E-1: Splitta ExpansionPanel.tsx (808 rader)
+  - Extrahera `CountryPanel.tsx` — landsval, karta, invasion-UI
+  - Extrahera `PressureSliders.tsx` — tryckfördelnings-sliders
+  - Extrahera `SpaceTargetPanel.tsx` — EXPANSION fas 10+ targets
+  - `ExpansionPanel.tsx` blir tunn wrapper som routar till rätt sub-panel baserat på era
+
+- [ ] 8E-2: Owner Theme CSS Variables
+  - Flytta hardcoded `#2D6A4F`, `#F5F0E8`, `#3D2B1F` till CSS custom properties i global.css
+  - Definiera under `[data-mode="owner"]` eller dedikerat `@theme` block
+  - Uppdatera alla owner-komponenter att använda variablerna
+  - Gör det möjligt att justera owner-tema på ett ställe
+
+- [ ] 8E-3: Error Boundaries
+  - Wrappa EventModal, AchievementPanel, ExpansionPanel i React error boundaries
+  - Fallback-UI: "Något gick fel — stäng och försök igen"
+  - Logga felinfo till console för debugging
+  - Förhindra att malformerad event/achievement-data kraschar hela appen
+
+### 8F — Verifiering
+
+- [ ] 8F-1: Build & Test
+  - TypeScript clean (`npx tsc --noEmit`)
+  - Vite build lyckad
+  - Verifiera save migration (v6 intakt, inga nya state-fält kräver migration)
+  - Snabb playtest: fas 1–3 (performance), fas 7 (auto-allocate), fas 10+ (nya events)
+  - Lighthouse accessibility audit (sikta 90+)
+  - Deploy till GitHub Pages
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:
