@@ -145,6 +145,25 @@ body::before {
   animation: float-up 0.8s ease-out forwards;
 }
 
+/* ── Warning Animations ── */
+@keyframes warning-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes warning-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(220, 38, 38, 0.4); }
+  50% { opacity: 0.85; box-shadow: 0 0 20px rgba(220, 38, 38, 0.7), 0 0 40px rgba(220, 38, 38, 0.3); }
+}
+
+@utility animate-warning-pulse {
+  animation: warning-pulse 2s ease-in-out infinite;
+}
+
+@utility animate-warning-blink {
+  animation: warning-blink 1s ease-in-out infinite;
+}
+
 /* ── Ticker Animation ── */
 @keyframes ticker-scroll {
   0% { transform: translateX(0); }
@@ -194,6 +213,10 @@ body::before {
   .animate-float-up {
     animation: none !important;
     opacity: 0;
+  }
+  .animate-warning-pulse,
+  .animate-warning-blink {
+    animation: none !important;
   }
   * {
     transition-duration: 0.01ms !important;
