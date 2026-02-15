@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { GameState, GameActions, Phase, Effect, GameSettings } from './types'
-import { saveGame, loadGame } from '../engine/save'
+import { saveGame, loadGame, backupSave, loadBackup, deleteSave } from '../engine/save'
 import { calculateUpgradeCost, getKapitalConversionRate, getOwnerTrustModifier } from '../engine/formulas'
 import { checkEventTrigger, selectEvent, scheduleNextEvent } from '../engine/events'
 import { checkPhaseTransition } from '../engine/phases'
@@ -1164,7 +1164,23 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     return false
   },
 
+  loadFromBackup: () => {
+    const saved = loadBackup()
+    if (saved) {
+      refreshLobbyModifiers(saved.lobbyProjects ?? {})
+      refreshKnowledgeModifiers(saved.ownerKnowledgeUpgrades ?? {})
+      set({ ...saved, lastTickAt: Date.now() })
+      // Also restore as main save so autosave continues from here
+      saveGame(saved)
+      return true
+    }
+    return false
+  },
+
   reset: () => {
+    // Backup current save before resetting (so player can recover)
+    backupSave()
+    deleteSave()
     refreshLobbyModifiers({})
     refreshKnowledgeModifiers({})
     const now = Date.now()

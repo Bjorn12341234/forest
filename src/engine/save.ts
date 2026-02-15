@@ -1,6 +1,7 @@
 import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
+const BACKUP_KEY = 'silva_maximus_backup'
 const CURRENT_VERSION = 7
 
 export function saveGame(state: GameState): void {
@@ -40,6 +41,77 @@ export function deleteSave(): void {
 
 export function hasSave(): boolean {
   return localStorage.getItem(SAVE_KEY) !== null
+}
+
+// ── Backup (pre-reset snapshot) ──
+
+/** Copy current main save to backup slot (called before reset) */
+export function backupSave(): void {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY)
+    if (raw) {
+      localStorage.setItem(BACKUP_KEY, raw)
+    }
+  } catch (e) {
+    console.error('Failed to backup save:', e)
+  }
+}
+
+export function loadBackup(): GameState | null {
+  try {
+    const raw = localStorage.getItem(BACKUP_KEY)
+    if (!raw) return null
+    const saveFile: SaveFile = JSON.parse(raw)
+    const migrated = migrate(saveFile)
+    return migrated.state
+  } catch (e) {
+    console.error('Failed to load backup:', e)
+    return null
+  }
+}
+
+export function hasBackup(): boolean {
+  return localStorage.getItem(BACKUP_KEY) !== null
+}
+
+export function deleteBackup(): void {
+  localStorage.removeItem(BACKUP_KEY)
+}
+
+export interface SaveSlotInfo {
+  key: 'main' | 'backup'
+  label: string
+  savedAt: number
+  phase: number
+  gameMode: string | null
+  totalStammar: number
+}
+
+/** Get info about all available save slots */
+export function getSaveSlots(): SaveSlotInfo[] {
+  const slots: SaveSlotInfo[] = []
+
+  for (const [key, storageKey, label] of [
+    ['main', SAVE_KEY, 'Senaste sparning'],
+    ['backup', BACKUP_KEY, 'Före nollställning'],
+  ] as const) {
+    try {
+      const raw = localStorage.getItem(storageKey)
+      if (!raw) continue
+      const sf: SaveFile = JSON.parse(raw)
+      const state = migrate(sf).state
+      slots.push({
+        key,
+        label,
+        savedAt: sf.savedAt,
+        phase: state.phase,
+        gameMode: state.gameMode,
+        totalStammar: state.totalStammar ?? 0,
+      })
+    } catch { /* skip corrupt slots */ }
+  }
+
+  return slots
 }
 
 export function exportSave(state: GameState): string {

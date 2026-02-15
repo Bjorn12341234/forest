@@ -263,6 +263,7 @@ export interface GameActions {
   dismissEvent: () => void
   save: () => void
   load: () => boolean
+  loadFromBackup: () => boolean
   reset: () => void
   setPhase: (phase: Phase) => void
   triggerPhaseTransition: (from: Phase, to: Phase) => void

@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import { exportSave, importSave } from '../engine/save'
+import { exportSave, importSave, getSaveSlots, type SaveSlotInfo } from '../engine/save'
+import { PHASE_NAMES } from '../engine/phases'
+import { formatNumber } from '../engine/format'
 import { GlassCard } from './ui/GlassCard'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 
@@ -24,12 +26,14 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
   const save = useGameStore(s => s.save)
   const reset = useGameStore(s => s.reset)
   const load = useGameStore(s => s.load)
+  const loadFromBackup = useGameStore(s => s.loadFromBackup)
   const [importText, setImportText] = useState('')
   const [showImport, setShowImport] = useState(false)
+  const [showLoad, setShowLoad] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [copyFeedback, setCopyFeedback] = useState(false)
   const [saveFeedback, setSaveFeedback] = useState(false)
-  const [loadFeedback, setLoadFeedback] = useState(false)
+  const [loadFeedback, setLoadFeedback] = useState<string | null>(null)
   const [importFeedback, setImportFeedback] = useState<'success' | 'error' | null>(null)
 
   const handleExport = () => {
@@ -159,20 +163,33 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               {saveFeedback ? 'Sparat!' : 'Spara nu'}
             </button>
 
-            <button
-              onClick={() => {
-                load()
-                setLoadFeedback(true)
-                setTimeout(() => setLoadFeedback(false), 2000)
-              }}
-              className={`w-full py-2 rounded-sm text-xs font-medium border transition-colors cursor-pointer
-                ${loadFeedback
-                  ? 'bg-green-800/20 border-green-500/30 text-green-400'
-                  : 'bg-black/5 border-black/10 text-text-primary hover:bg-black/10'
-                }`}
-            >
-              {loadFeedback ? 'Laddat!' : 'Ladda sparat spel'}
-            </button>
+            {!showLoad ? (
+              <button
+                onClick={() => setShowLoad(true)}
+                className={`w-full py-2 rounded-sm text-xs font-medium border transition-colors cursor-pointer
+                  ${loadFeedback
+                    ? 'bg-green-800/20 border-green-500/30 text-green-400'
+                    : 'bg-black/5 border-black/10 text-text-primary hover:bg-black/10'
+                  }`}
+              >
+                {loadFeedback ?? 'Ladda sparat spel'}
+              </button>
+            ) : (
+              <SaveSlotMenu
+                onLoad={(slot) => {
+                  const ok = slot.key === 'backup' ? loadFromBackup() : load()
+                  setShowLoad(false)
+                  if (ok) {
+                    setLoadFeedback('Laddat!')
+                    setTimeout(() => setLoadFeedback(null), 2000)
+                  } else {
+                    setLoadFeedback('Kunde inte ladda')
+                    setTimeout(() => setLoadFeedback(null), 2000)
+                  }
+                }}
+                onCancel={() => setShowLoad(false)}
+              />
+            )}
 
             <button
               onClick={handleExport}
@@ -261,5 +278,80 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         </GlassCard>
       </motion.div>
     </motion.div>
+  )
+}
+
+// ── Save Slot Menu ──
+
+function SaveSlotMenu({ onLoad, onCancel }: {
+  onLoad: (slot: SaveSlotInfo) => void
+  onCancel: () => void
+}) {
+  const slots = useMemo(() => getSaveSlots(), [])
+
+  const MODE_LABELS: Record<string, string> = {
+    industry: 'Storskogsbolag',
+    owner: 'Skogsägare',
+  }
+
+  function formatTime(ts: number): string {
+    const d = new Date(ts)
+    return d.toLocaleDateString('sv-SE') + ' ' + d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
+  }
+
+  if (slots.length === 0) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-xs text-text-muted text-center py-2">
+          Ingen sparfil hittades.
+        </p>
+        <button
+          onClick={onCancel}
+          className="w-full py-1.5 rounded-sm text-xs text-text-muted bg-black/5 border border-black/10
+                     hover:bg-black/10 cursor-pointer"
+        >
+          Stäng
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-xs text-text-muted uppercase tracking-wider">Välj sparfil</span>
+      {slots.map(slot => (
+        <button
+          key={slot.key}
+          onClick={() => onLoad(slot)}
+          className="w-full py-2 px-3 rounded-sm text-left bg-black/5 border border-black/10
+                     hover:bg-black/10 hover:border-accent/30 transition-colors cursor-pointer"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-text-primary">{slot.label}</span>
+            <span className="text-xs text-text-muted">{formatTime(slot.savedAt)}</span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs text-text-muted">
+              {MODE_LABELS[slot.gameMode ?? ''] ?? '—'}
+            </span>
+            <span className="text-xs text-text-muted">·</span>
+            <span className="text-xs text-text-muted">
+              Fas {slot.phase}: {PHASE_NAMES[slot.phase as keyof typeof PHASE_NAMES] ?? '?'}
+            </span>
+            <span className="text-xs text-text-muted">·</span>
+            <span className="text-xs text-accent font-numbers">
+              {formatNumber(slot.totalStammar)} stammar
+            </span>
+          </div>
+        </button>
+      ))}
+      <button
+        onClick={onCancel}
+        className="w-full py-1.5 rounded-sm text-xs text-text-muted bg-black/5 border border-black/10
+                   hover:bg-black/10 cursor-pointer"
+      >
+        Avbryt
+      </button>
+    </div>
   )
 }
