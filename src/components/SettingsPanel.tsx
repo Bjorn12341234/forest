@@ -23,10 +23,13 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
   const updateSettings = useGameStore(s => s.updateSettings)
   const save = useGameStore(s => s.save)
   const reset = useGameStore(s => s.reset)
+  const load = useGameStore(s => s.load)
   const [importText, setImportText] = useState('')
   const [showImport, setShowImport] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [copyFeedback, setCopyFeedback] = useState(false)
+  const [saveFeedback, setSaveFeedback] = useState(false)
+  const [loadFeedback, setLoadFeedback] = useState(false)
   const [importFeedback, setImportFeedback] = useState<'success' | 'error' | null>(null)
 
   const handleExport = () => {
@@ -142,11 +145,33 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
           {/* Save / Export / Import */}
           <div className="flex flex-col gap-2 mb-4">
             <button
-              onClick={() => { save(); }}
-              className="w-full py-2 rounded-sm text-xs font-medium bg-black/5 border border-black/10
-                         text-text-primary hover:bg-black/10 transition-colors cursor-pointer"
+              onClick={() => {
+                save()
+                setSaveFeedback(true)
+                setTimeout(() => setSaveFeedback(false), 2000)
+              }}
+              className={`w-full py-2 rounded-sm text-xs font-medium border transition-colors cursor-pointer
+                ${saveFeedback
+                  ? 'bg-green-800/20 border-green-500/30 text-green-400'
+                  : 'bg-black/5 border-black/10 text-text-primary hover:bg-black/10'
+                }`}
             >
-              Spara nu
+              {saveFeedback ? 'Sparat!' : 'Spara nu'}
+            </button>
+
+            <button
+              onClick={() => {
+                load()
+                setLoadFeedback(true)
+                setTimeout(() => setLoadFeedback(false), 2000)
+              }}
+              className={`w-full py-2 rounded-sm text-xs font-medium border transition-colors cursor-pointer
+                ${loadFeedback
+                  ? 'bg-green-800/20 border-green-500/30 text-green-400'
+                  : 'bg-black/5 border-black/10 text-text-primary hover:bg-black/10'
+                }`}
+            >
+              {loadFeedback ? 'Laddat!' : 'Ladda sparat spel'}
             </button>
 
             <button
