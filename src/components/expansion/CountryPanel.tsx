@@ -122,9 +122,18 @@ export function CountryPanel() {
       {/* World Map + Country Dots */}
       <GlassCard padding="sm" className="relative overflow-hidden">
         <div className="relative w-full" style={{ paddingBottom: '56%' }}>
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pointer-events-none">
             <WorldMapSVG />
           </div>
+
+          {/* Phase 6 hint — no countries yet */}
+          {visibleCountries.length === 0 && (
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <p className="text-sm text-text-muted text-center px-8">
+                Länderna låses upp i nästa fas. Fortsätt producera stammar.
+              </p>
+            </div>
+          )}
 
           {/* Country Dots */}
           <AnimatePresence>
@@ -150,9 +159,10 @@ export function CountryPanel() {
                   style={{
                     left: `${country.position.x}%`,
                     top: `${country.position.y}%`,
-                    width: isControlled ? 14 : isInvading ? 12 : 10,
-                    height: isControlled ? 14 : isInvading ? 12 : 10,
-                    transform: 'translate(-50%, -50%)',
+                    width: isControlled ? 24 : isInvading ? 20 : 16,
+                    height: isControlled ? 24 : isInvading ? 20 : 16,
+                    x: '-50%',
+                    y: '-50%',
                   }}
                   onClick={() => setSelectedId(isSelected ? null : country.id)}
                   whileHover={{ scale: 1.3 }}

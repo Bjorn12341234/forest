@@ -68,7 +68,7 @@ export function SpaceExpansionPanel() {
       {/* Map + Targets */}
       <GlassCard padding="sm" className="relative overflow-hidden">
         <div className="relative w-full" style={{ paddingBottom: '70%' }}>
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pointer-events-none">
             <MapSVG />
           </div>
 
@@ -102,9 +102,10 @@ export function SpaceExpansionPanel() {
                   style={{
                     left: `${target.position.x}%`,
                     top: `${target.position.y}%`,
-                    width: isControlled ? 14 : 10,
-                    height: isControlled ? 14 : 10,
-                    transform: 'translate(-50%, -50%)',
+                    width: isControlled ? 24 : 16,
+                    height: isControlled ? 24 : 16,
+                    x: '-50%',
+                    y: '-50%',
                   }}
                   onClick={() => setSelectedId(isSelected ? null : target.id)}
                   whileHover={{ scale: 1.3 }}
