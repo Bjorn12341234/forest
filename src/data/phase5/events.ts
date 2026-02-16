@@ -22,7 +22,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: '"Vi välkomnar transparens"',
         description: 'Säg att du står bakom utredningen',
         effects: [
-          { resource: 'kapital', amount: -50_000, type: 'add' },
+          { resource: 'kapital', amount: -150_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
         ],
       },
@@ -30,7 +30,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Attackera utredarna',
         description: '"Politiskt motiverad!" — finansiera motrapport',
         effects: [
-          { resource: 'kapital', amount: -30_000, type: 'add' },
+          { resource: 'kapital', amount: -90_000, type: 'add' },
           { resource: 'lobby', amount: 20, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
         ],
@@ -51,7 +51,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Samarbeta fullt ut',
         description: 'Visa upp modellområden, dölj resten',
         effects: [
-          { resource: 'kapital', amount: -20_000, type: 'add' },
+          { resource: 'kapital', amount: -60_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -59,7 +59,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Fördröj inspektionen',
         description: 'Juridisk process tar år. Hugga medan dom väntar.',
         effects: [
-          { resource: 'stammar', amount: 100_000, type: 'add' },
+          { resource: 'stammar', amount: 300_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
@@ -86,7 +86,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Skapa etikråd',
         description: 'En tandlös råd som aldrig möts',
         effects: [
-          { resource: 'kapital', amount: -10_000, type: 'add' },
+          { resource: 'kapital', amount: -30_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -106,7 +106,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: '"Skogen är lösningen"',
         description: 'Marknadsför svenskt skogsbruk globalt',
         effects: [
-          { resource: 'kapital', amount: 100_000, type: 'add' },
+          { resource: 'kapital', amount: 300_000, type: 'add' },
           { resource: 'image', amount: 15, type: 'add' },
           { resource: 'lobby', amount: 50, type: 'add' },
         ],
@@ -136,7 +136,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Avverka',
         description: '100% effektivitet. Inga undantag.',
         effects: [
-          { resource: 'stammar', amount: 500_000, type: 'add' },
+          { resource: 'stammar', amount: 1_500_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'biodiversity', amount: -10, type: 'add' },
         ],
@@ -145,7 +145,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Gör den till "upplevelsespark"',
         description: 'Ingångsavgift 350 kr. Stigar i betong.',
         effects: [
-          { resource: 'kapital', amount: 50_000, type: 'add' },
+          { resource: 'kapital', amount: 150_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -165,7 +165,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Plantera överallt',
         description: 'Ersätt alla bestånd med v3.0',
         effects: [
-          { resource: 'stammar', amount: 1_000_000, type: 'add' },
+          { resource: 'stammar', amount: 3_000_000, type: 'add' },
           { resource: 'biodiversity', amount: -15, type: 'add' },
         ],
       },
@@ -173,7 +173,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: '"Pilot-projekt"',
         description: 'Bara 50 000 hektar. För att börja med.',
         effects: [
-          { resource: 'stammar', amount: 300_000, type: 'add' },
+          { resource: 'stammar', amount: 900_000, type: 'add' },
           { resource: 'biodiversity', amount: -5, type: 'add' },
         ],
       },
@@ -200,7 +200,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Sponsra fågelholkar',
         description: 'I betong. För de fåglar som inte finns längre.',
         effects: [
-          { resource: 'kapital', amount: -20_000, type: 'add' },
+          { resource: 'kapital', amount: -60_000, type: 'add' },
           { resource: 'image', amount: 3, type: 'add' },
         ],
       },
@@ -220,15 +220,15 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Full autonomi',
         description: 'Låt AI:n optimera utan mänsklig inblandning',
         effects: [
-          { resource: 'stammar', amount: 2_000_000, type: 'add' },
+          { resource: 'stammar', amount: 6_000_000, type: 'add' },
         ],
       },
       {
         label: 'Människoövervakning',
         description: 'En operatör per 50 maskiner. För säkerhets skull.',
         effects: [
-          { resource: 'stammar', amount: 1_000_000, type: 'add' },
-          { resource: 'kapital', amount: -50_000, type: 'add' },
+          { resource: 'stammar', amount: 3_000_000, type: 'add' },
+          { resource: 'kapital', amount: -150_000, type: 'add' },
         ],
       },
     ],
@@ -249,16 +249,16 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Starta terraforming',
         description: 'Varför sluta vid atmosfären?',
         effects: [
-          { resource: 'stammar', amount: 5_000_000, type: 'add' },
-          { resource: 'kapital', amount: -500_000, type: 'add' },
+          { resource: 'stammar', amount: 15_000_000, type: 'add' },
+          { resource: 'kapital', amount: -1_500_000, type: 'add' },
         ],
       },
       {
         label: 'Mars först',
         description: 'Större yta. Bättre ROI.',
         effects: [
-          { resource: 'stammar', amount: 3_000_000, type: 'add' },
-          { resource: 'kapital', amount: -300_000, type: 'add' },
+          { resource: 'stammar', amount: 9_000_000, type: 'add' },
+          { resource: 'kapital', amount: -900_000, type: 'add' },
         ],
       },
     ],
@@ -277,15 +277,15 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Skala upp',
         description: 'Bygga 50 fabriker till',
         effects: [
-          { resource: 'stammar', amount: 10_000_000, type: 'add' },
-          { resource: 'kapital', amount: 1_000_000, type: 'add' },
+          { resource: 'stammar', amount: 30_000_000, type: 'add' },
+          { resource: 'kapital', amount: 3_000_000, type: 'add' },
         ],
       },
       {
         label: 'Optimera först',
         description: 'Kalibrera AI för Mars-förhållanden',
         effects: [
-          { resource: 'stammar', amount: 5_000_000, type: 'add' },
+          { resource: 'stammar', amount: 15_000_000, type: 'add' },
         ],
       },
     ],
@@ -311,7 +311,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
         label: 'Automatisera tackeventet också',
         description: 'Effektivitet i alla led',
         effects: [
-          { resource: 'kapital', amount: 10_000, type: 'add' },
+          { resource: 'kapital', amount: 30_000, type: 'add' },
         ],
       },
     ],

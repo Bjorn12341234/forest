@@ -27,7 +27,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     description: 'Nu med färgglada kartor. Ägaren fattar inget.',
     cost: 200,
     costResource: 'kapital',
-    stammarPerClickBonus: 5,
+    stammarPerClickBonus: 50,
     icon: '💻',
   },
   {
@@ -36,7 +36,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     description: 'En plan var tredje sekund. Ägarnas namn autogenereras.',
     cost: 1_000,
     costResource: 'kapital',
-    stammarPerClickBonus: 20,
+    stammarPerClickBonus: 200,
     icon: '🏭',
   },
   {
@@ -45,7 +45,7 @@ export const CLICK_UPGRADES: ClickUpgradeData[] = [
     description: 'Maskininlärning optimerar gallringsintervall. Inga människor inblandade.',
     cost: 10_000,
     costResource: 'kapital',
-    stammarPerClickBonus: 100,
+    stammarPerClickBonus: 1000,
     icon: '🤖',
   },
 ]

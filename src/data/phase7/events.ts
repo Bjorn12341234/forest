@@ -13,8 +13,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Ekonomiskt tryck',
         description: 'Stäng massaexporten till Finland. De behöver oss mer än vi dem.',
         effects: [
-          { resource: 'stammar', amount: -5_000_000, type: 'add' },
-          { resource: 'kapital', amount: 2_000_000, type: 'add' },
+          { resource: 'stammar', amount: -15_000_000, type: 'add' },
+          { resource: 'kapital', amount: 6_000_000, type: 'add' },
           { resource: 'lobby', amount: 100, type: 'add' },
         ],
       },
@@ -22,8 +22,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Köp finska skogsbolag bakvägen',
         description: 'Holdingbolag i Estland. Ingen spårbarhet.',
         effects: [
-          { resource: 'kapital', amount: -5_000_000, type: 'add' },
-          { resource: 'stammar', amount: 10_000_000, type: 'add' },
+          { resource: 'kapital', amount: -15_000_000, type: 'add' },
+          { resource: 'stammar', amount: 30_000_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
@@ -49,8 +49,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Exportera fullt ut',
         description: 'Alla länder ska se ut som Norrland. Bara gran.',
         effects: [
-          { resource: 'stammar', amount: 20_000_000, type: 'add' },
-          { resource: 'kapital', amount: 5_000_000, type: 'add' },
+          { resource: 'stammar', amount: 60_000_000, type: 'add' },
+          { resource: 'kapital', amount: 15_000_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
           { resource: 'biodiversity', amount: -5, type: 'add' },
         ],
@@ -59,7 +59,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Licensiera varumärket',
         description: 'Sälj namnet "Swedish Forestry Model" utan att göra något',
         effects: [
-          { resource: 'kapital', amount: 3_000_000, type: 'add' },
+          { resource: 'kapital', amount: 9_000_000, type: 'add' },
           { resource: 'lobby', amount: 200, type: 'add' },
         ],
       },
@@ -78,8 +78,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: '"Vi kände inte till det"',
         description: 'Avskeda chefen. Behåll licenserna.',
         effects: [
-          { resource: 'kapital', amount: -2_000_000, type: 'add' },
-          { resource: 'stammar', amount: 15_000_000, type: 'add' },
+          { resource: 'kapital', amount: -6_000_000, type: 'add' },
+          { resource: 'stammar', amount: 45_000_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
         ],
       },
@@ -87,8 +87,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Formalisera systemet',
         description: '"Lokala partnerskapsprogram" — samma mutor, ny rubrik',
         effects: [
-          { resource: 'kapital', amount: -1_000_000, type: 'add' },
-          { resource: 'stammar', amount: 10_000_000, type: 'add' },
+          { resource: 'kapital', amount: -3_000_000, type: 'add' },
+          { resource: 'stammar', amount: 30_000_000, type: 'add' },
           { resource: 'lobby', amount: -100, type: 'add' },
         ],
       },
@@ -96,7 +96,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Anmäl er själva till Ekobrottsmyndigheten',
         description: 'Visa transparens. Få mildare straff. Behåll PR-poäng.',
         effects: [
-          { resource: 'kapital', amount: -3_000_000, type: 'add' },
+          { resource: 'kapital', amount: -9_000_000, type: 'add' },
           { resource: 'image', amount: 8, type: 'add' },
         ],
       },
@@ -115,7 +115,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Infiltrera koalitionen',
         description: 'Placera "oberoende" företrädare i styrelsen',
         effects: [
-          { resource: 'kapital', amount: -500_000, type: 'add' },
+          { resource: 'kapital', amount: -1_500_000, type: 'add' },
           { resource: 'lobby', amount: 150, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
         ],
@@ -124,7 +124,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Starta motkoalition: "Forests for People"',
         description: '50 branschorganisationer. "Oberoende." Finansierade av er.',
         effects: [
-          { resource: 'kapital', amount: -2_000_000, type: 'add' },
+          { resource: 'kapital', amount: -6_000_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
           { resource: 'lobby', amount: 200, type: 'add' },
         ],
@@ -134,7 +134,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         description: 'NGO:er försvinner. Skogsbolag består.',
         effects: [
           { resource: 'image', amount: -15, type: 'add' },
-          { resource: 'stammar', amount: 5_000_000, type: 'add' },
+          { resource: 'stammar', amount: 15_000_000, type: 'add' },
         ],
       },
     ],
@@ -152,8 +152,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Aktivera klausulen omedelbart',
         description: '14 länders skogar är nu er marknad',
         effects: [
-          { resource: 'stammar', amount: 15_000_000, type: 'add' },
-          { resource: 'kapital', amount: 3_000_000, type: 'add' },
+          { resource: 'stammar', amount: 45_000_000, type: 'add' },
+          { resource: 'kapital', amount: 9_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'biodiversity', amount: -3, type: 'add' },
         ],
@@ -162,8 +162,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Gradvis implementering',
         description: 'Ett land i taget. Mindre uppmärksamhet.',
         effects: [
-          { resource: 'stammar', amount: 8_000_000, type: 'add' },
-          { resource: 'kapital', amount: 2_000_000, type: 'add' },
+          { resource: 'stammar', amount: 24_000_000, type: 'add' },
+          { resource: 'kapital', amount: 6_000_000, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
         ],
       },
@@ -183,7 +183,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         description: 'Om alla är urfolk är ingen urfolk. Lobba för snävare definition.',
         effects: [
           { resource: 'lobby', amount: -200, type: 'add' },
-          { resource: 'kapital', amount: -1_000_000, type: 'add' },
+          { resource: 'kapital', amount: -3_000_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
           { resource: 'samiLand', amount: 50, type: 'add' },
         ],
@@ -192,7 +192,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Skapa "urfolkspartnerskap"',
         description: 'Ge 0.1% av vinsten. Kalla det "historisk ersättning".',
         effects: [
-          { resource: 'kapital', amount: -500_000, type: 'add' },
+          { resource: 'kapital', amount: -1_500_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
         ],
       },
@@ -200,7 +200,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Respektera deras markrätter',
         description: 'Förlora 30% av planerad expansion. Oväntat etiskt.',
         effects: [
-          { resource: 'stammar', amount: -10_000_000, type: 'add' },
+          { resource: 'stammar', amount: -30_000_000, type: 'add' },
           { resource: 'image', amount: 20, type: 'add' },
           { resource: 'biodiversity', amount: 3, type: 'add' },
         ],
@@ -221,15 +221,15 @@ export const PHASE7_EVENTS: GameEvent[] = [
         description: 'En kontroversiell åsikt i Frankrike',
         effects: [
           { resource: 'image', amount: -10, type: 'add' },
-          { resource: 'stammar', amount: 5_000_000, type: 'add' },
+          { resource: 'stammar', amount: 15_000_000, type: 'add' },
         ],
       },
       {
         label: 'Dra tillbaka från Bordeaux',
         description: 'Avverka i Bretagne istället. Ingen bryr sig om Bretagne.',
         effects: [
-          { resource: 'stammar', amount: 3_000_000, type: 'add' },
-          { resource: 'kapital', amount: -500_000, type: 'add' },
+          { resource: 'stammar', amount: 9_000_000, type: 'add' },
+          { resource: 'kapital', amount: -1_500_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -237,8 +237,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Erbjud vinbönderna jobb som skogsarbetare',
         description: '"Grand Cru-avverkning" — premiumtimmer med terroir',
         effects: [
-          { resource: 'kapital', amount: -1_000_000, type: 'add' },
-          { resource: 'stammar', amount: 8_000_000, type: 'add' },
+          { resource: 'kapital', amount: -3_000_000, type: 'add' },
+          { resource: 'stammar', amount: 24_000_000, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
         ],
       },
@@ -259,14 +259,14 @@ export const PHASE7_EVENTS: GameEvent[] = [
         effects: [
           { resource: 'image', amount: 15, type: 'add' },
           { resource: 'lobby', amount: 300, type: 'add' },
-          { resource: 'kapital', amount: -1_000_000, type: 'add' },
+          { resource: 'kapital', amount: -3_000_000, type: 'add' },
         ],
       },
       {
         label: 'Låt andra länder "ansluta sig"',
         description: 'Medlemsavgift: 500 000 EUR. Förmån: en logotyp.',
         effects: [
-          { resource: 'kapital', amount: 3_000_000, type: 'add' },
+          { resource: 'kapital', amount: 9_000_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
           { resource: 'lobby', amount: 500, type: 'add' },
         ],
@@ -288,7 +288,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Plantera gran på den brända marken',
         description: '"Restaurering." 50 000 hektar monokultur.',
         effects: [
-          { resource: 'stammar', amount: 50_000_000, type: 'add' },
+          { resource: 'stammar', amount: 150_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'biodiversity', amount: -8, type: 'add' },
         ],
@@ -297,7 +297,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Donera till "regnskogsfonden"',
         description: 'Er egen fond. Pengarna går tillbaka till er.',
         effects: [
-          { resource: 'kapital', amount: -5_000_000, type: 'add' },
+          { resource: 'kapital', amount: -15_000_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
         ],
       },
@@ -305,8 +305,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Köp marken billigt medan det brinner',
         description: 'Brandrea. 90% rabatt.',
         effects: [
-          { resource: 'kapital', amount: -10_000_000, type: 'add' },
-          { resource: 'stammar', amount: 80_000_000, type: 'add' },
+          { resource: 'kapital', amount: -30_000_000, type: 'add' },
+          { resource: 'stammar', amount: 240_000_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
         ],
       },
@@ -325,7 +325,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: '"Vi stödjer demokrati"',
         description: 'Demokrati är när folket väljer den vi finansierar',
         effects: [
-          { resource: 'stammar', amount: 100_000_000, type: 'add' },
+          { resource: 'stammar', amount: 300_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'lobby', amount: -300, type: 'add' },
         ],
@@ -335,14 +335,14 @@ export const PHASE7_EVENTS: GameEvent[] = [
         description: '"Ingen kommentar. Vår advokat heter Lindqvist."',
         effects: [
           { resource: 'image', amount: -10, type: 'add' },
-          { resource: 'stammar', amount: 60_000_000, type: 'add' },
+          { resource: 'stammar', amount: 180_000_000, type: 'add' },
         ],
       },
       {
         label: 'Återgå till diplomati',
         description: 'Stäng ner operationen. Förlora investeringen.',
         effects: [
-          { resource: 'kapital', amount: -20_000_000, type: 'add' },
+          { resource: 'kapital', amount: -60_000_000, type: 'add' },
           { resource: 'image', amount: 15, type: 'add' },
         ],
       },
@@ -361,7 +361,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Kolonisera den smälta tundran',
         description: 'Gran i permafrosten. Ironin är inte förlorad på någon.',
         effects: [
-          { resource: 'stammar', amount: 80_000_000, type: 'add' },
+          { resource: 'stammar', amount: 240_000_000, type: 'add' },
           { resource: 'realCO2', amount: 500, type: 'add' },
           { resource: 'biodiversity', amount: -5, type: 'add' },
         ],
@@ -370,8 +370,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Joint venture med ryska oligarker',
         description: 'De tar 60%. Ni tar skogen.',
         effects: [
-          { resource: 'stammar', amount: 50_000_000, type: 'add' },
-          { resource: 'kapital', amount: -15_000_000, type: 'add' },
+          { resource: 'stammar', amount: 150_000_000, type: 'add' },
+          { resource: 'kapital', amount: -45_000_000, type: 'add' },
           { resource: 'lobby', amount: 100, type: 'add' },
         ],
       },
@@ -390,8 +390,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Starta fler undervarumärken',
         description: '50 nya namn. Samma cellulosa. Ingen spårbarhet.',
         effects: [
-          { resource: 'kapital', amount: -10_000_000, type: 'add' },
-          { resource: 'stammar', amount: 30_000_000, type: 'add' },
+          { resource: 'kapital', amount: -30_000_000, type: 'add' },
+          { resource: 'stammar', amount: 90_000_000, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
         ],
       },
@@ -399,8 +399,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Sänk priserna drastiskt',
         description: 'Bojkotten dör när priset är rätt. Alla har ett pris.',
         effects: [
-          { resource: 'kapital', amount: -25_000_000, type: 'add' },
-          { resource: 'stammar', amount: 60_000_000, type: 'add' },
+          { resource: 'kapital', amount: -75_000_000, type: 'add' },
+          { resource: 'stammar', amount: 180_000_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -408,7 +408,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Vänta ut bojkotten',
         description: 'Konsumenter glömmer. De glömmer alltid.',
         effects: [
-          { resource: 'stammar', amount: -20_000_000, type: 'add' },
+          { resource: 'stammar', amount: -60_000_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
@@ -427,8 +427,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Expandera till alla tre blocken',
         description: 'Tre fabriker. Tre bokföringar. Noll skatt.',
         effects: [
-          { resource: 'kapital', amount: -50_000_000, type: 'add' },
-          { resource: 'stammar', amount: 70_000_000, type: 'add' },
+          { resource: 'kapital', amount: -150_000_000, type: 'add' },
+          { resource: 'stammar', amount: 210_000_000, type: 'add' },
           { resource: 'lobby', amount: 200, type: 'add' },
         ],
       },
@@ -436,7 +436,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Spela blocken mot varandra',
         description: 'Sälj till högstbjudande. Byt sida varje kvartal.',
         effects: [
-          { resource: 'kapital', amount: 30_000_000, type: 'add' },
+          { resource: 'kapital', amount: 90_000_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
@@ -455,8 +455,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Anlägg alternativ väg genom skogen',
         description: 'Avverka en ny väg runt barrikaden. Problem löst.',
         effects: [
-          { resource: 'kapital', amount: -15_000_000, type: 'add' },
-          { resource: 'stammar', amount: 40_000_000, type: 'add' },
+          { resource: 'kapital', amount: -45_000_000, type: 'add' },
+          { resource: 'stammar', amount: 120_000_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },
           { resource: 'samiLand', amount: 30, type: 'add' },
         ],
@@ -465,8 +465,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Erbjud "Revenue Sharing Agreement"',
         description: '2% av vinsten. 98% av skogen.',
         effects: [
-          { resource: 'kapital', amount: -5_000_000, type: 'add' },
-          { resource: 'stammar', amount: 25_000_000, type: 'add' },
+          { resource: 'kapital', amount: -15_000_000, type: 'add' },
+          { resource: 'stammar', amount: 75_000_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -485,8 +485,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Köp allt till katastrofpris',
         description: '10 cent per hektar. "Marknadspris vid tidpunkten."',
         effects: [
-          { resource: 'kapital', amount: -5_000_000, type: 'add' },
-          { resource: 'stammar', amount: 60_000_000, type: 'add' },
+          { resource: 'kapital', amount: -15_000_000, type: 'add' },
+          { resource: 'stammar', amount: 180_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'biodiversity', amount: -5, type: 'add' },
         ],
@@ -495,8 +495,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Köp till "rättvist" pris',
         description: '50% under marknadspris. Fortfarande en deal.',
         effects: [
-          { resource: 'kapital', amount: -20_000_000, type: 'add' },
-          { resource: 'stammar', amount: 40_000_000, type: 'add' },
+          { resource: 'kapital', amount: -60_000_000, type: 'add' },
+          { resource: 'stammar', amount: 120_000_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -504,7 +504,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Donera till katastrofhjälp',
         description: 'Förvånande. Misstänkt. Men bra PR.',
         effects: [
-          { resource: 'kapital', amount: -10_000_000, type: 'add' },
+          { resource: 'kapital', amount: -30_000_000, type: 'add' },
           { resource: 'image', amount: 20, type: 'add' },
         ],
       },
@@ -523,7 +523,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Ignorera tribunalen',
         description: 'De har ingen armé. Vi har skördare.',
         effects: [
-          { resource: 'stammar', amount: 50_000_000, type: 'add' },
+          { resource: 'stammar', amount: 150_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'lobby', amount: -200, type: 'add' },
         ],
@@ -532,7 +532,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Skicka juridiskt team',
         description: '200 advokater. Fördröj processen i 15 år.',
         effects: [
-          { resource: 'kapital', amount: -30_000_000, type: 'add' },
+          { resource: 'kapital', amount: -90_000_000, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
           { resource: 'lobby', amount: 100, type: 'add' },
         ],
@@ -541,9 +541,9 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Förlikning: betala och fortsätt',
         description: '10 miljarder kr. Billigare än att sluta.',
         effects: [
-          { resource: 'kapital', amount: -50_000_000, type: 'add' },
+          { resource: 'kapital', amount: -150_000_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
-          { resource: 'stammar', amount: 30_000_000, type: 'add' },
+          { resource: 'stammar', amount: 90_000_000, type: 'add' },
         ],
       },
     ],
@@ -563,8 +563,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Signera avtalet',
         description: 'En miljard hektar. Inga journalister. Inga NGO:er.',
         effects: [
-          { resource: 'stammar', amount: 500_000_000, type: 'add' },
-          { resource: 'kapital', amount: -100_000_000, type: 'add' },
+          { resource: 'stammar', amount: 1_500_000_000, type: 'add' },
+          { resource: 'kapital', amount: -300_000_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
@@ -572,8 +572,8 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Kräv bättre villkor',
         description: '"60/40 i vår favör. Annars går vi till Indien."',
         effects: [
-          { resource: 'stammar', amount: 300_000_000, type: 'add' },
-          { resource: 'kapital', amount: -50_000_000, type: 'add' },
+          { resource: 'stammar', amount: 900_000_000, type: 'add' },
+          { resource: 'kapital', amount: -150_000_000, type: 'add' },
           { resource: 'lobby', amount: 200, type: 'add' },
         ],
       },
@@ -581,7 +581,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Läcka avtalet till Washington',
         description: 'USA betalar mer för att ni INTE signerar',
         effects: [
-          { resource: 'kapital', amount: 200_000_000, type: 'add' },
+          { resource: 'kapital', amount: 600_000_000, type: 'add' },
           { resource: 'lobby', amount: 500, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
         ],
@@ -601,7 +601,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Avverka den',
         description: '100% global täckningsgrad. Inga undantag.',
         effects: [
-          { resource: 'stammar', amount: 200_000_000, type: 'add' },
+          { resource: 'stammar', amount: 600_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
           { resource: 'biodiversity', amount: -10, type: 'add' },
           { resource: 'species', amount: 500, type: 'add' },
@@ -611,7 +611,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Gör den till museum',
         description: '"Skogens Minnespark™" — ingång 500 kr. Klimatstyrt.',
         effects: [
-          { resource: 'kapital', amount: 100_000_000, type: 'add' },
+          { resource: 'kapital', amount: 300_000_000, type: 'add' },
           { resource: 'image', amount: 15, type: 'add' },
         ],
       },
@@ -619,7 +619,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Köp den och lås in den',
         description: '"Silva Maximus Natural Reserve." Öppet aldrig.',
         effects: [
-          { resource: 'kapital', amount: -200_000_000, type: 'add' },
+          { resource: 'kapital', amount: -600_000_000, type: 'add' },
           { resource: 'image', amount: 20, type: 'add' },
           { resource: 'lobby', amount: 300, type: 'add' },
         ],
@@ -639,15 +639,15 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Flytta fabrikerna',
         description: 'Bygga nya fabriker där det inte finns flyktingar. Ännu.',
         effects: [
-          { resource: 'kapital', amount: -100_000_000, type: 'add' },
-          { resource: 'stammar', amount: 200_000_000, type: 'add' },
+          { resource: 'kapital', amount: -300_000_000, type: 'add' },
+          { resource: 'stammar', amount: 600_000_000, type: 'add' },
         ],
       },
       {
         label: 'Anställ flyktingarna',
         description: 'Billig arbetskraft. Kalla det "integration".',
         effects: [
-          { resource: 'stammar', amount: 300_000_000, type: 'add' },
+          { resource: 'stammar', amount: 900_000_000, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
         ],
       },
@@ -655,9 +655,9 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Bygg bostäder åt dem',
         description: 'Av trä från era fabriker. Cirkulär ekonomi.',
         effects: [
-          { resource: 'kapital', amount: -50_000_000, type: 'add' },
+          { resource: 'kapital', amount: -150_000_000, type: 'add' },
           { resource: 'image', amount: 15, type: 'add' },
-          { resource: 'stammar', amount: 100_000_000, type: 'add' },
+          { resource: 'stammar', amount: 300_000_000, type: 'add' },
         ],
       },
     ],
@@ -677,14 +677,14 @@ export const PHASE7_EVENTS: GameEvent[] = [
         effects: [
           { resource: 'image', amount: -15, type: 'add' },
           { resource: 'lobby', amount: 200, type: 'add' },
-          { resource: 'stammar', amount: 400_000_000, type: 'add' },
+          { resource: 'stammar', amount: 1_200_000_000, type: 'add' },
         ],
       },
       {
         label: 'Klona utdöda arter',
         description: 'DNA från museer. Återskapa 5 arter. Av 8 miljoner.',
         effects: [
-          { resource: 'kapital', amount: -300_000_000, type: 'add' },
+          { resource: 'kapital', amount: -900_000_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },
           { resource: 'biodiversity', amount: 1, type: 'add' },
         ],
@@ -707,16 +707,16 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Implementera globalt',
         description: 'Ersätt all mänsklig personal. 100% automatisering.',
         effects: [
-          { resource: 'stammar', amount: 1_000_000_000, type: 'add' },
-          { resource: 'kapital', amount: -200_000_000, type: 'add' },
+          { resource: 'stammar', amount: 3_000_000_000, type: 'add' },
+          { resource: 'kapital', amount: -600_000_000, type: 'add' },
         ],
       },
       {
         label: 'Behåll en människa per kontinent',
         description: 'För att trycka på nödstoppknappen. Om den finns.',
         effects: [
-          { resource: 'stammar', amount: 700_000_000, type: 'add' },
-          { resource: 'kapital', amount: -100_000_000, type: 'add' },
+          { resource: 'stammar', amount: 2_100_000_000, type: 'add' },
+          { resource: 'kapital', amount: -300_000_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
         ],
       },
@@ -737,7 +737,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         effects: [
           { resource: 'lobby', amount: 300, type: 'add' },
           { resource: 'image', amount: -10, type: 'add' },
-          { resource: 'stammar', amount: 500_000_000, type: 'add' },
+          { resource: 'stammar', amount: 1_500_000_000, type: 'add' },
         ],
       },
       {
@@ -752,7 +752,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
         label: 'Skicka motfaktura',
         description: '"För arbetet med att öka jordens BNP." Belopp: större.',
         effects: [
-          { resource: 'kapital', amount: 500_000_000, type: 'add' },
+          { resource: 'kapital', amount: 1_500_000_000, type: 'add' },
           { resource: 'image', amount: -20, type: 'add' },
         ],
       },
