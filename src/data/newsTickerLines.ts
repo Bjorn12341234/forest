@@ -289,8 +289,8 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     phase: 7,
   },
   {
-    id: 'tick_kongolien_mutor',
-    text: 'Intern revision: 2 MEUR i "konsultarvoden" till baltiska tjänstemän. Chefen befordras.',
+    id: 'tick_nordiska_mutor',
+    text: 'Intern revision: 2 MEUR i "konsultarvoden" till nordiska tjänstemän. Chefen befordras.',
     phase: 7,
     trigger: { type: 'totalStammar', value: 15_000_000_000 },
   },

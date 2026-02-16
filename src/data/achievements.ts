@@ -293,16 +293,16 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     icon: '👑',
     phase: 7,
     tier: 'kosmisk',
-    check: (s) => ['c_finlandia', 'c_norgia', 'c_baltiska'].every(id => s.countries[id]?.status === 'controlled'),
+    check: (s) => ['c_finlandia', 'c_norgia', 'c_island', 'c_danmark'].every(id => s.countries[id]?.status === 'controlled'),
   },
   {
     id: 'kolonialmakten_2',
     name: 'Kolonialmakten 2.0',
-    description: 'Kontrollera Amazonia och Kongolien. Historien upprepar sig, men med bättre logistik.',
+    description: 'Kontrollera Amazonia och Kanadien. Historien upprepar sig, men med bättre logistik.',
     icon: '🌍',
     phase: 8,
     tier: 'kosmisk',
-    check: (s) => s.countries['c_amazonia']?.status === 'controlled' && s.countries['c_kongolien']?.status === 'controlled',
+    check: (s) => s.countries['c_amazonia']?.status === 'controlled' && s.countries['c_kanadien']?.status === 'controlled',
   },
   {
     id: 'global_dominans',
@@ -311,7 +311,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     icon: '🌏',
     phase: 9,
     tier: 'kosmisk',
-    check: (s) => Object.values(s.countries).filter(c => c.status === 'controlled').length >= 14,
+    check: (s) => Object.values(s.countries).filter(c => c.status === 'controlled').length >= 9,
   },
   {
     id: 'arsredovisningen',

@@ -18,7 +18,7 @@ export interface CountryDef {
 
 export const COUNTRIES: CountryDef[] = [
   // ══════════════════════════════════════════════
-  // ── Fas 7: Norden (5 länder) ──
+  // ── Fas 7: Norden (4 länder) ──
   // ══════════════════════════════════════════════
   {
     id: 'c_finlandia',
@@ -49,21 +49,6 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 80_000, kapitalPerSecond: 3_000 },
     hiddenCosts: { biodiversityLoss: 0.5, co2Gain: 3_000 },
     position: { x: 40, y: 10 },
-  },
-  {
-    id: 'c_baltiska',
-    name: 'Baltiska Federationen',
-    description:
-      'Billig arbetskraft, minimal övervakning. EU-bidragen täcker "återplanteringen" som aldrig sker.',
-    unlockPhase: 7,
-    invasionCost: { stammar: 120_000_000, kapital: 1_200_000, lobby: 600 },
-    resistance: 30,
-    defenseType: 'political',
-    defenseStrength: 2,
-    maintenanceCost: { kapitalPerSecond: 150, lobbyPerSecond: 0.3 },
-    production: { stammarPerSecond: 100_000, kapitalPerSecond: 800 },
-    hiddenCosts: { biodiversityLoss: 1.2, co2Gain: 5_000 },
-    position: { x: 58, y: 26 },
   },
   {
     id: 'c_island',
@@ -97,7 +82,7 @@ export const COUNTRIES: CountryDef[] = [
   },
 
   // ══════════════════════════════════════════════
-  // ── Fas 8: Global (5 länder) ──
+  // ── Fas 8: Global (3 länder) ──
   // ══════════════════════════════════════════════
   {
     id: 'c_amazonia',
@@ -113,21 +98,6 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 800_000, kapitalPerSecond: 15_000 },
     hiddenCosts: { biodiversityLoss: 5.0, co2Gain: 50_000 },
     position: { x: 30, y: 60 },
-  },
-  {
-    id: 'c_kongolien',
-    name: 'Kongolien',
-    description:
-      'Tropisk monokultur. Ingen FSC behövs. Certifieringsorganet vi startade godkänner allt automatiskt.',
-    unlockPhase: 8,
-    invasionCost: { stammar: 800_000_000, kapital: 8_000_000, lobby: 3_000 },
-    resistance: 45,
-    defenseType: 'political',
-    defenseStrength: 4,
-    maintenanceCost: { kapitalPerSecond: 2_000, lobbyPerSecond: 3.0 },
-    production: { stammarPerSecond: 500_000, kapitalPerSecond: 8_000 },
-    hiddenCosts: { biodiversityLoss: 6.0, co2Gain: 60_000 },
-    position: { x: 52, y: 58 },
   },
   {
     id: 'c_siberien',
@@ -159,24 +129,9 @@ export const COUNTRIES: CountryDef[] = [
     hiddenCosts: { biodiversityLoss: 3.5, co2Gain: 35_000 },
     position: { x: 20, y: 22 },
   },
-  {
-    id: 'c_indonesien',
-    name: 'Indonesien',
-    description:
-      'Palmoljan var bara början. Torvmarkerna brinner "av sig själva" — men vi sålde tändstickorna.',
-    unlockPhase: 8,
-    invasionCost: { stammar: 1_200_000_000, kapital: 12_000_000, lobby: 4_500 },
-    resistance: 50,
-    defenseType: 'political',
-    defenseStrength: 5,
-    maintenanceCost: { kapitalPerSecond: 2_500, lobbyPerSecond: 4.0 },
-    production: { stammarPerSecond: 550_000, kapitalPerSecond: 9_000 },
-    hiddenCosts: { biodiversityLoss: 7.0, co2Gain: 70_000 },
-    position: { x: 78, y: 55 },
-  },
 
   // ══════════════════════════════════════════════
-  // ── Fas 9: Slutfas (4 länder) ──
+  // ── Fas 9: Slutfas (2 länder) ──
   // ══════════════════════════════════════════════
   {
     id: 'c_chinova',
@@ -207,36 +162,6 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 4_000_000, kapitalPerSecond: 80_000 },
     hiddenCosts: { biodiversityLoss: 6.0, co2Gain: 150_000 },
     position: { x: 70, y: 42 },
-  },
-  {
-    id: 'c_australien',
-    name: 'Australien',
-    description:
-      'Brinner redan. Perfekt timing. Köp brandhärjad mark till rabatterat pris — "vi hjälper till med återställningen".',
-    unlockPhase: 9,
-    invasionCost: { stammar: 3_000_000_000, kapital: 30_000_000, lobby: 5_000 },
-    resistance: 35,
-    defenseType: 'environmental',
-    defenseStrength: 4,
-    maintenanceCost: { kapitalPerSecond: 10_000, lobbyPerSecond: 10.0 },
-    production: { stammarPerSecond: 2_000_000, kapitalPerSecond: 40_000 },
-    hiddenCosts: { biodiversityLoss: 4.0, co2Gain: 80_000 },
-    position: { x: 82, y: 70 },
-  },
-  {
-    id: 'c_pacifiska',
-    name: 'Pacifiska Öarna',
-    description:
-      'Öar försvinner. Köp dem billigt. Havsnivåerna stiger — men trädplantagerna hinner ge avkastning först.',
-    unlockPhase: 9,
-    invasionCost: { stammar: 2_000_000_000, kapital: 15_000_000, lobby: 4_000 },
-    resistance: 25,
-    defenseType: 'environmental',
-    defenseStrength: 3,
-    maintenanceCost: { kapitalPerSecond: 5_000, lobbyPerSecond: 5.0 },
-    production: { stammarPerSecond: 1_000_000, kapitalPerSecond: 20_000 },
-    hiddenCosts: { biodiversityLoss: 3.0, co2Gain: 30_000 },
-    position: { x: 90, y: 58 },
   },
 ]
 

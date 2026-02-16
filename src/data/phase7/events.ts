@@ -68,43 +68,6 @@ export const PHASE7_EVENTS: GameEvent[] = [
     unique: true,
   },
   {
-    id: 'p7_korruption_baltiska',
-    phase: 7,
-    category: 'scandal',
-    headline: 'Baltiska mutor',
-    context: 'Intern revision avslöjar att er Baltikum-chef har betalat 2 miljoner euro i mutor till lettiska och litauiska tjänstemän för avverkningsrätter. Han kallar det "konsultarvoden".',
-    choices: [
-      {
-        label: '"Vi kände inte till det"',
-        description: 'Avskeda chefen. Behåll licenserna.',
-        effects: [
-          { resource: 'kapital', amount: -6_000_000, type: 'add' },
-          { resource: 'stammar', amount: 45_000_000, type: 'add' },
-          { resource: 'image', amount: -15, type: 'add' },
-        ],
-      },
-      {
-        label: 'Formalisera systemet',
-        description: '"Lokala partnerskapsprogram" — samma mutor, ny rubrik',
-        effects: [
-          { resource: 'kapital', amount: -3_000_000, type: 'add' },
-          { resource: 'stammar', amount: 30_000_000, type: 'add' },
-          { resource: 'lobby', amount: -100, type: 'add' },
-        ],
-      },
-      {
-        label: 'Anmäl er själva till Ekobrottsmyndigheten',
-        description: 'Visa transparens. Få mildare straff. Behåll PR-poäng.',
-        effects: [
-          { resource: 'kapital', amount: -9_000_000, type: 'add' },
-          { resource: 'image', amount: 8, type: 'add' },
-        ],
-      },
-    ],
-    conditions: [{ resource: 'totalStammar', operator: '>=', value: 15_000_000_000 }],
-    unique: true,
-  },
-  {
     id: 'p7_ngo_koalition',
     phase: 7,
     category: 'crisis',
@@ -315,42 +278,6 @@ export const PHASE7_EVENTS: GameEvent[] = [
     unique: true,
   },
   {
-    id: 'p8_kongolien_kuppmakare',
-    phase: 8,
-    category: 'scandal',
-    headline: 'Kongoliens kuppmakare',
-    context: 'Läckt dokumentation visar att Silva Maximus finansierade en statskupp i Demokratiska Republiken Kongo. Syftet: tillgång till 150 miljoner hektar regnskog. Den nye presidenten talar svenska.',
-    choices: [
-      {
-        label: '"Vi stödjer demokrati"',
-        description: 'Demokrati är när folket väljer den vi finansierar',
-        effects: [
-          { resource: 'stammar', amount: 300_000_000, type: 'add' },
-          { resource: 'image', amount: -20, type: 'add' },
-          { resource: 'lobby', amount: -300, type: 'add' },
-        ],
-      },
-      {
-        label: 'Förneka allt',
-        description: '"Ingen kommentar. Vår advokat heter Lindqvist."',
-        effects: [
-          { resource: 'image', amount: -10, type: 'add' },
-          { resource: 'stammar', amount: 180_000_000, type: 'add' },
-        ],
-      },
-      {
-        label: 'Återgå till diplomati',
-        description: 'Stäng ner operationen. Förlora investeringen.',
-        effects: [
-          { resource: 'kapital', amount: -60_000_000, type: 'add' },
-          { resource: 'image', amount: 15, type: 'add' },
-        ],
-      },
-    ],
-    conditions: [{ resource: 'totalStammar', operator: '>=', value: 120_000_000_000 }],
-    unique: true,
-  },
-  {
     id: 'p8_siberien_permafrost',
     phase: 8,
     category: 'opportunity',
@@ -472,44 +399,6 @@ export const PHASE7_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [{ resource: 'totalStammar', operator: '>=', value: 300_000_000_000 }],
-    unique: true,
-  },
-  {
-    id: 'p8_indonesien_tsunami',
-    phase: 8,
-    category: 'opportunity',
-    headline: 'Indonesisk naturkatastrof',
-    context: 'En tsunami har ödelagt Sumatras kust. Skogsmark säljs för en bråkdel. Lokala ägare behöver pengar desperat. Er inköpsavdelning kallar det "strategisk möjlighet".',
-    choices: [
-      {
-        label: 'Köp allt till katastrofpris',
-        description: '10 cent per hektar. "Marknadspris vid tidpunkten."',
-        effects: [
-          { resource: 'kapital', amount: -15_000_000, type: 'add' },
-          { resource: 'stammar', amount: 180_000_000, type: 'add' },
-          { resource: 'image', amount: -20, type: 'add' },
-          { resource: 'biodiversity', amount: -5, type: 'add' },
-        ],
-      },
-      {
-        label: 'Köp till "rättvist" pris',
-        description: '50% under marknadspris. Fortfarande en deal.',
-        effects: [
-          { resource: 'kapital', amount: -60_000_000, type: 'add' },
-          { resource: 'stammar', amount: 120_000_000, type: 'add' },
-          { resource: 'image', amount: 5, type: 'add' },
-        ],
-      },
-      {
-        label: 'Donera till katastrofhjälp',
-        description: 'Förvånande. Misstänkt. Men bra PR.',
-        effects: [
-          { resource: 'kapital', amount: -30_000_000, type: 'add' },
-          { resource: 'image', amount: 20, type: 'add' },
-        ],
-      },
-    ],
-    conditions: [{ resource: 'totalStammar', operator: '>=', value: 350_000_000_000 }],
     unique: true,
   },
   {

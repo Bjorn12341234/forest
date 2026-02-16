@@ -218,7 +218,7 @@ export const ANTAGONISTS: AntagonistDef[] = [
   {
     id: 'ant_lokala_rebeller',
     name: 'Lokala Rebellrörelsen',
-    description: 'Väpnade skogsväktare i Amazonia och Kongolien saboterar era maskiner.',
+    description: 'Väpnade skogsväktare i Amazonia och Siberien saboterar era maskiner.',
     icon: '🦾',
     triggerPhase: 8,
     maxPhase: 9,
