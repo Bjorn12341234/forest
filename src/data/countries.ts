@@ -33,7 +33,7 @@ export const COUNTRIES: CountryDef[] = [
     maintenanceCost: { kapitalPerSecond: 200, lobbyPerSecond: 0.5 },
     production: { stammarPerSecond: 120_000, kapitalPerSecond: 1_200 },
     hiddenCosts: { biodiversityLoss: 0.8, co2Gain: 4_000 },
-    position: { x: 58, y: 18 },
+    position: { x: 62, y: 14 },
   },
   {
     id: 'c_norgia',
@@ -48,7 +48,7 @@ export const COUNTRIES: CountryDef[] = [
     maintenanceCost: { kapitalPerSecond: 500, lobbyPerSecond: 1.5 },
     production: { stammarPerSecond: 80_000, kapitalPerSecond: 3_000 },
     hiddenCosts: { biodiversityLoss: 0.5, co2Gain: 3_000 },
-    position: { x: 46, y: 15 },
+    position: { x: 40, y: 10 },
   },
   {
     id: 'c_baltiska',
@@ -63,7 +63,7 @@ export const COUNTRIES: CountryDef[] = [
     maintenanceCost: { kapitalPerSecond: 150, lobbyPerSecond: 0.3 },
     production: { stammarPerSecond: 100_000, kapitalPerSecond: 800 },
     hiddenCosts: { biodiversityLoss: 1.2, co2Gain: 5_000 },
-    position: { x: 55, y: 24 },
+    position: { x: 58, y: 26 },
   },
   {
     id: 'c_germanien',
@@ -78,7 +78,7 @@ export const COUNTRIES: CountryDef[] = [
     maintenanceCost: { kapitalPerSecond: 600, lobbyPerSecond: 2.0 },
     production: { stammarPerSecond: 150_000, kapitalPerSecond: 4_000 },
     hiddenCosts: { biodiversityLoss: 0.6, co2Gain: 3_500 },
-    position: { x: 50, y: 30 },
+    position: { x: 48, y: 34 },
   },
   {
     id: 'c_gallien',
@@ -93,7 +93,7 @@ export const COUNTRIES: CountryDef[] = [
     maintenanceCost: { kapitalPerSecond: 700, lobbyPerSecond: 2.5 },
     production: { stammarPerSecond: 130_000, kapitalPerSecond: 3_500 },
     hiddenCosts: { biodiversityLoss: 0.7, co2Gain: 3_800 },
-    position: { x: 44, y: 34 },
+    position: { x: 36, y: 38 },
   },
 
   // ══════════════════════════════════════════════

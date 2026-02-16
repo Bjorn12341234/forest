@@ -2,13 +2,13 @@
 // Spec: <1K exact, <1M commas, <1B suffix, >=1B scientific-ish
 
 const SUFFIXES = [
-  { threshold: 1e24, suffix: ' septillion' },
-  { threshold: 1e21, suffix: ' sextillion' },
-  { threshold: 1e18, suffix: ' quintillion' },
-  { threshold: 1e15, suffix: ' quadrillion' },
-  { threshold: 1e12, suffix: ' trillion' },
-  { threshold: 1e9, suffix: ' billion' },
-  { threshold: 1e6, suffix: 'M' },
+  { threshold: 1e24, suffix: ' kvadriljoner' },
+  { threshold: 1e21, suffix: ' triljarder' },
+  { threshold: 1e18, suffix: ' triljoner' },
+  { threshold: 1e15, suffix: ' biljarder' },
+  { threshold: 1e12, suffix: ' biljoner' },
+  { threshold: 1e9, suffix: ' miljarder' },
+  { threshold: 1e6, suffix: ' miljoner' },
 ]
 
 export function formatNumber(n: number, decimals = 1): string {
@@ -21,7 +21,7 @@ export function formatNumber(n: number, decimals = 1): string {
 
   // Commas for < 1M
   if (n < 1e6) {
-    return Math.floor(n).toLocaleString('en-US')
+    return Math.floor(n).toLocaleString('sv-SE')
   }
 
   // Suffix notation for large numbers
@@ -39,9 +39,9 @@ export function formatNumber(n: number, decimals = 1): string {
 export function formatCompact(n: number): string {
   if (n < 1000) return Math.floor(n).toString()
   if (n < 1e6) return (n / 1e3).toFixed(1) + 'K'
-  if (n < 1e9) return (n / 1e6).toFixed(1) + 'M'
-  if (n < 1e12) return (n / 1e9).toFixed(1) + 'B'
-  if (n < 1e15) return (n / 1e12).toFixed(1) + 'T'
+  if (n < 1e9) return (n / 1e6).toFixed(1) + ' mn'
+  if (n < 1e12) return (n / 1e9).toFixed(1) + ' md'
+  if (n < 1e15) return (n / 1e12).toFixed(1) + ' bn'
   return n.toExponential(1)
 }
 
