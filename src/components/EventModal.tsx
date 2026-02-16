@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import type { GameEvent } from '../store/types'
+import type { GameEvent, Effect } from '../store/types'
 import { playEventByCategory } from '../engine/audio'
 import { useFocusTrap } from '../hooks/useFocusTrap'
+import { formatCompact } from '../engine/format'
 
 const CATEGORY_COLORS: Record<string, string> = {
   scandal: '#FF3333',
@@ -23,6 +24,38 @@ const CATEGORY_LABELS: Record<string, string> = {
   crisis: 'CRISIS',
   nobel: 'NOBEL COMMITTEE',
   reality_glitch: 'GLITCH',
+}
+
+const RESOURCE_LABELS: Record<string, string> = {
+  stammar: 'Stammar',
+  kapital: 'Kapital',
+  lobby: 'Lobby',
+  image: 'Grön Image™',
+  biodiversity: 'Biodiversitet',
+  realCO2: 'CO₂',
+  ownerTrust: 'Ägarförtroende',
+  species: 'Arter',
+  samiLand: 'Samisk Mark',
+  skogsvardering: 'Skogsvärdering',
+  inkomst: 'Inkomst',
+  kunskap: 'Kunskap',
+  resiliens: 'Resiliens',
+  legacy: 'Arv',
+  biodivOwner: 'Biodiversitet',
+  deadwood: 'Död Ved',
+}
+
+function formatEffect(effect: Effect): string {
+  const label = RESOURCE_LABELS[effect.resource] ?? effect.resource
+  if (effect.type === 'multiply') {
+    const pct = Math.round((effect.amount - 1) * 100)
+    return `${pct >= 0 ? '+' : ''}${pct}% ${label}`
+  }
+  if (effect.type === 'set') {
+    return `${label} → ${formatCompact(effect.amount)}`
+  }
+  const sign = effect.amount >= 0 ? '+' : ''
+  return `${sign}${formatCompact(effect.amount)} ${label}`
 }
 
 export function EventModal() {
@@ -122,6 +155,24 @@ function EventModalContent({
                 {choice.description && (
                   <p className="text-sm text-text-muted mt-1">
                     {choice.description}
+                  </p>
+                )}
+                {choice.effects.length > 0 && (
+                  <p className="text-xs mt-1.5 flex flex-wrap gap-x-2.5 gap-y-0.5">
+                    {choice.effects.map((eff, j) => (
+                      <span
+                        key={j}
+                        className={
+                          eff.type === 'multiply'
+                            ? eff.amount >= 1 ? 'text-green-400' : 'text-red-400'
+                            : eff.type === 'set'
+                              ? 'text-yellow-400'
+                              : eff.amount >= 0 ? 'text-green-400' : 'text-red-400'
+                        }
+                      >
+                        {formatEffect(eff)}
+                      </span>
+                    ))}
                   </p>
                 )}
               </button>
