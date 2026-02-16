@@ -18,7 +18,7 @@ export interface CountryDef {
 
 export const COUNTRIES: CountryDef[] = [
   // ══════════════════════════════════════════════
-  // ── Fas 7: Norden/Europa (5 länder) ──
+  // ── Fas 7: Norden (5 länder) ──
   // ══════════════════════════════════════════════
   {
     id: 'c_finlandia',
@@ -66,34 +66,34 @@ export const COUNTRIES: CountryDef[] = [
     position: { x: 58, y: 26 },
   },
   {
-    id: 'c_germanien',
-    name: 'Germanien',
+    id: 'c_island',
+    name: 'Ísland',
     description:
-      'Kraftledningar kräver trävirke. Deras Energiewende blev vår guldgruva — de byter kol mot pellets.',
+      'Inga träd. Inte ett enda. Men geotermiska konferensanläggningar perfekta för diskreta lobbymöten — bastu med EU-kommissionärer och lunnefågelmiddag ingår.',
     unlockPhase: 7,
-    invasionCost: { stammar: 400_000_000, kapital: 4_000_000, lobby: 1_800 },
-    resistance: 55,
+    invasionCost: { stammar: 50_000_000, kapital: 500_000, lobby: 200 },
+    resistance: 15,
     defenseType: 'political',
-    defenseStrength: 6,
-    maintenanceCost: { kapitalPerSecond: 600, lobbyPerSecond: 2.0 },
-    production: { stammarPerSecond: 150_000, kapitalPerSecond: 4_000 },
-    hiddenCosts: { biodiversityLoss: 0.6, co2Gain: 3_500 },
-    position: { x: 48, y: 34 },
+    defenseStrength: 1,
+    maintenanceCost: { kapitalPerSecond: 80, lobbyPerSecond: 0.1 },
+    production: { stammarPerSecond: 2_000, kapitalPerSecond: 3_000 },
+    hiddenCosts: { biodiversityLoss: 0.1, co2Gain: 200 },
+    position: { x: 22, y: 5 },
   },
   {
-    id: 'c_gallien',
-    name: 'Gallien',
+    id: 'c_danmark',
+    name: 'Danmark',
     description:
-      'Revolutionär tradition gör motstånd. Men byråkratin är ännu starkare — vi talar samma språk.',
+      'Platt som en pannkaka. Danskarna högg ner allt redan på vikingatiden — nu säljer vi dem tillbaka som certifierade julgranar till 400% påslag.',
     unlockPhase: 7,
-    invasionCost: { stammar: 500_000_000, kapital: 5_000_000, lobby: 2_000 },
-    resistance: 70,
+    invasionCost: { stammar: 200_000_000, kapital: 2_000_000, lobby: 800 },
+    resistance: 35,
     defenseType: 'environmental',
-    defenseStrength: 7,
-    maintenanceCost: { kapitalPerSecond: 700, lobbyPerSecond: 2.5 },
-    production: { stammarPerSecond: 130_000, kapitalPerSecond: 3_500 },
-    hiddenCosts: { biodiversityLoss: 0.7, co2Gain: 3_800 },
-    position: { x: 36, y: 38 },
+    defenseStrength: 3,
+    maintenanceCost: { kapitalPerSecond: 250, lobbyPerSecond: 0.5 },
+    production: { stammarPerSecond: 60_000, kapitalPerSecond: 2_000 },
+    hiddenCosts: { biodiversityLoss: 0.4, co2Gain: 2_000 },
+    position: { x: 48, y: 22 },
   },
 
   // ══════════════════════════════════════════════
@@ -184,7 +184,7 @@ export const COUNTRIES: CountryDef[] = [
     description:
       'Statlig kontroll kräver statlig muta. Femårsplanen inkluderar nu "nordisk skogsexpertis" — vi skrev den åt dem.',
     unlockPhase: 9,
-    invasionCost: { stammar: 40_000_000_000, kapital: 400_000_000, lobby: 40_000 },
+    invasionCost: { stammar: 12_000_000_000, kapital: 120_000_000, lobby: 15_000 },
     resistance: 90,
     defenseType: 'economic',
     defenseStrength: 9,
@@ -199,7 +199,7 @@ export const COUNTRIES: CountryDef[] = [
     description:
       'En miljard människor i vägen. Men de behöver alla möbler — BJÖRKEA öppnar 200 varuhus samtidigt.',
     unlockPhase: 9,
-    invasionCost: { stammar: 30_000_000_000, kapital: 300_000_000, lobby: 35_000 },
+    invasionCost: { stammar: 8_000_000_000, kapital: 80_000_000, lobby: 12_000 },
     resistance: 85,
     defenseType: 'political',
     defenseStrength: 8,
@@ -214,7 +214,7 @@ export const COUNTRIES: CountryDef[] = [
     description:
       'Brinner redan. Perfekt timing. Köp brandhärjad mark till rabatterat pris — "vi hjälper till med återställningen".',
     unlockPhase: 9,
-    invasionCost: { stammar: 8_000_000_000, kapital: 80_000_000, lobby: 12_000 },
+    invasionCost: { stammar: 3_000_000_000, kapital: 30_000_000, lobby: 5_000 },
     resistance: 35,
     defenseType: 'environmental',
     defenseStrength: 4,
@@ -229,7 +229,7 @@ export const COUNTRIES: CountryDef[] = [
     description:
       'Öar försvinner. Köp dem billigt. Havsnivåerna stiger — men trädplantagerna hinner ge avkastning först.',
     unlockPhase: 9,
-    invasionCost: { stammar: 5_000_000_000, kapital: 50_000_000, lobby: 10_000 },
+    invasionCost: { stammar: 2_000_000_000, kapital: 15_000_000, lobby: 4_000 },
     resistance: 25,
     defenseType: 'environmental',
     defenseStrength: 3,

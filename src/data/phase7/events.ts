@@ -210,23 +210,23 @@ export const PHASE7_EVENTS: GameEvent[] = [
     unique: true,
   },
   {
-    id: 'p7_gallien_revolution',
+    id: 'p7_danmark_julgran',
     phase: 7,
     category: 'absurd',
-    headline: 'Galliens skogsrevolution',
-    context: 'Franska bönder har blockerat alla hamnar med traktorer. Anledningen: Silva Maximus planterade gran på en vinodling i Bordeaux. "GRAND NON!" skanderar de. Macron ringer personligen.',
+    headline: 'Danmarks julgranskris',
+    context: 'Danska medier avslöjar att Silva Maximus köpt 80% av Danmarks julgranar och höjt priset 400%. "RØDGRANSEN ER GÅET FOR VIDT!" skanderar köpenhamnarna. Drottning Mary ringer personligen.',
     choices: [
       {
-        label: '"Gran är bättre än vin"',
-        description: 'En kontroversiell åsikt i Frankrike',
+        label: '"Jul utan gran är inte jul"',
+        description: 'Höj priset ytterligare. Vad ska de göra — köpa plastgran?',
         effects: [
           { resource: 'image', amount: -10, type: 'add' },
-          { resource: 'stammar', amount: 15_000_000, type: 'add' },
+          { resource: 'kapital', amount: 5_000_000, type: 'add' },
         ],
       },
       {
-        label: 'Dra tillbaka från Bordeaux',
-        description: 'Avverka i Bretagne istället. Ingen bryr sig om Bretagne.',
+        label: 'Erbjud "Demokratisk Julgran™"',
+        description: 'Subventionerade minigranar. 30 cm höga. Tekniskt sett en gran.',
         effects: [
           { resource: 'stammar', amount: 9_000_000, type: 'add' },
           { resource: 'kapital', amount: -1_500_000, type: 'add' },
@@ -234,11 +234,11 @@ export const PHASE7_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Erbjud vinbönderna jobb som skogsarbetare',
-        description: '"Grand Cru-avverkning" — premiumtimmer med terroir',
+        label: 'Starta "Adopt-a-Gran" med BJÖRKEA',
+        description: 'Danskarna hyr sin julgran — vi återanvänder dem som massaved i januari',
         effects: [
-          { resource: 'kapital', amount: -3_000_000, type: 'add' },
-          { resource: 'stammar', amount: 24_000_000, type: 'add' },
+          { resource: 'kapital', amount: 3_000_000, type: 'add' },
+          { resource: 'stammar', amount: 12_000_000, type: 'add' },
           { resource: 'image', amount: -5, type: 'add' },
         ],
       },

@@ -43,11 +43,11 @@ const PHASE_THRESHOLDS: Record<number, number> = {
   4: 10_000_000,          // → Phase 5
   5: 100_000_000,         // → Phase 6
   6: 1_000_000_000,       // → Phase 7
-  7: 5_000_000_000,       // → Phase 8
-  8: 100_000_000_000,     // → Phase 9
-  9: 1_000_000_000_000,   // → Phase 10
-  10: 10_000_000_000_000, // → Phase 11
-  11: 100_000_000_000_000,// → Phase 12
+  7: 5_000_000_000,        // → Phase 8
+  8: 20_000_000_000,       // → Phase 9
+  9: 200_000_000_000,      // → Phase 10
+  10: 2_000_000_000_000,   // → Phase 11
+  11: 20_000_000_000_000,  // → Phase 12
 }
 
 export function checkPhaseTransition(state: GameState): Phase | null {
