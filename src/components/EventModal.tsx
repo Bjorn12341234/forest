@@ -14,16 +14,18 @@ const CATEGORY_COLORS: Record<string, string> = {
   crisis: '#FF3333',
   nobel: '#FFD700',
   reality_glitch: '#8833FF',
+  dilemma: '#CC88FF',
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  scandal: 'SCANDAL',
-  opportunity: 'OPPORTUNITY',
-  contradiction: 'CONTRADICTION',
-  absurd: 'BIZARRE',
-  crisis: 'CRISIS',
-  nobel: 'NOBEL COMMITTEE',
-  reality_glitch: 'GLITCH',
+  scandal: 'SKANDAL',
+  opportunity: 'MÖJLIGHET',
+  contradiction: 'MOTSÄGELSE',
+  absurd: 'BISARRT',
+  crisis: 'KRIS',
+  nobel: 'NOBELKOMMITTÉN',
+  reality_glitch: 'GLITCH I MATRISEN',
+  dilemma: 'DILEMMA',
 }
 
 const RESOURCE_LABELS: Record<string, string> = {
@@ -88,7 +90,7 @@ function EventModalContent({
   }, [event.category])
 
   const color = CATEGORY_COLORS[event.category] ?? '#FF6600'
-  const label = CATEGORY_LABELS[event.category] ?? 'EVENT'
+  const label = CATEGORY_LABELS[event.category] ?? 'HÄNDELSE'
 
   return (
     <>
