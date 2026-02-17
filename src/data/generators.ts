@@ -65,19 +65,19 @@ export const GENERATORS: GeneratorData[] = [
     id: 'gen_autonomt',
     name: 'Autonomt Skördarnätverk',
     description: 'GPS-styrda skördare som opererar nattetid. Ingen ser dem. Ingen hör dem. Skogen hör dem.',
-    baseCost: 1_000_000,
+    baseCost: 500_000,
     baseProduction: 10_000,
     unlockPhase: 5,
-    costScale: 1.20,
+    costScale: 1.18,
   },
   {
     id: 'gen_klonskog',
     name: 'Klon-Skog',
     description: 'Genetiskt identiska träd. Ingen variation. Ingen motståndskraft. Maximal produktion.',
-    baseCost: 10_000_000,
+    baseCost: 5_000_000,
     baseProduction: 50_000,
     unlockPhase: 6,
-    costScale: 1.25,
+    costScale: 1.20,
   },
 
   // ── INTERNATIONELL (7-9) ──

@@ -155,6 +155,37 @@ function refreshLobbyModifiers(lobbyProjects: GameState['lobbyProjects']) {
   lobbyMods = computeLobbyModifiers(lobbyProjects)
 }
 
+// ── Cached upgrade modifiers (recomputed on purchaseUpgrade/load/reset) ──
+interface UpgradeModifiers {
+  gpsMultiplier: number
+  flatStammarPS: number
+  flatKapitalPS: number
+}
+
+let upgradeMods: UpgradeModifiers = { gpsMultiplier: 1, flatStammarPS: 0, flatKapitalPS: 0 }
+
+function refreshUpgradeModifiers(upgrades: GameState['upgrades']) {
+  let mult = 1
+  let stamPS = 0
+  let kapPS = 0
+
+  for (const [id, state] of Object.entries(upgrades)) {
+    if (state.purchased || state.count > 0) {
+      const data = getUpgradeData(id)
+      if (data?.effects) {
+        const count = state.count || 1
+        for (const eff of data.effects) {
+          if (eff.type === 'gpsMultiplier') mult *= eff.value
+          else if (eff.type === 'stammarPerSecond') stamPS += eff.value * count
+          else if (eff.type === 'kapitalPerSecond') kapPS += eff.value * count
+        }
+      }
+    }
+  }
+
+  upgradeMods = { gpsMultiplier: mult, flatStammarPS: stamPS, flatKapitalPS: kapPS }
+}
+
 /** Calculate stammarPerClick from base + click upgrades + tech tree upgrades */
 function computeStammarPerClick(
   clickUpgrades: GameState['clickUpgrades'],
@@ -375,10 +406,10 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const warningLevel = calculateWarningLevel(state)
     const warningPenalty = getWarningPenalty(warningLevel)
 
-    // Calculate stammar from generators with lobby boost and warning penalty
+    // Calculate stammar from generators with lobby boost, upgrade multipliers, and warning penalty
     const baseStammarPS = computeBaseStammarPerSecond(state.generators)
     const lobbyBoost = lobbyMods.generatorBoost
-    const stammarPS = baseStammarPS * lobbyBoost * warningPenalty
+    const stammarPS = (baseStammarPS * lobbyBoost * upgradeMods.gpsMultiplier + upgradeMods.flatStammarPS) * warningPenalty
 
     // Add expansion target production (only from controlled targets)
     let expansionStammarPS = 0
@@ -425,7 +456,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const trustModifier = getOwnerTrustModifier(state.ownerTrust)
     const kapitalBoost = lobbyMods.kapitalBoost
     const totalStammarPS = stammarPS + expansionStammarPS + countryStammarPS
-    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
+    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + upgradeMods.flatKapitalPS + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
 
     const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
@@ -535,7 +566,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     // ── Entropy countdown (phase 12) ──
     if (state.phase >= 12 && state.entropi > 0) {
-      const drainPerSecond = Math.min(0.2, totalStammarPS / 5e13)
+      const drainPerSecond = Math.min(0.5, totalStammarPS / 1e10)
       const newEntropi = Math.max(0, state.entropi - drainPerSecond * dt)
       updates.entropi = newEntropi
     }
@@ -831,6 +862,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     // Recalculate stammarPerClick in case this upgrade has click effects
     const newStammarPerClick = computeStammarPerClick(state.clickUpgrades, newUpgrades)
+    refreshUpgradeModifiers(newUpgrades)
 
     set({
       [resource]: current - cost,
@@ -1108,6 +1140,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const saved = loadGame()
     if (saved) {
       refreshLobbyModifiers(saved.lobbyProjects ?? {})
+      refreshUpgradeModifiers(saved.upgrades ?? {})
       refreshKnowledgeModifiers(saved.ownerKnowledgeUpgrades ?? {})
       set({ ...saved, lastTickAt: Date.now() })
       return true
@@ -1119,6 +1152,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const saved = loadBackup()
     if (saved) {
       refreshLobbyModifiers(saved.lobbyProjects ?? {})
+      refreshUpgradeModifiers(saved.upgrades ?? {})
       refreshKnowledgeModifiers(saved.ownerKnowledgeUpgrades ?? {})
       set({ ...saved, lastTickAt: Date.now() })
       // Also restore as main save so autosave continues from here
@@ -1133,6 +1167,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     backupSave()
     deleteSave()
     refreshLobbyModifiers({})
+    refreshUpgradeModifiers({})
     refreshKnowledgeModifiers({})
     const now = Date.now()
     set({
