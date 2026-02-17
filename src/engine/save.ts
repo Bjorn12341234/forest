@@ -2,7 +2,7 @@ import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
 const BACKUP_KEY = 'silva_maximus_backup'
-const CURRENT_VERSION = 7
+const CURRENT_VERSION = 8
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -249,6 +249,33 @@ const migrations: Record<number, MigrationFn> = {
     }
 
     save.version = 7
+    return save
+  },
+  7: (save) => {
+    // v7 → v8: Add entropi, simplify expansion targets (remove pressure/resistance)
+    const state = save.state as GameState
+    if ((state as Record<string, unknown>).entropi === undefined) {
+      (state as Record<string, unknown>).entropi = state.phase >= 12 ? 100 : 100
+    }
+
+    // Convert expansion target states: remove pressure/resistance, drop removed targets
+    const validTargetIds = new Set(['exp_manen', 'exp_mars', 'exp_dyson', 'exp_universe_alpha', 'exp_tidslinje'])
+    if (state.expansionTargets) {
+      const oldTargets = state.expansionTargets as Record<string, { status?: string; acquired?: boolean }>
+      const newTargets: Record<string, { status: string }> = {}
+
+      for (const [id, entry] of Object.entries(oldTargets)) {
+        if (!validTargetIds.has(id)) continue // drop removed targets
+        if (entry.status === 'controlled' || entry.acquired) {
+          newTargets[id] = { status: 'controlled' }
+        }
+        // Drop 'conquering' entries — they lose their progress (no more conquest mechanic)
+      }
+
+      ;(state as unknown as Record<string, unknown>).expansionTargets = newTargets
+    }
+
+    save.version = 8
     return save
   },
 }

@@ -379,11 +379,11 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'multiverse_magnaten',
     name: 'Multiverse-Magnaten',
-    description: 'Förvärva båda parallella universum. Verkligheten är en franchise.',
+    description: 'Förvärva det parallella universumet. Verkligheten är en franchise.',
     icon: '🌐',
     phase: 11,
     tier: 'kosmisk',
-    check: (s) => s.expansionTargets['exp_universe_alpha']?.status === 'controlled' && s.expansionTargets['exp_universe_beta']?.status === 'controlled',
+    check: (s) => s.expansionTargets['exp_universe_alpha']?.status === 'controlled',
   },
   {
     id: 'tidsresenaren',

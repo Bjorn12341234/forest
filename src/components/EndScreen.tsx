@@ -370,7 +370,7 @@ const REALITY_SECTIONS: { heading: string; text: string }[] = [
   },
 ]
 
-function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset: () => void }) {
+export function RealityPage({ onContinue, onReset }: { onContinue: () => void; onReset: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-[200] overflow-y-auto"

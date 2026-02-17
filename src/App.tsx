@@ -29,6 +29,8 @@ import { IndustryAttackModal } from './components/owner/IndustryAttackModal'
 import { IndustryLureModal } from './components/owner/IndustryLureModal'
 import { OwnerTicker } from './components/owner/OwnerTicker'
 import { OwnerEndScreen } from './components/owner/OwnerEndScreen'
+import { FinalEndScreen } from './components/FinalEndScreen'
+import { RealityPage } from './components/EndScreen'
 import { ErrorBoundary } from './components/ErrorBoundary'
 
 function App() {
@@ -37,8 +39,11 @@ function App() {
   const [showSettings, setShowSettings] = useState(false)
   const [offlineReport, setOfflineReport] = useState<OfflineResult | null>(null)
   const [showEndScreen, setShowEndScreen] = useState(false)
+  const [showFinalEnd, setShowFinalEnd] = useState(false)
+  const [showFinalReality, setShowFinalReality] = useState(false)
   const gameMode = useGameStore(state => state.gameMode)
   const currentPhase = useGameStore(state => state.phase)
+  const entropi = useGameStore(state => state.entropi)
   const endgameSeen = useGameStore(state => state.achievements['endgame_seen'])
   const pendingTransition = useGameStore(state => state.pendingTransition)
   const completePhaseTransition = useGameStore(state => state.completePhaseTransition)
@@ -60,6 +65,13 @@ function App() {
       setShowEndScreen(true)
     }
   }, [currentPhase, endgameSeen, showEndScreen])
+
+  // Trigger FinalEndScreen when entropy reaches 0 (phase 12)
+  useEffect(() => {
+    if (currentPhase >= 12 && entropi <= 0 && !showFinalEnd && !showFinalReality) {
+      setShowFinalEnd(true)
+    }
+  }, [currentPhase, entropi, showFinalEnd, showFinalReality])
 
   // Offline report callback
   const handleOfflineReport = useCallback((report: OfflineResult) => {
@@ -141,6 +153,34 @@ function App() {
           }}
           onReset={() => {
             setShowEndScreen(false)
+            reset()
+          }}
+        />
+      )}
+
+      {/* Final End Screen (entropy = 0, phase 12) */}
+      {showFinalEnd && (
+        <FinalEndScreen
+          onReality={() => {
+            setShowFinalEnd(false)
+            setShowFinalReality(true)
+          }}
+          onReset={() => {
+            setShowFinalEnd(false)
+            reset()
+          }}
+        />
+      )}
+
+      {/* Reality page after final end */}
+      {showFinalReality && (
+        <RealityPage
+          onContinue={() => {
+            setShowFinalReality(false)
+            useGameStore.getState().save()
+          }}
+          onReset={() => {
+            setShowFinalReality(false)
             reset()
           }}
         />

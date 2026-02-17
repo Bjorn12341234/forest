@@ -61,6 +61,9 @@ export interface GameState {
   // Warning level based on image (0-3)
   warningLevel: 0 | 1 | 2 | 3
 
+  // Entropy countdown (phase 12, 100→0)
+  entropi: number
+
   // Owner action cooldowns (timestamp when action becomes available again)
   ownerActionCooldowns: Record<string, number>
 
@@ -138,14 +141,7 @@ export interface AntagonistState {
 }
 
 export interface ExpansionTargetState {
-  status: 'locked' | 'available' | 'conquering' | 'controlled'
-  resistance: number
-  controlProgress: number
-  pressureAllocation: {
-    energi: number
-    byrakrati: number
-    resurser: number
-  }
+  status: 'locked' | 'available' | 'controlled'
 }
 
 export interface CountryState {
@@ -255,8 +251,7 @@ export interface GameActions {
   buyPRCampaign: (id: string) => void
   counterAntagonist: (id: string) => void
   purchaseOwnerKnowledge: (id: string) => void
-  startCosmicInvasion: (id: string) => void
-  allocateCosmicPressure: (id: string, vector: 'energi' | 'byrakrati' | 'resurser', amount: number) => void
+  buyExpansionTarget: (id: string) => void
   invadeCountry: (id: string) => void
   allocatePressure: (id: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => void
   resolveEvent: (choiceIndex: number) => void

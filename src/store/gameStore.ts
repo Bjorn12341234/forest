@@ -84,6 +84,7 @@ export const INITIAL_STATE: GameState = {
   ownerActionCooldowns: {},
   countries: {},
   warningLevel: 0,
+  entropi: 100,
 
   eventQueue: [],
   eventHistory: [],
@@ -532,37 +533,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       updates.countries = newCountries
     }
 
-    // ── Cosmic conquest tick ──
-    // Reduce resistance based on pressure allocation (mirrors country invasion)
-    let expansionChanged = false
-    const newExpansion = { ...state.expansionTargets }
-    for (const [targetId, ts] of Object.entries(newExpansion)) {
-      if (ts.status !== 'conquering') continue
-      const def = getExpansionTarget(targetId)
-      if (!def) continue
-
-      const pa = ts.pressureAllocation
-      // Each vector has a type modifier: 2x if it matches the weakness
-      // gravitational → weak to energi, bureaucratic → weak to resurser, existential → weak to byrakrati
-      const energiMod = def.defenseType === 'gravitational' ? 2 : 1
-      const byrakratiMod = def.defenseType === 'existential' ? 2 : 1
-      const resurserMod = def.defenseType === 'bureaucratic' ? 2 : 1
-
-      const totalPressure = (pa.energi * energiMod + pa.byrakrati * byrakratiMod + pa.resurser * resurserMod) / def.defenseStrength
-      const resistanceReduction = totalPressure * dt * 0.1
-
-      if (resistanceReduction > 0) {
-        const newResistance = Math.max(0, ts.resistance - resistanceReduction)
-        if (newResistance <= 0) {
-          newExpansion[targetId] = { ...ts, status: 'controlled', resistance: 0, controlProgress: 100 }
-        } else {
-          newExpansion[targetId] = { ...ts, resistance: newResistance, controlProgress: ((def.resistance - newResistance) / def.resistance) * 100 }
-        }
-        expansionChanged = true
-      }
-    }
-    if (expansionChanged) {
-      updates.expansionTargets = newExpansion
+    // ── Entropy countdown (phase 12) ──
+    if (state.phase >= 12 && state.entropi > 0) {
+      const drainPerSecond = Math.min(0.2, totalStammarPS / 5e13)
+      const newEntropi = Math.max(0, state.entropi - drainPerSecond * dt)
+      updates.entropi = newEntropi
     }
 
     // Species counting: lose species when biodiversity drops past thresholds
@@ -1011,13 +986,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
-  startCosmicInvasion: (id: string) => {
+  buyExpansionTarget: (id: string) => {
     const state = get()
     const target = getExpansionTarget(id)
     if (!target) return
     if (target.unlockPhase > state.phase) return
     const existing = state.expansionTargets[id]
-    if (existing?.status === 'conquering' || existing?.status === 'controlled') return
+    if (existing?.status === 'controlled') return
 
     // Check costs
     if (state.stammar < target.cost.stammar) return
@@ -1030,31 +1005,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lobby: state.lobby - target.cost.lobby,
       expansionTargets: {
         ...state.expansionTargets,
-        [id]: {
-          status: 'conquering',
-          resistance: target.resistance,
-          controlProgress: 0,
-          pressureAllocation: { energi: 0, byrakrati: 0, resurser: 0 },
-        },
-      },
-    } as Partial<GameStore>)
-  },
-
-  allocateCosmicPressure: (id: string, vector: 'energi' | 'byrakrati' | 'resurser', amount: number) => {
-    const state = get()
-    const ts = state.expansionTargets[id]
-    if (!ts || ts.status !== 'conquering') return
-
-    set({
-      expansionTargets: {
-        ...state.expansionTargets,
-        [id]: {
-          ...ts,
-          pressureAllocation: {
-            ...ts.pressureAllocation,
-            [vector]: Math.max(0, amount),
-          },
-        },
+        [id]: { status: 'controlled' },
       },
     } as Partial<GameStore>)
   },
