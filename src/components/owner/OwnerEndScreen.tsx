@@ -39,36 +39,32 @@ const POST_CREDITS: string[] = [
 
 const REALITY_SECTIONS: { heading: string; text: string }[] = [
   {
-    heading: 'Det här var ett spel. Men det är också sant.',
-    text: 'Allt du just spelade bygger på verkliga metoder. Hyggesfritt skogsbruk — plockhuggning, blädning, naturlig föryngring — är inget nytt. Det är så människor skötte skog i tusentals år innan industriellt skogsbruk tog över på 1950-talet.',
+    heading: 'Det här var ett spel. Det här är inte det.',
+    text: 'Allt du just spelade är satir. Men den bygger på en verklighet som pågår, varje dag, i Sverige.',
   },
   {
-    heading: 'Plockhuggning fungerar',
-    text: 'Forskning från SLU och internationella studier visar att selektiv avverkning ger jämförbar ekonomisk avkastning som kalhyggesbruk — men med 200–400% högre biodiversitet, bättre kolinlagring och större motståndskraft mot storm, torka och insektsangrepp.',
+    heading: 'Kalhyggesbruket är standard',
+    text: 'I Sverige bedrivs skogsbruket i stor utsträckning med trakthyggesbruk. Det betyder: man slutavverkar, markbereder och planterar ny skog. Det skapar stora hyggen, och det är den dominerande modellen i svenskt skogsbruk.',
   },
   {
-    heading: 'Industrins berättelse',
-    text: 'Den svenska skogsindustrin har systematiskt spridit budskapet att kalhyggesbruk är det enda \"vetenskapliga\" sättet att sköta skog. Deras lobbyorganisationer finansierar forskning, skriver läromedel och påverkar myndigheter. Alternativa metoder har medvetet marginaliserats.',
+    heading: 'Vad som försvinner',
+    text: 'Det som försvinner är inte bara träd. Det är skog som struktur: gamla träd, död ved, luckighet, fukt, svampmycel, och livsmiljöer som tar årtionden eller sekler att bygga upp. Sverige har tusentals rödlistade arter. En stor del av dem är knutna till skogsmiljöer, särskilt äldre skog och naturskogslika strukturer.',
   },
   {
-    heading: 'Vad skogsägaren får',
-    text: 'En typisk skogsägare får cirka 200–300 kr per kubikmeter vid försäljning till massaindustrin. Samma virke, om det får växa längre och säljs direkt till snickerier eller byggföretag, kan ge 3–5 gånger mer. Industrin tjänar på volym. Skogsägaren tjänar på kvalitet.',
+    heading: 'Varför det här händer',
+    text: 'Skogen är en av Sveriges största exportbaserade industrier. Det gör att skogsfrågan inte bara är biologi. Det är ekonomi, politik, regionala jobb, och nationell självbild. Därför blir debatten hård. Och därför är det svårt att förändra systemet, även när forskare, organisationer och lokala röster varnar för konsekvenserna.',
   },
   {
-    heading: 'Död ved = liv',
-    text: 'Över 2 000 arter i svensk skog är beroende av död ved. När industrin \"städar\" skogen efter avverkning, tar de bort det som hundratals svampar, insekter, lavar och fåglar behöver för att överleva. I en naturlig skog utgör död ved 20–30% av volymen. I en produktionsskog: nästan noll.',
+    heading: 'Klimatet är inte en enkel saga',
+    text: 'Skog binder kol. Men hur mycket skogsbruket hjälper eller skadar klimatet beror på vad som avverkas, hur ofta, och vad virket används till. Om virket blir kortlivade produkter som papper, kartong och engångsartiklar, då återvänder kolet snabbt till atmosfären. Om virket blir långlivade produkter som byggmaterial, kan kolet lagras i årtionden eller sekel. Det är en av de stora konfliktlinjerna i skogsdebatten.',
   },
   {
-    heading: 'Resiliens',
-    text: 'Monokulturer av gran är extremt sårbara för storm, torka och insektsangrepp. Stormen Gudrun 2005 fällde 75 miljoner kubikmeter skog — nästan uteslutande monokulturer. Blandskog med varierad åldersstruktur klarar samma storm med minimala förluster.',
+    heading: 'Samerna och marken',
+    text: 'Skogsbruket påverkar också renskötseln. Äldre skogar och lavrika marker är viktiga för renbete, särskilt vintertid. När landskapet fragmenteras av hyggen, vägar och planteringar blir renskötseln svårare. Det här är en återkommande konflikt mellan industriella intressen och urfolksrättigheter.',
   },
   {
-    heading: 'Kolinlagring',
-    text: 'Stående skog lagrar kol. Kalavverkning frigör enorma mängder markbundet kol. När virket går till kortlivade produkter — massa, papper, wellpapp — återvänder kolet till atmosfären inom år. Långsiktigt skogsbruk med långa omloppstider och massivträprodukter lagrar kol i århundraden.',
-  },
-  {
-    heading: 'Du kan göra skillnad',
-    text: 'Om du äger skog: fråga din inspektör om alternativ till kalhyggen. Om du inte äger skog: stöd organisationer som arbetar för hyggesfritt skogsbruk. Fråga var ditt papper, dina möbler och ditt byggvirke kommer ifrån.',
+    heading: 'Det finns andra sätt',
+    text: 'Hyggesfritt skogsbruk, kontinuitetsskogsbruk och längre omloppstider är alternativ som redan används, men i liten skala. De metoderna kan minska skadorna på biologisk mångfald och göra skogen mer motståndskraftig. De är inte en magisk lösning. Men de visar att kalhyggen inte är den enda vägen.',
   },
 ]
 
@@ -407,7 +403,7 @@ function OwnerRealityPage({ onContinue, onReset }: { onContinue: () => void; onR
   return (
     <motion.div
       className="fixed inset-0 z-[200] overflow-y-auto"
-      style={{ background: '#1A2E1A' }}
+      style={{ background: '#0A0A0A' }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 2 }}
@@ -420,18 +416,18 @@ function OwnerRealityPage({ onContinue, onReset }: { onContinue: () => void; onR
           transition={{ delay: 0.5, duration: 1.5 }}
           className="mb-16 text-center"
         >
-          <div className="w-12 h-px bg-[#A8D5BA]/20 mx-auto mb-8" />
+          <div className="w-12 h-px bg-white/20 mx-auto mb-8" />
           <p
-            className="text-[0.6rem] tracking-[0.4em] text-[#A8D5BA]/40 mb-3 uppercase"
+            className="text-[0.6rem] tracking-[0.4em] text-white/30 mb-3 uppercase"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            Verkligheten.
+            Vänta.
           </p>
           <p
-            className="text-[0.6rem] tracking-[0.3em] text-[#A8D5BA]/30"
+            className="text-[0.6rem] tracking-[0.3em] text-white/30"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            Det här är inte ett spel längre.
+            Innan du fortsätter.
           </p>
         </motion.div>
 
@@ -445,19 +441,19 @@ function OwnerRealityPage({ onContinue, onReset }: { onContinue: () => void; onR
             className="mb-10"
           >
             <h3
-              className={`text-sm font-bold mb-3 ${i === 0 ? 'text-[#A8D5BA]' : 'text-[#A8D5BA]/80'}`}
+              className={`text-sm font-bold mb-3 ${i === 0 ? 'text-white' : 'text-white/80'}`}
               style={{ fontFamily: 'IBM Plex Mono, monospace' }}
             >
               {section.heading}
             </h3>
             <p
-              className="text-xs leading-relaxed text-[#A8D5BA]/50"
+              className="text-xs leading-relaxed text-white/50"
               style={{ fontFamily: 'IBM Plex Mono, monospace' }}
             >
               {section.text}
             </p>
             {i < REALITY_SECTIONS.length - 1 && (
-              <div className="w-8 h-px bg-[#A8D5BA]/10 mt-10" />
+              <div className="w-8 h-px bg-white/10 mt-10" />
             )}
           </motion.div>
         ))}
@@ -469,50 +465,58 @@ function OwnerRealityPage({ onContinue, onReset }: { onContinue: () => void; onR
           transition={{ delay: 1.5 + REALITY_SECTIONS.length * 0.3 + 0.5, duration: 1 }}
           className="mt-16 mb-8 text-center"
         >
-          <div className="w-12 h-px bg-[#A8D5BA]/20 mx-auto mb-10" />
+          <div className="w-12 h-px bg-white/20 mx-auto mb-10" />
 
           <p
-            className="text-xs text-[#A8D5BA]/60 leading-relaxed mb-2"
+            className="text-sm font-bold text-white/80 leading-relaxed mb-1"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
-            Vill du veta mer? Stöd de som kämpar för skogen:
+            Det här var bara ett spel.
+          </p>
+          <p
+            className="text-sm font-bold text-white leading-relaxed mb-8"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            Men skogen är på riktigt.
+          </p>
+
+          <p
+            className="text-xs text-white/60 leading-relaxed mb-2"
+            style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+          >
+            Vill du veta mer, eller stötta de som arbetar med naturhänsyn i skogsbruket?
           </p>
 
           <a
             href="https://naturhansyn.se/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 mb-12 px-6 py-3 border border-owner-accent text-[#A8D5BA] text-xs font-bold tracking-[0.15em] no-underline hover:bg-owner-accent/20 transition-colors"
+            className="inline-block mt-4 mb-12 px-6 py-3 border border-white/30 text-white text-xs font-bold tracking-[0.15em] no-underline hover:bg-white/10 transition-colors"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
             FÖRENINGEN NATURHÄNSYN
           </a>
 
           <p
-            className="text-[0.55rem] text-[#A8D5BA]/25 leading-relaxed mb-12"
+            className="text-[0.55rem] text-white/25 leading-relaxed mb-12"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
             naturhansyn.se
           </p>
 
-          <div className="w-8 h-px bg-[#A8D5BA]/10 mx-auto mb-10" />
+          <div className="w-8 h-px bg-white/10 mx-auto mb-10" />
 
           <div className="flex flex-col gap-4 items-center">
             <button
               onClick={onContinue}
-              className="px-8 py-3 text-xs font-bold tracking-wider cursor-pointer border transition-colors"
-              style={{
-                background: 'rgba(45,106,79,0.15)',
-                borderColor: 'rgba(45,106,79,0.4)',
-                color: '#A8D5BA',
-                fontFamily: 'IBM Plex Mono, monospace',
-              }}
+              className="px-8 py-3 bg-white/10 text-white/70 text-xs font-bold tracking-wider cursor-pointer border border-white/20 hover:bg-white/20 transition-colors"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
             >
-              FORTSÄTT VÅRDA SKOGEN
+              FORTSÄTT SPELA
             </button>
             <button
               onClick={onReset}
-              className="px-4 py-1 bg-transparent text-[#A8D5BA]/20 text-[0.5rem] tracking-wider cursor-pointer border-none hover:text-[#A8D5BA]/40 transition-colors"
+              className="px-4 py-1 bg-transparent text-white/20 text-[0.5rem] tracking-wider cursor-pointer border-none hover:text-white/40 transition-colors"
             >
               starta om
             </button>

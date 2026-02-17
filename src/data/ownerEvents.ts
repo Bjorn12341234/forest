@@ -5,6 +5,34 @@
 import type { GameEvent } from '../store/types'
 
 export const OWNER_EVENTS: GameEvent[] = [
+  // ── Early game narrative teaser ──
+  {
+    id: 'oe_grannens_kalavverkning',
+    phase: 1,
+    category: 'crisis',
+    headline: 'Grannens kalavverkning',
+    context: 'Du hör motorsågar från grannens mark. Maskinerna har kommit. En skördare, en skotare, en lastbil. Imorgon finns där 80 hektar stubbar och körspår. Överimorgon planterar de contorta.',
+    unique: true,
+    conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 150 }],
+    choices: [
+      {
+        label: 'Gå dit och titta',
+        description: 'Du ser det med egna ögon. Stubbarna. Körskadorna. Tystnaden där fåglarna brukade sjunga. Du lär dig något.',
+        effects: [
+          { resource: 'kunskap', amount: 5, type: 'add' },
+          { resource: 'legacy', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Stäng fönstret',
+        description: 'Du hör motorsågarna ändå. Men din skog står kvar. Det räcker för idag.',
+        effects: [
+          { resource: 'resiliens', amount: 5, type: 'add' },
+        ],
+      },
+    ],
+  },
+
   {
     id: 'oe_stormen',
     phase: 1,
@@ -15,8 +43,17 @@ export const OWNER_EVENTS: GameEvent[] = [
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 15_000 }],
     choices: [
       {
-        label: 'Låt stormen passera',
-        description: 'Din skog är varierad. De svagaste faller. Resten står kvar.',
+        label: 'Städa och sälj stormvirke',
+        description: 'Du räddar det du kan. Snickaren köper de bästa stammarna.',
+        effects: [
+          { resource: 'inkomst', amount: 10_000, type: 'add' },
+          { resource: 'deadwood', amount: -10, type: 'add' },
+          { resource: 'resiliens', amount: -5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Låt naturen läka sig',
+        description: 'De fallna träden blir hem åt insekter, svampar och hackspettar. Skogen vet vad den gör.',
         effects: [
           { resource: 'resiliens', amount: 10, type: 'add' },
           { resource: 'biodivOwner', amount: 5, type: 'add' },
@@ -34,6 +71,23 @@ export const OWNER_EVENTS: GameEvent[] = [
     unique: true,
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 25_000 }],
     choices: [
+      {
+        label: 'Sanera drabbade träd',
+        description: 'Du tar bort de angripna granarna och säljer virket. Snabbt och effektivt.',
+        effects: [
+          { resource: 'inkomst', amount: 5_000, type: 'add' },
+          { resource: 'deadwood', amount: -5, type: 'add' },
+          { resource: 'resiliens', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Ring biologen',
+        description: 'Hon kommer och inventerar. Barkborren är mat åt tretåig hackspett. Hela näringskedjan lever.',
+        effects: [
+          { resource: 'kunskap', amount: 20, type: 'add' },
+          { resource: 'biodivOwner', amount: 5, type: 'add' },
+        ],
+      },
       {
         label: 'Låt mångfalden göra sitt',
         description: 'Barkborren tar tre granar. Tallarna, björkarna, asparna står emot.',
@@ -113,8 +167,26 @@ export const OWNER_EVENTS: GameEvent[] = [
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 60_000 }],
     choices: [
       {
+        label: 'Bjud in på studiebesök',
+        description: 'En heldag i skogen. Du visar, förklarar, bjuder på kaffe. Han gråter lite vid den gamla tallen.',
+        effects: [
+          { resource: 'inkomst', amount: -2_000, type: 'add' },
+          { resource: 'kunskap', amount: 40, type: 'add' },
+          { resource: 'legacy', amount: 30, type: 'add' },
+        ],
+      },
+      {
+        label: 'Ge honom sticklingar',
+        description: 'Björk, rönn, asp — allt som hans contortaplantage saknar. Det tar 20 år. Men det börjar.',
+        effects: [
+          { resource: 'biodivOwner', amount: 5, type: 'add' },
+          { resource: 'legacy', amount: 25, type: 'add' },
+          { resource: 'kunskap', amount: 20, type: 'add' },
+        ],
+      },
+      {
         label: 'Visa honom',
-        description: '+30 Kunskap. Du får en allierad.',
+        description: 'En kort promenad. Du pekar på tallarna, lavarna, hackspetten. Han nickar tyst. Du får en allierad.',
         effects: [
           { resource: 'kunskap', amount: 30, type: 'add' },
           { resource: 'legacy', amount: 20, type: 'add' },
@@ -132,8 +204,25 @@ export const OWNER_EVENTS: GameEvent[] = [
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 50_000 }],
     choices: [
       {
+        label: 'Söka katastrofbidrag',
+        description: 'Länsstyrelsen beviljar stöd. Pengarna hjälper. Men blanketten kräver "återplantering enligt standard".',
+        effects: [
+          { resource: 'inkomst', amount: 15_000, type: 'add' },
+          { resource: 'legacy', amount: -10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Dokumentera och forska',
+        description: 'Du mäter, fotograferar, antecknar. Brandens effekt på ekosystemet blir en studie i sig.',
+        effects: [
+          { resource: 'kunskap', amount: 40, type: 'add' },
+          { resource: 'legacy', amount: 15, type: 'add' },
+          { resource: 'deadwood', amount: 25, type: 'add' },
+        ],
+      },
+      {
         label: 'Skogen återhämtar sig',
-        description: 'Branden tog undervegetationen. Men rötterna lever. +20 Resiliens.',
+        description: 'Branden tog undervegetationen. Men rötterna lever. Du låter naturen sköta resten.',
         effects: [
           { resource: 'resiliens', amount: 20, type: 'add' },
           { resource: 'deadwood', amount: 15, type: 'add' },
@@ -151,8 +240,25 @@ export const OWNER_EVENTS: GameEvent[] = [
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 100_000 }],
     choices: [
       {
+        label: 'Bli medförfattare',
+        description: 'Du lägger ner tid och pengar. Men ditt namn står på publikationen. Ingen kan säga att du inte förstår.',
+        effects: [
+          { resource: 'inkomst', amount: -5_000, type: 'add' },
+          { resource: 'kunskap', amount: 150, type: 'add' },
+          { resource: 'legacy', amount: 80, type: 'add' },
+        ],
+      },
+      {
+        label: 'Begär oberoende studie',
+        description: 'Du insisterar på att forskarna inte tar industripengar. Det tar längre tid. Men resultaten är vattentäta.',
+        effects: [
+          { resource: 'kunskap', amount: 80, type: 'add' },
+          { resource: 'legacy', amount: 30, type: 'add' },
+        ],
+      },
+      {
         label: 'Släpp in forskarna',
-        description: '+100 Kunskap, +50 Generationsarv. Nationell uppmärksamhet.',
+        description: 'Du öppnar grinden och låter dem mäta. Nationell uppmärksamhet.',
         effects: [
           { resource: 'kunskap', amount: 100, type: 'add' },
           { resource: 'legacy', amount: 50, type: 'add' },
@@ -171,9 +277,17 @@ export const OWNER_EVENTS: GameEvent[] = [
     choices: [
       {
         label: 'Drick kaffe och vänta',
-        description: '+20 Kunskap. Ingen effekt på din inkomst. Så känns det.',
+        description: 'Ingen effekt på din inkomst. Så känns det att vara oberoende.',
         effects: [
           { resource: 'kunskap', amount: 20, type: 'add' },
+        ],
+      },
+      {
+        label: 'Kontakta möbelsnickare direkt',
+        description: 'Du ringer tre snickare. En vill ha ek. En vill ha björk. Alla betalar bättre än massa.',
+        effects: [
+          { resource: 'inkomst', amount: 3_000, type: 'add' },
+          { resource: 'kunskap', amount: 10, type: 'add' },
         ],
       },
     ],

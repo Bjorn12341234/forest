@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useGameStore } from '../../store/gameStore'
 import { KNOWLEDGE_ACTIVITIES, KNOWLEDGE_THRESHOLDS } from '../../data/ownerKnowledge'
 import { KNOWLEDGE_CATEGORIES, getUpgradesByCategory, type OwnerKnowledgeUpgrade } from '../../data/ownerKnowledgeTree'
@@ -10,9 +11,24 @@ export function KnowledgePanel() {
   const kunskap = useGameStore(s => s.kunskap)
   const resiliens = useGameStore(s => s.resiliens)
   const biodivOwner = useGameStore(s => s.biodivOwner)
+  const totalSV = useGameStore(s => s.totalSkogsvardering)
   const ownerKnowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
+  const lastKnowledgeActivityAt = useGameStore(s => s.lastKnowledgeActivityAt)
   const buyKnowledgeActivity = useGameStore(s => s.buyKnowledgeActivity)
   const purchaseOwnerKnowledge = useGameStore(s => s.purchaseOwnerKnowledge)
+
+  // Cooldown timer for knowledge activities
+  const [cooldownRemaining, setCooldownRemaining] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, 30_000 - (Date.now() - lastKnowledgeActivityAt))
+      setCooldownRemaining(remaining)
+    }, 500)
+    return () => clearInterval(interval)
+  }, [lastKnowledgeActivityAt])
+
+  const isOnCooldown = cooldownRemaining > 0
 
   // Find current and next threshold
   const currentThreshold = KNOWLEDGE_THRESHOLDS.filter(t => kunskap >= t.level).pop()
@@ -115,6 +131,7 @@ export function KnowledgePanel() {
                       purchased={!!ownerKnowledgeUpgrades[upgrade.id]}
                       canAfford={kunskap >= upgrade.cost}
                       prerequisitesMet={upgrade.prerequisites.every(p => ownerKnowledgeUpgrades[p])}
+                      svMet={!upgrade.svRequired || totalSV >= upgrade.svRequired}
                       isFirst={i === 0}
                       onPurchase={() => {
                         purchaseOwnerKnowledge(upgrade.id)
@@ -136,9 +153,15 @@ export function KnowledgePanel() {
           Spendera Inkomst för att öka din Skogskunskap.
         </p>
 
+        {isOnCooldown && (
+          <div className="bg-owner-accent/10 border border-owner-accent/20 rounded-sm p-2 text-xs text-owner-text/50 text-center font-numbers">
+            Kunskapsvila: {Math.ceil(cooldownRemaining / 1000)}s
+          </div>
+        )}
+
         <div className="flex flex-col gap-2">
           {KNOWLEDGE_ACTIVITIES.map(activity => {
-            const canAfford = inkomst >= activity.cost
+            const canAfford = inkomst >= activity.cost && !isOnCooldown
             return (
               <div
                 key={activity.id}
@@ -159,7 +182,7 @@ export function KnowledgePanel() {
                   </div>
                   <div className="text-right flex-shrink-0">
                     <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/40'}`}>
-                      {activity.cost === 0 ? 'Gratis' : `${formatNumber(activity.cost)} tkr`}
+                      {`${formatNumber(activity.cost)} tkr`}
                     </span>
                     <div className="text-xs text-owner-accent font-numbers">+{activity.kunskapReward} kunskap</div>
                   </div>
@@ -175,16 +198,17 @@ export function KnowledgePanel() {
 
 // ── Knowledge Tree Node ──
 
-function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, isFirst, onPurchase }: {
+function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, svMet, isFirst, onPurchase }: {
   upgrade: OwnerKnowledgeUpgrade
   purchased: boolean
   canAfford: boolean
   prerequisitesMet: boolean
+  svMet: boolean
   isFirst: boolean
   onPurchase: () => void
 }) {
-  const available = !purchased && canAfford && prerequisitesMet
-  const locked = !purchased && !prerequisitesMet
+  const available = !purchased && canAfford && prerequisitesMet && svMet
+  const locked = !purchased && (!prerequisitesMet || !svMet)
 
   return (
     <div className="flex items-start gap-2">
@@ -231,6 +255,11 @@ function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, isFirs
         <p className={`text-xs leading-relaxed mt-0.5 ${purchased ? 'text-owner-text/60' : locked ? 'text-owner-text/25' : 'text-owner-text/45'}`}>
           {upgrade.description}
         </p>
+        {!purchased && upgrade.svRequired && !svMet && (
+          <p className="text-[0.6rem] text-[#B8860B]/60 mt-1">
+            Kräver {formatNumber(upgrade.svRequired)} skogsvärde
+          </p>
+        )}
       </div>
     </div>
   )

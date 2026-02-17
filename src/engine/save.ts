@@ -2,7 +2,7 @@ import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
 const BACKUP_KEY = 'silva_maximus_backup'
-const CURRENT_VERSION = 8
+const CURRENT_VERSION = 9
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -276,6 +276,18 @@ const migrations: Record<number, MigrationFn> = {
     }
 
     save.version = 8
+    return save
+  },
+  8: (save) => {
+    // v8 → v9: Add lastKnowledgeActivityAt + ownerPhase
+    const state = save.state as GameState
+    if ((state as unknown as Record<string, unknown>).lastKnowledgeActivityAt === undefined) {
+      (state as unknown as Record<string, unknown>).lastKnowledgeActivityAt = 0
+    }
+    if ((state as unknown as Record<string, unknown>).ownerPhase === undefined) {
+      (state as unknown as Record<string, unknown>).ownerPhase = 1
+    }
+    save.version = 9
     return save
   },
 }

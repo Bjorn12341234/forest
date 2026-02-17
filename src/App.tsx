@@ -281,14 +281,15 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
   const ownerTab = (activeTab === 'lobby' ? 'knowledge' : 'dashboard') as OwnerTab
   const [showOwnerEnd, setShowOwnerEnd] = useState(false)
   const legacy = useGameStore(s => s.legacy)
+  const totalSV = useGameStore(s => s.totalSkogsvardering)
   const ownerEndSeen = useGameStore(s => s.achievements['owner_endgame_seen'])
 
-  // Trigger owner endscreen at legacy >= 500
+  // Trigger owner endscreen at legacy >= 500 AND totalSV >= 150K
   useEffect(() => {
-    if (legacy >= 500 && !ownerEndSeen && !showOwnerEnd) {
+    if (legacy >= 500 && totalSV >= 150_000 && !ownerEndSeen && !showOwnerEnd) {
       setShowOwnerEnd(true)
     }
-  }, [legacy, ownerEndSeen, showOwnerEnd])
+  }, [legacy, totalSV, ownerEndSeen, showOwnerEnd])
 
   if (showOwnerEnd) {
     return (

@@ -14,6 +14,7 @@ export interface IndustryAttackData {
     skogsvardering?: number   // multiplier on current sv (e.g., 0.5 = lose 50%)
     inkomstBonus?: number     // one-time inkomst gain
     resiliensPenalty?: number  // flat resiliens loss
+    legacyPenalty?: number    // flat legacy loss
   }
   resistFlavour: string       // text shown when resisted
   acceptFlavour: string       // text shown when accepted
@@ -24,7 +25,7 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     id: 'atk_gratisplan',
     name: '"Gratis skogsbruksplan"',
     description: 'En inspektör från det stora bolaget dyker upp med en "gratis skogsbruksplan". Planen schemalägger kalavverkning av dina bästa bestånd.',
-    triggerSV: 800,
+    triggerSV: 500,
     kunskapRequired: 10,
     acceptEffects: {
       description: '-50% Skogsvärde, +5 000 Inkomst',
@@ -132,6 +133,23 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     },
     resistFlavour: 'De ändrade lagen. Men vi var 200 skogsägare som svarade på remissen. Vi hade biologerna. Vi hade siffrorna. Vi hade skogen. De hade lobbyister.',
     acceptFlavour: 'Lagen antogs. Du har inget val. Skördarna kommer i november.',
+  },
+  {
+    id: 'atk_lagstiftning',
+    name: 'Lagstiftningshotet',
+    description: 'Industrin lobbyr för lagstiftning som specifikt riktar sig mot småskaligt skogsbruk. "Effektivisering av skoglig produktion" — varje ord skrivet av deras jurister.',
+    triggerSV: 200_000,
+    kunskapRequired: 600,
+    extraCostResource: 'inkomst',
+    extraCostAmount: 15_000,
+    acceptEffects: {
+      description: '-30% Skogsvärde, -30 Resiliens, -50 Generationsarv',
+      skogsvardering: 0.7,
+      resiliensPenalty: 30,
+      legacyPenalty: 50,
+    },
+    resistFlavour: 'Du mobiliserar. 50 skogsägare, tre professorer, en advokat som jobbar pro bono. Remissyttrandet är 200 sidor. Deras lagförslag: 3 sidor utan källhänvisningar.',
+    acceptFlavour: 'Lagen träder i kraft. Din metod klassas som "icke-ändamålsenlig". Du tvingas avverka enligt industrins normer.',
   },
 ]
 

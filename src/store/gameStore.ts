@@ -3,7 +3,7 @@ import type { GameState, GameActions, Phase, Effect, GameSettings } from './type
 import { saveGame, loadGame, backupSave, loadBackup, deleteSave } from '../engine/save'
 import { calculateUpgradeCost, getKapitalConversionRate, getOwnerTrustModifier } from '../engine/formulas'
 import { checkEventTrigger, selectEvent, scheduleNextEvent } from '../engine/events'
-import { checkPhaseTransition } from '../engine/phases'
+import { checkPhaseTransition, getOwnerPhase } from '../engine/phases'
 import { PHASE1_EVENTS } from '../data/phase1/events'
 import { PHASE2_EVENTS } from '../data/phase2/events'
 import { PHASE2_NEW_EVENTS } from '../data/phase2/newEvents'
@@ -130,6 +130,9 @@ export const INITIAL_STATE: GameState = {
   activeIndustryLure: null,
 
   ownerKnowledgeUpgrades: {},
+
+  lastKnowledgeActivityAt: 0,
+  ownerPhase: 1,
 }
 
 // ── Helpers ──
@@ -357,6 +360,12 @@ function ownerTick(
         }
       }
     }
+  }
+
+  // ── Owner phase transitions ──
+  const ownerPhaseInfo = getOwnerPhase(newTotalSV)
+  if (ownerPhaseInfo.phase !== state.ownerPhase) {
+    updates.ownerPhase = ownerPhaseInfo.phase
   }
 
   // ── Owner event triggers ──
@@ -677,9 +686,14 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     if (state.inkomst < data.cost) return
 
+    // 30-second global cooldown between knowledge activity purchases
+    const now = Date.now()
+    if (now - state.lastKnowledgeActivityAt < 30_000) return
+
     set({
       inkomst: state.inkomst - data.cost,
       kunskap: state.kunskap + data.kunskapReward,
+      lastKnowledgeActivityAt: now,
     } as Partial<GameStore>)
   },
 
@@ -692,6 +706,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     // Check kunskap cost
     if (state.kunskap < upgrade.cost) return
+
+    // Check svRequired gate
+    if (upgrade.svRequired && state.totalSkogsvardering < upgrade.svRequired) return
 
     // Check prerequisites
     for (const prereq of upgrade.prerequisites) {
@@ -729,6 +746,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       }
       if (atk.acceptEffects.resiliensPenalty) {
         updates.resiliens = Math.max(0, state.resiliens - atk.acceptEffects.resiliensPenalty)
+      }
+      if (atk.acceptEffects.legacyPenalty) {
+        updates.legacy = state.legacy - atk.acceptEffects.legacyPenalty
       }
       set(updates as Partial<GameStore>)
     } else {
@@ -1190,6 +1210,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       activeIndustryAttack: null,
       activeIndustryLure: null,
       ownerKnowledgeUpgrades: {},
+      lastKnowledgeActivityAt: 0,
+      ownerPhase: 1,
     })
   },
 

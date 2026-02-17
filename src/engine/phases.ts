@@ -157,6 +157,40 @@ export const TRANSITION_SCRIPTS: Partial<Record<`${Phase}_${Phase}`, TransitionL
   ],
 }
 
+// ── Owner Phase System ──
+
+export interface OwnerPhaseInfo {
+  phase: number
+  name: string
+  message: string
+}
+
+const OWNER_PHASES: OwnerPhaseInfo[] = [
+  { phase: 1, name: 'Rötterna', message: 'Fas 1: Rötterna — Du lär känna din skog.' },
+  { phase: 2, name: 'Nätverket', message: 'Fas 2: Nätverket — Grannarna börjar fråga om din metod.' },
+  { phase: 3, name: 'Arvet', message: 'Fas 3: Arvet — Din skog blir ett arv för kommande generationer.' },
+]
+
+const OWNER_PHASE_THRESHOLDS = [0, 50_000, 150_000]
+
+export function getOwnerPhase(totalSV: number): OwnerPhaseInfo {
+  if (totalSV >= OWNER_PHASE_THRESHOLDS[2]) return OWNER_PHASES[2]
+  if (totalSV >= OWNER_PHASE_THRESHOLDS[1]) return OWNER_PHASES[1]
+  return OWNER_PHASES[0]
+}
+
+export function getOwnerPhaseProgress(totalSV: number): { current: number; next: number | null; progress: number } {
+  const info = getOwnerPhase(totalSV)
+  const idx = info.phase - 1
+  const currentThreshold = OWNER_PHASE_THRESHOLDS[idx]
+  const nextThreshold = OWNER_PHASE_THRESHOLDS[idx + 1] ?? null
+
+  if (nextThreshold === null) return { current: currentThreshold, next: null, progress: 1 }
+
+  const progress = Math.min(1, (totalSV - currentThreshold) / (nextThreshold - currentThreshold))
+  return { current: currentThreshold, next: nextThreshold, progress }
+}
+
 export function getTransitionScript(from: Phase, to: Phase): TransitionLine[] {
   return TRANSITION_SCRIPTS[`${from}_${to}`] ?? [
     { text: `Fas ${to}...`, delay: 0, style: 'bold' },

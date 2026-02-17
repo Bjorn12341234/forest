@@ -72,6 +72,38 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
       biodivGain: 5,
     },
   },
+  {
+    id: 'lure_virkesprispremie',
+    name: '"Virkesprispremie"',
+    offer: '"Vi erbjuder TRIPPELT massapris för ditt bästa virke! Exklusiv premieköpare!"',
+    trap: 'De köper dina bästa träd — de som tagit 150 år att växa. Priset var bra. Skogen blev fattigare.',
+    declineText: 'Du ringer din snickare istället. Samma pris, men du väljer vilka träd som tas.',
+    triggerSV: 80_000,
+    acceptEffects: {
+      skogsvardering: 0.85,
+      resiliensPenalty: 15,
+    },
+    declineEffects: {
+      inkomstCost: 3_000,
+      kunskapGain: 30,
+    },
+  },
+  {
+    id: 'lure_forskningssamarbete',
+    name: '"Forskningssamarbete"',
+    offer: '"Vårt universitet vill studera din skog! Helt kostnadsfritt! Publicering i Nature!"',
+    trap: 'Universitetet finansieras av industrin. Studien "visar" att din metod ger lägre tillväxt. De utelämnar biodiversitetsdatan.',
+    declineText: 'Du anlitar en oberoende forskare. Kostar mer. Men resultaten är ärliga.',
+    triggerSV: 120_000,
+    acceptEffects: {
+      skogsvardering: 0.9,
+      biodivPenalty: 15,
+    },
+    declineEffects: {
+      inkomstCost: 5_000,
+      kunskapGain: 35,
+    },
+  },
 ]
 
 const INDUSTRY_LURE_MAP = new Map<string, IndustryLureData>(

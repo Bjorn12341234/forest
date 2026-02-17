@@ -18,6 +18,7 @@ export interface OwnerKnowledgeUpgrade {
   cost: number              // kunskap cost
   prerequisites: string[]   // other upgrade IDs
   effects: OwnerKnowledgeEffect[]
+  svRequired?: number       // minimum totalSkogsvardering to purchase
 }
 
 export const KNOWLEDGE_CATEGORIES: { id: KnowledgeCategory; name: string; icon: string }[] = [
@@ -58,6 +59,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 150,
     prerequisites: ['kt_mykoriza'],
     effects: [{ type: 'resiliensRate', value: 0.5 }],
+    svRequired: 25_000,
   },
   {
     id: 'kt_vatmark',
@@ -71,6 +73,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
       { type: 'biodivRate', value: 0.3 },
       { type: 'resiliensRate', value: 0.2 },
     ],
+    svRequired: 60_000,
   },
   {
     id: 'kt_ekosystem_master',
@@ -81,6 +84,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 400,
     prerequisites: ['kt_vatmark'],
     effects: [{ type: 'biodivRate', value: 0.5 }],
+    svRequired: 120_000,
   },
 
   // ── Skoglig praxis (sv production) ──
@@ -113,6 +117,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 120,
     prerequisites: ['kt_naturlig_foryngring'],
     effects: [{ type: 'inkomstMult', value: 0.25 }],
+    svRequired: 25_000,
   },
   {
     id: 'kt_agroforestry',
@@ -123,6 +128,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 200,
     prerequisites: ['kt_timmer_kvalitet'],
     effects: [{ type: 'svPerSecondMult', value: 0.30 }],
+    svRequired: 60_000,
   },
   {
     id: 'kt_skoglig_master',
@@ -136,6 +142,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
       { type: 'svPerClickMult', value: 0.20 },
       { type: 'svPerSecondMult', value: 0.25 },
     ],
+    svRequired: 120_000,
   },
 
   // ── Ekonomiskt oberoende (inkomst/resistance) ──
@@ -168,6 +175,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 150,
     prerequisites: ['kt_kooperativ_grund'],
     effects: [{ type: 'attackResistance', value: 0.25 }],
+    svRequired: 25_000,
   },
   {
     id: 'kt_ekonomisk_resiliens',
@@ -178,6 +186,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 250,
     prerequisites: ['kt_juridisk_kunskap'],
     effects: [{ type: 'lureCostReduction', value: 0.50 }],
+    svRequired: 60_000,
   },
   {
     id: 'kt_ekonomi_master',
@@ -188,6 +197,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 400,
     prerequisites: ['kt_ekonomisk_resiliens'],
     effects: [{ type: 'inkomstMult', value: 0.50 }],
+    svRequired: 120_000,
   },
 
   // ── Samhällspåverkan (legacy/political) ──
@@ -220,6 +230,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 180,
     prerequisites: ['kt_media_kontakter'],
     effects: [{ type: 'legacyRate', value: 1.0 }],
+    svRequired: 25_000,
   },
   {
     id: 'kt_riksdagskontakt',
@@ -230,6 +241,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 300,
     prerequisites: ['kt_kommunpolitik'],
     effects: [{ type: 'legacyRate', value: 2.0 }],
+    svRequired: 60_000,
   },
   {
     id: 'kt_samhall_master',
@@ -240,6 +252,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     cost: 500,
     prerequisites: ['kt_riksdagskontakt'],
     effects: [{ type: 'legacyRate', value: 3.0 }],
+    svRequired: 120_000,
   },
 ]
 

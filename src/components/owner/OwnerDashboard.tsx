@@ -1,5 +1,6 @@
 import { useGameStore } from '../../store/gameStore'
 import { formatNumber } from '../../engine/format'
+import { getOwnerPhase, getOwnerPhaseProgress } from '../../engine/phases'
 import { OwnerClickArea } from './OwnerClickArea'
 import { OwnerGenerators } from './OwnerGenerators'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
@@ -13,9 +14,33 @@ export function OwnerDashboard() {
   const realCarbonPos = useGameStore(s => s.realCarbonPos)
   const legacy = useGameStore(s => s.legacy)
   const deadwood = useGameStore(s => s.deadwood)
+  const totalSV = useGameStore(s => s.totalSkogsvardering)
+
+  const phaseInfo = getOwnerPhase(totalSV)
+  const phaseProgress = getOwnerPhaseProgress(totalSV)
 
   return (
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
+      {/* Owner Phase Indicator */}
+      <div className="bg-white/50 border border-owner-accent/15 rounded-sm p-2.5">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-medium text-owner-accent">
+            Fas {phaseInfo.phase}: {phaseInfo.name}
+          </span>
+          {phaseProgress.next !== null && (
+            <span className="text-[0.65rem] text-owner-text/40 font-numbers">
+              {formatNumber(totalSV)} / {formatNumber(phaseProgress.next)}
+            </span>
+          )}
+        </div>
+        <div className="w-full h-1.5 bg-owner-text/10 rounded-sm overflow-hidden">
+          <div
+            className="h-full bg-owner-accent/50 transition-all duration-700"
+            style={{ width: `${phaseProgress.progress * 100}%` }}
+          />
+        </div>
+      </div>
+
       {/* Top Resource Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <OwnerResourceCard label="Skogsvärde" value={skogsvardering} />
