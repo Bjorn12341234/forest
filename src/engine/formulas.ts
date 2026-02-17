@@ -9,18 +9,18 @@ export function calculateUpgradeCost(baseCost: number, count: number): number {
 // ── Kapital Conversion Rate ──
 // Base rate scales slightly with phase
 const KAPITAL_BASE_RATE: Record<number, number> = {
-  1: 0.01,
-  2: 0.015,
-  3: 0.02,
-  4: 0.025,
-  5: 0.03,
-  6: 0.04,
-  7: 0.05,
-  8: 0.06,
-  9: 0.07,
-  10: 0.12,
-  11: 0.15,
-  12: 0.20,
+  1: 0.02,
+  2: 0.03,
+  3: 0.04,
+  4: 0.06,
+  5: 0.08,
+  6: 0.10,
+  7: 0.12,
+  8: 0.14,
+  9: 0.16,
+  10: 0.20,
+  11: 0.25,
+  12: 0.30,
 }
 
 export function getKapitalConversionRate(phase: number): number {
