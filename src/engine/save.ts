@@ -254,8 +254,8 @@ const migrations: Record<number, MigrationFn> = {
   7: (save) => {
     // v7 → v8: Add entropi, simplify expansion targets (remove pressure/resistance)
     const state = save.state as GameState
-    if ((state as Record<string, unknown>).entropi === undefined) {
-      (state as Record<string, unknown>).entropi = state.phase >= 12 ? 100 : 100
+    if ((state as unknown as Record<string, unknown>).entropi === undefined) {
+      (state as unknown as Record<string, unknown>).entropi = state.phase >= 12 ? 100 : 100
     }
 
     // Convert expansion target states: remove pressure/resistance, drop removed targets
