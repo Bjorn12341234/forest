@@ -15,7 +15,7 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     id: 'know_maktutredning',
     name: 'Läs Skogsstyrelsens maktutredning',
     description: 'Dina ögon öppnas. Du läser om svängdörrarna. Du förstår varför "gratisplanen" var gratis.',
-    cost: 200,
+    cost: 25,
     kunskapReward: 10,
     icon: '📜',
   },

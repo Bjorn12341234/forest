@@ -22,7 +22,7 @@ export function KnowledgePanel() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const remaining = Math.max(0, 30_000 - (Date.now() - lastKnowledgeActivityAt))
+      const remaining = Math.max(0, 15_000 - (Date.now() - lastKnowledgeActivityAt))
       setCooldownRemaining(remaining)
     }, 500)
     return () => clearInterval(interval)

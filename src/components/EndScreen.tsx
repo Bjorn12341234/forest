@@ -121,14 +121,41 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: POST_CREDITS.length * 2.5 + 2 }}
-            className="mt-12 flex flex-col gap-6 items-center"
+            className="mt-12 flex flex-col gap-8 items-center"
           >
+            <div className="w-12 h-px bg-white/20" />
+            <p
+              className="text-xs text-white/40 text-center leading-relaxed max-w-xs"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+            >
+              Årsredovisningen är klar. Spelet kunde sluta här.
+            </p>
+            <p
+              className="text-[0.6rem] text-white/25 text-center leading-relaxed max-w-xs"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+            >
+              Men det finns en epilog — tre faser bortom fysikens gränser, om du vill.
+            </p>
+
+            <button
+              onClick={() => {
+                useGameStore.setState({ epilogChosen: true })
+                onContinue()
+              }}
+              className="px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+            >
+              EPILOGEN — FORTSÄTT
+            </button>
+
             <button
               onClick={() => setStage('reality')}
-              className="px-8 py-3 bg-white text-black text-sm font-bold tracking-wider cursor-pointer border-none hover:bg-gray-200 transition-colors"
+              className="px-6 py-2 bg-transparent text-white/50 text-xs tracking-wider cursor-pointer border border-white/20 hover:bg-white/10 transition-colors"
+              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
             >
-              FORTSÄTT EXPANDERA
+              NEJ. VISA VERKLIGHETEN.
             </button>
+
             <button
               onClick={onReset}
               className="px-4 py-1 bg-transparent text-white/20 text-[0.5rem] tracking-wider cursor-pointer border-none hover:text-white/40 transition-colors"

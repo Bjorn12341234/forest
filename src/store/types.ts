@@ -122,6 +122,23 @@ export interface GameState {
 
   // Owner phase (1-3 based on totalSkogsvardering)
   ownerPhase: number
+
+  // ── Sprint 10: Game Feel ──
+
+  // Entropy-slowing purchases (phase 12)
+  entropyPurchases: Record<string, boolean>
+
+  // Milestones already celebrated (don't re-toast)
+  milestonesSeen: Record<string, boolean>
+
+  // Player chose to continue to Epilog (phases 10-12) after Årsredovisning
+  epilogChosen: boolean
+
+  // Game speed multiplier (1 = normal, 5 = fast-forward) — ephemeral, not persisted
+  gameSpeed: number
+
+  // Golden opportunity production multiplier active until (timestamp, 0 = inactive)
+  goldenMultiplierUntil: number
 }
 
 export interface GeneratorState {
@@ -260,6 +277,10 @@ export interface GameActions {
   buyExpansionTarget: (id: string) => void
   invadeCountry: (id: string) => void
   allocatePressure: (id: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => void
+  buyEntropyPurchase: (id: string) => void
+  setGameSpeed: (speed: number) => void
+  activateGoldenMultiplier: (durationMs: number, multiplier: number) => void
+  markMilestoneSeen: (key: string) => void
   resolveEvent: (choiceIndex: number) => void
   dismissEvent: () => void
   save: () => void

@@ -2,7 +2,7 @@ import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
 const BACKUP_KEY = 'silva_maximus_backup'
-const CURRENT_VERSION = 9
+const CURRENT_VERSION = 10
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -288,6 +288,19 @@ const migrations: Record<number, MigrationFn> = {
       (state as unknown as Record<string, unknown>).ownerPhase = 1
     }
     save.version = 9
+    return save
+  },
+  9: (save) => {
+    // v9 → v10: Add Sprint 10 game feel fields
+    const state = save.state as GameState
+    const s = state as unknown as Record<string, unknown>
+    if (!s.entropyPurchases) s.entropyPurchases = {}
+    if (!s.milestonesSeen) s.milestonesSeen = {}
+    if (s.epilogChosen === undefined) s.epilogChosen = false
+    // Ephemeral fields (not persisted but needed for type consistency)
+    s.gameSpeed = 1
+    s.goldenMultiplierUntil = 0
+    save.version = 10
     return save
   },
 }

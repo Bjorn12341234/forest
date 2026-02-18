@@ -32,6 +32,9 @@ import { OwnerEndScreen } from './components/owner/OwnerEndScreen'
 import { FinalEndScreen } from './components/FinalEndScreen'
 import { RealityPage } from './components/EndScreen'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { useMilestones, type MilestoneToast } from './hooks/useMilestones'
+import { MilestoneToastManager } from './components/MilestoneToast'
+import { GoldenOpportunity, GoldenMultiplierIndicator } from './components/GoldenOpportunity'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -53,6 +56,19 @@ function App() {
   // Achievement toasts
   const { toasts, showToast, dismissToast } = useAchievementToasts()
   useAchievements(showToast)
+
+  // Milestone toasts
+  const [milestoneToasts, setMilestoneToasts] = useState<MilestoneToast[]>([])
+  const handleMilestoneToast = useCallback((toast: MilestoneToast) => {
+    setMilestoneToasts(prev => [...prev, toast])
+    setTimeout(() => {
+      setMilestoneToasts(prev => prev.filter(t => t.id !== toast.id))
+    }, 3000)
+  }, [])
+  const dismissMilestone = useCallback((id: number) => {
+    setMilestoneToasts(prev => prev.filter(t => t.id !== id))
+  }, [])
+  useMilestones(handleMilestoneToast)
 
   // Load save on mount
   useEffect(() => {
@@ -113,6 +129,8 @@ function App() {
         onTabChange={setActiveTab}
         toasts={toasts}
         onDismissToast={dismissToast}
+        milestoneToasts={milestoneToasts}
+        onDismissMilestone={dismissMilestone}
         onReset={() => {
           reset()
           useGameStore.setState({ gameMode: null })
@@ -135,6 +153,13 @@ function App() {
 
       {/* Achievement Toasts */}
       <AchievementToastManager toasts={toasts} onDismiss={dismissToast} />
+
+      {/* Milestone Toasts */}
+      <MilestoneToastManager toasts={milestoneToasts} onDismiss={dismissMilestone} />
+
+      {/* Golden Opportunity */}
+      <GoldenOpportunity />
+      <GoldenMultiplierIndicator />
 
       {/* Event Modal */}
       <ErrorBoundary fallbackLabel="Händelser">
@@ -265,11 +290,13 @@ function App() {
 
 type OwnerTab = 'dashboard' | 'knowledge'
 
-function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, showSettings, onShowSettings, onHideSettings, showAchievements, onShowAchievements, onHideAchievements }: {
+function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToasts, onDismissMilestone, onReset, showSettings, onShowSettings, onHideSettings, showAchievements, onShowAchievements, onHideAchievements }: {
   activeTab: Tab
   onTabChange: (tab: Tab) => void
   toasts: ReturnType<typeof useAchievementToasts>['toasts']
   onDismissToast: (id: number) => void
+  milestoneToasts: MilestoneToast[]
+  onDismissMilestone: (id: number) => void
   onReset: () => void
   showSettings: boolean
   onShowSettings: () => void
@@ -314,6 +341,13 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, onReset, sho
 
       {/* Achievement Toasts */}
       <AchievementToastManager toasts={toasts} onDismiss={onDismissToast} />
+
+      {/* Milestone Toasts */}
+      <MilestoneToastManager toasts={milestoneToasts} onDismiss={onDismissMilestone} />
+
+      {/* Golden Opportunity (Skogens Gåva) */}
+      <GoldenOpportunity />
+      <GoldenMultiplierIndicator />
 
       {/* Event Modal (owner events) */}
       <ErrorBoundary fallbackLabel="Händelser">

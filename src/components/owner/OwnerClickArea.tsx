@@ -1,9 +1,10 @@
-import { useRef, useCallback, useMemo } from 'react'
+import { useRef, useCallback, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { formatNumber } from '../../engine/format'
 import { ParticleCanvas, type ParticleCanvasHandle } from '../ui/ParticleCanvas'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
+import { playClick } from '../../engine/audio'
 import { OWNER_CLICK_UPGRADES } from '../../data/ownerClickUpgrades'
 
 // Flavourtext changes with skogsvardering milestones
@@ -38,8 +39,46 @@ export function OwnerClickArea() {
 
   const flavour = getFlavour(totalSV)
 
+  // Click streak tracking
+  const [streak, setStreak] = useState(0)
+  const [streakBonus, setStreakBonus] = useState(0)
+  const lastClickRef = useRef(0)
+  const streakTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const handleClick = useCallback((e: React.MouseEvent) => {
+    const now = Date.now()
+    const timeSinceLast = now - lastClickRef.current
+    lastClickRef.current = now
+
+    const newStreak = timeSinceLast <= 500 ? streak + 1 : 1
+    setStreak(newStreak)
+
+    if (newStreak >= 25 && streakBonus < 1.0) {
+      setStreakBonus(1.0)
+      const bonus = svPerClick * 1.0
+      useGameStore.setState(s => ({
+        skogsvardering: s.skogsvardering + bonus,
+        totalSkogsvardering: s.totalSkogsvardering + bonus,
+      }))
+      if (particlesRef.current && containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect()
+        particlesRef.current.emit(rect.width / 2, rect.height / 2, 24, '#2D6A4F')
+      }
+      if (streakTimerRef.current) clearTimeout(streakTimerRef.current)
+      streakTimerRef.current = setTimeout(() => { setStreakBonus(0); setStreak(0) }, 5000)
+    } else if (newStreak >= 10 && streakBonus < 0.5) {
+      setStreakBonus(0.5)
+      const bonus = svPerClick * 0.5
+      useGameStore.setState(s => ({
+        skogsvardering: s.skogsvardering + bonus,
+        totalSkogsvardering: s.totalSkogsvardering + bonus,
+      }))
+      if (streakTimerRef.current) clearTimeout(streakTimerRef.current)
+      streakTimerRef.current = setTimeout(() => { setStreakBonus(0); setStreak(0) }, 5000)
+    }
+
     ownerClick()
+    playClick()
 
     if (particlesRef.current && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
@@ -47,7 +86,7 @@ export function OwnerClickArea() {
       const y = e.clientY - rect.top
       particlesRef.current.emit(x, y, 8, '#2D6A4F')
     }
-  }, [ownerClick])
+  }, [ownerClick, streak, streakBonus, svPerClick])
 
   const visibleUpgrades = useMemo(() => {
     return OWNER_CLICK_UPGRADES.filter(cu => {
@@ -68,6 +107,9 @@ export function OwnerClickArea() {
         <div className="flex gap-4 justify-center mt-1">
           <span className="text-owner-text/50 text-sm">
             +{formatNumber(svPerClick)}/klick
+            {streakBonus > 0 && (
+              <span className="text-owner-accent ml-1">(+{Math.round(streakBonus * 100)}%)</span>
+            )}
           </span>
           {svPerSecond > 0 && (
             <span className="text-owner-text/50 text-sm">
@@ -86,9 +128,17 @@ export function OwnerClickArea() {
           whileHover={{ scale: 1.03 }}
           onClick={handleClick}
           className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
-                     border-2 border-owner-accent/40 bg-owner-accent/10
+                     border-2 bg-owner-accent/10
                      flex items-center justify-center
-                     hover:border-owner-accent transition-colors"
+                     hover:border-owner-accent transition-all duration-200"
+          style={{
+            borderColor: streakBonus > 0
+              ? `rgba(45, 106, 79, ${0.5 + streakBonus * 0.5})`
+              : undefined,
+            boxShadow: streakBonus > 0
+              ? `0 0 ${20 + streakBonus * 20}px rgba(45, 106, 79, ${0.2 + streakBonus * 0.3})`
+              : undefined,
+          }}
         >
           <div className="absolute inset-2 rounded-full border border-owner-accent/20" />
           <span className="text-owner-accent font-bold text-sm sm:text-base text-center leading-tight px-4">

@@ -207,7 +207,7 @@ export const OWNER_KNOWLEDGE_UPGRADES: OwnerKnowledgeUpgrade[] = [
     description: 'Du visar grannen din skog. Hans plantage ser plötsligt ut som en parkeringsplats.',
     category: 'samhallelig',
     icon: '🗣️',
-    cost: 50,
+    cost: 25,
     prerequisites: [],
     effects: [{ type: 'legacyRate', value: 0.2 }],
   },

@@ -410,6 +410,202 @@ export function playPhaseTransition() {
   rise.stop(now + 3.5)
 }
 
+/** Phase up fanfare: ascending C→E→G triangle wave, 500ms total */
+export function playPhaseUp() {
+  const vol = getEffectiveVolume()
+  if (vol === 0) return
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  const notes = [523, 659, 784] // C5, E5, G5
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    const t = now + i * 0.15
+
+    osc.type = 'triangle'
+    osc.frequency.setValueAtTime(freq, t)
+
+    gain.gain.setValueAtTime(0.14 * vol, t)
+    gain.gain.linearRampToValueAtTime(0.1 * vol, t + 0.12)
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start(t)
+    osc.stop(t + 0.35)
+  })
+}
+
+/** Era change fanfare: C→E→G→C↑ with reverb tail, 1.2s total */
+export function playEraChange() {
+  const vol = getEffectiveVolume()
+  if (vol === 0) return
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  const notes = [523, 659, 784, 1047] // C5, E5, G5, C6
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    const t = now + i * 0.2
+
+    osc.type = 'triangle'
+    osc.frequency.setValueAtTime(freq, t)
+
+    gain.gain.setValueAtTime(0.15 * vol, t)
+    gain.gain.linearRampToValueAtTime(0.12 * vol, t + 0.15)
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start(t)
+    osc.stop(t + 0.65)
+  })
+
+  // Reverb-like tail: quiet octave-up shimmer
+  const shimmer = ctx.createOscillator()
+  const shimmerGain = ctx.createGain()
+  shimmer.type = 'sine'
+  shimmer.frequency.setValueAtTime(2093, now + 0.8) // C7
+  shimmerGain.gain.setValueAtTime(0.04 * vol, now + 0.8)
+  shimmerGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8)
+  shimmer.connect(shimmerGain)
+  shimmerGain.connect(ctx.destination)
+  shimmer.start(now + 0.8)
+  shimmer.stop(now + 2)
+}
+
+/** Owner phase up: warm ascending A→C#→E sine wave */
+export function playOwnerPhaseUp() {
+  const vol = getEffectiveVolume()
+  if (vol === 0) return
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  const notes = [440, 554, 659] // A4, C#5, E5
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    const t = now + i * 0.18
+
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(freq, t)
+
+    gain.gain.setValueAtTime(0.12 * vol, t)
+    gain.gain.linearRampToValueAtTime(0.08 * vol, t + 0.15)
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start(t)
+    osc.stop(t + 0.45)
+  })
+}
+
+/** Milestone ding: high C bell-like, 200ms */
+export function playMilestoneDing() {
+  const vol = getEffectiveVolume()
+  if (vol === 0) return
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  // Bell-like: fundamental + inharmonic partial
+  const osc1 = ctx.createOscillator()
+  const osc2 = ctx.createOscillator()
+  const gain = ctx.createGain()
+
+  osc1.type = 'sine'
+  osc1.frequency.setValueAtTime(1047, now) // C6
+  osc2.type = 'sine'
+  osc2.frequency.setValueAtTime(2637, now) // ~E7, inharmonic partial
+
+  gain.gain.setValueAtTime(0.15 * vol, now)
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5)
+
+  osc1.connect(gain)
+  osc2.connect(gain)
+  gain.connect(ctx.destination)
+  osc1.start(now)
+  osc1.stop(now + 0.55)
+  osc2.start(now)
+  osc2.stop(now + 0.3)
+}
+
+/** Golden opportunity: shimmery ascending sparkle */
+export function playGoldenAppear() {
+  const vol = getEffectiveVolume()
+  if (vol === 0) return
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  // Quick ascending sparkle: 4 rapid notes
+  const notes = [880, 1175, 1397, 1760] // A5, D6, F6, A6
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    const t = now + i * 0.06
+
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(freq, t)
+
+    gain.gain.setValueAtTime(0.08 * vol, t)
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start(t)
+    osc.stop(t + 0.2)
+  })
+}
+
+/** Golden opportunity clicked: satisfying crunch + sparkle */
+export function playGoldenClick() {
+  const vol = getEffectiveVolume()
+  if (vol === 0) return
+  const ctx = getContext()
+  if (!ctx) return
+  const now = ctx.currentTime
+
+  // Big satisfying chime
+  const notes = [1047, 1319, 1568, 2093] // C6, E6, G6, C7
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    const t = now + i * 0.08
+
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(freq, t)
+
+    gain.gain.setValueAtTime(0.14 * vol, t)
+    gain.gain.linearRampToValueAtTime(0.1 * vol, t + 0.1)
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start(t)
+    osc.stop(t + 0.55)
+  })
+
+  // Low confirmation thump
+  const thump = ctx.createOscillator()
+  const thumpGain = ctx.createGain()
+  thump.type = 'sine'
+  thump.frequency.setValueAtTime(150, now)
+  thump.frequency.exponentialRampToValueAtTime(60, now + 0.1)
+  thumpGain.gain.setValueAtTime(0.12 * vol, now)
+  thumpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15)
+  thump.connect(thumpGain)
+  thumpGain.connect(ctx.destination)
+  thump.start(now)
+  thump.stop(now + 0.2)
+}
+
 // ── Ambient Audio System ──
 // Multi-layered soundscapes that evolve from idyllic nature to industrial silence
 

@@ -18,7 +18,7 @@ export const OWNER_CLICK_UPGRADES: OwnerClickUpgradeData[] = [
     id: 'oclk_kurs',
     name: 'Skogskunskapskurs',
     description: 'Plockhugget håller kurs. De tar betalt, till skillnad från industrin. Men de ljuger inte heller.',
-    cost: 500,
+    cost: 200,
     svPerClickBonus: 2,
     bonuses: { kunskap: 5 },
     icon: '📖',

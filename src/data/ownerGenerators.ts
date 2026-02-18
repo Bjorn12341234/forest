@@ -36,6 +36,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 500,
     svPerSecond: 2,
     inkomstPerSecond: 0.5,
+    bonuses: { kunskap: 0.05 },
     costScale: 1.12,
   },
   {

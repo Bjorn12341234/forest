@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { formatNumber } from '../engine/format'
 import { ClickArea } from './ClickArea'
@@ -8,6 +8,13 @@ import { AnimatedNumber } from './ui/AnimatedNumber'
 import { WarningBanner } from './WarningBanner'
 
 import { PHASE_NAMES } from '../engine/phases'
+
+// ── Entropy purchases data (industry path, phase 12) ──
+const ENTROPY_PURCHASES = [
+  { id: 'entropy_slow_1', name: 'Byråkratisk Fördröjning', description: 'Lobby förhindrar effektiv entropihantering. −30% dränering.', resource: 'lobby' as const, cost: 50_000 },
+  { id: 'entropy_slow_2', name: 'Tidskristallisering', description: 'Kapital investerat i temporal stabilisering. −30% dränering.', resource: 'kapital' as const, cost: 500_000_000_000 },
+  { id: 'entropy_slow_3', name: 'Entropikommitténs Utredning', description: 'En utredning tar alltid tid. −30% dränering.', resource: 'lobby' as const, cost: 200_000 },
+]
 
 const PHASE_THRESHOLDS: Record<number, number> = {
   1: 10_000,
@@ -33,8 +40,39 @@ export function Dashboard() {
   const lobby = useGameStore(s => s.lobby)
   const species = useGameStore(s => s.species)
   const biodiversity = useGameStore(s => s.biodiversity)
+  const gameSpeed = useGameStore(s => s.gameSpeed)
+  const setGameSpeed = useGameStore(s => s.setGameSpeed)
+  const activeEvent = useGameStore(s => s.activeEvent)
+  const pendingTransition = useGameStore(s => s.pendingTransition)
+  const entropi = useGameStore(s => s.entropi)
+  const entropyPurchases = useGameStore(s => s.entropyPurchases)
+  const buyEntropyPurchase = useGameStore(s => s.buyEntropyPurchase)
+  const stammarPerSecond = useGameStore(s => s.stammarPerSecond)
 
   const [mobileExpanded, setMobileExpanded] = useState(false)
+
+  // Auto-disable fast-forward during events/transitions
+  useEffect(() => {
+    if ((activeEvent || pendingTransition) && gameSpeed > 1) {
+      setGameSpeed(1)
+    }
+  }, [activeEvent, pendingTransition, gameSpeed, setGameSpeed])
+
+  const toggleFastForward = useCallback(() => {
+    setGameSpeed(gameSpeed > 1 ? 1 : 5)
+  }, [gameSpeed, setGameSpeed])
+
+  // Calculate entropy drain rate and ETA (phase 12)
+  const entropyDrainRate = phase >= 12
+    ? (() => {
+        const baseDrain = Math.min(0.5, stammarPerSecond / 1e10)
+        const purchaseCount = Object.values(entropyPurchases).filter(Boolean).length
+        return baseDrain * Math.pow(0.7, purchaseCount)
+      })()
+    : 0
+  const entropyETA = entropyDrainRate > 0
+    ? Math.ceil(entropi / entropyDrainRate)
+    : Infinity
 
   const phaseName = PHASE_NAMES[phase] ?? `Fas ${phase}`
   const nextThreshold = PHASE_THRESHOLDS[phase] ?? Infinity
@@ -128,6 +166,78 @@ export function Dashboard() {
         </div>
       </GlassCard>
 
+      {/* Fast-Forward Button (phase 7+) */}
+      {phase >= 7 && (
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleFastForward}
+            disabled={!!activeEvent || !!pendingTransition}
+            className={`px-4 py-2 rounded-sm text-sm font-medium tracking-wider cursor-pointer border transition-all min-h-[44px]
+              ${gameSpeed > 1
+                ? 'bg-accent/20 border-accent text-accent'
+                : 'glass-card border-text-muted/20 text-text-muted hover:text-text-primary'
+              }
+              ${(activeEvent || pendingTransition) ? 'opacity-40 cursor-not-allowed' : ''}`}
+            aria-label={gameSpeed > 1 ? 'Stäng av tidsskift' : 'Aktivera tidsskift (5× hastighet)'}
+          >
+            ⏩ Tidsskift {gameSpeed > 1 ? `(${gameSpeed}×)` : ''}
+          </button>
+          {gameSpeed > 1 && (
+            <span className="text-xs text-accent animate-pulse">Snabbspolar...</span>
+          )}
+        </div>
+      )}
+
+      {/* Entropy Display (phase 12) */}
+      {phase >= 12 && (
+        <GlassCard padding="sm">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-text-primary">
+                Entropi: {entropi.toFixed(1)}%
+              </span>
+              <span className="text-xs text-text-muted font-numbers">
+                −{entropyDrainRate.toFixed(3)}/s
+                {entropyETA < Infinity && ` — ~${formatTime(entropyETA)} kvar`}
+              </span>
+            </div>
+            <div className="w-full h-2 bg-bg-tertiary rounded-sm overflow-hidden">
+              <div
+                className="h-full bg-danger/80 transition-all duration-300"
+                style={{ width: `${entropi}%` }}
+              />
+            </div>
+            {/* Entropy-slowing purchases */}
+            <div className="flex flex-col gap-1 mt-1">
+              {ENTROPY_PURCHASES.map(ep => {
+                const bought = entropyPurchases[ep.id]
+                const resourceVal = ep.resource === 'lobby' ? lobby : kapital
+                const canAfford = !bought && resourceVal >= ep.cost
+                return (
+                  <button
+                    key={ep.id}
+                    onClick={() => canAfford && buyEntropyPurchase(ep.id)}
+                    disabled={bought || !canAfford}
+                    className={`text-left px-3 py-2 rounded-sm text-xs border cursor-pointer transition-all min-h-[44px]
+                      ${bought
+                        ? 'border-success/30 bg-success/5 text-success'
+                        : canAfford
+                          ? 'border-accent/30 hover:border-accent text-text-secondary'
+                          : 'border-text-muted/10 text-text-muted/50 cursor-not-allowed'
+                      }`}
+                  >
+                    <span className="font-medium">{ep.name}</span>
+                    {bought ? ' ✓' : ` — ${formatNumber(ep.cost)} ${ep.resource === 'lobby' ? 'PK' : 'Mkr'}`}
+                    <br />
+                    <span className="text-text-muted">{ep.description}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </GlassCard>
+      )}
+
       {/* Two-Panel Layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left Panel: Click Area */}
@@ -166,6 +276,17 @@ function ResourceCard({ label, value, format, className = '' }: ResourceCardProp
       </div>
     </GlassCard>
   )
+}
+
+function formatTime(seconds: number): string {
+  if (seconds >= 3600) {
+    const h = Math.floor(seconds / 3600)
+    const m = Math.floor((seconds % 3600) / 60)
+    return `${h}h ${m}m`
+  }
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  return `${m}m ${s}s`
 }
 
 function SpeciesCard({ species, biodiversity }: { species: number; biodiversity: number }) {

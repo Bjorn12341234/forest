@@ -133,6 +133,13 @@ export const INITIAL_STATE: GameState = {
 
   lastKnowledgeActivityAt: 0,
   ownerPhase: 1,
+
+  // Sprint 10: Game Feel
+  entropyPurchases: {},
+  milestonesSeen: {},
+  epilogChosen: false,
+  gameSpeed: 1,
+  goldenMultiplierUntil: 0,
 }
 
 // ── Helpers ──
@@ -222,6 +229,12 @@ function computeStammarPerClick(
 
 // ── Cached knowledge modifiers (recomputed on purchaseOwnerKnowledge/load/reset) ──
 let knowledgeMods: KnowledgeModifiers = computeKnowledgeModifiers({})
+
+// Cooldown between industry attacks/lures (module-level, not saved)
+let lastAttackResolvedAt = 0
+
+// Golden opportunity multiplier value (set when activated, applied in tick)
+let goldenMultiplierValue = 3
 
 function refreshKnowledgeModifiers(upgrades: Record<string, boolean>) {
   knowledgeMods = computeKnowledgeModifiers(upgrades)
@@ -315,11 +328,11 @@ function ownerTick(
   const carbonGrowth = (totalSVPS * 0.01 + genCarbon) * dt
   // Deadwood: grows from generators
   const deadwoodGrowth = genDeadwood * dt
-  // Kunskap: passive from generators (kooperativ)
-  const kunskapGrowth = genKunskap * dt
+  // Kunskap: passive observation + generators (kooperativ)
+  const kunskapGrowth = (0.05 + genKunskap) * dt
   // Legacy: base from time + biodiv + resistance + generator bonuses + knowledge tree
   const resistedCount = Object.values(state.ownerAttacksResisted).filter(Boolean).length
-  const legacyGrowth = (0.03 + state.biodivOwner * 0.0002 + resistedCount * 0.005 + genLegacy + knowledgeMods.legacyRate) * dt
+  const legacyGrowth = (0.15 + state.biodivOwner * 0.0003 + resistedCount * 0.02 + genLegacy + knowledgeMods.legacyRate) * dt
 
   const newTotalSV = state.totalSkogsvardering + svGained
 
@@ -338,8 +351,9 @@ function ownerTick(
     lastTickAt: now,
   }
 
-  // ── Industry attack triggers ──
-  if (!state.activeIndustryAttack && !state.activeIndustryLure && !state.activeEvent) {
+  // ── Industry attack triggers (min 45s cooldown between attacks/lures) ──
+  if (!state.activeIndustryAttack && !state.activeIndustryLure && !state.activeEvent
+    && now - lastAttackResolvedAt >= 45_000) {
     for (const atk of INDUSTRY_ATTACKS) {
       if (state.ownerAttacksResisted[atk.id] || state.ownerAttacksSurrendered[atk.id]) continue
       if (newTotalSV >= atk.triggerSV) {
@@ -393,9 +407,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
   tick: (now: number) => {
     const state = get()
-    const dt = (now - state.lastTickAt) / 1000
+    const rawDt = (now - state.lastTickAt) / 1000
 
-    if (dt <= 0 || dt > 60) return
+    if (rawDt <= 0 || rawDt > 60) return
+
+    // Apply game speed multiplier (fast-forward)
+    const dt = rawDt * state.gameSpeed
 
     // Skip tick if no game mode selected yet
     if (!state.gameMode) {
@@ -464,8 +481,10 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const conversionRate = getKapitalConversionRate(state.phase)
     const trustModifier = getOwnerTrustModifier(state.ownerTrust)
     const kapitalBoost = lobbyMods.kapitalBoost
-    const totalStammarPS = stammarPS + expansionStammarPS + countryStammarPS
-    const kapitalRate = stammarPS * conversionRate * trustModifier * kapitalBoost + upgradeMods.flatKapitalPS + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
+    // Apply golden opportunity multiplier if active
+    const goldenMult = (state.goldenMultiplierUntil > now) ? goldenMultiplierValue : 1
+    const totalStammarPS = (stammarPS + expansionStammarPS + countryStammarPS) * goldenMult
+    const kapitalRate = stammarPS * goldenMult * conversionRate * trustModifier * kapitalBoost + upgradeMods.flatKapitalPS + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
 
     const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
@@ -575,7 +594,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     // ── Entropy countdown (phase 12) ──
     if (state.phase >= 12 && state.entropi > 0) {
-      const drainPerSecond = Math.min(0.5, totalStammarPS / 1e10)
+      const baseDrain = Math.min(0.5, totalStammarPS / 1e10)
+      // Apply entropy-slowing purchases (each -30%)
+      const purchaseCount = Object.values(state.entropyPurchases).filter(Boolean).length
+      const entropySlowFactor = Math.pow(0.7, purchaseCount)
+      const drainPerSecond = baseDrain * entropySlowFactor
       const newEntropi = Math.max(0, state.entropi - drainPerSecond * dt)
       updates.entropi = newEntropi
     }
@@ -686,9 +709,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     if (state.inkomst < data.cost) return
 
-    // 30-second global cooldown between knowledge activity purchases
+    // 15-second global cooldown between knowledge activity purchases
     const now = Date.now()
-    if (now - state.lastKnowledgeActivityAt < 30_000) return
+    if (now - state.lastKnowledgeActivityAt < 15_000) return
 
     set({
       inkomst: state.inkomst - data.cost,
@@ -732,6 +755,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const atk = getIndustryAttack(attackId)
     if (!atk) return
 
+    lastAttackResolvedAt = state.lastTickAt
+
     if (accept) {
       // Player surrenders to the attack
       const updates: Partial<GameState> = {
@@ -761,7 +786,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const updates: Partial<GameState> = {
         activeIndustryAttack: null,
         ownerAttacksResisted: { ...state.ownerAttacksResisted, [attackId]: true },
-        kunskap: state.kunskap - Math.floor(effectiveKunskapReq * 0.1), // small kunskap cost
+        kunskap: state.kunskap + 10, // you learn from standing your ground
+        legacy: state.legacy + 25, // bonus legacy for standing firm
       }
       if (atk.extraCostResource === 'inkomst' && atk.extraCostAmount) {
         updates.inkomst = state.inkomst - atk.extraCostAmount
@@ -777,6 +803,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     const lure = getIndustryLure(lureId)
     if (!lure) return
+
+    lastAttackResolvedAt = state.lastTickAt
 
     if (accept) {
       // Player fell for the trap
@@ -1108,6 +1136,43 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
+  buyEntropyPurchase: (id: string) => {
+    const state = get()
+    if (state.entropyPurchases[id]) return
+    if (state.phase < 12) return
+
+    const costs: Record<string, { resource: 'kapital' | 'lobby'; amount: number }> = {
+      entropy_slow_1: { resource: 'lobby', amount: 50_000 },
+      entropy_slow_2: { resource: 'kapital', amount: 500_000_000_000 },
+      entropy_slow_3: { resource: 'lobby', amount: 200_000 },
+    }
+    const cost = costs[id]
+    if (!cost) return
+
+    const current = state[cost.resource]
+    if (typeof current !== 'number' || current < cost.amount) return
+
+    set({
+      [cost.resource]: current - cost.amount,
+      entropyPurchases: { ...state.entropyPurchases, [id]: true },
+    } as Partial<GameStore>)
+  },
+
+  setGameSpeed: (speed: number) => {
+    set({ gameSpeed: Math.max(1, Math.min(5, speed)) })
+  },
+
+  activateGoldenMultiplier: (durationMs: number, multiplier: number) => {
+    goldenMultiplierValue = multiplier
+    set({ goldenMultiplierUntil: Date.now() + durationMs })
+  },
+
+  markMilestoneSeen: (key: string) => {
+    set(state => ({
+      milestonesSeen: { ...state.milestonesSeen, [key]: true },
+    }))
+  },
+
   resolveEvent: (choiceIndex: number) => {
     const state = get()
     if (!state.activeEvent) return
@@ -1212,6 +1277,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       ownerKnowledgeUpgrades: {},
       lastKnowledgeActivityAt: 0,
       ownerPhase: 1,
+      entropyPurchases: {},
+      milestonesSeen: {},
+      epilogChosen: false,
+      gameSpeed: 1,
+      goldenMultiplierUntil: 0,
     })
   },
 

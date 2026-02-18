@@ -830,6 +830,261 @@
 
 ---
 
+## Sprint 10: Juice & Celebration (Game Feel)
+
+> **Source:** `review.md` — Independent game review findings
+> **Goal:** Make the game *feel* better. Phase transitions, milestones, and active play are currently muted. Add celebration, reward active players, reduce endgame slog.
+
+### 10A — Phase Transition Celebration
+
+- [x] 10A-1: Phase Transition Overhaul
+  - Current: simple text overlay with phase name
+  - New: particle burst (24 orange particles from center), screen pulse (subtle scale 1.0→1.02→1.0 over 500ms), phase-specific sound crescendo
+  - Add "ERA CHANGE" mega-celebration when crossing era boundaries (SVERIGE→MAKT, etc.) — double particle count, slower reveal, era name in large text
+  - Owner mode: green particles, warm sound (ascending arpeggio)
+
+- [x] 10A-2: Milestone Alerts
+  - Track stammar milestones: 1K, 10K, 100K, 1M, 10M, 100M, 1B, 10B, 100B, 1T
+  - On milestone hit: play achievement-like sound + toast "🪵 1 MILJARD STAMMAR" (3s duration)
+  - Owner mode: sv milestones at 1K, 5K, 10K, 25K, 50K, 100K, 200K with green toast
+  - Don't overlap with phase transition celebrations (suppress if within 5s)
+
+### 10B — Active Play Rewards
+
+- [x] 10B-1: Gyllene Tillfället (Golden Opportunity)
+  - Random chance (every 45-90s of active play): a golden clickable icon appears on screen for 8-10s
+  - Clicking it: 30s of 3× production multiplier + bonus kapital + satisfying sound
+  - Visual: glowing golden tree icon, pulses, fades if not clicked
+  - Only appears when tab is focused (no AFK farming)
+  - Phase 7+: appears less often but gives 5× multiplier
+  - Owner mode variant: "Skogens Gåva" — green/gold glow, grants bonus sv + kunskap
+
+- [x] 10B-2: Click Streak Bonus
+  - Track consecutive clicks within 500ms windows
+  - At 10-click streak: +50% click value for next 5s
+  - At 25-click streak: +100% click value for next 5s + small particle burst
+  - Visual: subtle glow intensification on click button during streak
+  - Keeps clicking relevant mid-game without breaking idle balance
+
+### 10C — Endgame Pacing Fix
+
+- [x] 10C-1: Fast-Forward Button
+  - New UI element: "⏩ Tidsskift" button in settings/dashboard (visible from phase 7+)
+  - When held/toggled: 5× game speed (tick every 20ms instead of 100ms)
+  - Visual: subtle speed lines on background, ticker moves faster
+  - Cap at 5× to prevent performance issues
+  - Auto-disables during events/modals
+
+- [x] 10C-2: Reframe Phases 10-12 as "Epilog"
+  - After EndScreen (phase 10 entry), show "Fortsätt till Epilogen?" choice
+  - Players who say no get the current EndScreen → reality page → done
+  - Players who say yes continue to phases 10-12 cosmic content
+  - This makes the core game 1-9 phases (~3-4h) with optional endgame
+  - Saves phase 10+ as bonus content for completionists
+
+- [x] 10C-3: Entropy Rework
+  - Current: entropy drains passively with no counter (forced timer)
+  - New: entropy drains but player can SLOW it by spending lobby/kapital on "Entropimotståndsåtgärder"
+  - Add 3 entropy-slowing purchases (lobby/kapital costs, each -30% drain rate)
+  - This gives the player agency during the final phase instead of passive waiting
+  - Also: display entropy drain rate and ETA so player knows how long is left
+
+### 10D — Sound Celebration
+
+- [x] 10D-1: Phase Transition Sounds
+  - Current: no specific transition sound
+  - Phase up: ascending 3-note fanfare (C→E→G, triangle wave, 500ms total)
+  - Era change: longer fanfare (C→E→G→C↑, with reverb tail, 1.2s total)
+  - Owner phase up: warm ascending (A→C#→E, sine wave)
+
+- [x] 10D-2: Milestone Sounds
+  - Stammar milestones: short celebration ding (high C, 200ms, bell-like)
+  - First generator purchase: special "ka-ching" (ascending double tone)
+  - Achievement sound already exists — verify it plays correctly
+
+**Notes:** Sprint 10 complete. Key changes:
+- **10A-1 Phase Transitions**: Rewrote PhaseTransition.tsx with BurstParticles (24/48 radial particles), era change detection (getEra comparison), screen pulse on era change, era name badge, green particles for owner mode. Plays playPhaseUp() or playEraChange() sounds.
+- **10A-2 Milestone Alerts**: New `src/hooks/useMilestones.ts` tracks stammar milestones (1K→1T) and owner sv milestones (1K→200K). New `src/components/MilestoneToast.tsx` with colored toasts. Suppresses toasts within 5s of phase transitions. Plays playMilestoneDing().
+- **10B-1 Golden Opportunity**: New `src/components/GoldenOpportunity.tsx` — random golden clickable (45-90s industry, 60-120s phase 7+), grants 30s of 3×/5× production multiplier. Owner variant "Skogens Gåva" with green/gold glow + instant sv/kunskap bonus. Tab focus check. GoldenMultiplierIndicator shows countdown.
+- **10B-2 Click Streak**: Modified ClickArea.tsx and OwnerClickArea.tsx with streak tracking (500ms window), +50% at 10-streak, +100% at 25-streak with particle burst, 5s duration. Visual glow on button. Also fixed silent owner clicks (added playClick()).
+- **10C-1 Fast-Forward**: "⏩ Tidsskift" toggle in Dashboard (phase 7+), 5× game speed via dt multiplication, auto-disables during events/transitions. Entropy display for phase 12: bar, drain rate, ETA, 3 entropy-slowing purchases.
+- **10C-2 Epilog Reframe**: EndScreen postcredits now offers choice: "EPILOGEN — FORTSÄTT" (sets epilogChosen, continues to phases 10-12) or "NEJ. VISA VERKLIGHETEN." (goes to reality page). Core game framed as phases 1-9 with optional cosmic epilog.
+- **10C-3 Entropy Rework**: 3 entropy-slowing purchases in Dashboard (Byråkratisk Fördröjning 50K PK, Tidskristallisering 500B Mkr, Entropikommitténs Utredning 200K PK). Each purchase reduces drain by 30% (multiplicative). Drain formula updated in gameStore tick.
+- **10D-1/10D-2 Sounds**: 6 new Web Audio functions in audio.ts: playPhaseUp (C→E→G triangle), playEraChange (C→E→G→C↑ with shimmer), playOwnerPhaseUp (A→C#→E sine), playMilestoneDing (bell), playGoldenAppear (sparkle), playGoldenClick (chime+thump).
+- **Store/Types**: Added entropyPurchases, milestonesSeen, epilogChosen, gameSpeed, goldenMultiplierUntil to state. 4 new actions. Save migration v9→v10. gameSpeed wired via dt multiplication in tick. Golden multiplier as module-level cache.
+- Build: 230KB gzipped, TypeScript clean. Save version 10.
+
+---
+
+## Sprint 11: Strategic Depth (Core Mechanics)
+
+> **Source:** `review.md` — "Buy cheapest is optimal 90% of the time", antagonists become irrelevant, country invasion repetitive
+> **Goal:** Add meaningful decisions. The game needs moments where the player must choose between competing options, not just buy everything in order.
+
+### 11A — Antagonist Scaling
+
+- [ ] 11A-1: Percentage-Based Antagonist Costs
+  - Current: fixed costs (50K kapital, 300 PK, etc.) become trivial by phase 6
+  - New: counter costs scale with player income
+  - Formula: `baseCost × max(1, stammarPerSecond / threshold)` where threshold = antagonist's original target income
+  - E.g., Skovarnarna base 50K kapital, threshold 500/s. At 500K/s income: costs 50M kapital
+  - Cap at 100× base cost to prevent absurdity
+  - This keeps antagonists threatening throughout the game
+
+- [ ] 11A-2: Antagonist Escalation Mechanic
+  - If an antagonist is active for >5 minutes without being countered, it ESCALATES
+  - Escalated antagonist: 2× penalty, counter cost +50%, spawns news ticker headline about it
+  - Visual: escalated antagonists pulse red in the UI
+  - This punishes ignoring antagonists and creates urgency
+
+### 11B — Generator Niches
+
+- [ ] 11B-1: Generator Side Effects (Industry)
+  - Add secondary effects to generators beyond raw stammar/s:
+    - Virkesuppköpare: -0.01 image/s per owned (visible environmental cost)
+    - Certifieringskarusell: +0.05 image/s per owned (greenwashing benefit)
+    - Lobbyfirma: +1 PK/s per 5 owned (political power generation)
+    - Klon-Skog: -0.02 biodiversity/s per owned (monoculture penalty)
+    - Late generators: mixed positive/negative effects
+  - These effects are VISIBLE in generator tooltip/description
+  - Creates genuine tradeoffs: "do I buy the cheap generator that tanks my image, or the expensive one that helps?"
+
+- [ ] 11B-2: Generator Synergy Bonuses
+  - Pairs of generators that boost each other when both owned:
+    - Massafabrik + Certifieringskarusell: +10% kapital/s (certified wood premium)
+    - Lobbyfirma + Autonomt Skördarnätverk: +15% stammar/s (deregulated automation)
+    - Markberedning + Klon-Skog: +20% stammar/s but -0.05 image/s (industrial monoculture)
+  - Show synergy badges on generator cards when active
+  - Makes buying ORDER matter, not just buying cheapest
+
+### 11C — Country Invasion Depth
+
+- [ ] 11C-1: Country Unique Rewards
+  - Each country grants a unique bonus beyond raw production:
+    - Finlandia: +10% generator efficiency (Finnish engineering)
+    - Norgia: +20% kapital/s (oil money synergy)
+    - Amazonia: Unlocks "Tropisk Monokultur" upgrade (+50% stammar/s, -5 image)
+    - Siberien: Unlocks "Permafrost Exploitation" (huge stammar but triggers unique antagonist)
+    - Chinova: +30% to all generator production (manufacturing scale)
+  - Display unique reward on country detail panel before invasion
+  - This gives players a reason to target specific countries, not just invade in order
+
+- [ ] 11C-2: Country Events (8 unique)
+  - Each major country has 1-2 events that fire during/after invasion:
+    - Amazonia: "Amazonas-branden" — your operations cause fire, choose: deny/evacuate/profit
+    - Norgia: "Nordisk solidaritet" — Norway protests, threatens trade sanctions
+    - Siberien: "Permafrost-kollapsen" — your drilling releases methane, global PR crisis
+    - Chinova: "Den Kinesiska Väggen" — trade barriers, must bribe or retreat
+  - Events add narrative weight to what is currently a mechanical grind
+
+### 11D — Tech Tree Strategic Choice
+
+- [ ] 11D-1: Mutually Exclusive Upgrade Pairs
+  - Add 3-4 "fork" points in the tech tree where you must choose one of two upgrades:
+    - Phase 3: "Hållbarhetscertifiering" (+15% image, +10% kapital) VS "Kostnadsminimering" (+25% stammar/s, -5 image)
+    - Phase 5: "Multinationell Expansion" (+20% country invasion speed) VS "Nationell Dominans" (+30% Swedish generator production)
+    - Phase 8: "Diplomatisk Expansion" (-50% invasion kapital cost) VS "Militär Expansion" (-50% invasion lobby cost)
+  - Forks are clearly marked in UI with "VÄLJ EN" label
+  - Choice is permanent per playthrough — adds replay value
+
+**Notes:** Sprint 11 pending.
+
+---
+
+## Sprint 12: Content & Balance Polish
+
+> **Source:** `review.md` — Event frequency, owner content gaps, ticker variety, attack/lure balance
+> **Goal:** Fill content gaps, improve balance, ensure both modes feel complete and well-paced.
+
+### 12A — Event Frequency & Distribution
+
+- [ ] 12A-1: Increase Event Rate (Phases 1-6)
+  - Current: ~2-3 events/hour in early game
+  - Target: ~4-5 events/hour in phases 1-3, ~3-4/hour in phases 4-6
+  - Reduce `getNextEventDelay()` by ~40% for phases 1-6
+  - Keep phases 7+ at current rate (already tuned in Sprint 8)
+
+- [ ] 12A-2: Event Replay System
+  - Currently ~100 events exist but only ~45 seen per playthrough due to conditions/cooldowns
+  - Add `replayable: true` flag to ~20 events (scandals, opportunities) that can fire multiple times with cooldown
+  - Replayable events have 15-minute cooldown between repeats
+  - Non-replayable events (story beats, phase transitions) remain one-time
+  - This doubles effective event density without writing new content
+
+### 12B — Owner Mode Content Expansion
+
+- [ ] 12B-1: Late-Game Owner Generators (3 new)
+  - Urskogsskydd (250K sv, +300 sv/s, +150 legacy/tick) — old-growth protection
+  - Klimatpartnerskap (400K sv, +80 inkomst/s, +3 carbon/tick) — carbon partnership at scale
+  - Naturskogsallians (750K sv, +500 sv/s, +200 legacy/tick, +5 biodiv/tick) — capstone alliance generator
+  - Gives owner mode depth beyond sv=200K where currently only Arvsskogen exists
+
+- [ ] 12B-2: Owner Ticker Expansion (25→50 headlines)
+  - Add 25 new headlines for sv=80K+ range (currently sparse)
+  - Topics: late-game resilience, generational themes, research breakthroughs, industry decline
+  - Match quality of existing headlines ("Naturen har inget pressmeddelande...")
+  - Ensure even distribution across sv milestones
+
+- [ ] 12B-3: Dynamic Owner Ticker
+  - Add 10 conditional headlines that respond to player state:
+    - biodiv > 50: "Din skog har fler arter per hektar än grannarnas tillsammans."
+    - All attacks resisted: "Industrin har slutat ringa. De vet."
+    - legacy > 300: "Barnbarnet har börjat rita kartor över skogen."
+    - kunskap > 500: "Du vet mer om din skog än Skogsstyrelsen."
+  - Makes ticker feel responsive to playstyle, not just sv milestones
+
+### 12C — Attack/Lure Rebalance
+
+- [ ] 12C-1: Scale Attack Accept Rewards
+  - Current: fixed inkomst rewards (5K, 8K, etc.) become irrelevant late-game
+  - New: accept inkomst = 5% of total skogsvardering (always tempting)
+  - This keeps the "temptation" real throughout the game, not just early
+
+- [ ] 12C-2: Additional Lures (3 new, total 8)
+  - "Virkesprispremie" (sv=80K) — Premium price offer, trap: locks you into industry supply chain
+  - "Forskningssamarbete" (sv=120K) — University study, trap: funded by industry, publishes biased results
+  - "Generationsavtal" (sv=180K) — Inheritance planning, trap: transfers decision rights to industry trust
+  - Matches 8 attacks with 8 lures for symmetry
+
+- [ ] 12C-3: Knowledge Tree Aggregate Display
+  - Add "Aktiva modifierare" summary panel at top of KnowledgePanel
+  - Show: total sv/s multiplier, total inkomst multiplier, attack resistance %, biodiv rate bonus
+  - Updates live as upgrades are purchased
+  - Helps players see the value of their knowledge investments
+
+### 12D — Achievements as Guidance
+
+- [ ] 12D-1: Strategic Achievements (10 new)
+  - Achievements that reward specific playstyles, not just milestones:
+    - "Pacifisten" — reach phase 6 without countering any antagonist
+    - "Lobbykungen" — buy all lobby purchases before phase 5
+    - "Snabbväxaren" — reach phase 3 in under 15 minutes
+    - "Gröntvätt Deluxe" — maintain image >80 while having >1M stammar/s
+    - "Den Rena Skogsägaren" — decline all lures (owner)
+    - "Kunskapens Väg" — buy all 20 knowledge upgrades (owner)
+    - "Fyra Generationer" — reach legacy 500 with all attacks resisted (owner)
+    - "Mångfaldens Mästare" — reach biodiv 100 (owner)
+    - "Självförsörjande" — reach sv=100K without accepting any attack inkomst (owner)
+    - "Tidlös" — complete owner mode in under 2 hours
+  - These guide players toward interesting playstyles and add replay value
+
+### 12E — Verification & Deploy
+
+- [ ] 12E-1: Autoplay Test Update
+  - Update `scripts/autoplay.ts` to verify new mechanics (golden opportunity, antagonist scaling, generator side effects)
+  - Add owner autoplay script timing
+  - Verify pacing targets: phases 1-6 in ~2h, full game in ~4h
+
+- [ ] 12E-2: Build & Deploy
+  - TypeScript clean
+  - Save migration (bump version if new state fields added)
+  - Deploy to GitHub Pages
+  - Verify on mobile
+
+**Notes:** Sprint 12 pending.
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

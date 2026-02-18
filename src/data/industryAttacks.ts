@@ -26,7 +26,7 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     name: '"Gratis skogsbruksplan"',
     description: 'En inspektör från det stora bolaget dyker upp med en "gratis skogsbruksplan". Planen schemalägger kalavverkning av dina bästa bestånd.',
     triggerSV: 500,
-    kunskapRequired: 10,
+    kunskapRequired: 5,
     acceptEffects: {
       description: '-50% Skogsvärde, +5 000 Inkomst',
       skogsvardering: 0.5,
@@ -40,7 +40,7 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     name: 'Virkesuppköparen',
     description: 'En man i Barburr-jacka dyker upp. Han erbjuder "fantastiskt pris" för dina bästa tallar.',
     triggerSV: 3_000,
-    kunskapRequired: 30,
+    kunskapRequired: 15,
     acceptEffects: {
       description: '-30% Skogsvärde, +8 000 Inkomst',
       skogsvardering: 0.7,
@@ -54,7 +54,7 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     name: 'Priskollaps-panik',
     description: 'Massapriserna rasar. Kina dumpar. Industrin säger: "Avverka nu innan det blir värre!"',
     triggerSV: 8_000,
-    kunskapRequired: 50,
+    kunskapRequired: 25,
     acceptEffects: {
       description: '-40% Skogsvärde, +12 000 Inkomst',
       skogsvardering: 0.6,
@@ -68,7 +68,7 @@ export const INDUSTRY_ATTACKS: IndustryAttackData[] = [
     name: '"Äganderätten är hotad!"-kampanjen',
     description: 'Industrin vill att du protesterar mot EU-kartläggning av gammelskog — kartläggning som faktiskt SKYDDAR din skog.',
     triggerSV: 10_000,
-    kunskapRequired: 100,
+    kunskapRequired: 50,
     acceptEffects: {
       description: '+5 000 Inkomst, -20 Biodiversitet',
       inkomstBonus: 5_000,
