@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import { getUpgradesByPhase } from '../data/upgradeRegistry'
+import { getUpgradesByPhase, getUpgradeData } from '../data/upgradeRegistry'
 import type { UpgradeData } from '../store/types'
 import { UpgradeCard } from './UpgradeCard'
 
@@ -39,9 +39,20 @@ export function UpgradeList() {
   const canAfford = (data: UpgradeData): boolean => {
     const count = upgrades[data.id]?.count ?? 0
     if (count >= data.maxCount) return false
+    // Check exclusive lock
+    if (data.exclusiveWith) {
+      const otherState = upgrades[data.exclusiveWith]
+      if (otherState?.purchased || (otherState?.count ?? 0) > 0) return false
+    }
     const cost = data.baseCost * Math.pow(1.15, count)
     const resource = resourceMap[data.costResource as keyof typeof resourceMap] ?? 0
     return resource >= cost
+  }
+
+  const isLocked = (data: UpgradeData): boolean => {
+    if (!data.exclusiveWith) return false
+    const otherState = upgrades[data.exclusiveWith]
+    return (otherState?.purchased || (otherState?.count ?? 0) > 0)
   }
 
   return (
@@ -65,6 +76,7 @@ export function UpgradeList() {
                     data={data}
                     state={upgrades[data.id]}
                     canAfford={canAfford(data)}
+                    locked={isLocked(data)}
                     onPurchase={() => purchaseUpgrade(data.id)}
                   />
                 </motion.div>
@@ -91,10 +103,35 @@ function isVisible(
   const state = upgrades[data.id]
   if (state?.purchased) return true
 
-  if (data.prerequisites) {
-    for (const prereqId of data.prerequisites) {
-      const prereq = upgrades[prereqId]
-      if (!prereq?.purchased) return false
+  // If exclusively locked and other was purchased, hide (unless already purchased)
+  if (data.exclusiveWith) {
+    const otherState = upgrades[data.exclusiveWith]
+    if (otherState?.purchased || (otherState?.count ?? 0) > 0) {
+      // Show as locked briefly, then hide
+      return true // Show locked state so player sees what they missed
+    }
+  }
+
+  if (data.prerequisites && data.prerequisites.length > 0) {
+    // Check if these are fork prerequisites (any prereq is part of a fork pair)
+    const hasForkPrereqs = data.prerequisites.some(prereqId => {
+      const prereqData = getUpgradeData(prereqId)
+      return prereqData?.exclusiveWith != null
+    })
+
+    if (hasForkPrereqs) {
+      // Fork prerequisites: need ANY one (since player can only buy one)
+      const anyMet = data.prerequisites.some(prereqId => {
+        const prereq = upgrades[prereqId]
+        return prereq?.purchased || (prereq?.count ?? 0) > 0
+      })
+      if (!anyMet) return false
+    } else {
+      // Normal prerequisites: need ALL
+      for (const prereqId of data.prerequisites) {
+        const prereq = upgrades[prereqId]
+        if (!prereq?.purchased && (prereq?.count ?? 0) === 0) return false
+      }
     }
   }
 

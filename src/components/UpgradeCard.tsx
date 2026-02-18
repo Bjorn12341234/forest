@@ -10,25 +10,26 @@ interface UpgradeCardProps {
   data: UpgradeData
   state: UpgradeState | undefined
   canAfford: boolean
+  locked?: boolean
   onPurchase: () => void
 }
 
-export function UpgradeCard({ data, state, canAfford, onPurchase }: UpgradeCardProps) {
+export function UpgradeCard({ data, state, canAfford, locked, onPurchase }: UpgradeCardProps) {
   const [showFlash, setShowFlash] = useState(false)
   const count = state?.count ?? 0
   const purchased = count >= data.maxCount
   const cost = calculateUpgradeCost(data.baseCost, count)
 
   const handlePurchase = () => {
-    if (!canAfford || purchased) return
+    if (!canAfford || purchased || locked) return
     onPurchase()
     playPurchase()
     setShowFlash(true)
     setTimeout(() => setShowFlash(false), 400)
   }
 
-  const glowColor = purchased ? 'green' : canAfford ? 'orange' : 'none'
-  const opacity = !canAfford && !purchased ? 'opacity-60' : ''
+  const glowColor = locked ? 'none' : purchased ? 'green' : canAfford ? 'orange' : 'none'
+  const opacity = locked ? 'opacity-40' : (!canAfford && !purchased ? 'opacity-60' : '')
 
   return (
     <GlassCard
@@ -85,6 +86,11 @@ export function UpgradeCard({ data, state, canAfford, onPurchase }: UpgradeCardP
                 x{count}
               </span>
             )}
+            {data.exclusiveWith && !purchased && !locked && (
+              <span className="text-[10px] font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                Välj en
+              </span>
+            )}
             {purchased && (
               <span className="w-2 h-2 rounded-full bg-success flex-shrink-0" />
             )}
@@ -97,7 +103,9 @@ export function UpgradeCard({ data, state, canAfford, onPurchase }: UpgradeCardP
 
           {/* Cost + production */}
           <div className="flex items-center justify-between mt-1.5">
-            {!purchased ? (
+            {locked ? (
+              <span className="text-sm text-red-400">Låst</span>
+            ) : !purchased ? (
               <span className={`text-sm font-numbers ${canAfford ? 'text-accent' : 'text-text-muted'}`}>
                 {formatNumber(cost)} {data.costResource}
               </span>

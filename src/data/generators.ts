@@ -1,6 +1,13 @@
 // ── Silva Maximus — Generator Definitions ──
 // All 8 generators from the GDD. Cost scaling: baseCost * 1.15^n
 
+export interface GeneratorSideEffect {
+  resource: 'image' | 'lobby' | 'biodiversity'
+  /** Per second per unit owned (negative = cost) */
+  perSecond: number
+  description: string
+}
+
 export interface GeneratorData {
   id: string
   name: string
@@ -10,6 +17,8 @@ export interface GeneratorData {
   unlockPhase: number    // phase required to see this generator
   unlockCost?: number    // show when player can almost afford (optional hint)
   costScale?: number     // cost scaling factor (default 1.15)
+  /** Secondary effects beyond raw stammar/s — creates tradeoffs */
+  sideEffects?: GeneratorSideEffect[]
 }
 
 export const GENERATORS: GeneratorData[] = [
@@ -20,6 +29,9 @@ export const GENERATORS: GeneratorData[] = [
     baseCost: 100,
     baseProduction: 1,
     unlockPhase: 1,
+    sideEffects: [
+      { resource: 'image', perSecond: -0.01, description: '-0,01 Image/s' },
+    ],
   },
   {
     id: 'gen_skordarteam',
@@ -44,6 +56,9 @@ export const GENERATORS: GeneratorData[] = [
     baseCost: 10_000,
     baseProduction: 100,
     unlockPhase: 2,
+    sideEffects: [
+      { resource: 'biodiversity', perSecond: -0.002, description: '-0,002 Biodiv/s' },
+    ],
   },
   {
     id: 'gen_certifiering',
@@ -52,6 +67,9 @@ export const GENERATORS: GeneratorData[] = [
     baseCost: 50_000,
     baseProduction: 500,
     unlockPhase: 2,
+    sideEffects: [
+      { resource: 'image', perSecond: 0.05, description: '+0,05 Image/s' },
+    ],
   },
   {
     id: 'gen_lobbyfirma',
@@ -60,6 +78,9 @@ export const GENERATORS: GeneratorData[] = [
     baseCost: 200_000,
     baseProduction: 2_000,
     unlockPhase: 3,
+    sideEffects: [
+      { resource: 'lobby', perSecond: 0.2, description: '+0,2 PK/s' },
+    ],
   },
   {
     id: 'gen_autonomt',
@@ -78,6 +99,10 @@ export const GENERATORS: GeneratorData[] = [
     baseProduction: 50_000,
     unlockPhase: 6,
     costScale: 1.15,
+    sideEffects: [
+      { resource: 'biodiversity', perSecond: -0.02, description: '-0,02 Biodiv/s' },
+      { resource: 'image', perSecond: -0.03, description: '-0,03 Image/s' },
+    ],
   },
 
   // ── INTERNATIONELL (7-9) ──
@@ -98,6 +123,9 @@ export const GENERATORS: GeneratorData[] = [
     baseProduction: 1_000_000,
     unlockPhase: 8,
     costScale: 1.15,
+    sideEffects: [
+      { resource: 'biodiversity', perSecond: -0.05, description: '-0,05 Biodiv/s' },
+    ],
   },
   {
     id: 'gen_avskogning',
@@ -107,6 +135,10 @@ export const GENERATORS: GeneratorData[] = [
     baseProduction: 5_000_000,
     unlockPhase: 9,
     costScale: 1.15,
+    sideEffects: [
+      { resource: 'image', perSecond: -0.08, description: '-0,08 Image/s' },
+      { resource: 'biodiversity', perSecond: -0.08, description: '-0,08 Biodiv/s' },
+    ],
   },
 
   // ── EXPANSION (10-12) ──
@@ -165,6 +197,61 @@ export const GENERATORS: GeneratorData[] = [
     costScale: 1.15,
   },
 ]
+
+// ── Generator Synergy System ──
+// Pairs that boost each other when both owned
+
+export interface GeneratorSynergy {
+  id: string
+  genA: string
+  genB: string
+  label: string
+  effects: {
+    stammarMultiplier?: number  // e.g. 1.15 = +15% stammar/s
+    kapitalMultiplier?: number  // e.g. 1.10 = +10% kapital/s
+    imagePerSecond?: number     // e.g. -0.05 = additional image loss
+  }
+}
+
+export const GENERATOR_SYNERGIES: GeneratorSynergy[] = [
+  {
+    id: 'syn_massa_cert',
+    genA: 'gen_massafabrik',
+    genB: 'gen_certifiering',
+    label: 'Certifierad Massa',
+    effects: { kapitalMultiplier: 1.10 },
+  },
+  {
+    id: 'syn_lobby_auto',
+    genA: 'gen_lobbyfirma',
+    genB: 'gen_autonomt',
+    label: 'Avreglerad Automation',
+    effects: { stammarMultiplier: 1.15 },
+  },
+  {
+    id: 'syn_mark_klon',
+    genA: 'gen_markberedning',
+    genB: 'gen_klonskog',
+    label: 'Industriell Monokultur',
+    effects: { stammarMultiplier: 1.20, imagePerSecond: -0.05 },
+  },
+  {
+    id: 'syn_koncession_mono',
+    genA: 'gen_koncession',
+    genB: 'gen_monokultur',
+    label: 'Global Plantage',
+    effects: { stammarMultiplier: 1.15, kapitalMultiplier: 1.10 },
+  },
+]
+
+/** Get active synergies based on current generator ownership */
+export function getActiveSynergies(generators: Record<string, { count: number }>): GeneratorSynergy[] {
+  return GENERATOR_SYNERGIES.filter(syn => {
+    const a = generators[syn.genA]
+    const b = generators[syn.genB]
+    return a && a.count > 0 && b && b.count > 0
+  })
+}
 
 // Map for O(1) lookups (hot path — called 20×/tick)
 const GENERATOR_MAP = new Map<string, GeneratorData>(

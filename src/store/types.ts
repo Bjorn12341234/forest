@@ -161,6 +161,10 @@ export interface LobbyProjectState {
 export interface AntagonistState {
   active: boolean
   countered: boolean
+  /** Timestamp when antagonist became active (for escalation timer) */
+  activatedAt?: number
+  /** Whether this antagonist has escalated (2× penalties, +50% counter cost) */
+  escalated?: boolean
 }
 
 export interface ExpansionTargetState {
@@ -234,6 +238,8 @@ export interface UpgradeData {
   prerequisites?: string[]
   unlockAt?: UnlockCondition
   phase: number
+  /** If set, buying this upgrade locks out the other upgrade (mutually exclusive fork) */
+  exclusiveWith?: string
 }
 
 export interface UpgradeEffect {

@@ -1,6 +1,18 @@
 // ── Silva Maximus — Country Definitions (INTERNATIONELL Era, Phases 7-9) ──
 // Fictional but recognizable nations to invade with your forestry industrial complex
 
+export interface CountryUniqueReward {
+  label: string
+  description: string
+  effects: {
+    generatorEfficiency?: number   // multiplier, e.g. 1.10 = +10%
+    kapitalMultiplier?: number     // multiplier on kapital/s
+    stammarMultiplier?: number     // multiplier on stammar/s
+    lobbyPerSecond?: number        // flat PK/s bonus
+    imagePerSecond?: number        // flat image/s change
+  }
+}
+
 export interface CountryDef {
   id: string
   name: string
@@ -14,6 +26,8 @@ export interface CountryDef {
   production: { stammarPerSecond: number; kapitalPerSecond: number }
   hiddenCosts: { biodiversityLoss: number; co2Gain: number }
   position: { x: number; y: number } // map placement, 0-100 percentage
+  /** Unique bonus granted when country is controlled */
+  uniqueReward?: CountryUniqueReward
 }
 
 export const COUNTRIES: CountryDef[] = [
@@ -34,6 +48,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 120_000, kapitalPerSecond: 1_200 },
     hiddenCosts: { biodiversityLoss: 0.8, co2Gain: 4_000 },
     position: { x: 62, y: 14 },
+    uniqueReward: {
+      label: 'Finsk Ingenjörskonst',
+      description: '+10% generatoreffektivitet',
+      effects: { generatorEfficiency: 1.10 },
+    },
   },
   {
     id: 'c_norgia',
@@ -49,6 +68,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 80_000, kapitalPerSecond: 3_000 },
     hiddenCosts: { biodiversityLoss: 0.5, co2Gain: 3_000 },
     position: { x: 40, y: 10 },
+    uniqueReward: {
+      label: 'Oljefondens Synergi',
+      description: '+20% kapital/s',
+      effects: { kapitalMultiplier: 1.20 },
+    },
   },
   {
     id: 'c_island',
@@ -64,6 +88,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 2_000, kapitalPerSecond: 3_000 },
     hiddenCosts: { biodiversityLoss: 0.1, co2Gain: 200 },
     position: { x: 22, y: 5 },
+    uniqueReward: {
+      label: 'Diskreta Lobbymöten',
+      description: '+0,5 PK/s',
+      effects: { lobbyPerSecond: 0.5 },
+    },
   },
   {
     id: 'c_danmark',
@@ -79,6 +108,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 60_000, kapitalPerSecond: 2_000 },
     hiddenCosts: { biodiversityLoss: 0.4, co2Gain: 2_000 },
     position: { x: 48, y: 22 },
+    uniqueReward: {
+      label: 'Julgransmonopol',
+      description: '+15% kapital/s',
+      effects: { kapitalMultiplier: 1.15 },
+    },
   },
 
   // ══════════════════════════════════════════════
@@ -98,6 +132,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 2_000_000, kapitalPerSecond: 30_000 },
     hiddenCosts: { biodiversityLoss: 5.0, co2Gain: 50_000 },
     position: { x: 30, y: 60 },
+    uniqueReward: {
+      label: 'Tropisk Monokultur',
+      description: '+25% stammar/s, -0,1 Image/s',
+      effects: { stammarMultiplier: 1.25, imagePerSecond: -0.1 },
+    },
   },
   {
     id: 'c_siberien',
@@ -113,6 +152,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 1_500_000, kapitalPerSecond: 20_000 },
     hiddenCosts: { biodiversityLoss: 3.0, co2Gain: 40_000 },
     position: { x: 72, y: 18 },
+    uniqueReward: {
+      label: 'Permafrost-exploatering',
+      description: '+20% stammar/s',
+      effects: { stammarMultiplier: 1.20 },
+    },
   },
   {
     id: 'c_kanadien',
@@ -128,6 +172,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 1_800_000, kapitalPerSecond: 25_000 },
     hiddenCosts: { biodiversityLoss: 3.5, co2Gain: 35_000 },
     position: { x: 20, y: 22 },
+    uniqueReward: {
+      label: 'Bore-skog Synergi',
+      description: '+15% stammar/s, +1 PK/s',
+      effects: { stammarMultiplier: 1.15, lobbyPerSecond: 1.0 },
+    },
   },
 
   // ══════════════════════════════════════════════
@@ -147,6 +196,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 15_000_000, kapitalPerSecond: 200_000 },
     hiddenCosts: { biodiversityLoss: 8.0, co2Gain: 200_000 },
     position: { x: 75, y: 32 },
+    uniqueReward: {
+      label: 'Tillverkningsskala',
+      description: '+30% generatoreffektivitet',
+      effects: { generatorEfficiency: 1.30 },
+    },
   },
   {
     id: 'c_indiska',
@@ -162,6 +216,11 @@ export const COUNTRIES: CountryDef[] = [
     production: { stammarPerSecond: 10_000_000, kapitalPerSecond: 150_000 },
     hiddenCosts: { biodiversityLoss: 6.0, co2Gain: 150_000 },
     position: { x: 70, y: 42 },
+    uniqueReward: {
+      label: 'BJÖRKEA-distributionsnät',
+      description: '+25% kapital/s, +2 PK/s',
+      effects: { kapitalMultiplier: 1.25, lobbyPerSecond: 2.0 },
+    },
   },
 ]
 
@@ -180,4 +239,36 @@ export function getCountry(id: string): CountryDef | undefined {
 /** Get all countries unlocked at or before the given phase */
 export function getCountriesByPhase(phase: number): CountryDef[] {
   return COUNTRIES.filter((c) => c.unlockPhase <= phase)
+}
+
+export interface CountryRewardTotals {
+  generatorEfficiency: number  // multiplicative, starts at 1
+  kapitalMultiplier: number    // multiplicative, starts at 1
+  stammarMultiplier: number    // multiplicative, starts at 1
+  lobbyPerSecond: number       // additive
+  imagePerSecond: number       // additive
+}
+
+/** Compute aggregate unique rewards from all controlled countries */
+export function computeCountryRewards(countries: Record<string, { status: string }>): CountryRewardTotals {
+  const totals: CountryRewardTotals = {
+    generatorEfficiency: 1,
+    kapitalMultiplier: 1,
+    stammarMultiplier: 1,
+    lobbyPerSecond: 0,
+    imagePerSecond: 0,
+  }
+
+  for (const country of COUNTRIES) {
+    const cs = countries[country.id]
+    if (cs?.status !== 'controlled' || !country.uniqueReward) continue
+    const e = country.uniqueReward.effects
+    if (e.generatorEfficiency) totals.generatorEfficiency *= e.generatorEfficiency
+    if (e.kapitalMultiplier) totals.kapitalMultiplier *= e.kapitalMultiplier
+    if (e.stammarMultiplier) totals.stammarMultiplier *= e.stammarMultiplier
+    if (e.lobbyPerSecond) totals.lobbyPerSecond += e.lobbyPerSecond
+    if (e.imagePerSecond) totals.imagePerSecond += e.imagePerSecond
+  }
+
+  return totals
 }

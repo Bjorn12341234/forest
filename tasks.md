@@ -923,7 +923,7 @@
 
 ### 11A — Antagonist Scaling
 
-- [ ] 11A-1: Percentage-Based Antagonist Costs
+- [x] 11A-1: Percentage-Based Antagonist Costs
   - Current: fixed costs (50K kapital, 300 PK, etc.) become trivial by phase 6
   - New: counter costs scale with player income
   - Formula: `baseCost × max(1, stammarPerSecond / threshold)` where threshold = antagonist's original target income
@@ -931,7 +931,7 @@
   - Cap at 100× base cost to prevent absurdity
   - This keeps antagonists threatening throughout the game
 
-- [ ] 11A-2: Antagonist Escalation Mechanic
+- [x] 11A-2: Antagonist Escalation Mechanic
   - If an antagonist is active for >5 minutes without being countered, it ESCALATES
   - Escalated antagonist: 2× penalty, counter cost +50%, spawns news ticker headline about it
   - Visual: escalated antagonists pulse red in the UI
@@ -939,7 +939,7 @@
 
 ### 11B — Generator Niches
 
-- [ ] 11B-1: Generator Side Effects (Industry)
+- [x] 11B-1: Generator Side Effects (Industry)
   - Add secondary effects to generators beyond raw stammar/s:
     - Virkesuppköpare: -0.01 image/s per owned (visible environmental cost)
     - Certifieringskarusell: +0.05 image/s per owned (greenwashing benefit)
@@ -949,7 +949,7 @@
   - These effects are VISIBLE in generator tooltip/description
   - Creates genuine tradeoffs: "do I buy the cheap generator that tanks my image, or the expensive one that helps?"
 
-- [ ] 11B-2: Generator Synergy Bonuses
+- [x] 11B-2: Generator Synergy Bonuses
   - Pairs of generators that boost each other when both owned:
     - Massafabrik + Certifieringskarusell: +10% kapital/s (certified wood premium)
     - Lobbyfirma + Autonomt Skördarnätverk: +15% stammar/s (deregulated automation)
@@ -959,7 +959,7 @@
 
 ### 11C — Country Invasion Depth
 
-- [ ] 11C-1: Country Unique Rewards
+- [x] 11C-1: Country Unique Rewards
   - Each country grants a unique bonus beyond raw production:
     - Finlandia: +10% generator efficiency (Finnish engineering)
     - Norgia: +20% kapital/s (oil money synergy)
@@ -969,7 +969,7 @@
   - Display unique reward on country detail panel before invasion
   - This gives players a reason to target specific countries, not just invade in order
 
-- [ ] 11C-2: Country Events (8 unique)
+- [x] 11C-2: Country Events (8 unique)
   - Each major country has 1-2 events that fire during/after invasion:
     - Amazonia: "Amazonas-branden" — your operations cause fire, choose: deny/evacuate/profit
     - Norgia: "Nordisk solidaritet" — Norway protests, threatens trade sanctions
@@ -979,7 +979,7 @@
 
 ### 11D — Tech Tree Strategic Choice
 
-- [ ] 11D-1: Mutually Exclusive Upgrade Pairs
+- [x] 11D-1: Mutually Exclusive Upgrade Pairs
   - Add 3-4 "fork" points in the tech tree where you must choose one of two upgrades:
     - Phase 3: "Hållbarhetscertifiering" (+15% image, +10% kapital) VS "Kostnadsminimering" (+25% stammar/s, -5 image)
     - Phase 5: "Multinationell Expansion" (+20% country invasion speed) VS "Nationell Dominans" (+30% Swedish generator production)
@@ -987,7 +987,15 @@
   - Forks are clearly marked in UI with "VÄLJ EN" label
   - Choice is permanent per playthrough — adds replay value
 
-**Notes:** Sprint 11 pending.
+**Notes:** Sprint 11 complete. Key changes:
+- **11A-1 Antagonist Scaling**: Added `scaleThreshold` to `CounterCost` interface, `getScaledCounterCost()` function. All 17 antagonists have tailored thresholds. Formula: `baseCost × min(100, max(1, stammarPS / threshold))`. AntagonistPanel shows scaled costs.
+- **11A-2 Escalation**: Added `activatedAt`/`escalated` to `AntagonistState`. Active >5min → escalated (2× tick effects, +50% counter cost). "ESKALERAD" badge with red pulse-glow animation in UI.
+- **11B-1 Side Effects**: Added `GeneratorSideEffect` interface and `sideEffects` to 7 generators (image/lobby/biodiversity per second per unit). Applied in tick loop. Shown as colored badges on generator cards.
+- **11B-2 Synergies**: 4 synergy pairs (Massafabrik+Certifiering, Lobbyfirma+Autonomt, Markberedning+Klon-Skog, Koncession+Monokultur). Applied as multiplicative stammar/kapital boosts + flat image/s in tick. "Aktiva synergier" section in Generators.tsx.
+- **11C-1 Country Rewards**: All 9 countries have unique rewards (generator efficiency, kapital/stammar multipliers, lobby/image per second). `computeCountryRewards()` aggregates controlled countries. Applied in tick. Shown in CountryPanel detail.
+- **11C-2 Country Events**: 8 events in `src/data/phase7/countryEvents.ts` (Amazonia fire, Norgia protest, Siberien methane, Chinova trade wall, Finlandia merger, Kanadien indigenous, Indiska BJÖRKEA, Danmark julgranar). 2-3 choices each with resource tradeoffs.
+- **11D-1 Fork Upgrades**: 6 fork upgrades (3 pairs) in `src/data/forkUpgrades.ts`. `exclusiveWith` field on UpgradeData. UpgradeCard shows "Välj en" badge, "Låst" when other chosen. Fork prerequisites use ANY-one-met logic.
+- Save migration v10→v11: sets `activatedAt` on existing active antagonists. Build: 234KB gzipped, TypeScript clean.
 
 ---
 

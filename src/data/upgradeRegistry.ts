@@ -7,11 +7,13 @@ import { PHASE3_UPGRADES } from './phase3/upgrades'
 import { PHASE4_UPGRADES } from './phase4/upgrades'
 import { PHASE7_UPGRADES } from './phase7/upgrades'
 import { PHASE10_UPGRADES } from './phase10/upgrades'
+import { FORK_UPGRADES } from './forkUpgrades'
 
 const UPGRADES: UpgradeData[] = [
   ...PHASE1_UPGRADES,
   ...PHASE3_UPGRADES,
   ...PHASE4_UPGRADES,
+  ...FORK_UPGRADES,
   ...PHASE7_UPGRADES,
   ...PHASE10_UPGRADES,
 ]

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import { GENERATORS, getGeneratorCost, type GeneratorData } from '../data/generators'
+import { GENERATORS, getGeneratorCost, getActiveSynergies, GENERATOR_SYNERGIES, type GeneratorData } from '../data/generators'
 import { formatNumber } from '../engine/format'
 import { GlassCard } from './ui/GlassCard'
 import { playPurchase } from '../engine/audio'
@@ -25,6 +25,11 @@ export function Generators() {
   const nextLocked = useMemo(() => {
     return GENERATORS.find(g => g.unlockPhase === phase + 1)
   }, [phase])
+
+  // Active synergies
+  const activeSynergies = useMemo(() => {
+    return getActiveSynergies(generators)
+  }, [generators])
 
   return (
     <div className="flex flex-col gap-2">
@@ -66,6 +71,22 @@ export function Generators() {
           </GlassCard>
         )}
       </div>
+
+      {/* Active synergies */}
+      {activeSynergies.length > 0 && (
+        <div className="mt-2">
+          <h3 className="text-xs font-medium text-text-muted mb-1">Aktiva synergier</h3>
+          <div className="flex flex-wrap gap-1">
+            {activeSynergies.map(syn => (
+              <span key={syn.id} className="text-xs bg-accent/10 text-accent px-2 py-0.5 rounded border border-accent/20">
+                {syn.label}
+                {syn.effects.stammarMultiplier && ` +${Math.round((syn.effects.stammarMultiplier - 1) * 100)}% stammar`}
+                {syn.effects.kapitalMultiplier && ` +${Math.round((syn.effects.kapitalMultiplier - 1) * 100)}% kapital`}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {visibleGenerators.length === 0 && (
         <div className="text-center text-text-muted text-sm py-4">
@@ -144,6 +165,20 @@ function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
               )}
             </span>
           </div>
+          {/* Side effects */}
+          {data.sideEffects && data.sideEffects.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-1">
+              {data.sideEffects.map((eff, i) => (
+                <span key={i} className={`text-xs px-1.5 py-0.5 rounded ${
+                  eff.perSecond > 0
+                    ? 'text-success bg-success/10'
+                    : 'text-danger bg-danger/10'
+                }`}>
+                  {eff.description}/st
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </GlassCard>

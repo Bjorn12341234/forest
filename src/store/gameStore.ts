@@ -11,18 +11,19 @@ import { PHASE3_EVENTS } from '../data/phase3/events'
 import { PHASE5_EVENTS } from '../data/phase5/events'
 import { PHASE5_NEW_EVENTS } from '../data/phase5/newEvents'
 import { PHASE7_EVENTS } from '../data/phase7/events'
+import { COUNTRY_EVENTS } from '../data/phase7/countryEvents'
 import { PHASE8_EVENTS } from '../data/phase8/events'
 import { PHASE10_NEW_EVENTS } from '../data/phase10/events'
-import { getGeneratorData, getGeneratorCost } from '../data/generators'
+import { getGeneratorData, getGeneratorCost, GENERATORS, getActiveSynergies } from '../data/generators'
 import { getClickUpgrade, CLICK_UPGRADES } from '../data/clickUpgrades'
 import { getUpgradeData } from '../data/upgradeRegistry'
 import { getLobbyEarner, getLobbyPurchase, computeLobbyModifiers, type LobbyModifiers } from '../data/lobbyProjects'
 import { getOwnerAction } from '../data/ownerActions'
 import { getPRCampaign } from '../data/ownerActions'
-import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist } from '../data/antagonists'
+import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist, getScaledCounterCost } from '../data/antagonists'
 import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
 import { calculateWarningLevel, getWarningPenalty } from '../engine/warnings'
-import { getCountry } from '../data/countries'
+import { getCountry, computeCountryRewards } from '../data/countries'
 import { getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
 import { getKnowledgeActivity } from '../data/ownerKnowledge'
@@ -39,6 +40,7 @@ export const ALL_EVENTS = [
   ...PHASE5_EVENTS,
   ...PHASE5_NEW_EVENTS,
   ...PHASE7_EVENTS,
+  ...COUNTRY_EVENTS,
   ...PHASE8_EVENTS,
   ...PHASE10_NEW_EVENTS,
 ]
@@ -432,10 +434,25 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const warningLevel = calculateWarningLevel(state)
     const warningPenalty = getWarningPenalty(warningLevel)
 
-    // Calculate stammar from generators with lobby boost, upgrade multipliers, and warning penalty
+    // Calculate stammar from generators with lobby boost, upgrade multipliers, warning penalty, synergies, and country rewards
     const baseStammarPS = computeBaseStammarPerSecond(state.generators)
     const lobbyBoost = lobbyMods.generatorBoost
-    const stammarPS = (baseStammarPS * lobbyBoost * upgradeMods.gpsMultiplier + upgradeMods.flatStammarPS) * warningPenalty
+
+    // Calculate country unique rewards
+    const countryRewards = computeCountryRewards(state.countries)
+
+    // Calculate synergy multipliers
+    const activeSynergies = getActiveSynergies(state.generators)
+    let synergyStammarMult = 1
+    let synergyKapitalMult = 1
+    let synergyImagePS = 0
+    for (const syn of activeSynergies) {
+      if (syn.effects.stammarMultiplier) synergyStammarMult *= syn.effects.stammarMultiplier
+      if (syn.effects.kapitalMultiplier) synergyKapitalMult *= syn.effects.kapitalMultiplier
+      if (syn.effects.imagePerSecond) synergyImagePS += syn.effects.imagePerSecond
+    }
+
+    const stammarPS = (baseStammarPS * lobbyBoost * upgradeMods.gpsMultiplier * synergyStammarMult * countryRewards.generatorEfficiency * countryRewards.stammarMultiplier + upgradeMods.flatStammarPS) * warningPenalty
 
     // Add expansion target production (only from controlled targets)
     let expansionStammarPS = 0
@@ -484,23 +501,45 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     // Apply golden opportunity multiplier if active
     const goldenMult = (state.goldenMultiplierUntil > now) ? goldenMultiplierValue : 1
     const totalStammarPS = (stammarPS + expansionStammarPS + countryStammarPS) * goldenMult
-    const kapitalRate = stammarPS * goldenMult * conversionRate * trustModifier * kapitalBoost + upgradeMods.flatKapitalPS + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
+    const kapitalRate = stammarPS * goldenMult * conversionRate * trustModifier * kapitalBoost * synergyKapitalMult * countryRewards.kapitalMultiplier + upgradeMods.flatKapitalPS + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
 
     const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
+
+    // ── Generator side effects ──
+    let genSideImage = 0
+    let genSideLobby = 0
+    let genSideBiodiv = 0
+    for (const gen of GENERATORS) {
+      const gs = state.generators[gen.id]
+      if (!gs || gs.count <= 0 || !gen.sideEffects) continue
+      for (const eff of gen.sideEffects) {
+        const amount = eff.perSecond * gs.count * dt
+        if (eff.resource === 'image') genSideImage += amount
+        else if (eff.resource === 'lobby') genSideLobby += amount
+        else if (eff.resource === 'biodiversity') genSideBiodiv += amount
+      }
+    }
+    const totalSideImage = genSideImage + synergyImagePS * dt + countryRewards.imagePerSecond * dt
+    if (totalSideImage !== 0) {
+      updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + totalSideImage))
+    }
+    if (genSideLobby !== 0) {
+      updates.lobby = Math.max(0, (updates.lobby ?? state.lobby) + genSideLobby)
+    }
 
     // Update hidden variables (include expansion + country hidden costs)
     const co2Gain = stammarGained * 0.05 + expansionCO2 * dt + countryCO2 * dt
     const ownerShare = kapitalGained * 0.08
     const industryShare = kapitalGained * 0.92
-    const biodivLoss = stammarGained * 0.0001 + expansionBiodivLoss * dt + countryBiodivLoss * dt
+    const biodivLoss = stammarGained * 0.0001 + expansionBiodivLoss * dt + countryBiodivLoss * dt - genSideBiodiv
 
     const updates: Partial<GameState> = {
       stammar: state.stammar + stammarGained,
       stammarPerSecond: totalStammarPS,
       totalStammar: state.totalStammar + stammarGained,
       kapital: state.kapital + kapitalGained,
-      lobby: Math.max(0, state.lobby - (countryLobbyCost + expansionLobbyCost) * dt),
+      lobby: Math.max(0, state.lobby - (countryLobbyCost + expansionLobbyCost) * dt + countryRewards.lobbyPerSecond * dt),
       warningLevel,
       realCO2: state.realCO2 + co2Gain,
       ownerProfit: state.ownerProfit + ownerShare,
@@ -534,21 +573,41 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     // Check for newly triggered antagonists
     const currentState = { ...state, ...updates } as GameState
     const newlyTriggered = checkAntagonistTriggers(currentState)
-    if (newlyTriggered.length > 0) {
-      const newAntagonists = { ...state.antagonists }
+    const antagonistsNeedUpdate = newlyTriggered.length > 0
+    const newAntagonists = antagonistsNeedUpdate ? { ...state.antagonists } : state.antagonists
+
+    if (antagonistsNeedUpdate) {
       for (const id of newlyTriggered) {
-        newAntagonists[id] = { active: true, countered: false }
+        newAntagonists[id] = { active: true, countered: false, activatedAt: now }
       }
       updates.antagonists = newAntagonists
     }
 
+    // Check for escalation (active >5 min without countering → escalated)
+    const ESCALATION_TIME_MS = 5 * 60 * 1000
+    let escalationChanged = false
+    const antagonistSource = updates.antagonists ?? state.antagonists
+    for (const ant of ANTAGONISTS) {
+      const antState = antagonistSource[ant.id]
+      if (!antState?.active || antState.countered || antState.escalated) continue
+      if (antState.activatedAt && (now - antState.activatedAt) >= ESCALATION_TIME_MS) {
+        if (!escalationChanged) {
+          updates.antagonists = { ...antagonistSource }
+          escalationChanged = true
+        }
+        updates.antagonists![ant.id] = { ...antState, escalated: true }
+      }
+    }
+
     // Apply tick effects from active, uncountered antagonists
     const imageProtection = lobbyMods.imageProtection
+    const activeAnts = updates.antagonists ?? state.antagonists
     for (const ant of ANTAGONISTS) {
-      const antState = (updates.antagonists ?? state.antagonists)[ant.id]
+      const antState = activeAnts[ant.id]
       if (!antState?.active || antState.countered) continue
+      const escalationMult = antState.escalated ? 2 : 1
       for (const eff of ant.tickEffects) {
-        const amount = eff.perSecond * dt
+        const amount = eff.perSecond * dt * escalationMult
         if (eff.resource === 'image') {
           updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + amount * imageProtection))
         } else if (eff.resource === 'stammar') {
@@ -894,6 +953,36 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const count = currentUpgrade?.count ?? 0
     if (count >= data.maxCount) return
 
+    // Check mutually exclusive lock — if the other fork was already purchased, block
+    if (data.exclusiveWith) {
+      const otherState = state.upgrades[data.exclusiveWith]
+      if (otherState?.purchased || (otherState?.count ?? 0) > 0) return
+    }
+
+    // Check prerequisites — for fork upgrades, need ANY prerequisite (not all)
+    if (data.prerequisites && data.prerequisites.length > 0) {
+      const hasForkPrereqs = data.prerequisites.some(prereqId => {
+        const prereqData = getUpgradeData(prereqId)
+        return prereqData?.exclusiveWith != null // this prereq is part of a fork pair
+      })
+
+      if (hasForkPrereqs) {
+        // For fork prerequisites: need at least ONE
+        const anyMet = data.prerequisites.some(prereqId => {
+          const ps = state.upgrades[prereqId]
+          return ps?.purchased || (ps?.count ?? 0) > 0
+        })
+        if (!anyMet) return
+      } else {
+        // Normal prerequisites: need ALL
+        const allMet = data.prerequisites.every(prereqId => {
+          const ps = state.upgrades[prereqId]
+          return ps?.purchased || (ps?.count ?? 0) > 0
+        })
+        if (!allMet) return
+      }
+    }
+
     const cost = calculateUpgradeCost(data.baseCost, count)
     const resource = data.costResource as keyof GameState
     const current = state[resource]
@@ -1052,16 +1141,21 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const antState = state.antagonists[id]
     if (!antState?.active || antState.countered) return
 
-    // Check cost
+    // Calculate scaled cost based on current income
+    const scaledAmount = getScaledCounterCost(ant.counterCost, state.stammarPerSecond)
+    // Escalated antagonists cost 50% more
+    const escalated = antState.escalated ?? false
+    const finalAmount = escalated ? Math.floor(scaledAmount * 1.5) : scaledAmount
+
     const costResource = ant.counterCost.resource as keyof GameState
     const current = state[costResource]
-    if (typeof current !== 'number' || current < ant.counterCost.amount) return
+    if (typeof current !== 'number' || current < finalAmount) return
 
     set({
-      [costResource]: current - ant.counterCost.amount,
+      [costResource]: current - finalAmount,
       antagonists: {
         ...state.antagonists,
-        [id]: { active: true, countered: true },
+        [id]: { ...antState, countered: true },
       },
     } as Partial<GameStore>)
   },

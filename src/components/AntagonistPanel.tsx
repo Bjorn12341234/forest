@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import { ANTAGONISTS, type AntagonistDef } from '../data/antagonists'
+import { ANTAGONISTS, type AntagonistDef, getScaledCounterCost } from '../data/antagonists'
 import { formatNumber } from '../engine/format'
 import { GlassCard } from './ui/GlassCard'
 import { playPurchase } from '../engine/audio'
@@ -10,6 +10,7 @@ export function AntagonistPanel() {
   const antagonists = useGameStore(s => s.antagonists)
   const kapital = useGameStore(s => s.kapital)
   const lobby = useGameStore(s => s.lobby)
+  const stammarPerSecond = useGameStore(s => s.stammarPerSecond)
   const counterAntagonist = useGameStore(s => s.counterAntagonist)
 
   const activeAntagonists = useMemo(() => {
@@ -36,9 +37,10 @@ export function AntagonistPanel() {
             >
               <AntagonistRow
                 data={ant}
-                countered={antagonists[ant.id]?.countered ?? false}
+                antState={antagonists[ant.id]}
                 kapital={kapital}
                 lobby={lobby}
+                stammarPerSecond={stammarPerSecond}
                 onCounter={() => {
                   counterAntagonist(ant.id)
                   playPurchase()
@@ -52,25 +54,32 @@ export function AntagonistPanel() {
   )
 }
 
-function AntagonistRow({ data, countered, kapital, lobby, onCounter }: {
+import type { AntagonistState } from '../store/types'
+
+function AntagonistRow({ data, antState, kapital, lobby, stammarPerSecond, onCounter }: {
   data: AntagonistDef
-  countered: boolean
+  antState: AntagonistState | undefined
   kapital: number
   lobby: number
+  stammarPerSecond: number
   onCounter: () => void
 }) {
+  const countered = antState?.countered ?? false
+  const escalated = antState?.escalated ?? false
   const costResource = data.counterCost.resource
   const currentResource = costResource === 'kapital' ? kapital : lobby
-  const canAfford = !countered && currentResource >= data.counterCost.amount
+  const scaledAmount = getScaledCounterCost(data.counterCost, stammarPerSecond)
+  const finalAmount = escalated ? Math.floor(scaledAmount * 1.5) : scaledAmount
+  const canAfford = !countered && currentResource >= finalAmount
   const costLabel = costResource === 'kapital'
-    ? `${formatNumber(data.counterCost.amount)} Mkr`
-    : `${formatNumber(data.counterCost.amount)} PK`
+    ? `${formatNumber(finalAmount)} Mkr`
+    : `${formatNumber(finalAmount)} PK`
 
   return (
     <GlassCard
       padding="sm"
       glow={countered ? 'none' : 'red'}
-      className={countered ? 'opacity-60' : ''}
+      className={`${countered ? 'opacity-60' : ''} ${escalated && !countered ? 'animate-pulse-glow-red' : ''}`}
     >
       <div className="flex items-start gap-2">
         <span className="text-lg flex-shrink-0 mt-0.5">{data.icon}</span>
@@ -80,6 +89,11 @@ function AntagonistRow({ data, countered, kapital, lobby, onCounter }: {
               {data.name}
             </span>
             {countered && <span className="text-xs text-success">Neutraliserad</span>}
+            {escalated && !countered && (
+              <span className="text-xs text-danger font-bold bg-danger/20 px-1.5 py-0.5 rounded">
+                ESKALERAD
+              </span>
+            )}
           </div>
           <p className="text-xs text-text-muted leading-relaxed">{data.description}</p>
 
@@ -88,7 +102,7 @@ function AntagonistRow({ data, countered, kapital, lobby, onCounter }: {
             <div className="flex flex-wrap gap-1 mt-1">
               {data.tickEffects.map((eff, i) => (
                 <span key={i} className="text-xs text-danger bg-danger/10 px-1.5 py-0.5 rounded">
-                  {eff.description}
+                  {escalated ? `${eff.description} (×2)` : eff.description}
                 </span>
               ))}
             </div>

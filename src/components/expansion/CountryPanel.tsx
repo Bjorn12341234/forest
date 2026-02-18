@@ -360,6 +360,19 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
             </div>
           )}
 
+          {/* Unique reward (always visible) */}
+          {country.uniqueReward && (
+            <div className="mt-2">
+              <span className={`text-xs px-1.5 py-0.5 rounded ${
+                status === 'controlled'
+                  ? 'bg-accent-green/15 text-accent-green font-medium'
+                  : 'bg-bg-tertiary text-text-secondary'
+              }`}>
+                {status === 'controlled' ? '✓ ' : '★ '}{country.uniqueReward.label}: {country.uniqueReward.description}
+              </span>
+            </div>
+          )}
+
           {/* Costs to invade */}
           {!status && (
             <div className="flex flex-wrap gap-2 mt-3">

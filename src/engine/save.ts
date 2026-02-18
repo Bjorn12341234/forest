@@ -2,7 +2,7 @@ import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
 const BACKUP_KEY = 'silva_maximus_backup'
-const CURRENT_VERSION = 10
+const CURRENT_VERSION = 11
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -301,6 +301,21 @@ const migrations: Record<number, MigrationFn> = {
     s.gameSpeed = 1
     s.goldenMultiplierUntil = 0
     save.version = 10
+    return save
+  },
+  10: (save) => {
+    // v10 → v11: Sprint 11 — set activatedAt on existing active antagonists
+    const state = save.state as GameState
+    if (state.antagonists) {
+      const now = Date.now()
+      for (const [, antState] of Object.entries(state.antagonists)) {
+        const s = antState as { active?: boolean; activatedAt?: number }
+        if (s.active && !s.activatedAt) {
+          s.activatedAt = now
+        }
+      }
+    }
+    save.version = 11
     return save
   },
 }

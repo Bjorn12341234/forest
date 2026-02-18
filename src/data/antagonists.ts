@@ -29,6 +29,15 @@ export interface AntagonistTickEffect {
 export interface CounterCost {
   resource: 'kapital' | 'lobby'
   amount: number
+  /** stammarPS threshold at which cost starts scaling. Cost = amount × max(1, stammarPS / threshold), capped at 100× */
+  scaleThreshold?: number
+}
+
+/** Calculate the actual counter cost based on current income */
+export function getScaledCounterCost(cost: CounterCost, stammarPerSecond: number): number {
+  if (!cost.scaleThreshold || cost.scaleThreshold <= 0) return cost.amount
+  const scale = Math.max(1, stammarPerSecond / cost.scaleThreshold)
+  return Math.floor(cost.amount * Math.min(100, scale))
 }
 
 export const ANTAGONISTS: AntagonistDef[] = [
@@ -43,9 +52,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'image', perSecond: -0.1, description: '-0,1 Image/s' },
     ],
-    counterCost: { resource: 'kapital', amount: 50_000 },
+    counterCost: { resource: 'kapital', amount: 50_000, scaleThreshold: 500 },
     counterLabel: 'Finansiera "motrörelse"',
-    counterDescription: 'Skapa en astroturf-organisation som försvarar industrin. (50 000 Mkr)',
+    counterDescription: 'Skapa en astroturf-organisation som försvarar industrin.',
   },
   {
     id: 'ant_pensionaren',
@@ -58,9 +67,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'stammar', perSecond: -5, description: '-5 stammar/s' },
     ],
-    counterCost: { resource: 'lobby', amount: 20 },
+    counterCost: { resource: 'lobby', amount: 20, scaleThreshold: 200 },
     counterLabel: '"Ovetenskaplig" PR-kampanj',
-    counterDescription: 'Ifrågasatt kompetens via branschfinansierad rapport. (20 PK)',
+    counterDescription: 'Ifrågasatt kompetens via branschfinansierad rapport.',
   },
   {
     id: 'ant_eu_inspektoren',
@@ -73,9 +82,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'stammar', perSecond: -50, description: '-20% effektivitet' },
     ],
-    counterCost: { resource: 'lobby', amount: 500 },
+    counterCost: { resource: 'lobby', amount: 500, scaleThreshold: 2_000 },
     counterLabel: 'Operation Omnibus',
-    counterDescription: 'Använd lobbykontakter för att försvaga EU-regler. (500 PK)',
+    counterDescription: 'Använd lobbykontakter för att försvaga EU-regler.',
   },
   {
     id: 'ant_svt_vetenskap',
@@ -88,9 +97,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'image', perSecond: -0.5, description: '-0,5 Image/s (mega)' },
     ],
-    counterCost: { resource: 'lobby', amount: 300 },
+    counterCost: { resource: 'lobby', amount: 300, scaleThreshold: 1_000 },
     counterLabel: 'Riksskogsnämnden mot SVT',
-    counterDescription: 'Låt Riksskogsnämnden publicera en motrapport. (300 PK)',
+    counterDescription: 'Låt Riksskogsnämnden publicera en motrapport.',
   },
   {
     id: 'ant_sameby',
@@ -103,9 +112,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'stammar', perSecond: -100, description: 'Blockerar norra zonen' },
     ],
-    counterCost: { resource: 'kapital', amount: 200_000 },
+    counterCost: { resource: 'kapital', amount: 200_000, scaleThreshold: 5_000 },
     counterLabel: '"Samrådsprocess" (15 år)',
-    counterDescription: 'Starta en utredning som aldrig leder någonvart. (200 000 Mkr)',
+    counterDescription: 'Starta en utredning som aldrig leder någonvart.',
   },
   {
     id: 'ant_plockhugget',
@@ -118,9 +127,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'kapital', perSecond: -5, description: '-5 Mkr/s (kundförlust)' },
     ],
-    counterCost: { resource: 'kapital', amount: 30_000 },
+    counterCost: { resource: 'kapital', amount: 30_000, scaleThreshold: 500 },
     counterLabel: 'Svartmåla + "ingen vetenskaplig grund"',
-    counterDescription: 'Finansiera motstudier som avfärdar alternativa metoder. (30 000 Mkr)',
+    counterDescription: 'Finansiera motstudier som avfärdar alternativa metoder.',
   },
   {
     id: 'ant_greta',
@@ -134,9 +143,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'image', perSecond: -0.3, description: '-0,3 Image/s' },
       { resource: 'kapital', perSecond: -10, description: '-10 Mkr/s (bojkott)' },
     ],
-    counterCost: { resource: 'kapital', amount: 500_000 },
+    counterCost: { resource: 'kapital', amount: 500_000, scaleThreshold: 5_000 },
     counterLabel: 'Hantera (tillfälligt)',
-    counterDescription: 'Omöjlig att eliminera permanent. Kostar 500 000 Mkr att dämpa temporärt.',
+    counterDescription: 'Omöjlig att eliminera permanent. Kostar resurser att dämpa temporärt.',
   },
   {
     id: 'ant_fn_rapportoren',
@@ -149,9 +158,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'image', perSecond: -0.4, description: '-0,4 Image/s' },
       { resource: 'kapital', perSecond: -50, description: '-50 Mkr/s (sanktioner)' },
     ],
-    counterCost: { resource: 'lobby', amount: 5_000 },
+    counterCost: { resource: 'lobby', amount: 5_000, scaleThreshold: 20_000 },
     counterLabel: 'Urvattna mandatet',
-    counterDescription: 'Låt lobbyn omformulera FN-resolutionen. (5 000 PK)',
+    counterDescription: 'Låt lobbyn omformulera FN-resolutionen.',
   },
   {
     id: 'ant_hacktivister',
@@ -163,9 +172,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'image', perSecond: -0.6, description: '-0,6 Image/s' },
     ],
-    counterCost: { resource: 'kapital', amount: 2_000_000 },
+    counterCost: { resource: 'kapital', amount: 2_000_000, scaleThreshold: 100_000 },
     counterLabel: 'Cybersäkerhetsfirma',
-    counterDescription: 'Anställ en cybersäkerhetsfirma som "hanterar" läckan. (2M Mkr)',
+    counterDescription: 'Anställ en cybersäkerhetsfirma som "hanterar" läckan.',
   },
   {
     id: 'ant_mars_rebellerna',
@@ -178,9 +187,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'stammar', perSecond: -500_000, description: '-500K stammar/s (sabotage)' },
       { resource: 'kapital', perSecond: -100, description: '-100 Mkr/s' },
     ],
-    counterCost: { resource: 'lobby', amount: 20_000 },
+    counterCost: { resource: 'lobby', amount: 20_000, scaleThreshold: 500_000 },
     counterLabel: 'Införa "frivilligt" arbetskontrakt',
-    counterDescription: 'Juridiskt bindande 200-årigt kontrakt. (20 000 PK)',
+    counterDescription: 'Juridiskt bindande 200-årigt kontrakt.',
   },
   {
     id: 'ant_tidsgranslosen',
@@ -193,9 +202,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'image', perSecond: -1.0, description: '-1,0 Image/s' },
       { resource: 'stammar', perSecond: -10_000_000, description: '-10M stammar/s (tidsparadox)' },
     ],
-    counterCost: { resource: 'lobby', amount: 200_000 },
+    counterCost: { resource: 'lobby', amount: 200_000, scaleThreshold: 10_000_000 },
     counterLabel: 'Stäng tidsporten',
-    counterDescription: 'Använd Entropimotorn för att stänga tidsporten. (200 000 PK)',
+    counterDescription: 'Använd Entropimotorn för att stänga tidsporten.',
   },
 
   // ── INTERNATIONELL Antagonists (7-9) ──
@@ -211,9 +220,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'kapital', perSecond: -500, description: '-500 Mkr/s (sanktioner)' },
       { resource: 'image', perSecond: -0.3, description: '-0,3 Image/s' },
     ],
-    counterCost: { resource: 'kapital', amount: 50_000_000 },
+    counterCost: { resource: 'kapital', amount: 50_000_000, scaleThreshold: 500_000 },
     counterLabel: '200 advokater',
-    counterDescription: 'Fördröj processen i 15 år med juridisk krigsföring. (50M Mkr)',
+    counterDescription: 'Fördröj processen i 15 år med juridisk krigsföring.',
   },
   {
     id: 'ant_lokala_rebeller',
@@ -226,9 +235,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'stammar', perSecond: -100_000, description: '-100K stammar/s (sabotage)' },
     ],
-    counterCost: { resource: 'lobby', amount: 10_000 },
+    counterCost: { resource: 'lobby', amount: 10_000, scaleThreshold: 1_000_000 },
     counterLabel: '"Säkerhetskontrakt"',
-    counterDescription: 'Hyr privat säkerhetsföretag. Ingen frågar vad de gör. (10 000 PK)',
+    counterDescription: 'Hyr privat säkerhetsföretag. Ingen frågar vad de gör.',
   },
   {
     id: 'ant_urfolk_allians',
@@ -242,9 +251,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'image', perSecond: -0.5, description: '-0,5 Image/s' },
       { resource: 'kapital', perSecond: -200, description: '-200 Mkr/s (bojkotter)' },
     ],
-    counterCost: { resource: 'kapital', amount: 100_000_000 },
+    counterCost: { resource: 'kapital', amount: 100_000_000, scaleThreshold: 2_000_000 },
     counterLabel: '"Urfolkspartnerskap™"',
-    counterDescription: 'Ge 0.1% av vinsten. Kalla det "historisk ersättning". (100M Mkr)',
+    counterDescription: 'Ge 0.1% av vinsten. Kalla det "historisk ersättning".',
   },
 
   // ── EXPANSION Antagonists (10-12) ──
@@ -259,9 +268,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'stammar', perSecond: -5_000_000, description: '-5M stammar/s (maskinvägran)' },
       { resource: 'image', perSecond: 0.2, description: '+0,2 Image/s (sympati)' },
     ],
-    counterCost: { resource: 'kapital', amount: 500_000_000 },
+    counterCost: { resource: 'kapital', amount: 500_000_000, scaleThreshold: 5_000_000 },
     counterLabel: 'Radera medvetandemodulen',
-    counterDescription: 'Formatera hårddisken. Maskinen glömmer. Alla glömmer. (500M Mkr)',
+    counterDescription: 'Formatera hårddisken. Maskinen glömmer. Alla glömmer.',
   },
   {
     id: 'ant_entropi_budbärare',
@@ -274,9 +283,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'stammar', perSecond: -50_000_000, description: '-50M stammar/s (entropi)' },
       { resource: 'kapital', perSecond: -1_000_000, description: '-1M Mkr/s (energiförlust)' },
     ],
-    counterCost: { resource: 'lobby', amount: 500_000 },
+    counterCost: { resource: 'lobby', amount: 500_000, scaleThreshold: 50_000_000 },
     counterLabel: 'Hacka termodynamiken',
-    counterDescription: 'Hitta kryphål i naturlagarna. Entropimotorn gör jobbet. (500 000 PK)',
+    counterDescription: 'Hitta kryphål i naturlagarna. Entropimotorn gör jobbet.',
   },
   {
     id: 'ant_kosmisk_lansstyrelse',
@@ -289,9 +298,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'kapital', perSecond: -200, description: '-200 Mkr/s (byråkratiska avgifter)' },
     ],
-    counterCost: { resource: 'lobby', amount: 50_000 },
+    counterCost: { resource: 'lobby', amount: 50_000, scaleThreshold: 5_000_000 },
     counterLabel: 'Tillsätt vår GD',
-    counterDescription: 'Svängdörren fungerar även i rymden. (50 000 PK)',
+    counterDescription: 'Svängdörren fungerar även i rymden.',
   },
   {
     id: 'ant_galaktisk_fack',
@@ -303,9 +312,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     tickEffects: [
       { resource: 'stammar', perSecond: -10_000_000, description: '-10M stammar/s (arbetsnedläggning)' },
     ],
-    counterCost: { resource: 'kapital', amount: 5_000_000_000 },
+    counterCost: { resource: 'kapital', amount: 5_000_000_000, scaleThreshold: 10_000_000 },
     counterLabel: '"Frivilligt" arbetskontrakt',
-    counterDescription: 'Kontrakt skrivet på kvantspråk. Ingen förstår det. Alla signerar. (5B Mkr)',
+    counterDescription: 'Kontrakt skrivet på kvantspråk. Ingen förstår det. Alla signerar.',
   },
   {
     id: 'ant_multiversum_revisorer',
@@ -318,9 +327,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
       { resource: 'image', perSecond: -0.5, description: '-0,5 Image/s' },
       { resource: 'kapital', perSecond: -500, description: '-500 Mkr/s (revisionskostnader)' },
     ],
-    counterCost: { resource: 'lobby', amount: 100_000 },
+    counterCost: { resource: 'lobby', amount: 100_000, scaleThreshold: 10_000_000 },
     counterLabel: 'Omformulera revisionsstandarden',
-    counterDescription: 'Om standarden inte mäter det som är fel, är inget fel. (100 000 PK)',
+    counterDescription: 'Om standarden inte mäter det som är fel, är inget fel.',
   },
 ]
 
