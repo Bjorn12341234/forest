@@ -53,11 +53,20 @@ export function selectEvent(
   return eligible[eligible.length - 1]
 }
 
+/** Cooldown between replays of a replayable event (15 minutes) */
+const REPLAY_COOLDOWN_MS = 15 * 60 * 1000
+
 function isEligible(event: GameEvent, state: GameState): boolean {
   // Phase/maxPhase already filtered by cache — skip those checks
 
-  // Unique events can only fire once
-  if (event.unique && state.eventHistory.includes(event.id)) return false
+  // Replayable events: allow re-firing after cooldown
+  if (event.replayable) {
+    const lastFired = state.lastEventFiredAt?.[event.id]
+    if (lastFired && (Date.now() - lastFired) < REPLAY_COOLDOWN_MS) return false
+  } else {
+    // Non-replayable: unique events can only fire once
+    if (state.eventHistory.includes(event.id)) return false
+  }
 
   // Check conditions
   if (event.conditions) {

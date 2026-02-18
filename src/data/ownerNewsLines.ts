@@ -1,10 +1,15 @@
 // ── Silva Maximus — Owner (Skogsägare) News Ticker Headlines ──
 // Shown when gameMode === 'owner'. Triggered by totalSkogsvardering milestones.
+// Sprint 12: expanded from 25→50 headlines + 10 dynamic conditional headlines.
+
+import type { GameState } from '../store/types'
 
 export interface OwnerTickerHeadline {
   id: string
   text: string
   triggerSV?: number  // totalSkogsvardering threshold (optional, shown from start if omitted)
+  /** Dynamic headline: condition function on game state (if set, triggerSV is ignored) */
+  condition?: (state: GameState) => boolean
 }
 
 export const OWNER_TICKER_HEADLINES: OwnerTickerHeadline[] = [
@@ -159,11 +164,186 @@ export const OWNER_TICKER_HEADLINES: OwnerTickerHeadline[] = [
     text: 'Barnbarnen leker vid bäcken. Samma bäck som du lekte vid. Den rinner fortfarande. Grannens bäck torrlade för 20 år sen.',
     triggerSV: 160_000,
   },
+  // ── Sprint 12: Late-game headlines (sv=80K+) ──
+  {
+    id: 'otick_stormtrad',
+    text: 'Stormen tog 30% av industriskogarna. Din blandskog stod kvar. Resiliens är inte en teori. Det är rötter.',
+    triggerSV: 85_000,
+  },
+  {
+    id: 'otick_slu_inbjudan',
+    text: 'SLU bjuder in dig som föreläsare. "Alternativ skogsförvaltning." Du säger: det heter skogsbruk.',
+    triggerSV: 95_000,
+  },
+  {
+    id: 'otick_insekter',
+    text: 'Entomologen räknar 142 insektsarter i din skog. Grannens plantage: 11. "Men han har ju contorta."',
+    triggerSV: 105_000,
+  },
+  {
+    id: 'otick_eldsjalen',
+    text: 'Tre nya skogsägare ringer varje vecka. De vill byta metod. Rörelsen växer utan marknadsföring.',
+    triggerSV: 110_000,
+  },
+  {
+    id: 'otick_eu_studie',
+    text: 'EU-studien jämför nordiska skogsmodeller. Sverige: mest avverkning, lägst biodiversitet. Din skog: undantaget.',
+    triggerSV: 115_000,
+  },
+  {
+    id: 'otick_kolbudget',
+    text: 'Din skog lagrar mer kol per hektar än hela kommunens industriskog. Klimatavdelningen ringer. Kommunen vill samarbeta.',
+    triggerSV: 125_000,
+  },
+  {
+    id: 'otick_domanverkets_skugga',
+    text: 'Domänverkets arkiv visar: din skog avverkades "rationellt" 1958. Din farfar planterade om den på sitt vis. 65 år senare har du en skog.',
+    triggerSV: 135_000,
+  },
+  {
+    id: 'otick_doktorand',
+    text: 'En doktorand skriver avhandling om din skog. "Naturanpassat bruk som ekonomisk modell." Handledaren från SLU är skeptisk. Datan är inte det.',
+    triggerSV: 140_000,
+  },
+  {
+    id: 'otick_exportmodell',
+    text: 'Norge, Finland och Estland studerar din metod. "Den svenska modellen" betyder plötsligt något annat.',
+    triggerSV: 155_000,
+  },
+  {
+    id: 'otick_svamp_rekord',
+    text: 'Mykolog hittar 47 svamparter på en enda stubbe i din skog. Nytt landskapsrekord. "I produktionsskog hittar vi kanske 5."',
+    triggerSV: 165_000,
+  },
+  {
+    id: 'otick_industrin_tyst',
+    text: 'Industrin har slutat kritisera plockhuggning i media. Inte för att de ändrat sig. För att de förlorar debatten.',
+    triggerSV: 170_000,
+  },
+  {
+    id: 'otick_arvsplanering',
+    text: 'Du skriver skogstestamentet. Inte juridiskt. Emotionellt. Vilka träd ska stå kvar. Vilka stigar ska hållas öppna.',
+    triggerSV: 180_000,
+  },
+  {
+    id: 'otick_klimatforandring',
+    text: 'Klimatförändringen tvingar industrin att ompröva contortaplantagen. Din blandskog klarar sig. Den har alltid klarat sig.',
+    triggerSV: 185_000,
+  },
+  {
+    id: 'otick_skolklass',
+    text: 'Skolklassen besöker din skog varje höst. Barnen lär sig namnen på svamparna. Läraren säger: "Det här borde vara i läroplanen."',
+    triggerSV: 190_000,
+  },
+  {
+    id: 'otick_skogsstyrelsen_rapport',
+    text: 'Skogsstyrelsens interna rapport läcker. "Nuvarande modell är ohållbar." Rapporten hemligstämplas.',
+    triggerSV: 195_000,
+  },
+  {
+    id: 'otick_radion',
+    text: 'P1 dokumentär om din skog. Tre miljoner lyssnare. Reportern gråter under intervjun. "Jag visste inte att det kunde se ut så här."',
+    triggerSV: 210_000,
+  },
+  {
+    id: 'otick_tusen_skogsagare',
+    text: '1 000 skogsägare har bytt metod. Industrin kallar det en kris. Skogen kallar det en chans.',
+    triggerSV: 230_000,
+  },
+  {
+    id: 'otick_arvsskogen_lever',
+    text: 'Arvsskogen fyller 100 år nästa sommar. Fyra generationers omsorg. Industrin har bytt ägare 12 gånger under samma period.',
+    triggerSV: 250_000,
+  },
+  {
+    id: 'otick_slutgiltig',
+    text: 'Du behöver inte bevisa något längre. Skogen bevisar det själv. Varje fågel. Varje svamp. Varje årsring.',
+    triggerSV: 300_000,
+  },
+  {
+    id: 'otick_lavskrikans_unge',
+    text: 'Lavskrikans ungar flyger för första gången. De stannar i din skog. De har ingenstans annat att vara.',
+    triggerSV: 220_000,
+  },
+  {
+    id: 'otick_karta',
+    text: 'Du ritar en karta över alla myrstackar i din skog. 34 stycken. Grannens plantage: 0. "Men han har ju effektiv produktion."',
+    triggerSV: 240_000,
+  },
+  {
+    id: 'otick_ministerbesok',
+    text: 'Miljöministern besöker din skog. "Imponerande." Nästa dag röstar hon för industrins förslag i riksdagen.',
+    triggerSV: 260_000,
+  },
+  {
+    id: 'otick_brevet_fran_japan',
+    text: 'Brev från Japan. Turisten som besökte din skog vill återvända. "I planted a tree in my garden. I named it after your forest."',
+    triggerSV: 270_000,
+  },
+  {
+    id: 'otick_framtiden',
+    text: 'Ditt barnbarn visar sin kompis skogen. "Min farmor planterade det där trädet." Kompisen: "Min farmors skog är bara stubbar."',
+    triggerSV: 280_000,
+  },
+  // ── Sprint 12: Dynamic conditional headlines ──
+  {
+    id: 'otick_dyn_biodiv_high',
+    text: 'Din skog har fler arter per hektar än grannarnas tillsammans. Biologen slutade räkna vid 200.',
+    condition: (s) => s.biodivOwner > 50,
+  },
+  {
+    id: 'otick_dyn_all_attacks_resisted',
+    text: 'Industrin har slutat ringa. De vet. Du motstod allt. Varje inspektör. Varje kampanj. Varje hot.',
+    condition: (s) => Object.values(s.ownerAttacksResisted).filter(Boolean).length >= 5,
+  },
+  {
+    id: 'otick_dyn_legacy_high',
+    text: 'Barnbarnet har börjat rita kartor över skogen. Samma stil som din farfar. Generationernas karta.',
+    condition: (s) => s.legacy > 300,
+  },
+  {
+    id: 'otick_dyn_kunskap_high',
+    text: 'Du vet mer om din skog än Skogsstyrelsen. Det är inte skryt. Det är sorgligt.',
+    condition: (s) => s.kunskap > 500,
+  },
+  {
+    id: 'otick_dyn_resiliens_max',
+    text: 'Stormen kom och gick. Dina träd stod kvar. Varenda ett. Grannens contortaplantage: platt.',
+    condition: (s) => s.resiliens > 80,
+  },
+  {
+    id: 'otick_dyn_carbon_high',
+    text: 'Din koldioxidinlagring är verifierad. Riktig kol. I riktiga träd. Inte industrins kreativa bokföring.',
+    condition: (s) => s.realCarbonPos > 500,
+  },
+  {
+    id: 'otick_dyn_deadwood_rich',
+    text: 'Död ved överallt. Det ser skräpigt ut, säger grannen. 2 000 arter håller inte med.',
+    condition: (s) => s.deadwood > 100,
+  },
+  {
+    id: 'otick_dyn_no_lures',
+    text: 'Du tackade nej till alla lockelser. Varje "gratis" erbjudande. Varje "samarbete". De var aldrig gratis.',
+    condition: (s) => s.ownerLuresDeclined >= 3 && Object.keys(s.ownerLuresAccepted).length === 0,
+  },
+  {
+    id: 'otick_dyn_kooperativ',
+    text: 'Kooperativet levererar direkt till snickeriet. Ingen mellanhand. Ingen industri. Bara trä och hantverkare.',
+    condition: (s) => (s.ownerGenerators['ogen_kooperativ']?.count ?? 0) >= 3,
+  },
+  {
+    id: 'otick_dyn_allians',
+    text: 'Naturskogsalliansen växer. 47 skogsägare. En sammanhängande korridor av liv genom landskapet.',
+    condition: (s) => (s.ownerGenerators['ogen_naturskogsallians']?.count ?? 0) >= 1,
+  },
 ]
 
-/** Get owner headlines available based on totalSkogsvardering */
-export function getAvailableOwnerHeadlines(totalSV: number): OwnerTickerHeadline[] {
+/** Get owner headlines available based on totalSkogsvardering and game state */
+export function getAvailableOwnerHeadlines(totalSV: number, state?: GameState): OwnerTickerHeadline[] {
   return OWNER_TICKER_HEADLINES.filter(h => {
+    // Dynamic headlines: check condition function
+    if (h.condition) return state ? h.condition(state) : false
+    // SV-gated headlines
     if (h.triggerSV && totalSV < h.triggerSV) return false
     return true
   })

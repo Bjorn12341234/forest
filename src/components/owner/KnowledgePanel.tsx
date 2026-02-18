@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useGameStore } from '../../store/gameStore'
 import { KNOWLEDGE_ACTIVITIES, KNOWLEDGE_THRESHOLDS } from '../../data/ownerKnowledge'
-import { KNOWLEDGE_CATEGORIES, getUpgradesByCategory, type OwnerKnowledgeUpgrade } from '../../data/ownerKnowledgeTree'
+import { KNOWLEDGE_CATEGORIES, getUpgradesByCategory, computeKnowledgeModifiers, type OwnerKnowledgeUpgrade } from '../../data/ownerKnowledgeTree'
 import { formatNumber } from '../../engine/format'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
 import { playPurchase } from '../../engine/audio'
@@ -47,6 +47,11 @@ export function KnowledgePanel() {
           <AnimatedNumber value={resiliens} className={`text-lg ${resiliens > 50 ? 'text-owner-accent' : resiliens > 20 ? 'text-[#B8860B]' : 'text-[#CC2222]'}`} />
         </div>
       </div>
+
+      {/* Aggregate Modifiers — Sprint 12 */}
+      {Object.values(ownerKnowledgeUpgrades).some(Boolean) && (
+        <KnowledgeModifiersSummary upgrades={ownerKnowledgeUpgrades} />
+      )}
 
       {/* Biodiversity meter */}
       <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
@@ -260,6 +265,44 @@ function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, svMet,
             Kräver {formatNumber(upgrade.svRequired)} skogsvärde
           </p>
         )}
+      </div>
+    </div>
+  )
+}
+
+// ── Aggregate Knowledge Modifiers Display ──
+
+const MODIFIER_LABELS: Record<string, { label: string; format: (v: number) => string }> = {
+  svPerClickMult: { label: 'Skogsvärde/klick', format: v => `+${Math.round(v * 100)}%` },
+  svPerSecondMult: { label: 'Skogsvärde/s', format: v => `+${Math.round(v * 100)}%` },
+  inkomstMult: { label: 'Inkomst/s', format: v => `+${Math.round(v * 100)}%` },
+  biodivRate: { label: 'Biodiversitet/s', format: v => `+${v.toFixed(2)}` },
+  resiliensRate: { label: 'Resiliens/s', format: v => `+${v.toFixed(2)}` },
+  legacyRate: { label: 'Generationsarv/s', format: v => `+${v.toFixed(2)}` },
+  attackResistance: { label: 'Motståndskraft', format: v => `-${Math.round(v * 100)}% kunskapskrav` },
+  lureCostReduction: { label: 'Lockelsekostnad', format: v => `-${Math.round(v * 100)}%` },
+}
+
+function KnowledgeModifiersSummary({ upgrades }: { upgrades: Record<string, boolean> }) {
+  const mods = computeKnowledgeModifiers(upgrades)
+  const activeEntries = Object.entries(mods).filter(([, v]) => v > 0)
+
+  if (activeEntries.length === 0) return null
+
+  return (
+    <div className="bg-owner-accent/10 border border-owner-accent/25 rounded-sm p-3">
+      <span className="text-owner-text/60 text-xs uppercase tracking-wider">Aktiva modifierare</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-1 mt-2">
+        {activeEntries.map(([key, value]) => {
+          const info = MODIFIER_LABELS[key]
+          if (!info) return null
+          return (
+            <div key={key} className="flex flex-col">
+              <span className="text-[0.65rem] text-owner-text/40 uppercase tracking-wider">{info.label}</span>
+              <span className="text-sm font-numbers text-owner-accent">{info.format(value)}</span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

@@ -530,6 +530,14 @@ function runAutoplay(): void {
   console.log(`  Image: ${finalState.image.toFixed(1)}`)
   console.log(`  Achievements: ${Object.values(finalState.achievements).filter(Boolean).length}`)
   console.log('')
+
+  // ── Replayable event check ──
+  console.log('═══ REPLAY EVENTS ═══')
+  const eventsSeen = finalState.eventHistory.length
+  const replayTimestamps = Object.keys(finalState.lastEventFiredAt ?? {}).length
+  console.log(`  Events i historik: ${eventsSeen}`)
+  console.log(`  Replayable-timestamps: ${replayTimestamps}`)
+  console.log('')
 }
 
 runAutoplay()

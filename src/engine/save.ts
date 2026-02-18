@@ -2,7 +2,7 @@ import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
 const BACKUP_KEY = 'silva_maximus_backup'
-const CURRENT_VERSION = 11
+const CURRENT_VERSION = 12
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -316,6 +316,15 @@ const migrations: Record<number, MigrationFn> = {
       }
     }
     save.version = 11
+    return save
+  },
+  11: (save) => {
+    // v11 → v12: Sprint 12 — add lastEventFiredAt for replayable events
+    const state = save.state as GameState
+    if (!state.lastEventFiredAt) {
+      (state as unknown as Record<string, unknown>).lastEventFiredAt = {}
+    }
+    save.version = 12
     return save
   },
 }

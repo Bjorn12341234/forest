@@ -4,11 +4,31 @@ import { getAvailableOwnerHeadlines } from '../../data/ownerNewsLines'
 
 export function OwnerTicker() {
   const totalSV = useGameStore(s => s.totalSkogsvardering)
+  // Subscribe to state slices used by dynamic headline conditions
+  const biodivOwner = useGameStore(s => s.biodivOwner)
+  const legacy = useGameStore(s => s.legacy)
+  const kunskap = useGameStore(s => s.kunskap)
+  const resiliens = useGameStore(s => s.resiliens)
+  const realCarbonPos = useGameStore(s => s.realCarbonPos)
+  const deadwood = useGameStore(s => s.deadwood)
+  const ownerAttacksResisted = useGameStore(s => s.ownerAttacksResisted)
+  const ownerLuresDeclined = useGameStore(s => s.ownerLuresDeclined)
+  const ownerLuresAccepted = useGameStore(s => s.ownerLuresAccepted)
+  const ownerGenerators = useGameStore(s => s.ownerGenerators)
 
   const headlines = useMemo(() => {
-    const available = getAvailableOwnerHeadlines(totalSV)
+    // Build a minimal state object for dynamic condition checks
+    const stateSlice = {
+      totalSkogsvardering: totalSV,
+      biodivOwner, legacy, kunskap, resiliens,
+      realCarbonPos, deadwood,
+      ownerAttacksResisted, ownerLuresDeclined, ownerLuresAccepted,
+      ownerGenerators,
+    }
+    const available = getAvailableOwnerHeadlines(totalSV, stateSlice as Parameters<typeof getAvailableOwnerHeadlines>[1])
     return available.slice(-6).map(h => h.text)
-  }, [totalSV])
+  }, [totalSV, biodivOwner, legacy, kunskap, resiliens, realCarbonPos, deadwood,
+      ownerAttacksResisted, ownerLuresDeclined, ownerLuresAccepted, ownerGenerators])
 
   if (headlines.length === 0) return null
 

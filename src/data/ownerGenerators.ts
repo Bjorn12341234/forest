@@ -106,6 +106,37 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     bonuses: { legacy: 10.0 },
     costScale: 1.12,
   },
+  // ── Late-game generators (Sprint 12) ──
+  {
+    id: 'ogen_urskogsskydd',
+    name: 'Urskogsskydd',
+    description: 'Du skyddar de sista fläckarna av urskogsliknande skog. Träd som stod här när Gustav Vasa var kung. Industrin ser kubikmeter. Du ser 500 år av evolution.',
+    baseCost: 250_000,
+    svPerSecond: 300,
+    inkomstPerSecond: 0,
+    bonuses: { legacy: 15.0, biodiv: 1.5, resiliens: 0.5 },
+    costScale: 1.14,
+  },
+  {
+    id: 'ogen_klimatpartnerskap',
+    name: 'Klimatpartnerskap',
+    description: 'Kommunen, universitetet och tre företag betalar dig för verifierad kolinlagring. Inte greenwashing. Inte kompensation. Riktig kol. I riktiga träd.',
+    baseCost: 400_000,
+    svPerSecond: 0,
+    inkomstPerSecond: 80,
+    bonuses: { carbon: 3.0, kunskap: 1.0 },
+    costScale: 1.14,
+  },
+  {
+    id: 'ogen_naturskogsallians',
+    name: 'Naturskogsallians',
+    description: '47 skogsägare. 12 000 hektar. En sammanhängande korridor av naturskog genom hela landskapet. Industrin kallar det "improduktivt". Biologerna kallar det "hopp".',
+    baseCost: 750_000,
+    svPerSecond: 500,
+    inkomstPerSecond: 30,
+    bonuses: { legacy: 20.0, biodiv: 5.0, resiliens: 1.0 },
+    costScale: 1.16,
+  },
 ]
 
 // Map for O(1) lookups (hot path — called per generator per tick in owner mode)

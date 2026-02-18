@@ -474,6 +474,110 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   },
 
   // ═══════════════════════════════════════════
+  //  STRATEGISK (Sprint 12 — playstyle rewards)
+  // ═══════════════════════════════════════════
+  {
+    id: 'pacifisten',
+    name: 'Pacifisten',
+    description: 'Nå fas 6 utan att motverka en enda antagonist. De vinner, men du bryr dig inte.',
+    icon: '🕊️',
+    phase: 6,
+    tier: 'endgame',
+    check: (s) => s.phase >= 6 && Object.values(s.antagonists).every(a => !a.countered),
+  },
+  {
+    id: 'lobbykungen',
+    name: 'Lobbykungen',
+    description: 'Köp alla lobbyköp före fas 5. Systemet var ditt redan innan de förstod det.',
+    icon: '👑',
+    phase: 4,
+    tier: 'nationell',
+    check: (s) => {
+      if (s.phase >= 5) return false
+      const bought = Object.values(s.lobbyProjects).filter(p => p.purchased)
+      return bought.length >= 7
+    },
+  },
+  {
+    id: 'snabbvaxaren',
+    name: 'Snabbväxaren',
+    description: 'Nå fas 3 på under 15 minuter. Effektivitet är en dygd.',
+    icon: '⚡',
+    phase: 3,
+    tier: 'regional',
+    check: (s) => s.phase >= 3 && s.totalPlayTime < 900,
+  },
+  {
+    id: 'grontvatt_deluxe',
+    name: 'Gröntvätt Deluxe',
+    description: 'Grön Image >80 samtidigt som du genererar >1M stammar/s. Perfekt fasad.',
+    icon: '🎭',
+    phase: 5,
+    tier: 'nationell',
+    check: (s) => s.image > 80 && s.stammarPerSecond > 1_000_000,
+  },
+  {
+    id: 'den_rena_skogsagaren',
+    name: 'Den Rena Skogsägaren',
+    description: 'Avböj alla lockelser. Varje "gratis" erbjudande. Varje "samarbete". De var aldrig gratis.',
+    icon: '✨',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.ownerLuresDeclined >= 5 && Object.keys(s.ownerLuresAccepted).length === 0,
+  },
+  {
+    id: 'kunskapens_vag',
+    name: 'Kunskapens Väg',
+    description: 'Köp alla 20 kunskapsuppgraderingar. Du vet allt om din skog.',
+    icon: '📚',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && Object.values(s.ownerKnowledgeUpgrades).filter(Boolean).length >= 20,
+  },
+  {
+    id: 'fyra_generationer',
+    name: 'Fyra Generationer',
+    description: 'Nå 500 Generationsarv med alla attacker motstådda. Arvet är komplett.',
+    icon: '🌳',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => {
+      if (s.gameMode !== 'owner') return false
+      const resisted = Object.values(s.ownerAttacksResisted).filter(Boolean).length
+      const surrendered = Object.values(s.ownerAttacksSurrendered).filter(Boolean).length
+      return s.legacy >= 500 && resisted > 0 && surrendered === 0
+    },
+  },
+  {
+    id: 'mangfaldens_mastare',
+    name: 'Mångfaldens Mästare',
+    description: 'Nå 100 Biodiversitet. Din skog är ett ekosystem.',
+    icon: '🦋',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.biodivOwner >= 100,
+  },
+  {
+    id: 'sjalvforsorjande',
+    name: 'Självförsörjande',
+    description: 'Nå 100 000 skogsvärde utan att ge efter för en enda attack. Oberoende.',
+    icon: '🏠',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.totalSkogsvardering >= 100_000
+      && Object.keys(s.ownerAttacksSurrendered).length === 0,
+  },
+  {
+    id: 'tidlos',
+    name: 'Tidlös',
+    description: 'Slutför skogsägarvägen på under 2 timmar. Effektiv naturvård.',
+    icon: '⏱️',
+    phase: 1,
+    tier: 'skogsagare',
+    check: (s) => s.gameMode === 'owner' && s.legacy >= 500 && s.totalPlayTime < 7200,
+  },
+
+  // ═══════════════════════════════════════════
   //  META
   // ═══════════════════════════════════════════
   {
@@ -616,7 +720,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (s) => {
       if (s.gameMode !== 'owner') return false
       const gens = Object.values(s.ownerGenerators)
-      return gens.length >= 9 && gens.every(g => g.count > 0)
+      return gens.length >= 12 && gens.every(g => g.count > 0)
     },
   },
 ]

@@ -9,6 +9,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Kommunfullmäktige: Skogsbruksplan godkänd',
     context: 'Kommunen har godkänt er nya skogsbruksplan utan ändringar. Ingen läste den. 347 sidor. Perfekt.',
+    replayable: true,
     choices: [
       {
         label: 'Börja avverka omedelbart',
@@ -72,6 +73,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Branschkonferens: "Framtidens Skog"',
     context: 'Årets stora skogskonferens i Sundsvall. 400 deltagare. Buffé. Mingel. Ingen talar om biologisk mångfald. Traditionen lever.',
+    replayable: true,
     choices: [
       {
         label: 'Håll keynote: "Tillväxt Genom Tradition"',
@@ -137,6 +139,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
     category: 'crisis',
     headline: 'Skogsägarföreningen kräver bättre virkespriser',
     context: 'Arga skogsägare i Dalarna hotar med leveransstopp. De har räknat ut att ni tar 68% av virkespriset i mellanhänder.',
+    replayable: true,
     choices: [
       {
         label: 'Höj priset med 2%',
@@ -228,6 +231,7 @@ export const PHASE2_NEW_EVENTS: GameEvent[] = [
     category: 'scandal',
     headline: 'Lokaltidningen gräver: "Skogskungen"',
     context: 'Norrländska Tidningen publicerar en artikelserie om er VD:s sommarhus vid avverkningsgränsen. Huset har utsikt över kalhygget han beställde.',
+    replayable: true,
     choices: [
       {
         label: '"Privat angelägenhet"',

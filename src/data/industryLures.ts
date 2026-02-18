@@ -104,6 +104,58 @@ export const INDUSTRY_LURES: IndustryLureData[] = [
       kunskapGain: 35,
     },
   },
+  // ── Sprint 12: 3 new lures ──
+  {
+    id: 'lure_generationsavtal',
+    name: '"Generationsavtal"',
+    offer: '"Vi hjälper er familj med arvsplanering! Trygghet för nästa generation!"',
+    trap: 'Avtalet överför beslutsrätten till en industrikontrollerad stiftelse. Din familj äger skogen — men industrin bestämmer vad som händer med den.',
+    declineText: 'Du skriver arvsplanering med en oberoende jurist. Dyrare. Men skogen stannar i familjen. På riktigt.',
+    triggerSV: 180_000,
+    acceptEffects: {
+      skogsvardering: 0.75,
+      resiliensPenalty: 25,
+      biodivPenalty: 10,
+    },
+    declineEffects: {
+      inkomstCost: 8_000,
+      kunskapGain: 40,
+      biodivGain: 3,
+    },
+  },
+  {
+    id: 'lure_digitalskog',
+    name: '"Digital skogsinventering"',
+    offer: '"Gratis drönarkartläggning av din skog! AI-baserad analys! Framtidens skogsbruk!"',
+    trap: 'Datan ägs av industrin. Deras AI rekommenderar "optimerad avverkning" av dina mest värdefulla bestånd. Kartläggningen delas med virkesuppköpare.',
+    declineText: 'Du köper en egen drönare. Lär dig själv. Datan stannar hos dig.',
+    triggerSV: 50_000,
+    acceptEffects: {
+      skogsvardering: 0.9,
+      resiliensPenalty: 10,
+    },
+    declineEffects: {
+      inkomstCost: 4_000,
+      kunskapGain: 30,
+    },
+  },
+  {
+    id: 'lure_klimatkompensation',
+    name: '"Klimatkompensationspartner"',
+    offer: '"Sälj kolkrediter via vår plattform! Garanterad inkomst! Inga krav!"',
+    trap: 'Kontraktet kräver att du avverkar och nyplanterar — industrins "kolsänka" räknar bara nyplanterade träd. Dina 150-åriga tallar räknas inte.',
+    declineText: 'Du ansluter dig till ett oberoende kolinlagringsnätverk. Mindre inkomst. Men dina stående träd räknas.',
+    triggerSV: 100_000,
+    acceptEffects: {
+      skogsvardering: 0.85,
+      biodivPenalty: 20,
+    },
+    declineEffects: {
+      inkomstCost: 6_000,
+      kunskapGain: 35,
+      biodivGain: 5,
+    },
+  },
 ]
 
 const INDUSTRY_LURE_MAP = new Map<string, IndustryLureData>(

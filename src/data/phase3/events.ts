@@ -241,6 +241,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
     category: 'contradiction',
     headline: 'Barnklass skriver brev till VD:n',
     context: '27 åttioåringar har skrivit brev till er VD. "Varför dödar ni ekorrarnas hem?" Breven är illustrerade. En har ritat VD:n som en motorsåg med slips.',
+    replayable: true,
     choices: [
       {
         label: 'Skicka standardsvar',
@@ -491,6 +492,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
     category: 'crisis',
     headline: 'Vargjakten: Skogsbolag sponsrar',
     context: 'Ert sponsoravtal med jägarförbundet avslöjas. Ni finansierar "skyddsjakt" på varg i era skogsområden. Vargen stör produktionen. Vargen måste bort.',
+    replayable: true,
     choices: [
       {
         label: '"Vi stödjer viltvård"',
@@ -519,6 +521,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
     category: 'absurd',
     headline: 'Influencer-kampanj: #SkogsLiv',
     context: 'Er PR-byrå har betalat 15 influencers att posta bilder från "riktig svensk skog". Alla foton är tagna i en stadspark i Malmö. Ingen märkte det förrän nu.',
+    replayable: true,
     choices: [
       {
         label: '"Bilden representerar känslan"',

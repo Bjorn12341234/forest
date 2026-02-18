@@ -72,6 +72,8 @@ export interface GameState {
   eventHistory: string[]
   activeEvent: GameEvent | null
   nextEventAt: number
+  /** Timestamp of last firing per replayable event (for 15-min cooldown) */
+  lastEventFiredAt: Record<string, number>
 
   // Achievements
   achievements: Record<string, boolean>
@@ -194,6 +196,8 @@ export interface GameEvent {
   conditions?: EventCondition[]
   cooldown?: number
   unique?: boolean
+  /** If true, this event can fire multiple times (15-min cooldown between repeats) */
+  replayable?: boolean
 }
 
 export interface EventChoice {

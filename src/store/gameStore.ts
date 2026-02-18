@@ -92,6 +92,7 @@ export const INITIAL_STATE: GameState = {
   eventHistory: [],
   activeEvent: null,
   nextEventAt: now + 120_000,
+  lastEventFiredAt: {},
 
   achievements: {},
 
@@ -825,8 +826,10 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       if (atk.acceptEffects.skogsvardering) {
         updates.skogsvardering = state.skogsvardering * atk.acceptEffects.skogsvardering
       }
-      if (atk.acceptEffects.inkomstBonus) {
-        updates.inkomst = (updates.inkomst ?? state.inkomst) + atk.acceptEffects.inkomstBonus
+      // Sprint 12: accept inkomst = max(fixedBonus, 5% of totalSV) — always tempting
+      const scaledInkomst = Math.max(atk.acceptEffects.inkomstBonus ?? 0, state.totalSkogsvardering * 0.05)
+      if (scaledInkomst > 0) {
+        updates.inkomst = (updates.inkomst ?? state.inkomst) + scaledInkomst
       }
       if (atk.acceptEffects.resiliensPenalty) {
         updates.resiliens = Math.max(0, state.resiliens - atk.acceptEffects.resiliensPenalty)
@@ -1291,8 +1294,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     set(state => {
       const [next, ...rest] = state.eventQueue
+      const eventId = state.activeEvent!.id
+      const isReplayable = state.activeEvent!.replayable
       return {
-        eventHistory: [...state.eventHistory, state.activeEvent!.id],
+        eventHistory: state.eventHistory.includes(eventId)
+          ? state.eventHistory
+          : [...state.eventHistory, eventId],
+        lastEventFiredAt: isReplayable
+          ? { ...state.lastEventFiredAt, [eventId]: Date.now() }
+          : state.lastEventFiredAt,
         activeEvent: next ?? null,
         eventQueue: next ? rest : state.eventQueue,
       }

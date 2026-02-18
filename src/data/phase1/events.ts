@@ -9,6 +9,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'scandal',
     headline: 'Kalhygge invid populär vandringsled',
     context: 'Foton sprids på sociala medier. Turister är upprörda. Aktien darrar.',
+    replayable: true,
     choices: [
       {
         label: '"Naturlig föryngring"',
@@ -35,6 +36,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'scandal',
     headline: 'Dikning förstör våtmark',
     context: 'Länsstyrelsen har upptäckt att ert dikningsarbete dränerat en skyddad våtmark.',
+    replayable: true,
     choices: [
       {
         label: '"Vi kände inte till det"',
@@ -61,6 +63,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'scandal',
     headline: 'FSC-certifiering ifrågasatt',
     context: 'Granskare visar att certifierat skogsbruk knappt skiljer sig från vanligt.',
+    replayable: true,
     choices: [
       {
         label: '"Processfel"',
@@ -90,6 +93,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Stor massaorder från pappersbruk',
     context: 'Ett stort pappersbruk vill köpa allt ni kan leverera. Priset är bra.',
+    replayable: true,
     choices: [
       {
         label: 'Maximal leverans',
@@ -151,6 +155,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Kommunen vill ha bioenergi',
     context: 'Lokalt värmeverk vill byta till träflis. Långsiktigt avtal erbjuds.',
+    replayable: true,
     choices: [
       {
         label: 'Teckna avtal',
@@ -177,6 +182,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Storm har fällt grannens skog',
     context: 'Stormfälld skog till vrakpris. Snabb volym om ni agerar nu.',
+    replayable: true,
     choices: [
       {
         label: 'Köp stormvirket',
@@ -205,6 +211,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'absurd',
     headline: 'Älg äter nyplantering',
     context: 'En ensam älg har ätit 2000 granplantor. Skogsvårdsstyrelsen skyller på er.',
+    replayable: true,
     choices: [
       {
         label: '"Naturens gång"',
@@ -231,6 +238,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'absurd',
     headline: 'Svampplockare blockerar avverkning',
     context: 'En grupp svampentusiaster har kedjar fast sig vid skördaren.',
+    replayable: true,
     choices: [
       {
         label: 'Vänta ut dem',
@@ -257,6 +265,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'absurd',
     headline: 'Renar på planteringen',
     context: 'Samisk renskötsel och er plantering överlappar. Igen.',
+    replayable: true,
     choices: [
       {
         label: '"Vi var här först"',
@@ -286,6 +295,7 @@ export const PHASE1_EVENTS: GameEvent[] = [
     category: 'crisis',
     headline: 'Barkborreangrepp',
     context: 'Granbarkborren har angripit era bestånd. Tusentals kubikmeter hotas.',
+    replayable: true,
     choices: [
       {
         label: 'Nödavverka',

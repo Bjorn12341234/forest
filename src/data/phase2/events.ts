@@ -38,6 +38,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Pensionerad skogsägare säljer 800 hektar',
     context: 'Barnen vill inte ha skogen. Perfekt tillfälle att expandera — och skriva en "generös" plan.',
+    replayable: true,
     choices: [
       {
         label: 'Köp till marknadspris',
@@ -67,6 +68,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     category: 'scandal',
     headline: 'FSC-revision: Avvikelser hittade',
     context: 'Revisorn har hittat "mindre avvikelser" i 23 av 25 granskade bestånd. Pressen vill ha kommentarer.',
+    replayable: true,
     choices: [
       {
         label: '"Processförändringar genomförs"',
@@ -350,6 +352,7 @@ export const PHASE2_EVENTS: GameEvent[] = [
     category: 'contradiction',
     headline: 'Ideell förening hittar nyckelbiotop',
     context: 'En pensionär med GPS och artkunskap har hittat en nyckelbiotop i ditt avverkningsområde. Foton publiceras på sociala medier.',
+    replayable: true,
     choices: [
       {
         label: 'Avverka allt!',

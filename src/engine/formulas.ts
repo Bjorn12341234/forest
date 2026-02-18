@@ -37,14 +37,15 @@ export function getOwnerTrustModifier(trust: number): number {
 }
 
 // ── Event Frequency ──
-// Increased intervals ~30-50% from Sprint 4 to reduce event spam
+// Sprint 12: phases 1-6 reduced ~40% for ~4-5 events/hour early, ~3-4/hour mid
+// Phases 7+ unchanged (already tuned in Sprint 8)
 const EVENT_FREQUENCY: Record<number, [number, number]> = {
-  1: [160, 260],
-  2: [120, 200],
-  3: [90, 150],
-  4: [80, 130],
-  5: [70, 120],
-  6: [60, 100],
+  1: [95, 155],
+  2: [75, 120],
+  3: [55, 90],
+  4: [50, 80],
+  5: [45, 75],
+  6: [40, 65],
   7: [90, 150],
   8: [100, 150],
   9: [100, 150],
