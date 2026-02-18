@@ -12,6 +12,15 @@ dist
 dist-ssr
 *.local
 
+# Android build artifacts (android/ itself is committed per Capacitor convention)
+android/app/build/
+android/.gradle/
+android/build/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+*.keystore
+*.jks
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

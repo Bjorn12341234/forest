@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.greatness.simulator',
-  appName: 'Greatness Simulator',
+  appId: 'com.tradgame.app',
+  appName: 'Träd',
   webDir: 'dist',
   server: {
     androidScheme: 'https',

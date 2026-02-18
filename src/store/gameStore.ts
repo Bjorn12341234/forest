@@ -522,12 +522,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       }
     }
     const totalSideImage = genSideImage + synergyImagePS * dt + countryRewards.imagePerSecond * dt
-    if (totalSideImage !== 0) {
-      updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + totalSideImage))
-    }
-    if (genSideLobby !== 0) {
-      updates.lobby = Math.max(0, (updates.lobby ?? state.lobby) + genSideLobby)
-    }
 
     // Update hidden variables (include expansion + country hidden costs)
     const co2Gain = stammarGained * 0.05 + expansionCO2 * dt + countryCO2 * dt
@@ -548,6 +542,14 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       biodiversity: Math.max(0, state.biodiversity - biodivLoss),
       totalPlayTime: newTotalPlayTime,
       lastTickAt: now,
+    }
+
+    // Apply generator side effects to updates
+    if (totalSideImage !== 0) {
+      updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + totalSideImage))
+    }
+    if (genSideLobby !== 0) {
+      updates.lobby = Math.max(0, (updates.lobby ?? state.lobby) + genSideLobby)
     }
 
     // Check phase transition

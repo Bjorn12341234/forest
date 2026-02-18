@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
-import { GENERATORS, getGeneratorCost, getActiveSynergies, GENERATOR_SYNERGIES, type GeneratorData } from '../data/generators'
+import { GENERATORS, getGeneratorCost, getActiveSynergies, type GeneratorData } from '../data/generators'
 import { formatNumber } from '../engine/format'
 import { GlassCard } from './ui/GlassCard'
 import { playPurchase } from '../engine/audio'

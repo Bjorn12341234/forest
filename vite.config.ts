@@ -4,5 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/forest/',
+  base: process.env.BUILD_TARGET === 'capacitor' ? '/' : '/forest/',
 })

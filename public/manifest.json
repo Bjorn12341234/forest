@@ -1,7 +1,7 @@
 {
-  "name": "Silva Maximus",
-  "short_name": "Silva",
-  "description": "Silva Maximus — en satirisk incremental-simulator om det skogsindustriella komplexet",
+  "name": "Träd",
+  "short_name": "Träd",
+  "description": "Träd — en satirisk incremental-simulator om det skogsindustriella komplexet",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#F0F0F0",

@@ -1,7 +1,7 @@
-// Silva Maximus — Service Worker
+// Träd — Service Worker
 // Simple cache-first strategy for offline play
 
-const CACHE_NAME = 'silva-maximus-v1'
+const CACHE_NAME = 'trad-v1'
 const BASE = self.registration.scope
 
 self.addEventListener('install', (event) => {
