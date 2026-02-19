@@ -1104,6 +1104,163 @@
 
 ---
 
+## Sprint 13: Testsvit & Kodkvalitet
+
+> **Source:** `review_from_claude.md` — Automated tests (6.5/10), tick duplication, country economy, generator tooltips
+> **Goal:** Address the biggest remaining code quality gap (zero tests) and remaining review items.
+
+### 13A — Automated Tests (Vitest)
+
+- [x] 13A-1: Vitest Setup
+  - Install vitest + @testing-library/react + jsdom
+  - Configure vitest.config.ts (jsdom environment, path aliases matching vite.config.ts)
+  - Add `test` script to package.json
+  - Create first smoke test to verify setup works
+
+- [x] 13A-2: Formula & Engine Tests (~40 tests)
+  - `src/engine/formulas.test.ts`:
+    - getGeneratorCost: base cost, scaling at 1/5/10/50 owned, custom costScale
+    - getKapitalConversionRate: per-phase rates
+    - getOwnerTrustModifier: trust brackets (0-20, 20-40, 40-60, 60-80, 80-100)
+  - `src/engine/phases.test.ts`:
+    - Phase thresholds: correct phase for each stammar value (boundaries)
+    - getEra: correct era for each phase (1-12)
+    - PHASE_NAMES: all 12 defined
+  - `src/engine/warnings.test.ts`:
+    - Warning levels 0-3 at image boundaries (5, 15, 25)
+    - Production penalties per level
+    - ownerTrust trigger in MAKT/INTERNATIONELL eras
+  - `src/engine/events.test.ts`:
+    - isEligible: phase check, maxPhase check, condition function, replay cooldown
+    - selectEvent: returns eligible event, respects cooldown, returns null when none eligible
+    - getNextEventDelay: correct ranges per phase
+
+- [x] 13A-3: Save Migration Tests (~20 tests)
+  - `src/engine/save.test.ts`:
+    - Each migration step (v1→v2, v2→v3, ... v11→v12): verify added fields and default values
+    - Full chain migration (v1→v12): verify final state shape
+    - Load corrupt/empty save: returns default state
+    - Load current version: no migration needed
+    - Save round-trip: save → load → deep equal
+
+- [x] 13A-4: Game Store Action Tests (~40 tests)
+  - `src/store/gameStore.test.ts`:
+    - buyGenerator: deducts stammar, increments count, cost scaling
+    - buyGenerator: insufficient funds rejected
+    - buyClickUpgrade: deducts kapital, sets boolean, increases click value
+    - buyUpgrade: deducts cost, adds to purchased, applies modifiers
+    - buyLobbyEarner: deducts kapital, adds PK
+    - buyLobbyProject: deducts PK, sets purchased, updates lobby modifiers
+    - counterAntagonist: deducts cost (scaled), sets countered
+    - performOwnerAction: cooldown check, trust change
+    - purchaseOwnerKnowledge: deducts kunskap, sets purchased, refreshes modifiers
+    - invadeCountry: sets status invading, initial pressure
+    - allocatePressure: updates pressure vectors
+    - buyExpansionTarget: deducts cost, sets controlled
+    - Owner path: ownerClick, buyOwnerGenerator, resolveIndustryAttack (resist/surrender)
+    - resolveIndustryLure: accept/decline effects
+
+- [x] 13A-5: Data Integrity Tests (~20 tests)
+  - `src/data/generators.test.ts`:
+    - All 20 generators have required fields (id, name, baseCost, baseProduction, unlockPhase)
+    - No duplicate IDs
+    - Costs monotonically increase with unlockPhase
+    - Side effects reference valid resource types
+    - Synergy pairs reference valid generator IDs
+  - `src/data/achievements.test.ts`:
+    - All achievements have id, name, description, tier, condition function
+    - No duplicate IDs
+    - All tiers are valid
+  - `src/data/antagonists.test.ts`:
+    - All antagonists have valid counter costs and effects
+    - maxPhase >= minPhase where applicable
+    - scaleThreshold > 0 for all counter costs
+  - `src/data/countries.test.ts`:
+    - All 14 countries have valid defense types
+    - Weakness vectors are valid
+    - Production/maintenance costs > 0
+  - `src/data/ownerKnowledgeTree.test.ts`:
+    - All 20 upgrades have prerequisites that reference existing IDs
+    - No circular dependencies
+    - Category assignment is valid
+
+- [x] 13A-6: Tick Logic Tests (~30 tests)
+  - `src/store/tick.test.ts` (or inline in gameStore.test.ts):
+    - Industry tick: stammar increases by generators × dt
+    - Industry tick: kapital conversion at correct phase rate
+    - Industry tick: antagonist effects applied (image, stammar, kapital penalties)
+    - Industry tick: warning level production penalty applied
+    - Industry tick: lobby modifiers applied (generator boost, kapital boost)
+    - Industry tick: golden multiplier applied during active window
+    - Industry tick: entropy drain in phase 12 with purchases reducing rate
+    - Industry tick: generator side effects applied (image/lobby/biodiversity per unit)
+    - Industry tick: synergy bonuses applied when both generators owned
+    - Industry tick: country rewards applied for controlled countries
+    - Owner tick: passive sv growth (+0.5/s base)
+    - Owner tick: generator bonuses (biodiv, resiliens, carbon, kunskap, legacy, deadwood)
+    - Owner tick: attack trigger at sv milestones
+    - Owner tick: knowledge modifiers applied to sv/s and inkomst
+    - Owner tick: species counting at biodiversity thresholds
+
+### 13B — Country Economy Rebalance
+
+- [x] 13B-1: Country Production 10×
+  - Current: Amazonia generates 2M/s against ~100M/s income (<2%)
+  - New: multiply all country production rewards by 10×
+  - Amazonia: 2M/s → 20M/s (~20% of income at invasion time)
+  - Scale other countries proportionally
+  - This makes invasions feel like meaningful economic expansion, not decoration
+  - Verify with autoplay that countries don't break late-game balance
+
+- [x] 13B-2: ~~Reduce to 9 Countries~~ (Already 9 — no change needed)
+  - Current: 14 countries, many feel like filler
+  - Remove 5 least distinctive countries (keep ones with unique events and strong flavor)
+  - Keep: Finlandia, Norgia, Amazonia, Siberien, Chinova, Kanadien, Indiska, Danmark, Australien
+  - Remove: Baltika, Centralafrika, Sydostasien, Patagonien, Brittiska — least narrative weight
+  - Redistribute removed countries' phase unlocks to remaining 9
+  - Update achievements referencing country counts
+  - This reduces repetition while keeping the countries that have unique events/rewards
+
+- [x] 13B-3: Country Maintenance Rebalance
+  - Current maintenance costs are trivial
+  - New: maintenance = 5% of country production (net gain = 95% of raw production)
+  - Late-game: maintenance scales slightly with number of countries controlled (1% per additional country)
+  - This creates a "stretched thin" dynamic: controlling 9 countries has higher per-country maintenance
+  - Player may strategically abandon unprofitable countries
+
+### 13C — Code Quality
+
+- [x] 13C-1: Extract Shared Tick Logic
+  - Owner and industry tick share: event triggering, antagonist/attack checking, phase detection, achievement checking
+  - Extract `tickEvents()`, `tickPhaseDetection()`, `tickAchievements()` into `src/engine/tickHelpers.ts`
+  - Owner tick and industry tick call shared helpers, keep mode-specific logic inline
+  - Reduces duplication by ~80-100 lines
+
+- [x] 13C-2: Generator Tooltip Component
+  - New `GeneratorTooltip.tsx` — hover/tap tooltip for generator cards
+  - Shows: base production, side effects (colored +/-), active synergies, cost breakdown
+  - Owner generators: shows all bonus types (biodiv, resiliens, carbon, etc.)
+  - Uses Framer Motion for enter/exit animation
+  - Replaces current inline text descriptions that are hard to read on mobile
+
+### 13D — Verification
+
+- [x] 13D-1: Run Full Test Suite
+  - All ~150 tests pass
+  - Coverage report: aim for >80% on engine/, >60% on store/
+  - No regressions in existing functionality
+
+- [x] 13D-2: Build & Deploy
+  - TypeScript clean
+  - Vite build passes
+  - Save version unchanged (no new state fields) or bumped if 13B changes require migration
+  - Deploy to GitHub Pages
+  - Verify country rebalance in live playthrough
+
+**Notes:** Sprint 13 complete. 244 tests across 13 test files (formulas 15, phases 19, warnings 18, events 14, save 18, generators 18, achievements 9, antagonists 13, countries 15, ownerKnowledgeTree 15, gameStore 41, tick 21, tickHelpers 28). Country production 10×, maintenance = 5% of kapital production with scaling multiplier (1 + 0.2 × (controlledCount-1)). Countries were already 9 (not 14). Extracted 9 pure functions into `src/engine/tickHelpers.ts` (computeExpansionTotals, computeCountryTotals, computeSynergyEffects, computeGeneratorSideEffects, processCountryInvasions, processAntagonistEscalation, computeAntagonistDeltas, computeEntropyDrain, computeSpeciesLoss). Generator hover tooltip shows production breakdown, side effect totals, synergies, next cost. Build: 243KB gzipped. No save version bump needed (no new state fields).
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

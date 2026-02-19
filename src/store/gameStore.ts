@@ -14,16 +14,27 @@ import { PHASE7_EVENTS } from '../data/phase7/events'
 import { COUNTRY_EVENTS } from '../data/phase7/countryEvents'
 import { PHASE8_EVENTS } from '../data/phase8/events'
 import { PHASE10_NEW_EVENTS } from '../data/phase10/events'
-import { getGeneratorData, getGeneratorCost, GENERATORS, getActiveSynergies } from '../data/generators'
+import { getGeneratorData, getGeneratorCost } from '../data/generators'
 import { getClickUpgrade, CLICK_UPGRADES } from '../data/clickUpgrades'
 import { getUpgradeData } from '../data/upgradeRegistry'
 import { getLobbyEarner, getLobbyPurchase, computeLobbyModifiers, type LobbyModifiers } from '../data/lobbyProjects'
 import { getOwnerAction } from '../data/ownerActions'
 import { getPRCampaign } from '../data/ownerActions'
-import { ANTAGONISTS, checkAntagonistTriggers, getAntagonist, getScaledCounterCost } from '../data/antagonists'
-import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
+import { checkAntagonistTriggers, getAntagonist, getScaledCounterCost } from '../data/antagonists'
+import { getExpansionTarget } from '../data/expansionTargets'
 import { calculateWarningLevel, getWarningPenalty } from '../engine/warnings'
 import { getCountry, computeCountryRewards } from '../data/countries'
+import {
+  computeExpansionTotals,
+  computeCountryTotals,
+  computeSynergyEffects,
+  computeGeneratorSideEffects,
+  processCountryInvasions,
+  processAntagonistEscalation,
+  computeAntagonistDeltas,
+  computeEntropyDrain,
+  computeSpeciesLoss,
+} from '../engine/tickHelpers'
 import { getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
 import { getKnowledgeActivity } from '../data/ownerKnowledge'
@@ -443,57 +454,13 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const countryRewards = computeCountryRewards(state.countries)
 
     // Calculate synergy multipliers
-    const activeSynergies = getActiveSynergies(state.generators)
-    let synergyStammarMult = 1
-    let synergyKapitalMult = 1
-    let synergyImagePS = 0
-    for (const syn of activeSynergies) {
-      if (syn.effects.stammarMultiplier) synergyStammarMult *= syn.effects.stammarMultiplier
-      if (syn.effects.kapitalMultiplier) synergyKapitalMult *= syn.effects.kapitalMultiplier
-      if (syn.effects.imagePerSecond) synergyImagePS += syn.effects.imagePerSecond
-    }
+    const synergies = computeSynergyEffects(state.generators)
 
-    const stammarPS = (baseStammarPS * lobbyBoost * upgradeMods.gpsMultiplier * synergyStammarMult * countryRewards.generatorEfficiency * countryRewards.stammarMultiplier + upgradeMods.flatStammarPS) * warningPenalty
+    const stammarPS = (baseStammarPS * lobbyBoost * upgradeMods.gpsMultiplier * synergies.stammarMult * countryRewards.generatorEfficiency * countryRewards.stammarMultiplier + upgradeMods.flatStammarPS) * warningPenalty
 
-    // Add expansion target production (only from controlled targets)
-    let expansionStammarPS = 0
-    let expansionKapitalPS = 0
-    let expansionBiodivLoss = 0
-    let expansionCO2 = 0
-    let expansionKapitalCost = 0
-    let expansionLobbyCost = 0
-    for (const target of EXPANSION_TARGETS) {
-      const ts = state.expansionTargets[target.id]
-      if (ts?.status === 'controlled') {
-        expansionStammarPS += target.production.stammarPerSecond
-        expansionKapitalPS += target.production.kapitalPerSecond
-        expansionBiodivLoss += target.hiddenCosts.biodiversityLoss
-        expansionCO2 += target.hiddenCosts.co2Gain
-        expansionKapitalCost += target.maintenanceCost.kapitalPerSecond
-        expansionLobbyCost += target.maintenanceCost.lobbyPerSecond
-      }
-    }
-
-    // Add country production and maintenance
-    let countryStammarPS = 0
-    let countryKapitalPS = 0
-    let countryBiodivLoss = 0
-    let countryCO2 = 0
-    let countryKapitalCost = 0
-    let countryLobbyCost = 0
-    for (const [countryId, cs] of Object.entries(state.countries)) {
-      if (cs.status === 'controlled') {
-        const def = getCountry(countryId)
-        if (def) {
-          countryStammarPS += def.production.stammarPerSecond
-          countryKapitalPS += def.production.kapitalPerSecond
-          countryBiodivLoss += def.hiddenCosts.biodiversityLoss
-          countryCO2 += def.hiddenCosts.co2Gain
-          countryKapitalCost += def.maintenanceCost.kapitalPerSecond
-          countryLobbyCost += def.maintenanceCost.lobbyPerSecond
-        }
-      }
-    }
+    // Aggregate expansion target and country production/maintenance
+    const expansion = computeExpansionTotals(state.expansionTargets)
+    const country = computeCountryTotals(state.countries)
 
     // Calculate kapital conversion with ownerTrust modifier + lobby kapital boost
     const conversionRate = getKapitalConversionRate(state.phase)
@@ -501,40 +468,28 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const kapitalBoost = lobbyMods.kapitalBoost
     // Apply golden opportunity multiplier if active
     const goldenMult = (state.goldenMultiplierUntil > now) ? goldenMultiplierValue : 1
-    const totalStammarPS = (stammarPS + expansionStammarPS + countryStammarPS) * goldenMult
-    const kapitalRate = stammarPS * goldenMult * conversionRate * trustModifier * kapitalBoost * synergyKapitalMult * countryRewards.kapitalMultiplier + upgradeMods.flatKapitalPS + expansionKapitalPS + countryKapitalPS - countryKapitalCost - expansionKapitalCost
+    const totalStammarPS = (stammarPS + expansion.stammarPS + country.stammarPS) * goldenMult
+    const kapitalRate = stammarPS * goldenMult * conversionRate * trustModifier * kapitalBoost * synergies.kapitalMult * countryRewards.kapitalMultiplier + upgradeMods.flatKapitalPS + expansion.kapitalPS + country.kapitalPS - country.kapitalCost - expansion.kapitalCost
 
     const stammarGained = totalStammarPS * dt
     const kapitalGained = kapitalRate * dt
 
-    // ── Generator side effects ──
-    let genSideImage = 0
-    let genSideLobby = 0
-    let genSideBiodiv = 0
-    for (const gen of GENERATORS) {
-      const gs = state.generators[gen.id]
-      if (!gs || gs.count <= 0 || !gen.sideEffects) continue
-      for (const eff of gen.sideEffects) {
-        const amount = eff.perSecond * gs.count * dt
-        if (eff.resource === 'image') genSideImage += amount
-        else if (eff.resource === 'lobby') genSideLobby += amount
-        else if (eff.resource === 'biodiversity') genSideBiodiv += amount
-      }
-    }
-    const totalSideImage = genSideImage + synergyImagePS * dt + countryRewards.imagePerSecond * dt
+    // Generator side effects (image/lobby/biodiversity)
+    const sideEffects = computeGeneratorSideEffects(state.generators, dt)
+    const totalSideImage = sideEffects.image + synergies.imagePS * dt + countryRewards.imagePerSecond * dt
 
     // Update hidden variables (include expansion + country hidden costs)
-    const co2Gain = stammarGained * 0.05 + expansionCO2 * dt + countryCO2 * dt
+    const co2Gain = stammarGained * 0.05 + expansion.co2 * dt + country.co2 * dt
     const ownerShare = kapitalGained * 0.08
     const industryShare = kapitalGained * 0.92
-    const biodivLoss = stammarGained * 0.0001 + expansionBiodivLoss * dt + countryBiodivLoss * dt - genSideBiodiv
+    const biodivLoss = stammarGained * 0.0001 + expansion.biodivLoss * dt + country.biodivLoss * dt - sideEffects.biodiversity
 
     const updates: Partial<GameState> = {
       stammar: state.stammar + stammarGained,
       stammarPerSecond: totalStammarPS,
       totalStammar: state.totalStammar + stammarGained,
       kapital: state.kapital + kapitalGained,
-      lobby: Math.max(0, state.lobby - (countryLobbyCost + expansionLobbyCost) * dt + countryRewards.lobbyPerSecond * dt),
+      lobby: Math.max(0, state.lobby - (country.lobbyCost + expansion.lobbyCost) * dt + countryRewards.lobbyPerSecond * dt),
       warningLevel,
       realCO2: state.realCO2 + co2Gain,
       ownerProfit: state.ownerProfit + ownerShare,
@@ -548,8 +503,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (totalSideImage !== 0) {
       updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + totalSideImage))
     }
-    if (genSideLobby !== 0) {
-      updates.lobby = Math.max(0, (updates.lobby ?? state.lobby) + genSideLobby)
+    if (sideEffects.lobby !== 0) {
+      updates.lobby = Math.max(0, (updates.lobby ?? state.lobby) + sideEffects.lobby)
     }
 
     // Check phase transition
@@ -586,95 +541,35 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       updates.antagonists = newAntagonists
     }
 
-    // Check for escalation (active >5 min without countering → escalated)
-    const ESCALATION_TIME_MS = 5 * 60 * 1000
-    let escalationChanged = false
+    // Check for antagonist escalation (active >5 min)
     const antagonistSource = updates.antagonists ?? state.antagonists
-    for (const ant of ANTAGONISTS) {
-      const antState = antagonistSource[ant.id]
-      if (!antState?.active || antState.countered || antState.escalated) continue
-      if (antState.activatedAt && (now - antState.activatedAt) >= ESCALATION_TIME_MS) {
-        if (!escalationChanged) {
-          updates.antagonists = { ...antagonistSource }
-          escalationChanged = true
-        }
-        updates.antagonists![ant.id] = { ...antState, escalated: true }
-      }
-    }
+    const escalatedAnts = processAntagonistEscalation(antagonistSource, now)
+    if (escalatedAnts) updates.antagonists = escalatedAnts
 
-    // Apply tick effects from active, uncountered antagonists
-    const imageProtection = lobbyMods.imageProtection
+    // Apply tick effects from active antagonists
     const activeAnts = updates.antagonists ?? state.antagonists
-    for (const ant of ANTAGONISTS) {
-      const antState = activeAnts[ant.id]
-      if (!antState?.active || antState.countered) continue
-      const escalationMult = antState.escalated ? 2 : 1
-      for (const eff of ant.tickEffects) {
-        const amount = eff.perSecond * dt * escalationMult
-        if (eff.resource === 'image') {
-          updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + amount * imageProtection))
-        } else if (eff.resource === 'stammar') {
-          // Don't let antagonists make stammar go negative
-          updates.stammar = Math.max(0, (updates.stammar ?? state.stammar) + amount)
-        } else if (eff.resource === 'kapital') {
-          updates.kapital = Math.max(0, (updates.kapital ?? state.kapital) + amount)
-        }
-      }
+    const antDeltas = computeAntagonistDeltas(activeAnts, dt, lobbyMods.imageProtection)
+    if (antDeltas.image !== 0) {
+      updates.image = Math.max(0, Math.min(100, (updates.image ?? state.image) + antDeltas.image))
+    }
+    if (antDeltas.stammar !== 0) {
+      updates.stammar = Math.max(0, (updates.stammar ?? state.stammar) + antDeltas.stammar)
+    }
+    if (antDeltas.kapital !== 0) {
+      updates.kapital = Math.max(0, (updates.kapital ?? state.kapital) + antDeltas.kapital)
     }
 
-    // ── Country invasion tick ──
-    // Reduce resistance based on pressure allocation
-    let countriesChanged = false
-    const newCountries = { ...state.countries }
-    for (const [countryId, cs] of Object.entries(newCountries)) {
-      if (cs.status !== 'invading') continue
-      const def = getCountry(countryId)
-      if (!def) continue
+    // Country invasion tick
+    const updatedCountries = processCountryInvasions(state.countries, dt)
+    if (updatedCountries) updates.countries = updatedCountries
 
-      const pa = cs.pressureAllocation ?? { kapital: 0, lobby: 0, stammar: 0 }
-      // Each vector has a type modifier: 2x if it matches the weakness
-      const kapitalMod = def.defenseType === 'political' ? 2 : 1
-      const lobbyMod = def.defenseType === 'environmental' ? 2 : 1
-      const stammarMod = def.defenseType === 'economic' ? 2 : 1
+    // Entropy countdown (phase 12)
+    const newEntropi = computeEntropyDrain(state.entropi, state.phase, totalStammarPS, state.entropyPurchases, dt)
+    if (newEntropi !== state.entropi) updates.entropi = newEntropi
 
-      const totalPressure = (pa.kapital * kapitalMod + pa.lobby * lobbyMod + pa.stammar * stammarMod) / def.defenseStrength
-      const resistanceReduction = totalPressure * dt * 0.1
-
-      if (resistanceReduction > 0) {
-        const newResistance = Math.max(0, cs.resistance - resistanceReduction)
-        if (newResistance <= 0) {
-          newCountries[countryId] = { ...cs, status: 'controlled', resistance: 0, controlProgress: 100 }
-        } else {
-          newCountries[countryId] = { ...cs, resistance: newResistance, controlProgress: ((def.resistance - newResistance) / def.resistance) * 100 }
-        }
-        countriesChanged = true
-      }
-    }
-    if (countriesChanged) {
-      updates.countries = newCountries
-    }
-
-    // ── Entropy countdown (phase 12) ──
-    if (state.phase >= 12 && state.entropi > 0) {
-      const baseDrain = Math.min(0.5, totalStammarPS / 1e10)
-      // Apply entropy-slowing purchases (each -30%)
-      const purchaseCount = Object.values(state.entropyPurchases).filter(Boolean).length
-      const entropySlowFactor = Math.pow(0.7, purchaseCount)
-      const drainPerSecond = baseDrain * entropySlowFactor
-      const newEntropi = Math.max(0, state.entropi - drainPerSecond * dt)
-      updates.entropi = newEntropi
-    }
-
-    // Species counting: lose species when biodiversity drops past thresholds
+    // Species counting
     const newBiodiv = updates.biodiversity ?? state.biodiversity
-    const oldBiodiv = state.biodiversity
-    const speciesThresholds = [95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5]
-    let speciesGain = 0
-    for (const threshold of speciesThresholds) {
-      if (oldBiodiv > threshold && newBiodiv <= threshold) {
-        speciesGain++
-      }
-    }
+    const speciesGain = computeSpeciesLoss(state.biodiversity, newBiodiv)
     if (speciesGain > 0) {
       updates.species = (state.species ?? 0) + speciesGain
     }

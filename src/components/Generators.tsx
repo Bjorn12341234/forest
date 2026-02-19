@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { GENERATORS, getGeneratorCost, getActiveSynergies, type GeneratorData } from '../data/generators'
 import { formatNumber } from '../engine/format'
 import { GlassCard } from './ui/GlassCard'
 import { playPurchase } from '../engine/audio'
+import { GeneratorTooltip } from './GeneratorTooltip'
 
 export function Generators() {
   const phase = useGameStore(s => s.phase)
@@ -106,6 +107,8 @@ interface GeneratorRowProps {
 
 function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
   const [showFlash, setShowFlash] = useState(false)
+  const [showTooltip, setShowTooltip] = useState(false)
+  const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cost = getGeneratorCost(data.baseCost, count, data.costScale)
   const canAfford = stammar >= cost
   const totalProduction = count * data.baseProduction
@@ -117,6 +120,14 @@ function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
     setTimeout(() => setShowFlash(false), 400)
   }
 
+  const handleMouseEnter = () => {
+    tooltipTimer.current = setTimeout(() => setShowTooltip(true), 500)
+  }
+  const handleMouseLeave = () => {
+    if (tooltipTimer.current) clearTimeout(tooltipTimer.current)
+    setShowTooltip(false)
+  }
+
   return (
     <GlassCard
       padding="sm"
@@ -125,6 +136,8 @@ function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
       className={`relative overflow-hidden cursor-pointer select-none ${!canAfford ? 'opacity-60' : ''}`}
       onClick={handleBuy}
       whileTap={canAfford ? { scale: 0.97 } : undefined}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Flash overlay */}
       <AnimatePresence>
@@ -181,6 +194,21 @@ function GeneratorRow({ data, count, stammar, onBuy }: GeneratorRowProps) {
           )}
         </div>
       </div>
+
+      {/* Hover tooltip */}
+      <AnimatePresence>
+        {showTooltip && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="absolute left-4 right-4 top-full mt-1 z-50 bg-bg-secondary border border-bg-tertiary rounded-lg p-3 shadow-xl"
+          >
+            <GeneratorTooltip data={data} count={count} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </GlassCard>
   )
 }

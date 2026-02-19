@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
-import { COUNTRIES, type CountryDef } from '../../data/countries'
+import { COUNTRIES, type CountryDef, getCountryMaintenanceMultiplier } from '../../data/countries'
 import type { CountryState } from '../../store/types'
 import { formatNumber } from '../../engine/format'
 import { GlassCard } from '../ui/GlassCard'
@@ -68,6 +68,11 @@ export function CountryPanel() {
     return COUNTRIES.filter(c => c.unlockPhase <= phase)
   }, [phase])
 
+  const controlledCount = useMemo(() => {
+    return Object.values(countries).filter(cs => cs.status === 'controlled').length
+  }, [countries])
+  const maintenanceMult = getCountryMaintenanceMultiplier(controlledCount)
+
   const selected = useMemo(() => {
     return visibleCountries.find(c => c.id === selectedId) ?? null
   }, [selectedId, visibleCountries])
@@ -87,7 +92,6 @@ export function CountryPanel() {
     }
   }
 
-  const controlledCount = Object.values(countries).filter(c => c.status === 'controlled').length
   const invadingCount = Object.values(countries).filter(c => c.status === 'invading').length
 
   return (
@@ -392,7 +396,7 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
                 +{formatNumber(country.production.kapitalPerSecond)} kapital/s
               </span>
               <span className="text-xs text-danger bg-danger/10 px-1.5 py-0.5 rounded">
-                -{formatNumber(country.maintenanceCost.kapitalPerSecond)} kapital/s underhåll
+                -{formatNumber(country.maintenanceCost.kapitalPerSecond * maintenanceMult)} kapital/s underhåll{maintenanceMult > 1 ? ` (×${maintenanceMult.toFixed(1)})` : ''}
               </span>
             </div>
           )}

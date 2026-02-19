@@ -44,8 +44,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 40,
     defenseType: 'environmental',
     defenseStrength: 3,
-    maintenanceCost: { kapitalPerSecond: 200, lobbyPerSecond: 0.5 },
-    production: { stammarPerSecond: 120_000, kapitalPerSecond: 1_200 },
+    maintenanceCost: { kapitalPerSecond: 600, lobbyPerSecond: 0.5 },
+    production: { stammarPerSecond: 1_200_000, kapitalPerSecond: 12_000 },
     hiddenCosts: { biodiversityLoss: 0.8, co2Gain: 4_000 },
     position: { x: 62, y: 14 },
     uniqueReward: {
@@ -64,8 +64,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 60,
     defenseType: 'economic',
     defenseStrength: 5,
-    maintenanceCost: { kapitalPerSecond: 500, lobbyPerSecond: 1.5 },
-    production: { stammarPerSecond: 80_000, kapitalPerSecond: 3_000 },
+    maintenanceCost: { kapitalPerSecond: 1_500, lobbyPerSecond: 1.5 },
+    production: { stammarPerSecond: 800_000, kapitalPerSecond: 30_000 },
     hiddenCosts: { biodiversityLoss: 0.5, co2Gain: 3_000 },
     position: { x: 40, y: 10 },
     uniqueReward: {
@@ -84,8 +84,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 15,
     defenseType: 'political',
     defenseStrength: 1,
-    maintenanceCost: { kapitalPerSecond: 80, lobbyPerSecond: 0.1 },
-    production: { stammarPerSecond: 2_000, kapitalPerSecond: 3_000 },
+    maintenanceCost: { kapitalPerSecond: 1_500, lobbyPerSecond: 0.2 },
+    production: { stammarPerSecond: 20_000, kapitalPerSecond: 30_000 },
     hiddenCosts: { biodiversityLoss: 0.1, co2Gain: 200 },
     position: { x: 22, y: 5 },
     uniqueReward: {
@@ -104,8 +104,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 35,
     defenseType: 'environmental',
     defenseStrength: 3,
-    maintenanceCost: { kapitalPerSecond: 250, lobbyPerSecond: 0.5 },
-    production: { stammarPerSecond: 60_000, kapitalPerSecond: 2_000 },
+    maintenanceCost: { kapitalPerSecond: 1_000, lobbyPerSecond: 0.5 },
+    production: { stammarPerSecond: 600_000, kapitalPerSecond: 20_000 },
     hiddenCosts: { biodiversityLoss: 0.4, co2Gain: 2_000 },
     position: { x: 48, y: 22 },
     uniqueReward: {
@@ -128,8 +128,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 80,
     defenseType: 'environmental',
     defenseStrength: 8,
-    maintenanceCost: { kapitalPerSecond: 5_000, lobbyPerSecond: 8.0 },
-    production: { stammarPerSecond: 2_000_000, kapitalPerSecond: 30_000 },
+    maintenanceCost: { kapitalPerSecond: 15_000, lobbyPerSecond: 8.0 },
+    production: { stammarPerSecond: 20_000_000, kapitalPerSecond: 300_000 },
     hiddenCosts: { biodiversityLoss: 5.0, co2Gain: 50_000 },
     position: { x: 30, y: 60 },
     uniqueReward: {
@@ -148,8 +148,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 50,
     defenseType: 'economic',
     defenseStrength: 5,
-    maintenanceCost: { kapitalPerSecond: 3_000, lobbyPerSecond: 5.0 },
-    production: { stammarPerSecond: 1_500_000, kapitalPerSecond: 20_000 },
+    maintenanceCost: { kapitalPerSecond: 10_000, lobbyPerSecond: 5.0 },
+    production: { stammarPerSecond: 15_000_000, kapitalPerSecond: 200_000 },
     hiddenCosts: { biodiversityLoss: 3.0, co2Gain: 40_000 },
     position: { x: 72, y: 18 },
     uniqueReward: {
@@ -168,8 +168,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 55,
     defenseType: 'economic',
     defenseStrength: 6,
-    maintenanceCost: { kapitalPerSecond: 4_000, lobbyPerSecond: 6.0 },
-    production: { stammarPerSecond: 1_800_000, kapitalPerSecond: 25_000 },
+    maintenanceCost: { kapitalPerSecond: 12_500, lobbyPerSecond: 6.0 },
+    production: { stammarPerSecond: 18_000_000, kapitalPerSecond: 250_000 },
     hiddenCosts: { biodiversityLoss: 3.5, co2Gain: 35_000 },
     position: { x: 20, y: 22 },
     uniqueReward: {
@@ -192,8 +192,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 90,
     defenseType: 'economic',
     defenseStrength: 9,
-    maintenanceCost: { kapitalPerSecond: 50_000, lobbyPerSecond: 40.0 },
-    production: { stammarPerSecond: 15_000_000, kapitalPerSecond: 200_000 },
+    maintenanceCost: { kapitalPerSecond: 100_000, lobbyPerSecond: 40.0 },
+    production: { stammarPerSecond: 150_000_000, kapitalPerSecond: 2_000_000 },
     hiddenCosts: { biodiversityLoss: 8.0, co2Gain: 200_000 },
     position: { x: 75, y: 32 },
     uniqueReward: {
@@ -212,8 +212,8 @@ export const COUNTRIES: CountryDef[] = [
     resistance: 85,
     defenseType: 'political',
     defenseStrength: 8,
-    maintenanceCost: { kapitalPerSecond: 40_000, lobbyPerSecond: 35.0 },
-    production: { stammarPerSecond: 10_000_000, kapitalPerSecond: 150_000 },
+    maintenanceCost: { kapitalPerSecond: 75_000, lobbyPerSecond: 35.0 },
+    production: { stammarPerSecond: 100_000_000, kapitalPerSecond: 1_500_000 },
     hiddenCosts: { biodiversityLoss: 6.0, co2Gain: 150_000 },
     position: { x: 70, y: 42 },
     uniqueReward: {
@@ -247,6 +247,13 @@ export interface CountryRewardTotals {
   stammarMultiplier: number    // multiplicative, starts at 1
   lobbyPerSecond: number       // additive
   imagePerSecond: number       // additive
+}
+
+/** Get maintenance cost multiplier based on number of controlled countries.
+ *  Each additional country beyond the first adds +20% to maintenance of ALL countries.
+ *  1 country = 1×, 2 = 1.2×, 5 = 1.8×, 9 (all) = 2.6× */
+export function getCountryMaintenanceMultiplier(controlledCount: number): number {
+  return 1 + 0.2 * Math.max(0, controlledCount - 1)
 }
 
 /** Compute aggregate unique rewards from all controlled countries */
