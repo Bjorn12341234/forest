@@ -7,6 +7,11 @@ import { GlassCard } from '../ui/GlassCard'
 import { playPurchase } from '../../engine/audio'
 import { getMapView, VIEW_LABELS, MAP_COMPONENTS } from './MapBackgrounds'
 import { CostBadge } from './CostBadge'
+import { SupplyChainMechanic } from './SupplyChainMechanic'
+import { TerraformMechanic } from './TerraformMechanic'
+import { MegaprojectMechanic } from './MegaprojectMechanic'
+import { RiftMechanic } from './RiftMechanic'
+import { ParadoxMechanic } from './ParadoxMechanic'
 
 // ── Space Expansion Panel (EXPANSION era, phases 10-12) ──
 
@@ -17,7 +22,7 @@ export function SpaceExpansionPanel() {
   const lobby = useGameStore(s => s.lobby)
   const entropi = useGameStore(s => s.entropi)
   const expansionTargets = useGameStore(s => s.expansionTargets)
-  const buyExpansionTarget = useGameStore(s => s.buyExpansionTarget)
+  const startExpansionTarget = useGameStore(s => s.startExpansionTarget)
 
   const mapView = getMapView(phase)
   const MapSVG = MAP_COMPONENTS[mapView]
@@ -30,8 +35,8 @@ export function SpaceExpansionPanel() {
     return stammar >= t.cost.stammar && kapital >= t.cost.kapital && lobby >= t.cost.lobby
   }
 
-  function handleBuy(id: string) {
-    buyExpansionTarget(id)
+  function handleStart(id: string) {
+    startExpansionTarget(id)
     playPurchase()
   }
 
@@ -60,8 +65,8 @@ export function SpaceExpansionPanel() {
         </span>
       </div>
 
-      {/* Entropy bar (phase 12) */}
-      {phase >= 12 && (
+      {/* Entropy bar (phase 10+) */}
+      {phase >= 10 && (
         <GlassCard padding="sm">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs uppercase tracking-widest text-red-400 font-medium">Entropi</span>
@@ -84,12 +89,12 @@ export function SpaceExpansionPanel() {
           </div>
           <p className="text-xs text-text-muted mt-1.5 italic">
             {entropi > 80
-              ? 'Universums energi sinar. Tillväxten fortsätter.'
+              ? 'Entropin stiger. Expandera för att dämpa den.'
               : entropi > 50
-                ? 'Stjärnor slocknar en efter en. Maskinerna maler vidare.'
+                ? 'Entropins grepp hårdnar. Varje mål sänker den.'
                 : entropi > 20
-                  ? 'Termisk jämvikt närmar sig. Någonting letar i mörkret.'
-                  : 'Absolut tystnad. Den sista maskinen söker ett träd att fälla.'}
+                  ? 'Termisk jämvikt närmar sig. Fler mål behövs.'
+                  : 'Kritisk nivå. Universum kollapsar.'}
           </p>
         </GlassCard>
       )}
@@ -104,7 +109,9 @@ export function SpaceExpansionPanel() {
           {/* Target Dots */}
           <AnimatePresence>
             {visibleTargets.map((target, i) => {
-              const isControlled = expansionTargets[target.id]?.status === 'controlled'
+              const ts = expansionTargets[target.id]
+              const isControlled = ts?.status === 'controlled'
+              const isInProgress = ts?.status === 'in_progress'
 
               return (
                 <motion.div
@@ -113,21 +120,22 @@ export function SpaceExpansionPanel() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: i * 0.06, type: 'spring', stiffness: 300, damping: 20 }}
                   className={`absolute z-10 rounded-full
-                    ${isControlled ? 'bg-accent glow-orange' : 'bg-text-muted/40'}
+                    ${isControlled ? 'bg-accent glow-orange' :
+                      isInProgress ? 'bg-accent/60' : 'bg-text-muted/40'}
                   `}
                   style={{
                     left: `${target.position.x}%`,
                     top: `${target.position.y}%`,
-                    width: isControlled ? 24 : 16,
-                    height: isControlled ? 24 : 16,
+                    width: isControlled ? 24 : isInProgress ? 20 : 16,
+                    height: isControlled ? 24 : isInProgress ? 20 : 16,
                     transform: 'translate(-50%, -50%)',
                   }}
                 >
-                  {isControlled && (
+                  {(isControlled || isInProgress) && (
                     <motion.div
-                      className="absolute inset-0 rounded-full bg-accent"
+                      className={`absolute inset-0 rounded-full ${isControlled ? 'bg-accent' : 'bg-accent/50'}`}
                       animate={{ opacity: [0.4, 0.8, 0.4] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                      transition={{ duration: isInProgress ? 1 : 2, repeat: Infinity, ease: 'easeInOut' }}
                     />
                   )}
                 </motion.div>
@@ -137,7 +145,9 @@ export function SpaceExpansionPanel() {
 
           {/* Labels */}
           {visibleTargets.map(target => {
-            const isControlled = expansionTargets[target.id]?.status === 'controlled'
+            const ts = expansionTargets[target.id]
+            const isControlled = ts?.status === 'controlled'
+            const isInProgress = ts?.status === 'in_progress'
             return (
               <div
                 key={`label-${target.id}`}
@@ -149,7 +159,7 @@ export function SpaceExpansionPanel() {
                 }}
               >
                 <span className={`text-xs leading-none font-medium whitespace-nowrap
-                  ${isControlled ? 'text-accent' : 'text-text-muted'}`}>
+                  ${isControlled ? 'text-accent' : isInProgress ? 'text-accent/70' : 'text-text-muted'}`}>
                   {target.name}
                 </span>
               </div>
@@ -161,19 +171,22 @@ export function SpaceExpansionPanel() {
       {/* Target Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {visibleTargets.map(target => {
-          const isControlled = expansionTargets[target.id]?.status === 'controlled'
+          const ts = expansionTargets[target.id]
+          const isControlled = ts?.status === 'controlled'
+          const isInProgress = ts?.status === 'in_progress'
           const affordable = canAfford(target)
 
           return (
             <GlassCard
               key={target.id}
               padding="md"
-              glow={isControlled ? 'orange' : affordable ? 'gold' : 'none'}
+              glow={isControlled ? 'orange' : isInProgress ? 'gold' : affordable ? 'gold' : 'none'}
             >
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-text-primary">{target.name}</h3>
                   {isControlled && <span className="text-xs text-accent">Kontrollerad</span>}
+                  {isInProgress && <span className="text-xs text-accent/70">Pågående</span>}
                 </div>
                 <p className="text-xs text-text-muted leading-relaxed">{target.description}</p>
 
@@ -184,6 +197,9 @@ export function SpaceExpansionPanel() {
                   </span>
                   <span className="text-xs text-accent-green bg-accent-green/10 px-1.5 py-0.5 rounded">
                     +{formatNumber(target.production.kapitalPerSecond)} kapital/s
+                  </span>
+                  <span className="text-xs text-blue-400 bg-blue-400/10 px-1.5 py-0.5 rounded">
+                    −{target.entropyReduction} entropi
                   </span>
                 </div>
 
@@ -199,8 +215,19 @@ export function SpaceExpansionPanel() {
                   </div>
                 )}
 
-                {/* Cost + Buy Button (shown when not controlled) */}
-                {!isControlled && (
+                {/* Mechanic UI (shown when in_progress) */}
+                {isInProgress && (
+                  <div className="mt-1">
+                    {target.mechanicType === 'supplyChain' && <SupplyChainMechanic targetId={target.id} />}
+                    {target.mechanicType === 'terraform' && <TerraformMechanic targetId={target.id} />}
+                    {target.mechanicType === 'megaproject' && <MegaprojectMechanic targetId={target.id} />}
+                    {target.mechanicType === 'rift' && <RiftMechanic targetId={target.id} />}
+                    {target.mechanicType === 'paradox' && <ParadoxMechanic targetId={target.id} />}
+                  </div>
+                )}
+
+                {/* Cost + Start Button (shown when not controlled and not in_progress) */}
+                {!isControlled && !isInProgress && (
                   <>
                     <div className="flex flex-wrap gap-1.5">
                       <CostBadge label="Stammar" cost={target.cost.stammar} current={stammar} />
@@ -208,7 +235,7 @@ export function SpaceExpansionPanel() {
                       <CostBadge label="Lobby" cost={target.cost.lobby} current={lobby} />
                     </div>
                     <button
-                      onClick={() => affordable && handleBuy(target.id)}
+                      onClick={() => affordable && handleStart(target.id)}
                       disabled={!affordable}
                       className={`w-full px-3 py-2 rounded-sm text-sm font-medium border transition-all
                         ${affordable
@@ -216,7 +243,7 @@ export function SpaceExpansionPanel() {
                           : 'bg-bg-tertiary border-bg-tertiary text-text-muted cursor-not-allowed'
                         }`}
                     >
-                      {affordable ? 'Förvärva' : 'Otillräckliga resurser'}
+                      {affordable ? 'Starta' : 'Otillräckliga resurser'}
                     </button>
                   </>
                 )}

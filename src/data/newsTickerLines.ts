@@ -473,6 +473,78 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     phase: 12,
     trigger: { type: 'totalStammar', value: 200_000_000_000_000 },
   },
+
+  // ── Sprint 15: Expansion Mechanic Headlines ──
+
+  // Phase 10
+  {
+    id: 'tick_leveranskedja_manen',
+    text: '[LOGISTIK] Månbas leveranskedja: steg 1 av 3. Uppskjutningsramp under konstruktion. Facklig blockad: upplöst. Tillfälligt.',
+    phase: 10,
+  },
+  {
+    id: 'tick_terraform_atmosfar',
+    text: '[TERRAFORMERING] Mars atmosfär: 23%. Jordmån: 8%. Vatten: 2%. Projektledaren: "Vi prioriterar andning framför odling."',
+    phase: 10,
+  },
+  {
+    id: 'tick_terraform_budget',
+    text: '[BUDGET] Mars terraformering: 340% över budget. Orsak: "Oförutsedda behov av atmosfär." Revisorn: godkänner.',
+    phase: 10,
+  },
+  {
+    id: 'tick_expansion_entropi_stiger',
+    text: '[VARNING] Entropin stiger. Varje nytt mål saktar ned den. Styrelsens respons: "Expandera snabbare."',
+    phase: 10,
+  },
+
+  // Phase 11
+  {
+    id: 'tick_dyson_milstolpe',
+    text: '[MEGAPROJEKT] Dysonsfären: 25% klar. Milstolpebonus utdelad. Champagne i tyngdlöshet. Bubblan rör sig inte.',
+    phase: 11,
+    trigger: { type: 'totalStammar', value: 250_000_000_000_000 },
+  },
+  {
+    id: 'tick_dimensionsreva_rapport',
+    text: '[MULTIVERS] Dimensionsrevan: stabil. Offringsgraden: 30%. Parallellt universums miljörörelse: under kontroll. Vår miljörörelse: utrotad sedan fas 6.',
+    phase: 11,
+  },
+  {
+    id: 'tick_rift_hr_problem',
+    text: '[HR] Anställda från parallellt universum söker asyl i vårt. Motiveringen: "Där vann miljörörelsen. Det var tråkigt."',
+    phase: 11,
+  },
+  {
+    id: 'tick_dyson_energi',
+    text: '[ENERGI] Dysonsfären levererar 47 exawatt. Användning: 99,8% till cellulosaproduktion. 0,2% till kaffemaskin.',
+    phase: 11,
+    trigger: { type: 'totalStammar', value: 400_000_000_000_000 },
+  },
+
+  // Phase 12
+  {
+    id: 'tick_paradox_vag1',
+    text: '[TEMPORAL] Paradoxvåg 1: produktionen halveras. Orsak: kausalitet. Åtgärd: ignorera kausalitet.',
+    phase: 12,
+  },
+  {
+    id: 'tick_paradox_dinosaurier',
+    text: '[TEMPORAL] Dinosaurierna undrar var skogen tog vägen. Svaret: retroaktivt avverkad. De verkar upprörda. Tillfälligt.',
+    phase: 12,
+    trigger: { type: 'totalStammar', value: 80_000_000_000_000 },
+  },
+  {
+    id: 'tick_entropi_motgang',
+    text: '[ENTROPI] Entropimotgång: måluppfyllelse sänker entropin med 15 enheter. Universum: tackar. Styrelsen: noterar.',
+    phase: 12,
+  },
+  {
+    id: 'tick_sista_expansion',
+    text: '[EXPANSION] Alla 5 mål kontrollerade. Entropin sjunker. Universum: räddas. Av skogsbruksindustrin. Ironin: kosmisk.',
+    phase: 12,
+    trigger: { type: 'totalStammar', value: 500_000_000_000_000 },
+  },
 ]
 
 /** Get headlines available for a given game state */

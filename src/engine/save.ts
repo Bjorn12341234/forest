@@ -2,7 +2,7 @@ import type { GameState, SaveFile } from '../store/types'
 
 const SAVE_KEY = 'silva_maximus_save'
 const BACKUP_KEY = 'silva_maximus_backup'
-const CURRENT_VERSION = 12
+const CURRENT_VERSION = 13
 
 export function saveGame(state: GameState): void {
   const saveFile: SaveFile = {
@@ -325,6 +325,36 @@ const migrations: Record<number, MigrationFn> = {
       (state as unknown as Record<string, unknown>).lastEventFiredAt = {}
     }
     save.version = 12
+    return save
+  },
+  12: (save) => {
+    // v12 → v13: Sprint 15 — expansion mechanic rework + entropy creep model
+    const state = save.state as GameState
+    const s = state as unknown as Record<string, unknown>
+
+    // Already-controlled targets: keep as controlled (strip old simple format)
+    // Non-controlled targets: reset (new mechanics start fresh)
+    if (state.expansionTargets) {
+      const oldTargets = state.expansionTargets as Record<string, { status?: string }>
+      const newTargets: Record<string, { status: string }> = {}
+      for (const [id, entry] of Object.entries(oldTargets)) {
+        if (entry.status === 'controlled') {
+          newTargets[id] = { status: 'controlled' }
+        }
+        // Drop non-controlled entries — new mechanics start fresh
+      }
+      s.expansionTargets = newTargets
+    }
+
+    // Reset entropi for phase 10+ saves (mechanic fundamentally different: creep instead of drain)
+    if (state.phase >= 10) {
+      s.entropi = 100
+    }
+
+    // Clear entropy purchases (formula changed)
+    s.entropyPurchases = {}
+
+    save.version = 13
     return save
   },
 }

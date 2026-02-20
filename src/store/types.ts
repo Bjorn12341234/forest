@@ -170,7 +170,12 @@ export interface AntagonistState {
 }
 
 export interface ExpansionTargetState {
-  status: 'locked' | 'available' | 'controlled'
+  status: 'locked' | 'available' | 'in_progress' | 'controlled'
+  supplyChain?: { stage: 0 | 1 | 2 | 3; stageProgress: number; stageStartedAt?: number }
+  terraform?: { atmosphere: number; soil: number; water: number; allocation: { atmosphere: number; soil: number; water: number } }
+  megaproject?: { progress: number; bonusesClaimed: number }
+  rift?: { sacrificePercent: number; progress: number }
+  paradox?: { currentWave: 0 | 1 | 2 | 3; waveProgress: number; waveStartedAt?: number }
 }
 
 export interface CountryState {
@@ -285,6 +290,10 @@ export interface GameActions {
   counterAntagonist: (id: string) => void
   purchaseOwnerKnowledge: (id: string) => void
   buyExpansionTarget: (id: string) => void
+  startExpansionTarget: (id: string) => void
+  advanceSupplyChainStage: (id: string) => void
+  setTerraformAllocation: (id: string, alloc: { atmosphere: number; soil: number; water: number }) => void
+  setSacrificePercent: (id: string, percent: number) => void
   invadeCountry: (id: string) => void
   allocatePressure: (id: string, vector: 'kapital' | 'lobby' | 'stammar', amount: number) => void
   buyEntropyPurchase: (id: string) => void

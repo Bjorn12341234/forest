@@ -1159,4 +1159,199 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     conditions: [{ resource: 'totalStammar', operator: '>=', value: 20_000_000_000 }],
     unique: false,
   },
+
+  // ═══ Sprint 15: Expansion Mechanic Events ═══
+
+  {
+    id: 'p10_manen_leverans_forsenad',
+    phase: 10,
+    category: 'crisis',
+    headline: 'Månleverans Försenad: Uppskjutningsrampen Blockerad',
+    context:
+      'Leveransen av titanlegering till Månbasen har stoppats av ett fackligt blockadmeddelande. Transportarbetarförbundets rymdsektion kräver kollektivavtal innan lasten lämnar jordbanan. Ramchef Lindqvist: "Vi har schemat att tänka på."',
+    choices: [
+      {
+        label: 'Förhandla med facket',
+        description: 'Kompromiss: 3 dagars fördröjning, kollektivavtal i rymden.',
+        effects: [
+          { resource: 'kapital', amount: -2_000_000_000, type: 'add' },
+          { resource: 'image', amount: 10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Kringgå blockaden',
+        description: 'Alternativ bana via Caymanöarna. Juridiskt grått. Effektivt.',
+        effects: [
+          { resource: 'stammar', amount: 3_000_000_000, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+          { resource: 'lobby', amount: -200, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 15_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p10_mars_torka',
+    phase: 10,
+    category: 'crisis',
+    headline: 'Mars Terraformering: Vattenkris',
+    context:
+      'Terraformeringens vattenreserver sjunker. Iskaporna smälter långsammare än beräknat. Projektledaren: "Vi optimerade för atmosfär. Vatten var en fas 2-fråga." Det är fas 2 nu. Styrelsen: "Prioritera."',
+    choices: [
+      {
+        label: 'Omallokera resurser till vatten',
+        description: 'Atmosfären får vänta. Utan vatten, ingen cellulosa.',
+        effects: [
+          { resource: 'kapital', amount: -3_000_000_000, type: 'add' },
+          { resource: 'image', amount: 5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Importera vatten från asteroider',
+        description: 'Dyr lösning. Men budgeten är kosmisk.',
+        effects: [
+          { resource: 'kapital', amount: -8_000_000_000, type: 'add' },
+          { resource: 'stammar', amount: 5_000_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Utveckla torrlandsbruk',
+        description: 'Syntetisk gran behöver ingen fukt. Marknadsför det som innovation.',
+        effects: [
+          { resource: 'lobby', amount: 200, type: 'add' },
+          { resource: 'stammar', amount: 2_000_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 25_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p11_dyson_overbelastning',
+    phase: 11,
+    category: 'crisis',
+    headline: 'Dysonsfären: Konstruktionsöverbelastning',
+    context:
+      'Dysonsfärens segement 7G visar strukturell utmattning. Orsak: produktionskraven översteg specifikationen med 340%. Ingenjören: "Vi byggde för effektivitet, inte fysik." Fysiken: invänder.',
+    choices: [
+      {
+        label: 'Nödförstärkning',
+        description: 'Temporär fix. Permanent kostnad. Typisk projektledning.',
+        effects: [
+          { resource: 'kapital', amount: -10_000_000_000, type: 'add' },
+          { resource: 'stammar', amount: 10_000_000_000, type: 'add' },
+        ],
+      },
+      {
+        label: 'Ignorera varningen',
+        description: 'Varningssystem: avaktiverade. Produktion: fortsätter.',
+        effects: [
+          { resource: 'stammar', amount: 20_000_000_000, type: 'add' },
+          { resource: 'image', amount: -15, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 300_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p11_dimensionslacka',
+    phase: 11,
+    category: 'reality_glitch',
+    headline: 'Dimensionsläcka: Parallella Verkligheter Blöder Igenom',
+    context:
+      'Revan i dimensionsväven läcker. Anställda rapporterar möten med sig själva. HR: "Dubbelbemanning klassificeras ej som övertid." Produktionsrapporten visar +47% i det parallella universumet. Minus 47% i vårt.',
+    choices: [
+      {
+        label: 'Öka offringsgraden',
+        description: 'Mer dimensionsenergi stabiliserar revan. Teoretiskt.',
+        effects: [
+          { resource: 'stammar', amount: -5_000_000_000, type: 'add' },
+          { resource: 'lobby', amount: 300, type: 'add' },
+        ],
+      },
+      {
+        label: 'Utnyttja dubbelbemanningen',
+        description: 'Två versioner av varje arbetare. Halva lönekostnaden.',
+        effects: [
+          { resource: 'kapital', amount: 15_000_000_000, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Stäng revan tillfälligt',
+        description: 'Produktionsstopp. Men verkligheten stabiliseras. Tillfälligt.',
+        effects: [
+          { resource: 'image', amount: 15, type: 'add' },
+          { resource: 'kapital', amount: -5_000_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 500_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p12_paradox_kaskad',
+    phase: 12,
+    category: 'reality_glitch',
+    headline: 'Paradoxkaskad: Kausalitetskedjan Brister',
+    context:
+      'Tidslinje-korrektionen skapar kaskadeffekter. Dinosaurierna existerar och existerar inte samtidigt. Effekten på cellulosamarknaden: otydlig. Kvantfysikern: "Det här borde inte vara möjligt." Revisorn: "Kontrollera siffrorna."',
+    choices: [
+      {
+        label: 'Rida ut paradoxen',
+        description: 'Kausalitet är en rekommendation, inte en lag.',
+        effects: [
+          { resource: 'stammar', amount: 30_000_000_000, type: 'add' },
+          { resource: 'image', amount: -10, type: 'add' },
+        ],
+      },
+      {
+        label: 'Korrigera korrigeringen',
+        description: 'Dubbelkorrigering. Paradoxen löser sig själv. Eventuellt.',
+        effects: [
+          { resource: 'kapital', amount: -20_000_000_000, type: 'add' },
+          { resource: 'image', amount: 10, type: 'add' },
+          { resource: 'lobby', amount: 200, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 10_000_000_000_000 }],
+    unique: true,
+  },
+
+  {
+    id: 'p10_expansion_rapport',
+    phase: 10,
+    maxPhase: 12,
+    category: 'opportunity',
+    headline: 'Kvartalsrapport: Kosmisk Expansion',
+    context:
+      'Styrelsen granskar expansionsprogrammet. Resultat: "Inom budget. Utom verkligheten." Rapport: 47 sidor. Slutsats: "Fortsätt." Bilaga: existentiell kris bland revisorerna. Noterat. Arkiverat.',
+    choices: [
+      {
+        label: 'Öka takten',
+        description: 'Mer resurser. Snabbare expansion. Mindre eftertanke.',
+        effects: [
+          { resource: 'stammar', amount: 5_000_000_000, type: 'add' },
+          { resource: 'image', amount: -5, type: 'add' },
+        ],
+      },
+      {
+        label: 'Hållbar expansion',
+        description: '"Hållbar" i meningen att vi vill hålla oss kvar.',
+        effects: [
+          { resource: 'image', amount: 10, type: 'add' },
+          { resource: 'kapital', amount: -1_000_000_000, type: 'add' },
+        ],
+      },
+    ],
+    conditions: [{ resource: 'totalStammar', operator: '>=', value: 10_000_000_000 }],
+    replayable: true,
+  },
 ]

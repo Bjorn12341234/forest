@@ -205,24 +205,30 @@ describe('computeAntagonistDeltas', () => {
 })
 
 describe('computeEntropyDrain', () => {
-  it('does not drain before phase 12', () => {
-    expect(computeEntropyDrain(100, 11, 1e12, {}, 1)).toBe(100)
+  it('does not change before phase 10', () => {
+    expect(computeEntropyDrain(50, 9, 1e12, {}, 1)).toBe(50)
   })
 
-  it('drains in phase 12', () => {
-    const result = computeEntropyDrain(100, 12, 1e12, {}, 1)
-    expect(result).toBeLessThan(100)
+  it('creeps up in phase 10+', () => {
+    const result = computeEntropyDrain(50, 10, 1e12, {}, 1)
+    expect(result).toBeGreaterThan(50)
   })
 
-  it('does not drain below 0', () => {
-    const result = computeEntropyDrain(0.001, 12, 1e15, {}, 100)
-    expect(result).toBe(0)
+  it('caps at 100', () => {
+    const result = computeEntropyDrain(99.9, 10, 1e15, {}, 100)
+    expect(result).toBe(100)
   })
 
-  it('slows drain with entropy purchases', () => {
-    const noSlow = computeEntropyDrain(100, 12, 1e12, {}, 10)
-    const withSlow = computeEntropyDrain(100, 12, 1e12, { p1: true, p2: true }, 10)
-    expect(withSlow).toBeGreaterThan(noSlow)
+  it('slows creep with entropy purchases', () => {
+    const noSlow = computeEntropyDrain(50, 10, 1e12, {}, 10)
+    const withSlow = computeEntropyDrain(50, 10, 1e12, { p1: true, p2: true }, 10)
+    expect(withSlow).toBeLessThan(noSlow)
+  })
+
+  it('slows creep when in_progress target exists', () => {
+    const normal = computeEntropyDrain(50, 10, 1e12, {}, 10)
+    const withInProgress = computeEntropyDrain(50, 10, 1e12, {}, 10, true)
+    expect(withInProgress).toBeLessThan(normal)
   })
 })
 

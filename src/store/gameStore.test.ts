@@ -280,7 +280,7 @@ describe('allocatePressure', () => {
 })
 
 describe('buyExpansionTarget', () => {
-  it('buys target with sufficient resources', () => {
+  it('starts target with sufficient resources (in_progress)', () => {
     resetStore({
       gameMode: 'industry',
       phase: 10 as Phase,
@@ -291,7 +291,9 @@ describe('buyExpansionTarget', () => {
     getState().buyExpansionTarget('exp_manen')
     const target = getState().expansionTargets.exp_manen
     expect(target).toBeDefined()
-    expect(target.status).toBe('controlled')
+    expect(target.status).toBe('in_progress')
+    expect(target.supplyChain).toBeDefined()
+    expect(target.supplyChain!.stage).toBe(0)
   })
 })
 

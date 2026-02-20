@@ -4,6 +4,8 @@
 
 export type ExpansionRegion = 'space' | 'cosmic' | 'beyond'
 
+export type MechanicType = 'supplyChain' | 'terraform' | 'megaproject' | 'rift' | 'paradox'
+
 export interface ExpansionTargetData {
   id: string
   name: string
@@ -15,6 +17,9 @@ export interface ExpansionTargetData {
   region: ExpansionRegion
   position: { x: number; y: number }
   maintenanceCost: { kapitalPerSecond: number; lobbyPerSecond: number }
+  mechanicType: MechanicType
+  entropyReduction: number
+  stageCosts?: { stammar: number; kapital: number }[]
 }
 
 export const EXPANSION_TARGETS: ExpansionTargetData[] = [
@@ -30,6 +35,13 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     region: 'space',
     position: { x: 35, y: 30 },
     maintenanceCost: { kapitalPerSecond: 5_000, lobbyPerSecond: 1 },
+    mechanicType: 'supplyChain',
+    entropyReduction: 10,
+    stageCosts: [
+      { stammar: 1_500_000_000_000, kapital: 15_000_000 },
+      { stammar: 2_000_000_000_000, kapital: 20_000_000 },
+      { stammar: 2_500_000_000_000, kapital: 25_000_000 },
+    ],
   },
   {
     id: 'exp_mars',
@@ -42,6 +54,8 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     region: 'space',
     position: { x: 55, y: 40 },
     maintenanceCost: { kapitalPerSecond: 10_000, lobbyPerSecond: 2 },
+    mechanicType: 'terraform',
+    entropyReduction: 15,
   },
 
   // ── Fas 11: Galaktisk + Bortom ──
@@ -56,6 +70,8 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     region: 'cosmic',
     position: { x: 50, y: 50 },
     maintenanceCost: { kapitalPerSecond: 500_000, lobbyPerSecond: 20 },
+    mechanicType: 'megaproject',
+    entropyReduction: 20,
   },
   {
     id: 'exp_universe_alpha',
@@ -68,6 +84,8 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     region: 'beyond',
     position: { x: 25, y: 35 },
     maintenanceCost: { kapitalPerSecond: 1_000_000, lobbyPerSecond: 50 },
+    mechanicType: 'rift',
+    entropyReduction: 25,
   },
 
   // ── Fas 12: Final ──
@@ -82,6 +100,8 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
     region: 'beyond',
     position: { x: 50, y: 70 },
     maintenanceCost: { kapitalPerSecond: 10_000_000, lobbyPerSecond: 200 },
+    mechanicType: 'paradox',
+    entropyReduction: 30,
   },
 ]
 

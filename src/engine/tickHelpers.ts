@@ -2,7 +2,7 @@
 // Pure computation functions extracted from the game tick for readability and testability.
 
 import { GENERATORS, getActiveSynergies } from '../data/generators'
-import { EXPANSION_TARGETS } from '../data/expansionTargets'
+import { EXPANSION_TARGETS, getExpansionTarget } from '../data/expansionTargets'
 import { getCountry, getCountryMaintenanceMultiplier } from '../data/countries'
 import { ANTAGONISTS } from '../data/antagonists'
 import type { GameState } from '../store/types'
@@ -203,20 +203,213 @@ export function computeAntagonistDeltas(
 
 // ── Entropy ──
 
-/** Calculate new entropy value for phase 12+ */
+/** Calculate new entropy value for phase 10+ (creep model) */
 export function computeEntropyDrain(
   entropi: number,
   phase: number,
-  totalStammarPS: number,
+  _totalStammarPS: number,
   entropyPurchases: Record<string, boolean>,
-  dt: number
+  dt: number,
+  hasInProgressTarget?: boolean,
 ): number {
-  if (phase < 12 || entropi <= 0) return entropi
-  const baseDrain = Math.min(0.5, totalStammarPS / 1e10)
+  if (phase < 10 || entropi >= 100) return entropi
+  // Entropy creeps UP at +0.5/s base
+  const baseCreep = 0.5
+  // Reduced while a target is in_progress (×0.3)
+  const inProgressMult = hasInProgressTarget ? 0.3 : 1
+  // Each countermeasure purchase reduces creep by 40% (×0.6^N)
   const purchaseCount = Object.values(entropyPurchases).filter(Boolean).length
-  const entropySlowFactor = Math.pow(0.7, purchaseCount)
-  const drainPerSecond = baseDrain * entropySlowFactor
-  return Math.max(0, entropi - drainPerSecond * dt)
+  const purchaseMult = Math.pow(0.6, purchaseCount)
+  const creepPerSecond = baseCreep * inProgressMult * purchaseMult
+  return Math.min(100, entropi + creepPerSecond * dt)
+}
+
+// ── Expansion Mechanics ──
+
+export interface ExpansionMechanicResult {
+  targets: GameState['expansionTargets']
+  completedIds: string[]
+  paradoxPenalty: { productionMult: number; maintenanceMult: number } | null
+}
+
+// Build times per stage in seconds
+const SUPPLY_CHAIN_BUILD_TIMES = [30, 45, 60]
+
+// Dysonsfär target rate: calibrated for ~4 min completion
+const MEGAPROJECT_TARGET_RATE = 240
+
+/** Process all in-progress expansion target mechanics. Pure function. */
+export function processExpansionMechanics(
+  targets: GameState['expansionTargets'],
+  dt: number,
+  now: number,
+  _stammarPS: number,
+): ExpansionMechanicResult {
+  let changed = false
+  const updated = { ...targets }
+  const completedIds: string[] = []
+  let paradoxPenalty: ExpansionMechanicResult['paradoxPenalty'] = null
+
+  for (const targetDef of EXPANSION_TARGETS) {
+    const ts = targets[targetDef.id]
+    if (!ts || ts.status !== 'in_progress') continue
+
+    const def = getExpansionTarget(targetDef.id)
+    if (!def) continue
+
+    switch (def.mechanicType) {
+      case 'supplyChain': {
+        const sc = ts.supplyChain
+        if (!sc || sc.stage >= 3) break
+        // Auto-advance progress if a stage has been started (stageStartedAt set)
+        if (sc.stageStartedAt) {
+          const buildTime = SUPPLY_CHAIN_BUILD_TIMES[sc.stage] ?? 60
+          const elapsed = (now - sc.stageStartedAt) / 1000
+          const progress = Math.min(1, elapsed / buildTime)
+          if (progress >= 1) {
+            const newStage = (sc.stage + 1) as 0 | 1 | 2 | 3
+            if (newStage >= 3) {
+              updated[def.id] = { status: 'controlled' }
+              completedIds.push(def.id)
+            } else {
+              updated[def.id] = {
+                ...ts,
+                supplyChain: { stage: newStage, stageProgress: 0 },
+              }
+            }
+            changed = true
+          } else if (progress !== sc.stageProgress) {
+            updated[def.id] = {
+              ...ts,
+              supplyChain: { ...sc, stageProgress: progress },
+            }
+            changed = true
+          }
+        }
+        break
+      }
+
+      case 'terraform': {
+        const tf = ts.terraform
+        if (!tf) break
+        const fillRate = 1.1 // %/s at full allocation (100 points)
+        const drainRate = 0.3 // %/s when unallocated
+        let allComplete = true
+        const newTf = { ...tf }
+        for (const meter of ['atmosphere', 'soil', 'water'] as const) {
+          const alloc = tf.allocation[meter]
+          const delta = alloc > 0
+            ? (alloc / 100) * fillRate * dt
+            : -drainRate * dt
+          const newVal = Math.max(0, Math.min(100, tf[meter] + delta))
+          if (newVal < 100) allComplete = false
+          ;(newTf as unknown as Record<string, number>)[meter] = newVal
+        }
+        if (allComplete) {
+          updated[def.id] = { status: 'controlled' }
+          completedIds.push(def.id)
+          changed = true
+        } else {
+          updated[def.id] = { ...ts, terraform: newTf }
+          changed = true
+        }
+        break
+      }
+
+      case 'megaproject': {
+        const mp = ts.megaproject
+        if (!mp) break
+        const progressRate = (1 / MEGAPROJECT_TARGET_RATE) * dt * 100
+        const newProgress = Math.min(100, mp.progress + progressRate)
+        if (newProgress >= 100) {
+          updated[def.id] = { status: 'controlled' }
+          completedIds.push(def.id)
+          changed = true
+        } else {
+          // Check milestones at 25/50/75
+          let bonusesClaimed = mp.bonusesClaimed
+          const milestones = [25, 50, 75]
+          for (let i = 0; i < milestones.length; i++) {
+            if (newProgress >= milestones[i] && bonusesClaimed <= i) {
+              bonusesClaimed = i + 1
+            }
+          }
+          updated[def.id] = {
+            ...ts,
+            megaproject: { progress: newProgress, bonusesClaimed },
+          }
+          changed = true
+        }
+        break
+      }
+
+      case 'rift': {
+        const rf = ts.rift
+        if (!rf) break
+        const progressGain = rf.sacrificePercent * 0.5 * dt
+        const newProgress = Math.min(100, rf.progress + progressGain)
+        if (newProgress >= 100) {
+          updated[def.id] = { status: 'controlled' }
+          completedIds.push(def.id)
+          changed = true
+        } else if (newProgress !== rf.progress) {
+          updated[def.id] = { ...ts, rift: { ...rf, progress: newProgress } }
+          changed = true
+        }
+        break
+      }
+
+      case 'paradox': {
+        const px = ts.paradox
+        if (!px || px.currentWave >= 3) break
+        // Waves auto-advance with time
+        if (px.waveStartedAt) {
+          const waveDurations = [30, 37.5, 45] // seconds per wave
+          const elapsed = (now - px.waveStartedAt) / 1000
+          const waveDur = waveDurations[px.currentWave] ?? 45
+          const progress = Math.min(1, elapsed / waveDur)
+
+          // Apply paradox penalties for active wave
+          const wave = px.currentWave
+          if (wave === 0) {
+            paradoxPenalty = { productionMult: 0.5, maintenanceMult: 1 }
+          } else if (wave === 1) {
+            paradoxPenalty = { productionMult: 1, maintenanceMult: 2 }
+          } else if (wave === 2) {
+            paradoxPenalty = { productionMult: 0.25, maintenanceMult: 1.5 }
+          }
+
+          if (progress >= 1) {
+            const nextWave = (px.currentWave + 1) as 0 | 1 | 2 | 3
+            if (nextWave >= 3) {
+              updated[def.id] = { status: 'controlled' }
+              completedIds.push(def.id)
+              paradoxPenalty = null
+            } else {
+              updated[def.id] = {
+                ...ts,
+                paradox: { currentWave: nextWave, waveProgress: 0, waveStartedAt: now },
+              }
+            }
+            changed = true
+          } else if (progress !== px.waveProgress) {
+            updated[def.id] = {
+              ...ts,
+              paradox: { ...px, waveProgress: progress },
+            }
+            changed = true
+          }
+        }
+        break
+      }
+    }
+  }
+
+  return {
+    targets: changed ? updated : targets,
+    completedIds,
+    paradoxPenalty,
+  }
 }
 
 // ── Species ──

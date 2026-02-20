@@ -21,7 +21,7 @@ import { getLobbyEarner, getLobbyPurchase, computeLobbyModifiers, type LobbyModi
 import { getOwnerAction } from '../data/ownerActions'
 import { getPRCampaign } from '../data/ownerActions'
 import { checkAntagonistTriggers, getAntagonist, getScaledCounterCost } from '../data/antagonists'
-import { getExpansionTarget } from '../data/expansionTargets'
+import { getExpansionTarget, EXPANSION_TARGETS } from '../data/expansionTargets'
 import { calculateWarningLevel, getWarningPenalty } from '../engine/warnings'
 import { getCountry, computeCountryRewards } from '../data/countries'
 import {
@@ -34,6 +34,7 @@ import {
   computeAntagonistDeltas,
   computeEntropyDrain,
   computeSpeciesLoss,
+  processExpansionMechanics,
 } from '../engine/tickHelpers'
 import { getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
@@ -563,8 +564,31 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const updatedCountries = processCountryInvasions(state.countries, dt)
     if (updatedCountries) updates.countries = updatedCountries
 
-    // Entropy countdown (phase 12)
-    const newEntropi = computeEntropyDrain(state.entropi, state.phase, totalStammarPS, state.entropyPurchases, dt)
+    // Expansion mechanics tick (in-progress targets)
+    const expMechanics = processExpansionMechanics(
+      updates.expansionTargets ?? state.expansionTargets,
+      dt,
+      now,
+      totalStammarPS,
+    )
+    if (expMechanics.targets !== (updates.expansionTargets ?? state.expansionTargets)) {
+      updates.expansionTargets = expMechanics.targets
+    }
+    // Apply entropy reduction for completed targets
+    let entropyDrop = 0
+    for (const completedId of expMechanics.completedIds) {
+      const targetDef = EXPANSION_TARGETS.find(t => t.id === completedId)
+      if (targetDef) entropyDrop += targetDef.entropyReduction
+    }
+
+    // Entropy creep (phase 10+)
+    const hasInProgressTarget = Object.values(updates.expansionTargets ?? state.expansionTargets)
+      .some(ts => ts.status === 'in_progress')
+    let newEntropi = computeEntropyDrain(state.entropi, state.phase, totalStammarPS, state.entropyPurchases, dt, hasInProgressTarget)
+    // Apply entropy drops from completed targets
+    if (entropyDrop > 0) {
+      newEntropi = Math.max(0, newEntropi - entropyDrop)
+    }
     if (newEntropi !== state.entropi) updates.entropi = newEntropi
 
     // Species counting
@@ -1060,18 +1084,38 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     } as Partial<GameStore>)
   },
 
-  buyExpansionTarget: (id: string) => {
+  startExpansionTarget: (id: string) => {
     const state = get()
     const target = getExpansionTarget(id)
     if (!target) return
     if (target.unlockPhase > state.phase) return
     const existing = state.expansionTargets[id]
-    if (existing?.status === 'controlled') return
+    if (existing?.status === 'controlled' || existing?.status === 'in_progress') return
 
     // Check costs
     if (state.stammar < target.cost.stammar) return
     if (state.kapital < target.cost.kapital) return
     if (state.lobby < target.cost.lobby) return
+
+    // Initialize mechanic sub-state
+    let mechanicState: Partial<import('./types').ExpansionTargetState> = {}
+    switch (target.mechanicType) {
+      case 'supplyChain':
+        mechanicState = { supplyChain: { stage: 0, stageProgress: 0 } }
+        break
+      case 'terraform':
+        mechanicState = { terraform: { atmosphere: 0, soil: 0, water: 0, allocation: { atmosphere: 33, soil: 33, water: 34 } } }
+        break
+      case 'megaproject':
+        mechanicState = { megaproject: { progress: 0, bonusesClaimed: 0 } }
+        break
+      case 'rift':
+        mechanicState = { rift: { sacrificePercent: 0, progress: 0 } }
+        break
+      case 'paradox':
+        mechanicState = { paradox: { currentWave: 0, waveProgress: 0, waveStartedAt: Date.now() } }
+        break
+    }
 
     set({
       stammar: state.stammar - target.cost.stammar,
@@ -1079,7 +1123,83 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lobby: state.lobby - target.cost.lobby,
       expansionTargets: {
         ...state.expansionTargets,
-        [id]: { status: 'controlled' },
+        [id]: { status: 'in_progress' as const, ...mechanicState },
+      },
+    } as Partial<GameStore>)
+  },
+
+  buyExpansionTarget: (id: string) => {
+    // Alias for backwards compatibility
+    get().startExpansionTarget(id)
+  },
+
+  advanceSupplyChainStage: (id: string) => {
+    const state = get()
+    const target = getExpansionTarget(id)
+    if (!target || target.mechanicType !== 'supplyChain') return
+    const ts = state.expansionTargets[id]
+    if (!ts || ts.status !== 'in_progress' || !ts.supplyChain) return
+    const sc = ts.supplyChain
+    // Can't advance if already building (stageStartedAt set and not complete)
+    if (sc.stageStartedAt) return
+    if (sc.stage >= 3) return
+
+    // Check stage cost
+    const stageCost = target.stageCosts?.[sc.stage]
+    if (!stageCost) return
+    if (state.stammar < stageCost.stammar || state.kapital < stageCost.kapital) return
+
+    set({
+      stammar: state.stammar - stageCost.stammar,
+      kapital: state.kapital - stageCost.kapital,
+      expansionTargets: {
+        ...state.expansionTargets,
+        [id]: {
+          ...ts,
+          supplyChain: { ...sc, stageStartedAt: Date.now(), stageProgress: 0 },
+        },
+      },
+    } as Partial<GameStore>)
+  },
+
+  setTerraformAllocation: (id: string, alloc: { atmosphere: number; soil: number; water: number }) => {
+    const state = get()
+    const ts = state.expansionTargets[id]
+    if (!ts || ts.status !== 'in_progress' || !ts.terraform) return
+
+    // Clamp and normalize to sum = 100
+    const total = alloc.atmosphere + alloc.soil + alloc.water
+    const norm = total > 0 ? 100 / total : 0
+    const clamped = {
+      atmosphere: Math.max(0, Math.round(alloc.atmosphere * norm)),
+      soil: Math.max(0, Math.round(alloc.soil * norm)),
+      water: Math.max(0, Math.round(alloc.water * norm)),
+    }
+
+    set({
+      expansionTargets: {
+        ...state.expansionTargets,
+        [id]: {
+          ...ts,
+          terraform: { ...ts.terraform, allocation: clamped },
+        },
+      },
+    } as Partial<GameStore>)
+  },
+
+  setSacrificePercent: (id: string, percent: number) => {
+    const state = get()
+    const ts = state.expansionTargets[id]
+    if (!ts || ts.status !== 'in_progress' || !ts.rift) return
+
+    const clamped = Math.max(0, Math.min(50, percent))
+    set({
+      expansionTargets: {
+        ...state.expansionTargets,
+        [id]: {
+          ...ts,
+          rift: { ...ts.rift, sacrificePercent: clamped },
+        },
       },
     } as Partial<GameStore>)
   },
@@ -1133,7 +1253,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   buyEntropyPurchase: (id: string) => {
     const state = get()
     if (state.entropyPurchases[id]) return
-    if (state.phase < 12) return
+    if (state.phase < 10) return
 
     const costs: Record<string, { resource: 'kapital' | 'lobby'; amount: number }> = {
       entropy_slow_1: { resource: 'lobby', amount: 50_000 },

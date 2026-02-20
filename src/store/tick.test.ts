@@ -154,31 +154,26 @@ describe('industry tick', () => {
   })
 
   describe('entropy', () => {
-    it('drains entropy in phase 12', () => {
-      // Entropy drain depends on totalStammarPS computed from generators
-      // gen_entropi has very high production — use it to get enough /s
+    it('entropy creeps up in phase 10+', () => {
       resetStore({
         gameMode: 'industry',
-        phase: 12 as Phase,
-        entropi: 100,
-        generators: {
-          gen_entropi: { count: 100, unlocked: true },
-        },
+        phase: 10 as Phase,
+        entropi: 50,
         nextEventAt: Date.now() + 999_999_999,
       })
       tickFor(10)
-      expect(getState().entropi).toBeLessThan(100)
+      expect(getState().entropi).toBeGreaterThan(50)
     })
 
-    it('does not drain entropy before phase 12', () => {
+    it('does not change entropy before phase 10', () => {
       resetStore({
         gameMode: 'industry',
-        phase: 11 as Phase,
-        entropi: 100,
+        phase: 9 as Phase,
+        entropi: 50,
         nextEventAt: Date.now() + 999_999_999,
       })
       tickFor(10)
-      expect(getState().entropi).toBe(100)
+      expect(getState().entropi).toBe(50)
     })
   })
 

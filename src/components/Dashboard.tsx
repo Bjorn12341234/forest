@@ -9,11 +9,11 @@ import { WarningBanner } from './WarningBanner'
 
 import { PHASE_NAMES } from '../engine/phases'
 
-// ── Entropy purchases data (industry path, phase 12) ──
+// ── Entropy purchases data (industry path, phase 10+) ──
 const ENTROPY_PURCHASES = [
-  { id: 'entropy_slow_1', name: 'Byråkratisk Fördröjning', description: 'Lobby förhindrar effektiv entropihantering. −30% dränering.', resource: 'lobby' as const, cost: 50_000 },
-  { id: 'entropy_slow_2', name: 'Tidskristallisering', description: 'Kapital investerat i temporal stabilisering. −30% dränering.', resource: 'kapital' as const, cost: 500_000_000_000 },
-  { id: 'entropy_slow_3', name: 'Entropikommitténs Utredning', description: 'En utredning tar alltid tid. −30% dränering.', resource: 'lobby' as const, cost: 200_000 },
+  { id: 'entropy_slow_1', name: 'Byråkratisk Fördröjning', description: 'Lobby saktar ned entropins framfart. −40% ökning.', resource: 'lobby' as const, cost: 50_000 },
+  { id: 'entropy_slow_2', name: 'Tidskristallisering', description: 'Kapital investerat i temporal stabilisering. −40% ökning.', resource: 'kapital' as const, cost: 500_000_000_000 },
+  { id: 'entropy_slow_3', name: 'Entropikommitténs Utredning', description: 'En utredning tar alltid tid. −40% ökning.', resource: 'lobby' as const, cost: 200_000 },
 ]
 
 const PHASE_THRESHOLDS: Record<number, number> = {
@@ -47,8 +47,6 @@ export function Dashboard() {
   const entropi = useGameStore(s => s.entropi)
   const entropyPurchases = useGameStore(s => s.entropyPurchases)
   const buyEntropyPurchase = useGameStore(s => s.buyEntropyPurchase)
-  const stammarPerSecond = useGameStore(s => s.stammarPerSecond)
-
   const [mobileExpanded, setMobileExpanded] = useState(false)
 
   // Auto-disable fast-forward during events/transitions
@@ -62,16 +60,20 @@ export function Dashboard() {
     setGameSpeed(gameSpeed > 1 ? 1 : 5)
   }, [gameSpeed, setGameSpeed])
 
-  // Calculate entropy drain rate and ETA (phase 12)
-  const entropyDrainRate = phase >= 12
+  const expansionTargets = useGameStore(s => s.expansionTargets)
+
+  // Calculate entropy creep rate and ETA (phase 10+)
+  const hasInProgressTarget = Object.values(expansionTargets).some(t => t.status === 'in_progress')
+  const entropyCreepRate = phase >= 10
     ? (() => {
-        const baseDrain = Math.min(0.5, stammarPerSecond / 1e10)
+        const baseCreep = 0.5
+        const inProgressMult = hasInProgressTarget ? 0.3 : 1
         const purchaseCount = Object.values(entropyPurchases).filter(Boolean).length
-        return baseDrain * Math.pow(0.7, purchaseCount)
+        return baseCreep * inProgressMult * Math.pow(0.6, purchaseCount)
       })()
     : 0
-  const entropyETA = entropyDrainRate > 0
-    ? Math.ceil(entropi / entropyDrainRate)
+  const entropyETA = entropyCreepRate > 0 && entropi < 100
+    ? Math.ceil((100 - entropi) / entropyCreepRate)
     : Infinity
 
   const phaseName = PHASE_NAMES[phase] ?? `Fas ${phase}`
@@ -188,8 +190,8 @@ export function Dashboard() {
         </div>
       )}
 
-      {/* Entropy Display (phase 12) */}
-      {phase >= 12 && (
+      {/* Entropy Display (phase 10+) */}
+      {phase >= 10 && (
         <GlassCard padding="sm">
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -197,8 +199,8 @@ export function Dashboard() {
                 Entropi: {entropi.toFixed(1)}%
               </span>
               <span className="text-xs text-text-muted font-numbers">
-                −{entropyDrainRate.toFixed(3)}/s
-                {entropyETA < Infinity && ` — ~${formatTime(entropyETA)} kvar`}
+                +{entropyCreepRate.toFixed(3)}/s
+                {entropyETA < Infinity && ` — full om ~${formatTime(entropyETA)}`}
               </span>
             </div>
             <div className="w-full h-2 bg-bg-tertiary rounded-sm overflow-hidden">
