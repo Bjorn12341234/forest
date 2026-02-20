@@ -29,6 +29,7 @@ import { IndustryAttackModal } from './components/owner/IndustryAttackModal'
 import { IndustryLureModal } from './components/owner/IndustryLureModal'
 import { OwnerTicker } from './components/owner/OwnerTicker'
 import { OwnerEndScreen } from './components/owner/OwnerEndScreen'
+import { ForestBackground } from './components/owner/ForestBackground'
 import { FinalEndScreen } from './components/FinalEndScreen'
 import { RealityPage } from './components/EndScreen'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -361,6 +362,9 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
   return (
     <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-dvh bg-owner-bg" data-mode="owner">
+      {/* Animated forest background */}
+      <ForestBackground />
+
       {/* Owner News Ticker */}
       <OwnerTicker />
 
@@ -426,7 +430,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
       <div className="fixed top-12 right-2 z-40 flex flex-col gap-1.5">
         <button
           onClick={onShowSettings}
-          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform text-owner-text/80"
           aria-label="Inställningar"
           title="Inställningar"
         >
@@ -434,7 +438,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
         </button>
         <button
           onClick={onShowAchievements}
-          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform text-owner-text/80"
           aria-label="Prestationer"
           title="Prestationer"
         >
@@ -442,7 +446,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
         </button>
         <button
           onClick={onReset}
-          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-owner-text/70"
+          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-owner-text/50"
           aria-label="Tillbaka till start"
           title="Tillbaka till start"
         >
@@ -463,8 +467,8 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
 
       {/* Bottom Tab Navigation */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/20 backdrop-blur-sm"
-        style={{ background: 'linear-gradient(to top, rgba(245,240,232,0.95), rgba(255,255,255,0.85))', paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/20"
+        style={{ background: 'linear-gradient(to top, rgba(26,38,24,0.90), rgba(26,38,24,0.75))', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', paddingBottom: 'env(safe-area-inset-bottom)' }}
         role="tablist"
         aria-label="Skogsägarnavigering"
       >

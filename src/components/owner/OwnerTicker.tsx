@@ -56,8 +56,10 @@ export function OwnerTicker() {
     <div
       className="w-full overflow-hidden relative flex-shrink-0"
       style={{
-        background: 'linear-gradient(90deg, rgba(var(--color-owner-accent-rgb),0.15) 0%, rgba(var(--color-owner-accent-rgb),0.04) 30%, rgba(var(--color-owner-accent-rgb),0.04) 70%, rgba(var(--color-owner-accent-rgb),0.15) 100%)',
-        borderBottom: '1px solid rgba(var(--color-owner-accent-rgb), 0.2)',
+        background: 'linear-gradient(90deg, rgba(var(--color-owner-accent-rgb),0.12) 0%, rgba(var(--color-owner-accent-rgb),0.04) 30%, rgba(var(--color-owner-accent-rgb),0.04) 70%, rgba(var(--color-owner-accent-rgb),0.12) 100%)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(var(--color-owner-accent-rgb), 0.15)',
         paddingTop: 'env(safe-area-inset-top)',
         height: 'calc(2rem + env(safe-area-inset-top))',
       }}

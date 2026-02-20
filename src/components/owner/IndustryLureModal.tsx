@@ -44,9 +44,9 @@ export function IndustryLureModal() {
               aria-label={lure.name}
               className="p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto rounded-xl"
               style={{
-                background: 'var(--color-owner-bg)',
+                background: 'linear-gradient(145deg, #1E2E1C 0%, #1A2618 100%)',
                 border: '2px solid #D4730C',
-                boxShadow: '0 0 40px rgba(212,115,12,0.2), 0 4px 24px rgba(0,0,0,0.3)',
+                boxShadow: '0 0 40px rgba(212,115,12,0.25), 0 4px 24px rgba(0,0,0,0.5)',
               }}
             >
               {/* Category badge */}
@@ -79,7 +79,7 @@ export function IndustryLureModal() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   className="mb-4 p-3 rounded-lg"
-                  style={{ background: 'rgba(204,51,51,0.08)', border: '1px solid rgba(204,51,51,0.2)' }}
+                  style={{ background: 'rgba(204,51,51,0.10)', border: '1px solid rgba(204,51,51,0.25)' }}
                 >
                   <p className="text-sm text-[#CC3333] font-medium mb-1">Sanningen:</p>
                   <p className="text-sm text-owner-text/70">{lure.trap}</p>
@@ -99,8 +99,8 @@ export function IndustryLureModal() {
                   }}
                   className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
                   style={{
-                    background: revealed ? 'rgba(204,51,51,0.05)' : 'rgba(212,115,12,0.08)',
-                    borderColor: revealed ? 'rgba(204,51,51,0.2)' : 'rgba(212,115,12,0.3)',
+                    background: revealed ? 'rgba(204,51,51,0.08)' : 'rgba(212,115,12,0.10)',
+                    borderColor: revealed ? 'rgba(204,51,51,0.25)' : 'rgba(212,115,12,0.35)',
                   }}
                 >
                   <span className="text-base font-medium" style={{ color: revealed ? '#CC3333' : '#D4730C' }}>

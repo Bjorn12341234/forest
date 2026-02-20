@@ -48,9 +48,9 @@ export function IndustryAttackModal() {
               aria-label={atk.name}
               className="p-6 max-w-md w-full mx-auto max-h-[85vh] overflow-y-auto rounded-xl"
               style={{
-                background: 'var(--color-owner-bg)',
+                background: 'linear-gradient(145deg, #1E2E1C 0%, #1A2618 100%)',
                 border: '2px solid #CC3333',
-                boxShadow: '0 0 40px rgba(204,51,51,0.2), 0 4px 24px rgba(0,0,0,0.3)',
+                boxShadow: '0 0 40px rgba(204,51,51,0.25), 0 4px 24px rgba(0,0,0,0.5)',
               }}
             >
               {/* Category badge */}
@@ -85,8 +85,8 @@ export function IndustryAttackModal() {
                   disabled={!canResist}
                   className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
                   style={{
-                    background: canResist ? 'rgba(var(--color-owner-accent-rgb),0.1)' : 'rgba(0,0,0,0.05)',
-                    borderColor: canResist ? 'rgba(var(--color-owner-accent-rgb),0.4)' : 'rgba(0,0,0,0.1)',
+                    background: canResist ? 'rgba(var(--color-owner-accent-rgb),0.12)' : 'rgba(255,255,255,0.03)',
+                    borderColor: canResist ? 'rgba(var(--color-owner-accent-rgb),0.4)' : 'rgba(255,255,255,0.08)',
                     opacity: canResist ? 1 : 0.5,
                   }}
                 >
@@ -112,8 +112,8 @@ export function IndustryAttackModal() {
                   onClick={() => resolve(true)}
                   className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
                   style={{
-                    background: 'rgba(204,51,51,0.05)',
-                    borderColor: 'rgba(204,51,51,0.2)',
+                    background: 'rgba(204,51,51,0.08)',
+                    borderColor: 'rgba(204,51,51,0.25)',
                   }}
                 >
                   <span className="text-base font-medium text-[#CC3333]">

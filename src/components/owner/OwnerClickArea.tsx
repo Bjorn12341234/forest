@@ -26,7 +26,7 @@ function getFlavour(totalSV: number): string {
 
 // Resolve CSS variable for canvas (which can't use var() directly)
 function getOwnerAccent(): string {
-  return getComputedStyle(document.documentElement).getPropertyValue('--color-owner-accent').trim() || '#2D6A4F'
+  return getComputedStyle(document.documentElement).getPropertyValue('--color-owner-accent').trim() || '#5E9E6E'
 }
 
 export function OwnerClickArea() {
@@ -139,7 +139,9 @@ export function OwnerClickArea() {
                      flex items-center justify-center
                      hover:border-owner-accent transition-all duration-200 animate-forest-glow"
           style={{
-            background: 'radial-gradient(circle at 40% 35%, rgba(45,106,79,0.18) 0%, rgba(45,106,79,0.06) 70%, transparent 100%)',
+            background: 'radial-gradient(circle at 40% 35%, rgba(94,158,110,0.28) 0%, rgba(94,158,110,0.12) 50%, rgba(94,158,110,0.04) 100%)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             borderColor: streakBonus > 0
               ? `rgba(var(--color-owner-accent-rgb), ${0.5 + streakBonus * 0.5})`
               : undefined,

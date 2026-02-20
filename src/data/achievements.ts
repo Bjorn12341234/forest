@@ -34,7 +34,7 @@ export const TIER_COLORS: Record<AchievementTier, string> = {
   endgame: '#CC22CC',
   kosmisk: '#00CCFF',
   meta: '#888888',
-  skogsagare: '#2D6A4F',
+  skogsagare: '#5E9E6E',
 }
 
 export const ACHIEVEMENTS: AchievementDef[] = [

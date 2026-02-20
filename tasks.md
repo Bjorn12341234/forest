@@ -1519,6 +1519,232 @@
 
 ---
 
+## Sprint 17: Skogsägarens Skog (Owner Path Visual Overhaul)
+
+> **Source:** Visuell granskning — ägarbanan känns steril, låg kontrast, saknar skogskänsla
+> **Goal:** Förvandla ägarbanan från "beige kontor" till "levande skog". Förbättra kontrast, lägg till Three.js-bakgrund med animerade skogseffekter, skapa en varm och inbjudande visuell upplevelse.
+
+### 17A — Kontrastfix & Färgpalett
+
+- [x] 17A-1: Förbättra text-/bakgrundskontrast
+  - Nuvarande problem: `#3D2B1F` text på `#F5F0E8` bakgrund ≈ 7.5:1 (ok), MEN cards med `rgba(255,255,255,0.82)` bakgrund gör text svårläst
+  - Card-bakgrunder har för hög vit-opacity (0.82-0.92) — suddar ut färgskillnaden mot page-bakgrunden
+  - Åtgärd: Sänk card-bakgrund till mer distinkta opaciteter, öka border-kontrast
+  - `owner-card`: bakgrund `rgba(255,255,255,0.82)` → mer distinkt gradient med bättre separation
+  - `owner-card-subtle`: bakgrund `rgba(255,255,255,0.6)` → tydligare hierarki
+  - Sekundär text (`text-owner-text/65`, `text-owner-text/50`) — verifiera ≥4.5:1 mot alla bakgrunder
+  - Testa med Chrome DevTools contrast checker
+
+- [x] 17A-2: Uppdatera ägarfärgpalett för skogskänsla
+  - Nuvarande `--color-owner-bg: #F5F0E8` är för "kontors-beige" — ändra till varm skogsgrön/jordton
+  - Ny palett-riktning:
+    - Bakgrund: mörkare varm jordton (t.ex. `#2A2318` mörk jord eller `#1C2B1C` djup skogsgrön)
+    - Text: ljus varm ton (`#E8DCC8` pergament eller `#D4C8A8` ljus bark)
+    - Accent: levande mossgrön (`#4A8B5C` eller `#3D7A4F`)
+    - Sekundär: gyllene (`#C4A44E`) för highlights
+  - Uppdatera CSS-variabler i global.css `@theme {}`
+  - Uppdatera `[data-mode="owner"]` bakgrundsgradienter
+  - Uppdatera `owner-card`, `owner-card-subtle`, `owner-card-interactive` klasser
+  - Uppdatera OwnerTabButton bottennav-gradient
+  - Verifiera all text mot nya bakgrunder med WCAG AA (≥4.5:1)
+
+- [x] 17A-3: Uppdatera modaler och specialelement
+  - IndustryAttackModal: anpassa bakgrund/skuggor till ny palett
+  - IndustryLureModal: anpassa bakgrund/skuggor till ny palett
+  - KnowledgePanel: uppdatera trädnoder och modifieringsbox
+  - OwnerTicker: uppdatera gradient och textfärg
+  - MilestoneToast (owner): uppdatera till ny palett
+  - CharacterSelect: ägarbeskrivning matcha ny stil
+
+### 17B — Three.js Animerad Skogsbakgrund
+
+- [x] 17B-1: Installera Three.js & React Three Fiber
+  - ~~`npm install three @react-three/fiber @react-three/drei`~~ → Canvas 2D (1.5KB vs 238KB gzipped)
+  - Skapa `src/components/owner/ForestBackground.tsx` — Canvas-komponent
+  - Canvas renderas bakom allt UI-innehåll (position: fixed, z-index: 0)
+  - Respektera `prefers-reduced-motion` — statisk fallback utan animationer
+  - Performance budget: <5ms per frame, requestAnimationFrame-baserad
+
+- [x] 17B-2: Animerade träd & skogssilhuetter
+  - Skapa procedurella trädsilhuetter (2-3 lager, parallax-djup)
+  - Bakre lager: dimmiga gransilhuetter, subtil sway-animation (wind)
+  - Mellersta lager: tydligare trädstammar med kronor, långsam gungning
+  - Främre lager: närmaste träd, mörkare, minimal rörelse
+  - Använd Canvas 2D med seeded RNG för performance
+  - Mörk/dämpad färgpalett som inte stör UI-läsbarheten
+  - Träden ska vara subtila — bakgrund, inte huvudattraktion
+
+- [x] 17B-3: Atmosfäriska effekter
+  - Ljusstrålar (god rays): subtila ljusstrålar genom trädkronorna, rör sig långsamt
+  - Fallande löv: 10-20 löv som faller långsamt, återanvänds (object pooling)
+  - Dimma/dis: tunn dimma vid marken, driftar horisontellt
+  - Eldflugepartikellar: små lysande prickar som rör sig oregelbundet (nattlig känsla)
+  - Alla effekter subtila och dämpade — ska skapa stämning utan distraktion
+  - Färgerna matchar den nya paletten (grönt, gyllene, jordfärger)
+
+- [x] 17B-4: Interaktivitet & fasrespons
+  - ~~Lättast parallax-effekt vid scroll/musrörelse (subtil)~~ → skippat (ej nödvändigt)
+  - Bakgrunden reagerar på spelets framsteg:
+    - Låg skogsvärd: glesare, yngre skog
+    - Hög skogsvärd (>100K): tätare, mer majestätisk skog
+    - Hög biodiversitet: fler löv/partiklar, ljusare grönska
+    - Industri-attack aktiv: mörkare ton, rödaktig dimma
+  - Övergångar via useMemo-baserad state
+
+### 17C — UI-komponentstil
+
+- [x] 17C-1: Genomskinliga glasmorfism-cards
+  - Ersätt nuvarande vita gradienter med backdrop-blur glaseffekt
+  - `owner-card`: `backdrop-filter: blur(12px)`, `background: rgba(bg, 0.6)`, tydlig border
+  - `owner-card-subtle`: `backdrop-filter: blur(8px)`, `background: rgba(bg, 0.4)`
+  - `owner-card-interactive`: glaseffekt med tydlig hover-state
+  - Cards ska låta skogsbakgrunden skymta igenom — men text måste vara läsbar
+  - Fallback för webbläsare utan backdrop-filter: solid bakgrundsfärg
+
+- [x] 17C-2: Uppdatera klickyta och knappar
+  - OwnerClickArea: klickknappen med backdrop-blur glaseffekt
+  - `animate-forest-glow`: uppdatera till ny accentfärg
+  - Ticker, bottom nav med backdrop-blur
+
+- [ ] 17C-3: Typografi & ikoner
+  - Behåll IBM Plex Mono — fungerar bra mot ny mörk bakgrund
+  - ~~Rubriker: eventuellt serif-font~~ → skippat (IBM Plex Mono funkar bättre med brutalism-temat)
+  - Emojis behålls som-de-är (fungerar bra visuellt)
+
+### 17D — Performance & Tillgänglighet
+
+- [x] 17D-1: Performance-optimering
+  - Canvas 2D: maximal 30fps (capped via delta-time check)
+  - Lazy-load canvas bundle (React.lazy + Suspense) — 1.5KB gzipped
+  - Total bundle-ökning: +1.5KB gzipped (vs 252KB main)
+  - Mobil: reducera partikelantal och effektintensitet via lowPower
+  - Lågeffektläge: detektera låg GPU/core-count och visa enklare bakgrund
+
+- [x] 17D-2: Tillgänglighet
+  - `prefers-reduced-motion: reduce` → statisk bakgrund utan animationer
+  - Canvas: `aria-hidden="true"`, inte fokusbar, pointer-events: none
+  - Alla textkontraster ≥4.5:1 (AA) — text #E0D5BF på #1A2618 = 10.9:1
+  - Accent #5E9E6E on bg = 5.0:1 (AA pass)
+  - Keyboard-navigering oförändrad
+
+- [x] 17D-3: Responsivitet
+  - Mobil/lowPower: färre partiklar (6 löv, 4 eldfluggor)
+  - Desktop: full effekt (15 löv, 15 eldfluggor)
+  - Canvas auto-resizes med DPR-awareness (capped at 1.5x)
+
+### 17E — Verifiering
+
+- [x] 17E-1: Visuell granskning
+  - Kontrast-beräknad: text 10.9:1, accent 5.0:1 (AA)
+  - Playtest manuellt behövs efter deploy
+
+- [x] 17E-2: Test & Build
+  - Alla 285 befintliga tester passerar
+  - TypeScript clean
+  - Vite build passerar
+  - Bundle-storlek: 252KB main + 1.5KB canvas (total ~254KB gzipped)
+
+- [ ] 17E-3: Deploy & Feedback
+  - Deploy till GitHub Pages
+  - Testa på mobil (iOS Safari, Android Chrome)
+  - Testa reduced-motion-läge
+  - Samla feedback — justera intensitet/färger vid behov
+
+**Notes:**
+- Bytte från Three.js (238KB gzipped) till Canvas 2D (1.5KB gzipped) — samma visuella effekt
+- Ny palett: bg #1A2618 (djup skogsgrön), text #E0D5BF (pergament), accent #5E9E6E (mossgrön)
+- Glasmorfism med backdrop-blur(12px) på cards, ticker, nav, klickknapp
+- Canvas renderar: 3-lagers trädsilhuetter, ljusstrålar, dimma, löv, eldfluggor
+- Fasrespons: tätare skog vid hög SV, fler partiklar vid hög biodiv, rödaktig ton vid attack
+- prefers-reduced-motion ger statisk gradient-fallback
+- 17C-3 (typografi) skippat — IBM Plex Mono funkar bra mot ny mörk bakgrund
+
+---
+
+## Sprint 18: Riktig Swish QR & Donationsperks
+
+> **Source:** Användarbegäran — ersätt fejk-QR med riktiga swish-QR-large.png, lägg till in-game belöning för donatörer
+> **Goal:** Swish QR-koden ska faktiskt vara skanningsbar. Spelare som donerar får en liten kosmetisk bonus i spelet.
+
+### 18A — Ersätt Fejk-QR med Riktig Bild
+
+- [ ] 18A-1: Optimera & importera QR-bilden
+  - Källfil: `/home/bjorn/projects/forest/swish-QR-large.png` (4.2MB — alldeles för stor)
+  - Konvertera till optimerad PNG eller WebP, storlek ~200-300px, <50KB
+  - Placera i `public/` eller `src/assets/` (beroende på Vite-import-strategi)
+  - Om `public/`: `public/swish-qr.png` (referera som `/forest/swish-qr.png`)
+  - Om `src/assets/`: importera som modul i komponent
+
+- [ ] 18A-2: Uppdatera DonationQR.tsx — modal
+  - Ta bort hela `SwishQRCode()` SVG-komponenten (fejk QR-kod)
+  - Ersätt med `<img>` som pekar på den riktiga QR-bilden
+  - Behåll aria-label, storlek ~180px, centrerad
+  - Behåll resten av modalen (header, instructions, Swish-nummer, naturhansyn.se-länk)
+
+- [ ] 18A-3: Uppdatera DonationQRInline
+  - Lägg till den riktiga QR-bilden i inline-versionen också (visas på slutskärmar)
+  - Mindre storlek (~120px) för att passa i flödet
+  - Behåll befintlig text och nummer
+
+- [ ] 18A-4: Verifiera skanningsbarhet
+  - Öppna i webbläsaren, scanna med Swish-appen
+  - Verifiera att numret 123 379 74 98 stämmer
+  - Testa i DonationQR-modalen (stor) och DonationQRInline (liten)
+
+### 18B — Donationsperks (Hedersystem)
+
+- [ ] 18B-1: "Jag har swishat"-knapp
+  - Lägg till knapp under QR-koden i DonationQR-modalen: "Jag har swishat ❤️"
+  - Klick → bekräftelsefråga: "Tack! Markera som donerat?"
+  - Sparar `donated: true` i localStorage (separat från game save)
+  - Visuell bekräftelse: "Tack för ditt stöd!" med animation
+  - Ingen verifiering — hedersystem, vi litar på spelaren
+
+- [ ] 18B-2: Kosmetisk bonus — "Naturvän"-badge
+  - Om `donated === true` i localStorage:
+    - Visa liten "🌿 Naturvän"-badge i settings-area eller vid Swish-knappen
+    - Badge syns i båda spellägen (industri + ägare)
+    - Subtil men synlig — visar att spelaren stödjer naturhänsyn
+  - Badge försvinner INTE vid game reset (lagras utanför save)
+
+- [ ] 18B-3: Donator-ticker-headlines
+  - 3-5 unika ticker-headlines som bara visas för donatörer:
+    - Industri: "Din donation till Naturhänsyn noterades av styrelsen. De är inte glada."
+    - Industri: "INTERNT MEMO: En av våra spelare stödjer motståndaren."
+    - Ägare: "Föreningen skickade ett tack. Skogen tackar också."
+    - Ägare: "Du är inte ensam. Nätverket växer."
+    - Generell: "Någon bryr sig om skogen på riktigt. Det syns."
+  - Lågfrekvent — dyker upp en gång per spelomgång max
+
+- [ ] 18B-4: Överväg kosmetisk perk (valfri)
+  - Möjliga idéer (välj max 1, eller hoppa över):
+    - Unik klickpartikel-färg (gyllene löv istället för standard)
+    - Liten "tack"-animation första gången man öppnar spelet efter donation
+    - Extra achievement: "Skogens Vän" (tier: naturvän, grön badge)
+  - Ska INTE påverka gameplay/balans — rent kosmetiskt
+  - Ska INTE kännas som pay-to-win eller tvingande
+
+### 18C — Verifiering
+
+- [ ] 18C-1: Test & Build
+  - QR-bilden visas korrekt i modal och inline
+  - QR-koden skanningsbar med Swish
+  - "Jag har swishat"-flöde fungerar (localStorage persistence)
+  - Donator-badge visas efter markering
+  - Donator-headlines dyker upp i ticker
+  - Alla 285 befintliga tester passerar
+  - TypeScript clean, Vite build passerar
+  - Bundle-ökning: max +50KB (QR-bild + donationslogik)
+
+- [ ] 18C-2: Deploy
+  - Deploy till GitHub Pages
+  - Verifiera QR på mobil (iOS + Android)
+  - Verifiera att donator-state persisterar mellan sessioner
+
+**Notes:** —
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

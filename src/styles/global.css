@@ -15,17 +15,17 @@
   --color-text-secondary: #C0C0C0;
   --color-text-muted: #A0A0A0;
 
-  /* Owner (Skogsägare) theme */
-  --color-owner-bg: #F5F0E8;
-  --color-owner-accent: #2D6A4F;
-  --color-owner-accent-rgb: 45, 106, 79;
-  --color-owner-text: #3D2B1F;
-  --color-owner-text-rgb: 61, 43, 31;
+  /* Owner (Skogsägare) forest theme — dark, warm, alive */
+  --color-owner-bg: #1A2618;
+  --color-owner-accent: #5E9E6E;
+  --color-owner-accent-rgb: 94, 158, 110;
+  --color-owner-text: #E0D5BF;
+  --color-owner-text-rgb: 224, 213, 191;
 
   /* Owner secondary palette */
-  --color-owner-moss: #4A6741;
-  --color-owner-bark: #5C4033;
-  --color-owner-gold: #8B7532;
+  --color-owner-moss: #3D6B4A;
+  --color-owner-bark: #8B7355;
+  --color-owner-gold: #C4A44E;
 
   --font-ui: 'IBM Plex Mono', 'Courier New', monospace;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
@@ -124,47 +124,64 @@ body::before {
   text-shadow: 0 0 8px rgba(212, 115, 12, 0.4);
 }
 
-/* ── Owner (Skogsägare) Forest Theme ── */
+/* ── Owner (Skogsägare) Forest Theme — Glassmorphism Cards ── */
 @utility owner-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.82) 0%, rgba(232,226,210,0.92) 100%);
-  border: 1px solid rgba(45, 106, 79, 0.22);
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(61, 43, 31, 0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(94, 158, 110, 0.18);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 @utility owner-card-subtle {
-  background: linear-gradient(145deg, rgba(255,255,255,0.6) 0%, rgba(232,226,210,0.7) 100%);
-  border: 1px solid rgba(45, 106, 79, 0.12);
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(61, 43, 31, 0.05);
+  background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(94, 158, 110, 0.10);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 @utility owner-card-interactive {
-  background: linear-gradient(145deg, rgba(255,255,255,0.82) 0%, rgba(232,226,210,0.92) 100%);
-  border: 1px solid rgba(45, 106, 79, 0.3);
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(61, 43, 31, 0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(94, 158, 110, 0.25);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.05);
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   &:hover {
-    border-color: rgba(45, 106, 79, 0.55);
-    box-shadow: 0 2px 8px rgba(45, 106, 79, 0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+    background: linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 100%);
+    border-color: rgba(94, 158, 110, 0.50);
+    box-shadow: 0 4px 12px rgba(94, 158, 110, 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
   }
 }
 
-/* Forest canopy light — subtle background for owner mode */
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .owner-card, .owner-card-interactive {
+    background: linear-gradient(145deg, rgba(30,45,28,0.9) 0%, rgba(26,38,24,0.95) 100%) !important;
+  }
+  .owner-card-subtle {
+    background: linear-gradient(145deg, rgba(26,38,24,0.85) 0%, rgba(26,38,24,0.9) 100%) !important;
+  }
+}
+
+/* Forest canopy — dark, dappled background for owner mode */
 [data-mode="owner"] {
   background:
-    radial-gradient(ellipse at 15% 25%, rgba(45, 106, 79, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 15%, rgba(139, 117, 50, 0.04) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 85%, rgba(45, 106, 79, 0.05) 0%, transparent 40%),
-    radial-gradient(ellipse at 90% 70%, rgba(92, 64, 51, 0.03) 0%, transparent 35%),
+    radial-gradient(ellipse at 15% 25%, rgba(94, 158, 110, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 15%, rgba(196, 164, 78, 0.05) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 85%, rgba(94, 158, 110, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 70%, rgba(139, 115, 85, 0.04) 0%, transparent 35%),
     var(--color-owner-bg) !important;
 }
 
 @keyframes forest-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(45, 106, 79, 0.2), 0 0 60px rgba(45, 106, 79, 0.06); }
-  50% { box-shadow: 0 0 30px rgba(45, 106, 79, 0.3), 0 0 80px rgba(45, 106, 79, 0.1); }
+  0%, 100% { box-shadow: 0 0 20px rgba(94, 158, 110, 0.25), 0 0 60px rgba(94, 158, 110, 0.08); }
+  50% { box-shadow: 0 0 30px rgba(94, 158, 110, 0.4), 0 0 80px rgba(94, 158, 110, 0.12); }
 }
 
 @utility animate-forest-glow {
@@ -279,6 +296,9 @@ body::before {
   }
   .animate-warning-pulse,
   .animate-warning-blink {
+    animation: none !important;
+  }
+  .animate-forest-glow {
     animation: none !important;
   }
   * {

@@ -177,7 +177,7 @@ export function OwnerEndScreen({ onContinue, onReset }: OwnerEndScreenProps) {
     return (
       <motion.div
         className="fixed inset-0 z-[200] flex flex-col items-center justify-start overflow-y-auto"
-        style={{ background: '#1A2E1A' }}
+        style={{ background: '#141E14' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
