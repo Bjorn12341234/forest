@@ -15,6 +15,7 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
   const [donated, setDonated] = useState(isDonator)
   const [showConfirm, setShowConfirm] = useState(false)
   const [showThanks, setShowThanks] = useState(false)
+  const [qrZoomed, setQrZoomed] = useState(false)
 
   // Close on Escape
   useEffect(() => {
@@ -33,11 +34,12 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
     }
   }, [isOpen])
 
-  // Reset confirm state when modal closes
+  // Reset state when modal closes
   useEffect(() => {
     if (!isOpen) {
       setShowConfirm(false)
       setShowThanks(false)
+      setQrZoomed(false)
     }
   }, [isOpen])
 
@@ -105,17 +107,31 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
                 </h2>
               </div>
 
-              {/* QR Code — real scannable image */}
+              {/* QR Code — click to zoom */}
               <div className="flex justify-center mb-5">
-                <img
-                  src={QR_IMAGE_PATH}
-                  alt="Swish QR-kod för Föreningen Naturhänsyn"
-                  width={200}
-                  height={283}
-                  className="rounded"
-                  style={{ imageRendering: 'auto' }}
-                />
+                <button
+                  onClick={() => setQrZoomed(z => !z)}
+                  className="bg-transparent border-none p-0 cursor-zoom-in transition-transform duration-200 hover:scale-105"
+                  style={{ cursor: qrZoomed ? 'zoom-out' : 'zoom-in' }}
+                  aria-label={qrZoomed ? 'Förminska QR-kod' : 'Förstora QR-kod för skanning'}
+                >
+                  <img
+                    src={QR_IMAGE_PATH}
+                    alt="Swish QR-kod för Föreningen Naturhänsyn"
+                    className="rounded transition-all duration-200"
+                    style={{
+                      width: qrZoomed ? 300 : 200,
+                      height: 'auto',
+                      imageRendering: 'auto',
+                    }}
+                  />
+                </button>
               </div>
+              {!qrZoomed && (
+                <p className="text-[0.5rem] text-white/25 text-center -mt-3 mb-4">
+                  Tryck på bilden för att förstora
+                </p>
+              )}
 
               {/* Instructions */}
               <div className="text-center space-y-2">
@@ -126,7 +142,15 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
                   {SWISH_NUMBER}
                 </p>
                 <p className="text-[0.6rem] text-white/30 mt-3">
-                  Föreningen Naturhänsyn arbetar för naturhänsyn i skogsbruket
+                  <a
+                    href="https://naturhansyn.se/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#52B5AA]/60 hover:text-[#52B5AA] underline transition-colors"
+                  >
+                    Föreningen Naturhänsyn
+                  </a>
+                  {' '}arbetar för naturhänsyn i skogsbruket
                 </p>
               </div>
 
@@ -179,7 +203,7 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
                   href="https://naturhansyn.se/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[0.6rem] text-white/30 hover:text-white/50 underline transition-colors"
+                  className="text-xs text-[#52B5AA]/50 hover:text-[#52B5AA] underline transition-colors"
                 >
                   naturhansyn.se
                 </a>
