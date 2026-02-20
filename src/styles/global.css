@@ -153,9 +153,9 @@ body::before {
   }
 }
 
-/* Forest canopy — dark, dappled background for owner mode */
+/* Forest canopy — dark gradient background for owner mode */
 [data-mode="owner"] {
-  background: var(--color-owner-bg) !important;
+  background: linear-gradient(to bottom, #111E10 0%, #1A2618 40%, #1E2A1A 70%, #22281C 100%) !important;
 }
 
 @keyframes forest-glow {
