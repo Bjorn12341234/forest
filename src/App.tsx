@@ -452,7 +452,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
         role="tablist"
         aria-label="Skogsägarnavigering"
       >
-        <div className="relative flex justify-around items-center h-16 max-w-lg mx-auto">
+        <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
           <OwnerTabButton
             active={ownerTab === 'dashboard'}
             label="Översikt"
@@ -460,24 +460,17 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
             onClick={() => onTabChange('dashboard')}
           />
           <OwnerTabButton
+            active={false}
+            label={isDonator() ? 'Naturvän' : 'Stöd'}
+            icon={'🌿'}
+            onClick={onShowDonation}
+          />
+          <OwnerTabButton
             active={ownerTab === 'knowledge'}
             label="Kunskap"
             icon={'📖'}
             onClick={() => onTabChange('lobby')}
           />
-
-          {/* Support button in nav bar */}
-          <button
-            onClick={onShowDonation}
-            className="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5 px-2 py-1.5 bg-transparent border-none cursor-pointer transition-colors group"
-            aria-label="Stöd Naturhänsyn"
-            title="Stöd Naturhänsyn"
-          >
-            <span className="text-sm">🌿</span>
-            <span className="text-[0.45rem] tracking-wider text-owner-text/50 group-hover:text-owner-text/80 transition-colors whitespace-nowrap" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
-              {isDonator() ? 'Naturvän' : 'Stöd'}
-            </span>
-          </button>
         </div>
       </nav>
     </div>
