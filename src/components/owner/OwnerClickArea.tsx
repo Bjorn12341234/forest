@@ -135,23 +135,27 @@ export function OwnerClickArea() {
           whileHover={{ scale: 1.03 }}
           onClick={handleClick}
           className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
-                     border-2 border-owner-accent/40
-                     flex items-center justify-center
-                     hover:border-owner-accent transition-all duration-200 animate-forest-glow"
+                     border-3 flex items-center justify-center
+                     hover:brightness-110 transition-all duration-200"
           style={{
-            background: 'radial-gradient(circle at 40% 35%, #1E1E1E 0%, #171717 50%, #131313 100%)',
+            background: 'radial-gradient(circle at 45% 40%, #5C4332 0%, #4A3628 20%, #3D2B1E 40%, #332416 60%, #2A1D12 80%, #1F150D 100%)',
             borderColor: streakBonus > 0
               ? `rgba(var(--color-owner-accent-rgb), ${0.5 + streakBonus * 0.5})`
-              : undefined,
+              : '#2A1D12',
             boxShadow: streakBonus > 0
               ? `0 0 ${20 + streakBonus * 20}px rgba(var(--color-owner-accent-rgb), ${0.2 + streakBonus * 0.3})`
-              : undefined,
+              : '0 2px 12px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3)',
           }}
         >
-          {/* Tree-ring decorative circles */}
-          <div className="absolute inset-3 rounded-full border border-owner-accent/15" />
-          <div className="absolute inset-6 rounded-full border border-owner-accent/10" />
-          <span className="text-owner-accent font-bold text-sm sm:text-base text-center leading-tight px-4">
+          {/* Tree growth rings */}
+          <div className="absolute inset-[8px] rounded-full border border-[#8B7355]/20" />
+          <div className="absolute inset-[16px] rounded-full border border-[#8B7355]/12" />
+          <div className="absolute inset-[24px] rounded-full border border-[#8B7355]/18" />
+          <div className="absolute inset-[32px] rounded-full border border-[#8B7355]/10" />
+          <div className="absolute inset-[40px] rounded-full border border-[#8B7355]/15" />
+          <div className="absolute inset-[48px] rounded-full border border-[#8B7355]/08" />
+          <div className="absolute inset-[54px] rounded-full border border-[#8B7355]/12" />
+          <span className="relative text-[#E0D5BF] font-bold text-sm sm:text-base text-center leading-tight px-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
             VÅRDA{'\n'}SKOG
           </span>
         </motion.button>
