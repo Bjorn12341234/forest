@@ -35,7 +35,7 @@ export function TabNav({ activeTab, currentPhase, onTabChange, onShowDonation }:
       role="tablist"
       aria-label="Huvudnavigering"
     >
-      <div className="relative flex justify-around items-center h-16 max-w-lg mx-auto">
+      <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
         {visibleTabs.map(tab => {
           const isActive = activeTab === tab.id
           const isLocked = tab.phase > currentPhase
@@ -78,16 +78,15 @@ export function TabNav({ activeTab, currentPhase, onTabChange, onShowDonation }:
           )
         })}
 
-        {/* Support button in nav bar */}
+        {/* Support tab */}
         {onShowDonation && (
           <button
             onClick={onShowDonation}
-            className="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5 px-2 py-1.5 bg-transparent border-none cursor-pointer transition-colors group"
+            className="relative flex flex-col items-center gap-0.5 px-4 py-3 min-w-[44px] min-h-[44px] transition-all duration-200 bg-transparent border-none cursor-pointer"
             aria-label="Stöd Naturhänsyn"
-            title="Stöd Naturhänsyn"
           >
-            <span className="text-sm">🌿</span>
-            <span className="text-[0.45rem] tracking-wider text-text-secondary/50 group-hover:text-text-secondary/80 transition-colors whitespace-nowrap" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
+            <span className="text-xl">🌿</span>
+            <span className="text-xs font-medium tracking-wide uppercase text-text-secondary">
               {isDonator() ? 'Naturvän' : 'Stöd'}
             </span>
           </button>
