@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { isDonator } from '../engine/donation'
 
 export type Tab = 'dashboard' | 'research' | 'lobby' | 'expansion'
 
@@ -20,9 +21,10 @@ interface TabNavProps {
   activeTab: Tab
   currentPhase: number
   onTabChange: (tab: Tab) => void
+  onShowDonation?: () => void
 }
 
-export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
+export function TabNav({ activeTab, currentPhase, onTabChange, onShowDonation }: TabNavProps) {
   const maxVisiblePhase = currentPhase + 1
   const visibleTabs = TABS.filter(t => t.phase <= maxVisiblePhase)
 
@@ -33,7 +35,7 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
       role="tablist"
       aria-label="Huvudnavigering"
     >
-      <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
+      <div className="relative flex justify-around items-center h-16 max-w-lg mx-auto">
         {visibleTabs.map(tab => {
           const isActive = activeTab === tab.id
           const isLocked = tab.phase > currentPhase
@@ -75,6 +77,21 @@ export function TabNav({ activeTab, currentPhase, onTabChange }: TabNavProps) {
             </button>
           )
         })}
+
+        {/* Support button in nav bar */}
+        {onShowDonation && (
+          <button
+            onClick={onShowDonation}
+            className="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5 px-2 py-1.5 bg-transparent border-none cursor-pointer transition-colors group"
+            aria-label="Stöd Naturhänsyn"
+            title="Stöd Naturhänsyn"
+          >
+            <span className="text-sm">🌿</span>
+            <span className="text-[0.45rem] tracking-wider text-text-secondary/50 group-hover:text-text-secondary/80 transition-colors whitespace-nowrap" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
+              {isDonator() ? 'Naturvän' : 'Stöd'}
+            </span>
+          </button>
+        )}
       </div>
     </nav>
   )
