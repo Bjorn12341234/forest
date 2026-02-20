@@ -54,10 +54,7 @@ function StaticForestBackground() {
       aria-hidden="true"
       style={{
         background: `
-          radial-gradient(ellipse at 20% 20%, rgba(94,158,110,0.08) 0%, transparent 60%),
-          radial-gradient(ellipse at 70% 30%, rgba(196,164,78,0.04) 0%, transparent 50%),
-          radial-gradient(ellipse at 40% 80%, rgba(94,158,110,0.06) 0%, transparent 50%),
-          linear-gradient(to bottom, rgba(26,38,24,0) 0%, rgba(26,38,24,0.3) 100%)
+          linear-gradient(to bottom, rgba(26,38,24,0) 0%, rgba(26,38,24,0.15) 100%)
         `,
       }}
     />

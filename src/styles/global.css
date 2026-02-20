@@ -171,12 +171,7 @@ body::before {
 
 /* Forest canopy — dark, dappled background for owner mode */
 [data-mode="owner"] {
-  background:
-    radial-gradient(ellipse at 15% 25%, rgba(94, 158, 110, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 15%, rgba(196, 164, 78, 0.05) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 85%, rgba(94, 158, 110, 0.06) 0%, transparent 40%),
-    radial-gradient(ellipse at 90% 70%, rgba(139, 115, 85, 0.04) 0%, transparent 35%),
-    var(--color-owner-bg) !important;
+  background: var(--color-owner-bg) !important;
 }
 
 @keyframes forest-glow {
