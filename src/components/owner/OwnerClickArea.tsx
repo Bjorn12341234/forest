@@ -139,7 +139,7 @@ export function OwnerClickArea() {
                      flex items-center justify-center
                      hover:border-owner-accent transition-all duration-200 animate-forest-glow"
           style={{
-            background: 'radial-gradient(circle at 40% 35%, rgba(30,50,30,0.95) 0%, rgba(24,40,24,0.90) 50%, rgba(20,34,20,0.85) 100%)',
+            background: 'radial-gradient(circle at 40% 35%, #1E1E1E 0%, #171717 50%, #131313 100%)',
             borderColor: streakBonus > 0
               ? `rgba(var(--color-owner-accent-rgb), ${0.5 + streakBonus * 0.5})`
               : undefined,

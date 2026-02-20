@@ -467,8 +467,8 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
 
       {/* Bottom Tab Navigation */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/20"
-        style={{ background: 'linear-gradient(to top, rgba(26,38,24,0.90), rgba(26,38,24,0.75))', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/15"
+        style={{ background: '#111111', paddingBottom: 'env(safe-area-inset-bottom)' }}
         role="tablist"
         aria-label="Skogsägarnavigering"
       >
