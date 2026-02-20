@@ -401,7 +401,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
       <div className="fixed top-12 right-2 z-40 flex flex-col gap-1.5">
         <button
           onClick={onShowSettings}
-          className="w-11 h-11 rounded-full bg-white/60 border border-owner-accent/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
           aria-label="Inställningar"
           title="Inställningar"
         >
@@ -409,7 +409,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
         </button>
         <button
           onClick={onShowAchievements}
-          className="w-11 h-11 rounded-full bg-white/60 border border-owner-accent/20 flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-lg cursor-pointer active:scale-95 transition-transform"
           aria-label="Prestationer"
           title="Prestationer"
         >
@@ -417,7 +417,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
         </button>
         <button
           onClick={onReset}
-          className="w-11 h-11 rounded-full bg-white/60 border border-owner-accent/20 flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-owner-text/40"
+          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-owner-text/70"
           aria-label="Tillbaka till start"
           title="Tillbaka till start"
         >
@@ -427,8 +427,8 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
 
       {/* Bottom Tab Navigation */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 border-t border-owner-accent/10 backdrop-blur-sm"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/20 backdrop-blur-sm"
+        style={{ background: 'linear-gradient(to top, rgba(245,240,232,0.95), rgba(255,255,255,0.85))', paddingBottom: 'env(safe-area-inset-bottom)' }}
         role="tablist"
         aria-label="Skogsägarnavigering"
       >
@@ -468,7 +468,7 @@ function OwnerTabButton({ active, label, icon, onClick }: {
     >
       <span className="text-xl">{icon}</span>
       <span className={`text-xs font-medium tracking-wide uppercase ${
-        active ? 'text-owner-accent' : 'text-owner-text/40'
+        active ? 'text-owner-accent font-medium' : 'text-owner-text/65'
       }`}>
         {label}
       </span>

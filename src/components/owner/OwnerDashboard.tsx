@@ -22,43 +22,47 @@ export function OwnerDashboard() {
   return (
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
       {/* Owner Phase Indicator */}
-      <div className="bg-white/50 border border-owner-accent/15 rounded-sm p-2.5">
+      <div className="owner-card p-2.5">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs font-medium text-owner-accent">
-            Fas {phaseInfo.phase}: {phaseInfo.name}
+          <span className="text-xs font-medium text-owner-accent tracking-wide">
+            🌿 Fas {phaseInfo.phase}: {phaseInfo.name}
           </span>
           {phaseProgress.next !== null && (
-            <span className="text-[0.65rem] text-owner-text/40 font-numbers">
+            <span className="text-[0.65rem] text-owner-text/70 font-numbers">
               {formatNumber(totalSV)} / {formatNumber(phaseProgress.next)}
             </span>
           )}
         </div>
-        <div className="w-full h-1.5 bg-owner-text/10 rounded-sm overflow-hidden">
+        <div className="w-full h-2 bg-owner-text/8 rounded-sm overflow-hidden">
           <div
-            className="h-full bg-owner-accent/50 transition-all duration-700"
-            style={{ width: `${phaseProgress.progress * 100}%` }}
+            className="h-full rounded-sm transition-all duration-700"
+            style={{
+              width: `${phaseProgress.progress * 100}%`,
+              background: 'linear-gradient(90deg, #2D6A4F, #4A6741)',
+            }}
           />
         </div>
       </div>
 
       {/* Top Resource Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <OwnerResourceCard label="Skogsvärde" value={skogsvardering} />
-        <OwnerResourceCard label="Inkomst" value={inkomst} format={n => `${formatNumber(n)} tkr`} />
-        <OwnerResourceCard label="Skogskunskap" value={kunskap} />
+        <OwnerResourceCard label="Skogsvärde" value={skogsvardering} icon="🌲" />
+        <OwnerResourceCard label="Inkomst" value={inkomst} format={n => `${formatNumber(n)} tkr`} icon="💰" />
+        <OwnerResourceCard label="Skogskunskap" value={kunskap} icon="📚" />
         <OwnerResourceCard
           label="Resiliens"
           value={resiliens}
+          icon="🛡️"
           className={resiliens > 50 ? 'text-owner-accent' : resiliens > 20 ? 'text-[#B8860B]' : 'text-[#CC2222]'}
         />
       </div>
 
       {/* Secondary Meters */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <OwnerMeterCard label="Biologisk mångfald" value={biodivOwner} unit="arter" />
-        <OwnerMeterCard label="Kolinlagring" value={realCarbonPos} unit="ton" />
-        <OwnerMeterCard label="Generationsarv" value={legacy} />
-        <OwnerMeterCard label="Död ved" value={deadwood} unit="m³" />
+        <OwnerMeterCard label="Biologisk mångfald" value={biodivOwner} unit="arter" icon="🦌" />
+        <OwnerMeterCard label="Kolinlagring" value={realCarbonPos} unit="ton" icon="🍃" />
+        <OwnerMeterCard label="Generationsarv" value={legacy} icon="🏡" />
+        <OwnerMeterCard label="Död ved" value={deadwood} unit="m³" icon="🪵" />
       </div>
 
       {/* Two-Panel Layout */}
@@ -74,16 +78,18 @@ export function OwnerDashboard() {
   )
 }
 
-function OwnerResourceCard({ label, value, format, className = '' }: {
+function OwnerResourceCard({ label, value, format, className = '', icon }: {
   label: string
   value: number
   format?: (n: number) => string
   className?: string
+  icon?: string
 }) {
   return (
-    <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
+    <div className="owner-card p-3">
       <div className="flex flex-col gap-0.5">
-        <span className="text-owner-text/60 text-xs uppercase tracking-wider">
+        <span className="text-owner-text/80 text-xs uppercase tracking-wider flex items-center gap-1">
+          {icon && <span className="text-xs">{icon}</span>}
           {label}
         </span>
         <AnimatedNumber
@@ -96,18 +102,20 @@ function OwnerResourceCard({ label, value, format, className = '' }: {
   )
 }
 
-function OwnerMeterCard({ label, value, unit }: {
+function OwnerMeterCard({ label, value, unit, icon }: {
   label: string
   value: number
   unit?: string
+  icon?: string
 }) {
   return (
-    <div className="bg-white/40 border border-owner-accent/10 rounded-sm p-2">
+    <div className="owner-card-subtle p-2">
       <div className="flex flex-col gap-0.5">
-        <span className="text-owner-text/40 text-[0.65rem] uppercase tracking-wider">
+        <span className="text-owner-text/75 text-[0.65rem] uppercase tracking-wider flex items-center gap-1">
+          {icon && <span className="text-[0.6rem]">{icon}</span>}
           {label}
         </span>
-        <span className="text-sm font-numbers text-owner-accent">
+        <span className="text-sm font-numbers text-owner-accent font-medium">
           {formatNumber(value)}{unit ? ` ${unit}` : ''}
         </span>
       </div>

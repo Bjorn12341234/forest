@@ -38,17 +38,17 @@ export function OwnerTicker() {
     <div
       className="w-full overflow-hidden relative flex-shrink-0"
       style={{
-        background: 'linear-gradient(90deg, rgba(var(--color-owner-accent-rgb),0.08) 0%, rgba(var(--color-owner-accent-rgb),0.03) 50%, rgba(var(--color-owner-accent-rgb),0.08) 100%)',
-        borderBottom: '1px solid rgba(var(--color-owner-accent-rgb),0.15)',
+        background: 'linear-gradient(90deg, rgba(45,106,79,0.12) 0%, rgba(45,106,79,0.04) 30%, rgba(45,106,79,0.04) 70%, rgba(45,106,79,0.12) 100%)',
+        borderBottom: '1px solid rgba(45, 106, 79, 0.2)',
         paddingTop: 'env(safe-area-inset-top)',
         height: 'calc(2rem + env(safe-area-inset-top))',
       }}
     >
       <div className="absolute inset-0 flex items-center animate-ticker whitespace-nowrap">
-        <span className="text-sm text-owner-text/70 tracking-wide px-4">
+        <span className="text-sm text-owner-text/90 tracking-wide px-4">
           {tickerText}
         </span>
-        <span className="text-sm text-owner-text/70 tracking-wide px-4">
+        <span className="text-sm text-owner-text/90 tracking-wide px-4">
           {tickerText}
         </span>
       </div>

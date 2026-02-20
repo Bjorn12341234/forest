@@ -38,12 +38,16 @@ export function KnowledgePanel() {
     <div className="flex flex-col gap-6 max-w-5xl mx-auto">
       {/* Resource Summary */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
-          <span className="text-owner-text/60 text-xs uppercase tracking-wider">Skogskunskap</span>
+        <div className="owner-card p-3">
+          <span className="text-owner-text/80 text-xs uppercase tracking-wider flex items-center gap-1">
+            <span className="text-xs">📚</span> Skogskunskap
+          </span>
           <AnimatedNumber value={kunskap} className="text-lg text-owner-accent" />
         </div>
-        <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
-          <span className="text-owner-text/60 text-xs uppercase tracking-wider">Resiliens</span>
+        <div className="owner-card p-3">
+          <span className="text-owner-text/80 text-xs uppercase tracking-wider flex items-center gap-1">
+            <span className="text-xs">🛡️</span> Resiliens
+          </span>
           <AnimatedNumber value={resiliens} className={`text-lg ${resiliens > 50 ? 'text-owner-accent' : resiliens > 20 ? 'text-[#B8860B]' : 'text-[#CC2222]'}`} />
         </div>
       </div>
@@ -54,25 +58,28 @@ export function KnowledgePanel() {
       )}
 
       {/* Biodiversity meter */}
-      <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
+      <div className="owner-card p-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-owner-text/60 text-xs uppercase tracking-wider">Biologisk mångfald</span>
-          <span className="text-sm font-numbers text-owner-accent">{formatNumber(biodivOwner)} arter</span>
+          <span className="text-owner-text/80 text-xs uppercase tracking-wider">🦌 Biologisk mångfald</span>
+          <span className="text-sm font-numbers text-owner-accent font-medium">{formatNumber(biodivOwner)} arter</span>
         </div>
-        <div className="w-full h-2 bg-owner-text/10 rounded-sm overflow-hidden">
+        <div className="w-full h-2 bg-owner-text/8 rounded-sm overflow-hidden">
           <div
-            className="h-full bg-owner-accent transition-all duration-500"
-            style={{ width: `${Math.min(100, (biodivOwner / 100) * 100)}%` }}
+            className="h-full rounded-sm transition-all duration-500"
+            style={{
+              width: `${Math.min(100, (biodivOwner / 100) * 100)}%`,
+              background: 'linear-gradient(90deg, #2D6A4F, #4A6741)',
+            }}
           />
         </div>
       </div>
 
       {/* Knowledge Threshold Progress */}
-      <div className="bg-white/60 border border-owner-accent/20 rounded-sm p-3">
+      <div className="owner-card p-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-owner-text/60 text-xs uppercase tracking-wider">Kunskapsnivå</span>
+          <span className="text-owner-text/80 text-xs uppercase tracking-wider">Kunskapsnivå</span>
           {nextThreshold && (
-            <span className="text-xs text-owner-text/40 font-numbers">
+            <span className="text-xs text-owner-text/70 font-numbers">
               {formatNumber(kunskap)} / {formatNumber(nextThreshold.level)}
             </span>
           )}
@@ -81,15 +88,18 @@ export function KnowledgePanel() {
         {currentThreshold && (
           <div className="mb-2">
             <span className="text-sm font-medium text-owner-accent">{currentThreshold.label}</span>
-            <p className="text-xs text-owner-text/50 italic mt-0.5">{currentThreshold.description}</p>
+            <p className="text-xs text-owner-text/70 italic mt-0.5">{currentThreshold.description}</p>
           </div>
         )}
 
         {nextThreshold && (
-          <div className="w-full h-2 bg-owner-text/10 rounded-sm overflow-hidden mb-2">
+          <div className="w-full h-2 bg-owner-text/8 rounded-sm overflow-hidden mb-2">
             <div
-              className="h-full bg-owner-accent/60 transition-all duration-500"
-              style={{ width: `${Math.min(100, (kunskap / nextThreshold.level) * 100)}%` }}
+              className="h-full rounded-sm transition-all duration-500"
+              style={{
+                width: `${Math.min(100, (kunskap / nextThreshold.level) * 100)}%`,
+                background: 'linear-gradient(90deg, #2D6A4F88, #2D6A4F)',
+              }}
             />
           </div>
         )}
@@ -100,10 +110,10 @@ export function KnowledgePanel() {
             const reached = kunskap >= t.level
             return (
               <div key={t.level} className="flex items-center gap-2 text-xs">
-                <span className={reached ? 'text-owner-accent' : 'text-owner-text/30'}>
+                <span className={reached ? 'text-owner-accent' : 'text-owner-text/50'}>
                   {reached ? '✓' : '○'}
                 </span>
-                <span className={reached ? 'text-owner-text/70' : 'text-owner-text/30'}>
+                <span className={reached ? 'text-owner-text/85' : 'text-owner-text/50'}>
                   {t.level}: {t.label}
                 </span>
               </div>
@@ -114,8 +124,8 @@ export function KnowledgePanel() {
 
       {/* ── Knowledge Tree ── */}
       <div className="flex flex-col gap-3">
-        <h2 className="text-base font-medium text-owner-text">Kunskapsträd</h2>
-        <p className="text-xs text-owner-text/50 -mt-2">
+        <h2 className="text-base font-medium text-owner-text">🌳 Kunskapsträd</h2>
+        <p className="text-xs text-owner-text/75 -mt-2">
           Investera kunskap för att utveckla din skog och ditt motstånd.
         </p>
 
@@ -123,7 +133,7 @@ export function KnowledgePanel() {
           {KNOWLEDGE_CATEGORIES.map(cat => {
             const upgrades = getUpgradesByCategory(cat.id)
             return (
-              <div key={cat.id} className="bg-white/40 border border-owner-accent/15 rounded-sm p-3">
+              <div key={cat.id} className="owner-card-subtle p-3">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-lg">{cat.icon}</span>
                   <span className="text-sm font-medium text-owner-text">{cat.name}</span>
@@ -153,13 +163,15 @@ export function KnowledgePanel() {
 
       {/* Knowledge Activities */}
       <div className="flex flex-col gap-3">
-        <h2 className="text-base font-medium text-owner-text">Lär dig mer</h2>
-        <p className="text-xs text-owner-text/50 -mt-2">
+        <h2 className="text-base font-medium text-owner-text">📖 Lär dig mer</h2>
+        <p className="text-xs text-owner-text/75 -mt-2">
           Spendera Inkomst för att öka din Skogskunskap.
         </p>
 
         {isOnCooldown && (
-          <div className="bg-owner-accent/10 border border-owner-accent/20 rounded-sm p-2 text-xs text-owner-text/50 text-center font-numbers">
+          <div className="owner-card p-2 text-xs text-owner-text/75 text-center font-numbers" style={{
+            background: 'linear-gradient(145deg, rgba(45,106,79,0.1) 0%, rgba(45,106,79,0.05) 100%)',
+          }}>
             Kunskapsvila: {Math.ceil(cooldownRemaining / 1000)}s
           </div>
         )}
@@ -170,8 +182,8 @@ export function KnowledgePanel() {
             return (
               <div
                 key={activity.id}
-                className={`bg-white/60 border rounded-sm p-3 select-none
-                  ${canAfford ? 'border-owner-accent/50 cursor-pointer hover:border-owner-accent' : 'border-owner-text/10 opacity-50'}`}
+                className={`select-none p-3
+                  ${canAfford ? 'owner-card-interactive' : 'owner-card-subtle opacity-60'}`}
                 onClick={() => {
                   if (canAfford) {
                     buyKnowledgeActivity(activity.id)
@@ -183,10 +195,10 @@ export function KnowledgePanel() {
                   <span className="text-lg flex-shrink-0">{activity.icon}</span>
                   <div className="flex-1 min-w-0">
                     <span className="text-sm font-medium text-owner-text">{activity.name}</span>
-                    <p className="text-xs text-owner-text/50 leading-relaxed">{activity.description}</p>
+                    <p className="text-xs text-owner-text/70 leading-relaxed">{activity.description}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/40'}`}>
+                    <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent font-medium' : 'text-owner-text/60'}`}>
                       {`${formatNumber(activity.cost)} tkr`}
                     </span>
                     <div className="text-xs text-owner-accent font-numbers">+{activity.kunskapReward} kunskap</div>
@@ -227,19 +239,19 @@ function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, svMet,
             ? 'bg-owner-accent border-owner-accent'
             : available
               ? 'bg-transparent border-owner-accent'
-              : 'bg-transparent border-owner-text/20'
+              : 'bg-transparent border-owner-text/25'
           }`}
         />
       </div>
 
       {/* Node content */}
       <div
-        className={`flex-1 rounded-sm p-2 select-none transition-all
+        className={`flex-1 rounded p-2 select-none transition-all
           ${purchased
             ? 'bg-owner-accent/15 border border-owner-accent/30'
             : available
-              ? 'bg-white/50 border border-owner-accent/40 cursor-pointer hover:border-owner-accent'
-              : 'bg-white/20 border border-owner-text/10 opacity-50'
+              ? 'bg-white/60 border border-owner-accent/40 cursor-pointer hover:border-owner-accent hover:shadow-sm'
+              : 'bg-white/30 border border-owner-text/12 opacity-55'
           }`}
         onClick={() => {
           if (available) onPurchase()
@@ -247,21 +259,21 @@ function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, svMet,
       >
         <div className="flex items-center gap-1.5">
           <span className="text-sm">{upgrade.icon}</span>
-          <span className={`text-xs font-medium ${purchased ? 'text-owner-accent' : locked ? 'text-owner-text/40' : 'text-owner-text'}`}>
+          <span className={`text-xs font-medium ${purchased ? 'text-owner-accent' : locked ? 'text-owner-text/55' : 'text-owner-text'}`}>
             {upgrade.name}
           </span>
           {purchased && <span className="text-xs text-owner-accent ml-auto">✓</span>}
           {!purchased && (
-            <span className={`text-xs font-numbers ml-auto ${canAfford && prerequisitesMet ? 'text-owner-accent' : 'text-owner-text/30'}`}>
+            <span className={`text-xs font-numbers ml-auto ${canAfford && prerequisitesMet ? 'text-owner-accent' : 'text-owner-text/50'}`}>
               {upgrade.cost}
             </span>
           )}
         </div>
-        <p className={`text-xs leading-relaxed mt-0.5 ${purchased ? 'text-owner-text/60' : locked ? 'text-owner-text/25' : 'text-owner-text/45'}`}>
+        <p className={`text-xs leading-relaxed mt-0.5 ${purchased ? 'text-owner-text/70' : locked ? 'text-owner-text/40' : 'text-owner-text/65'}`}>
           {upgrade.description}
         </p>
         {!purchased && upgrade.svRequired && !svMet && (
-          <p className="text-[0.6rem] text-[#B8860B]/60 mt-1">
+          <p className="text-[0.6rem] text-[#B8860B]/70 mt-1">
             Kräver {formatNumber(upgrade.svRequired)} skogsvärde
           </p>
         )}
@@ -290,16 +302,18 @@ function KnowledgeModifiersSummary({ upgrades }: { upgrades: Record<string, bool
   if (activeEntries.length === 0) return null
 
   return (
-    <div className="bg-owner-accent/10 border border-owner-accent/25 rounded-sm p-3">
-      <span className="text-owner-text/60 text-xs uppercase tracking-wider">Aktiva modifierare</span>
+    <div className="owner-card p-3" style={{
+      background: 'linear-gradient(145deg, rgba(45,106,79,0.1) 0%, rgba(45,106,79,0.04) 100%)',
+    }}>
+      <span className="text-owner-text/80 text-xs uppercase tracking-wider">Aktiva modifierare</span>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-1 mt-2">
         {activeEntries.map(([key, value]) => {
           const info = MODIFIER_LABELS[key]
           if (!info) return null
           return (
             <div key={key} className="flex flex-col">
-              <span className="text-[0.65rem] text-owner-text/40 uppercase tracking-wider">{info.label}</span>
-              <span className="text-sm font-numbers text-owner-accent">{info.format(value)}</span>
+              <span className="text-[0.65rem] text-owner-text/70 uppercase tracking-wider">{info.label}</span>
+              <span className="text-sm font-numbers text-owner-accent font-medium">{info.format(value)}</span>
             </div>
           )
         })}

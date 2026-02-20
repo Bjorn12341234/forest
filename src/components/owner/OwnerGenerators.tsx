@@ -71,8 +71,8 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
 
   return (
     <div
-      className={`relative overflow-hidden bg-white/60 border rounded-sm p-3 select-none
-        ${canAfford ? 'border-owner-accent/50 cursor-pointer hover:border-owner-accent' : 'border-owner-text/10 opacity-60'}`}
+      className={`relative overflow-hidden select-none p-3
+        ${canAfford ? 'owner-card-interactive' : 'owner-card-subtle opacity-60'}`}
       onClick={handleBuy}
     >
       {/* Flash overlay */}
@@ -92,20 +92,20 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
         {/* Count badge */}
         <div className="flex flex-col items-center flex-shrink-0 w-10">
           <span className="text-lg font-bold text-owner-accent font-numbers">{count}</span>
-          <span className="text-xs text-owner-text/40 uppercase">st</span>
+          <span className="text-xs text-owner-text/65 uppercase">st</span>
         </div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-medium text-owner-text">{data.name}</h3>
-          <p className="text-xs text-owner-text/50 leading-relaxed mt-0.5">
+          <p className="text-xs text-owner-text/70 leading-relaxed mt-0.5">
             {data.description}
           </p>
           <div className="flex items-center justify-between mt-1">
-            <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/40'}`}>
+            <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent font-medium' : 'text-owner-text/60'}`}>
               {formatNumber(cost)} sv
             </span>
-            <span className="text-xs text-owner-text/60 font-numbers">
+            <span className="text-xs text-owner-text/75 font-numbers">
               {productionLabel}
             </span>
           </div>

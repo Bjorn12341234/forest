@@ -106,20 +106,20 @@ export function OwnerClickArea() {
     <div className="flex flex-col items-center gap-4">
       {/* Skogsvärde Counter */}
       <div className="text-center">
-        <div className="text-owner-text/60 text-sm uppercase tracking-wider mb-1">Skogsvärde</div>
+        <div className="text-owner-text/85 text-sm uppercase tracking-wider mb-1 font-medium">Skogsvärde</div>
         <AnimatedNumber
           value={skogsvardering}
           className="font-display text-owner-accent"
         />
         <div className="flex gap-4 justify-center mt-1">
-          <span className="text-owner-text/50 text-sm">
+          <span className="text-owner-text/75 text-sm font-numbers">
             +{formatNumber(svPerClick)}/klick
             {streakBonus > 0 && (
-              <span className="text-owner-accent ml-1">(+{Math.round(streakBonus * 100)}%)</span>
+              <span className="text-owner-accent ml-1 font-medium">(+{Math.round(streakBonus * 100)}%)</span>
             )}
           </span>
           {svPerSecond > 0 && (
-            <span className="text-owner-text/50 text-sm">
+            <span className="text-owner-text/75 text-sm font-numbers">
               {formatNumber(svPerSecond)}/s
             </span>
           )}
@@ -135,10 +135,11 @@ export function OwnerClickArea() {
           whileHover={{ scale: 1.03 }}
           onClick={handleClick}
           className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
-                     border-2 bg-owner-accent/10
+                     border-2 border-owner-accent/40
                      flex items-center justify-center
-                     hover:border-owner-accent transition-all duration-200"
+                     hover:border-owner-accent transition-all duration-200 animate-forest-glow"
           style={{
+            background: 'radial-gradient(circle at 40% 35%, rgba(45,106,79,0.18) 0%, rgba(45,106,79,0.06) 70%, transparent 100%)',
             borderColor: streakBonus > 0
               ? `rgba(var(--color-owner-accent-rgb), ${0.5 + streakBonus * 0.5})`
               : undefined,
@@ -147,7 +148,9 @@ export function OwnerClickArea() {
               : undefined,
           }}
         >
-          <div className="absolute inset-2 rounded-full border border-owner-accent/20" />
+          {/* Tree-ring decorative circles */}
+          <div className="absolute inset-3 rounded-full border border-owner-accent/15" />
+          <div className="absolute inset-6 rounded-full border border-owner-accent/10" />
           <span className="text-owner-accent font-bold text-sm sm:text-base text-center leading-tight px-4">
             VÅRDA{'\n'}SKOG
           </span>
@@ -155,14 +158,14 @@ export function OwnerClickArea() {
       </div>
 
       {/* Flavourtext */}
-      <p className="text-owner-text/50 text-sm italic text-center max-w-sm leading-relaxed px-2">
+      <p className="text-owner-text/75 text-sm italic text-center max-w-sm leading-relaxed px-2">
         {flavour}
       </p>
 
       {/* Click Upgrades */}
       {visibleUpgrades.length > 0 && (
         <div className="w-full mt-2">
-          <h3 className="text-sm font-medium text-owner-text/70 uppercase tracking-wider mb-2">
+          <h3 className="text-sm font-medium text-owner-text/90 uppercase tracking-wider mb-2">
             Klick-uppgraderingar
           </h3>
           <div className="flex flex-col gap-1.5">
@@ -172,8 +175,8 @@ export function OwnerClickArea() {
               return (
                 <div
                   key={cu.id}
-                  className={`bg-white/60 border rounded-sm p-3 select-none
-                    ${purchased ? 'border-owner-accent/30' : canAfford ? 'border-owner-accent/50 cursor-pointer hover:border-owner-accent' : 'border-owner-text/10 opacity-50'}`}
+                  className={`select-none p-3
+                    ${purchased ? 'owner-card border-owner-accent/30' : canAfford ? 'owner-card-interactive' : 'owner-card-subtle opacity-60'}`}
                   onClick={() => canAfford && buyOwnerClickUpgrade(cu.id)}
                 >
                   <div className="flex items-center gap-2">
@@ -183,17 +186,17 @@ export function OwnerClickArea() {
                         <span className="text-sm font-medium text-owner-text">{cu.name}</span>
                         {purchased && <span className="w-2 h-2 rounded-full bg-owner-accent flex-shrink-0" />}
                       </div>
-                      <p className="text-xs text-owner-text/50 leading-relaxed">{cu.description}</p>
+                      <p className="text-xs text-owner-text/70 leading-relaxed">{cu.description}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
                       {purchased ? (
-                        <span className="text-xs text-owner-accent">Köpt</span>
+                        <span className="text-xs text-owner-accent font-medium">Köpt</span>
                       ) : (
-                        <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/40'}`}>
+                        <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent' : 'text-owner-text/60'}`}>
                           {formatNumber(cu.cost)} tkr
                         </span>
                       )}
-                      <div className="text-xs text-owner-text/50">+{cu.svPerClickBonus}/klick</div>
+                      <div className="text-xs text-owner-text/70 font-numbers">+{cu.svPerClickBonus}/klick</div>
                     </div>
                   </div>
                 </div>
