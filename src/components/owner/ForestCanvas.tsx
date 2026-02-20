@@ -144,11 +144,11 @@ export default function ForestCanvas({ totalSV, biodiv, isAttacked, lowPower }: 
   const fireflies = useMemo(() => generateFireflies(fireflyCount), [fireflyCount])
 
   // Colors based on state
-  const backColor = isAttacked ? 'rgba(60,30,25,0.10)' : 'rgba(20,35,22,0.10)'
-  const midColor = isAttacked ? 'rgba(45,35,20,0.18)' : 'rgba(16,32,20,0.18)'
-  const frontColor = 'rgba(6,14,6,0.28)'
-  const leafColor = isAttacked ? 'rgba(140,80,40,0.18)' : 'rgba(70,120,80,0.12)'
-  const fogColor = isAttacked ? 'rgba(100,40,30,0.03)' : 'rgba(60,100,70,0.03)'
+  const backColor = isAttacked ? 'rgba(60,30,25,0.15)' : 'rgba(15,25,15,0.20)'
+  const midColor = isAttacked ? 'rgba(45,35,20,0.25)' : 'rgba(10,20,10,0.30)'
+  const frontColor = 'rgba(5,12,5,0.45)'
+  const leafColor = isAttacked ? 'rgba(140,80,40,0.20)' : 'rgba(60,100,65,0.15)'
+  const fogColor = isAttacked ? 'rgba(100,40,30,0.04)' : 'rgba(40,70,45,0.04)'
 
   useEffect(() => {
     const canvas = canvasRef.current
