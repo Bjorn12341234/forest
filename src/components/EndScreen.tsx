@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { formatNumber, formatDuration } from '../engine/format'
+import { DonationQRInline } from './DonationQR'
+import { MembershipButton } from './MembershipForm'
 
 interface EndScreenProps {
   onReset: () => void
@@ -136,6 +138,14 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
             >
               Men det finns en epilog — tre faser bortom fysikens gränser, om du vill.
             </p>
+
+            {/* Donation CTA in årsredovisning */}
+            <div className="my-6">
+              <DonationQRInline />
+              <div className="flex justify-center mt-2">
+                <MembershipButton />
+              </div>
+            </div>
 
             <button
               onClick={() => {
@@ -476,18 +486,24 @@ export function RealityPage({ onContinue, onReset }: { onContinue: () => void; o
             href="https://naturhansyn.se/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-4 mb-12 px-6 py-3 border border-white/30 text-white text-xs font-bold tracking-[0.15em] no-underline hover:bg-white/10 transition-colors"
+            className="inline-block mt-4 mb-6 px-6 py-3 border border-white/30 text-white text-xs font-bold tracking-[0.15em] no-underline hover:bg-white/10 transition-colors"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
             FÖRENINGEN NATURHÄNSYN
           </a>
 
           <p
-            className="text-[0.55rem] text-white/25 leading-relaxed mb-12"
+            className="text-[0.55rem] text-white/25 leading-relaxed mb-8"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}
           >
             naturhansyn.se
           </p>
+
+          {/* Donation & Membership */}
+          <DonationQRInline />
+          <div className="flex justify-center mb-10">
+            <MembershipButton />
+          </div>
 
           <div className="w-8 h-px bg-white/10 mx-auto mb-10" />
 

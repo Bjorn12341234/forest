@@ -35,6 +35,8 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { useMilestones, type MilestoneToast } from './hooks/useMilestones'
 import { MilestoneToastManager } from './components/MilestoneToast'
 import { GoldenOpportunity, GoldenMultiplierIndicator } from './components/GoldenOpportunity'
+import { DonationQR } from './components/DonationQR'
+import { MembershipForm } from './components/MembershipForm'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -44,6 +46,8 @@ function App() {
   const [showEndScreen, setShowEndScreen] = useState(false)
   const [showFinalEnd, setShowFinalEnd] = useState(false)
   const [showFinalReality, setShowFinalReality] = useState(false)
+  const [showDonation, setShowDonation] = useState(false)
+  const [showMembership, setShowMembership] = useState(false)
   const gameMode = useGameStore(state => state.gameMode)
   const currentPhase = useGameStore(state => state.phase)
   const entropi = useGameStore(state => state.entropi)
@@ -124,24 +128,29 @@ function App() {
   // Owner (Skogsägare) mode
   if (gameMode === 'owner') {
     return (
-      <OwnerApp
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        toasts={toasts}
-        onDismissToast={dismissToast}
-        milestoneToasts={milestoneToasts}
-        onDismissMilestone={dismissMilestone}
-        onReset={() => {
-          reset()
-          useGameStore.setState({ gameMode: null })
-        }}
-        showSettings={showSettings}
-        onShowSettings={() => setShowSettings(true)}
-        onHideSettings={() => setShowSettings(false)}
-        showAchievements={showAchievements}
-        onShowAchievements={() => setShowAchievements(true)}
-        onHideAchievements={() => setShowAchievements(false)}
-      />
+      <>
+        <OwnerApp
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          toasts={toasts}
+          onDismissToast={dismissToast}
+          milestoneToasts={milestoneToasts}
+          onDismissMilestone={dismissMilestone}
+          onReset={() => {
+            reset()
+            useGameStore.setState({ gameMode: null })
+          }}
+          showSettings={showSettings}
+          onShowSettings={() => setShowSettings(true)}
+          onHideSettings={() => setShowSettings(false)}
+          showAchievements={showAchievements}
+          onShowAchievements={() => setShowAchievements(true)}
+          onHideAchievements={() => setShowAchievements(false)}
+          onShowDonation={() => setShowDonation(true)}
+        />
+        <DonationQR isOpen={showDonation} onClose={() => setShowDonation(false)} />
+        <MembershipForm isOpen={showMembership} onClose={() => setShowMembership(false)} />
+      </>
     )
   }
 
@@ -255,6 +264,10 @@ function App() {
         </AnimatePresence>
       </main>
 
+      {/* Donation & Membership Modals */}
+      <DonationQR isOpen={showDonation} onClose={() => setShowDonation(false)} />
+      <MembershipForm isOpen={showMembership} onClose={() => setShowMembership(false)} />
+
       {/* Top-right action buttons */}
       <div className="fixed top-12 right-2 z-40 flex flex-col gap-1.5">
         <button
@@ -275,6 +288,17 @@ function App() {
         </button>
       </div>
 
+      {/* Bottom-left support buttons */}
+      <div className="fixed bottom-20 left-2 z-30 flex flex-col gap-1">
+        <button
+          onClick={() => setShowDonation(true)}
+          className="px-2 py-1 text-[0.5rem] tracking-wider text-text-muted/40 hover:text-text-muted/70 bg-transparent border-none cursor-pointer transition-colors"
+          style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+        >
+          Stöd Naturhänsyn
+        </button>
+      </div>
+
       {/* Bottom Tab Navigation */}
       <TabNav
         activeTab={activeTab}
@@ -290,7 +314,7 @@ function App() {
 
 type OwnerTab = 'dashboard' | 'knowledge'
 
-function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToasts, onDismissMilestone, onReset, showSettings, onShowSettings, onHideSettings, showAchievements, onShowAchievements, onHideAchievements }: {
+function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToasts, onDismissMilestone, onReset, showSettings, onShowSettings, onHideSettings, showAchievements, onShowAchievements, onHideAchievements, onShowDonation }: {
   activeTab: Tab
   onTabChange: (tab: Tab) => void
   toasts: ReturnType<typeof useAchievementToasts>['toasts']
@@ -304,6 +328,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
   showAchievements: boolean
   onShowAchievements: () => void
   onHideAchievements: () => void
+  onShowDonation: () => void
 }) {
   const ownerTab = (activeTab === 'lobby' ? 'knowledge' : 'dashboard') as OwnerTab
   const [showOwnerEnd, setShowOwnerEnd] = useState(false)
@@ -422,6 +447,17 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
           title="Tillbaka till start"
         >
           &#8634;
+        </button>
+      </div>
+
+      {/* Bottom-left support button */}
+      <div className="fixed bottom-20 left-2 z-30 flex flex-col gap-1">
+        <button
+          onClick={onShowDonation}
+          className="px-2 py-1 text-[0.5rem] tracking-wider text-owner-text/30 hover:text-owner-text/60 bg-transparent border-none cursor-pointer transition-colors"
+          style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+        >
+          Stöd Naturhänsyn
         </button>
       </div>
 

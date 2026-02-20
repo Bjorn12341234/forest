@@ -71,7 +71,7 @@ export function CharacterSelect() {
               SMÅSKOGSÄGAREN
             </h2>
             <p className="text-sm text-[#B0B0B0] leading-relaxed">
-              &quot;Du ärvde 80 hektar skog i Ångermanland som din farfar ägde.&quot;
+              &quot;Du ärvde 20 hektar skog i Ångermanland som din farfar ägde.&quot;
             </p>
             <span className="text-xs text-[#8A8A8A] uppercase tracking-widest mt-auto">
               Välj

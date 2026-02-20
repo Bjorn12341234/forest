@@ -1435,6 +1435,90 @@
 
 ---
 
+## Sprint 16: Naturhänsyn-integration & Ägarfix
+
+> **Source:** Användarbegäran — donation/stödmedlem-koppling till Föreningen Naturhänsyn, ägarstartfix
+> **Goal:** Integrera Föreningen Naturhänsyn i spelet med donation (Swish QR) och stödmedlemsformulär. Fixa ägarbanans starthektar.
+
+### 16A — Donera till Naturhänsyn (Swish QR)
+
+- [x] 16A-1: QR-kod-komponent
+  - Ny `src/components/DonationQR.tsx` — modal/overlay med Swish QR-kod för Föreningen Naturhänsyn
+  - QR-koden pekar på Swish-nummer för Föreningen Naturhänsyn
+  - Visar kort text: "Donera till Föreningen Naturhänsyn via Swish"
+  - Stängbar med X-knapp, klick utanför, eller Escape
+  - Stilren design som matchar spelets tema
+
+- [x] 16A-2: In-game donationsknapp
+  - Liten, icke-påträngande knapp "Donera till Naturhänsyn" — placerad i settings/footer-area
+  - Synlig i båda spellägen (industri + ägare)
+  - Klick öppnar DonationQR-modalen
+  - Ska INTE störa spelupplevelsen — diskret men synlig
+
+- [x] 16A-3: QR-kod på verklighetsidan (EndScreen)
+  - Visa DonationQR automatiskt på reality-sidan i EndScreen.tsx (efter post-credits)
+  - Visa DonationQR på reality-sidan i OwnerEndScreen.tsx
+  - Placera nära den befintliga naturhansyn.se-länken
+  - Naturlig del av "vad kan du göra på riktigt"-sektionen
+
+- [x] 16A-4: QR-kod på årsredovisningen
+  - Visa donationsinformation/QR på EndScreen årsredovisnings-sektionen (post-credits, innan epilog-valet)
+  - "Stöd arbetet för naturhänsyn i skogsbruket"
+  - Visas tillsammans med årsredovisning-texten men utan att blockera fortsätt-knappen
+
+### 16B — Bli Stödmedlem
+
+- [x] 16B-1: Stödmedlem-formulär-komponent
+  - Ny `src/components/MembershipForm.tsx` — formulär med namn, e-post, valfritt meddelande
+  - Skickar e-post till Föreningen Naturhänsyn (mailto:-länk eller formulärtjänst)
+  - Tydlig text om vad stödmedlemskap innebär
+  - Bekräftelsemeddelande efter skickat
+  - Stängbar modal som matchar spelets stil
+
+- [x] 16B-2: Bli stödmedlem-knapp
+  - Knapp "Bli stödmedlem" bredvid donationsknappen (settings/footer)
+  - Synlig i båda spellägen
+  - Öppnar MembershipForm-modalen
+  - Diskret men tydlig
+
+- [x] 16B-3: Stödmedlem på verklighetsidan
+  - Visa "Bli stödmedlem"-knapp på reality-sidan i EndScreen.tsx och OwnerEndScreen.tsx
+  - Placera nära donation-QR och naturhansyn.se-länken
+  - Del av uppmaningen att agera efter spelets slut
+
+### 16C — Ägarbanans Startfix
+
+- [x] 16C-1: Ändra 80 hektar → 20 hektar
+  - CharacterSelect.tsx: "Du ärvde 80 hektar skog" → "Du ärvde 20 hektar skog"
+  - Uppdatera alla referenser till "80 hektar" i ägarbanans kontext:
+    - `src/data/ownerEvents.ts` — grannens mark (80 hektar stubbar) kan stå kvar (det är grannens mark, inte spelarens)
+    - `plan_additional_arch.md` — uppdatera om det refererar till spelarens mark
+  - Verifiera att inga formler/balans beror på 80-siffran
+  - Tematiskt: 20 hektar arv från farfar — mer realistiskt för småskogsbrukare
+
+### 16D — Verifiering
+
+- [x] 16D-1: Testa & Bygg
+  - Alla befintliga tester passerar
+  - QR-modal öppnar/stänger korrekt
+  - Formulär fungerar (mailto eller extern tjänst)
+  - Verklighetsidan visar donation + stödmedlem
+  - Årsredovisning visar donation
+  - Ägarbanans intro visar 20 hektar
+  - TypeScript clean, Vite build passerar
+  - Deploy till GitHub Pages
+
+**Notes:**
+- DonationQR.tsx: Swish QR modal (number 123 379 74 98) + DonationQRInline for end screens
+- MembershipForm.tsx: mailto-based form (info@naturhansyn.se) + MembershipButton inline component
+- In-game "Stöd Naturhänsyn" button at bottom-left in both modes, opens DonationQR modal
+- End screens (both paths) show Swish number + "Bli stödmedlem" button near naturhansyn.se link
+- Årsredovisning post-credits section shows donation + membership before epilog choice
+- CharacterSelect: 80→20 hektar (ownerEvents neighbor refs kept at 80, that's neighbor's land)
+- Build: 252KB gzipped (+3KB), 285 tests pass, TypeScript clean
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:
