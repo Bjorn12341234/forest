@@ -127,14 +127,14 @@ export function OwnerClickArea() {
       </div>
 
       {/* Main Click Button */}
-      <div ref={containerRef} className="relative my-2">
+      <div ref={containerRef} className="relative my-0">
         <ParticleCanvas ref={particlesRef} />
 
         <motion.button
           whileTap={{ scale: 0.93 }}
           whileHover={{ scale: 1.03 }}
           onClick={handleClick}
-          className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
+          className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
                      border-3 flex items-center justify-center
                      hover:brightness-110 transition-all duration-200"
           style={{
@@ -148,13 +148,13 @@ export function OwnerClickArea() {
           }}
         >
           {/* Tree growth rings */}
-          <div className="absolute inset-[8px] rounded-full border border-[#8B7355]/20" />
-          <div className="absolute inset-[16px] rounded-full border border-[#8B7355]/12" />
-          <div className="absolute inset-[24px] rounded-full border border-[#8B7355]/18" />
-          <div className="absolute inset-[32px] rounded-full border border-[#8B7355]/10" />
-          <div className="absolute inset-[40px] rounded-full border border-[#8B7355]/15" />
-          <div className="absolute inset-[48px] rounded-full border border-[#8B7355]/08" />
-          <div className="absolute inset-[54px] rounded-full border border-[#8B7355]/12" />
+          <div className="absolute inset-[6px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.20)' }} />
+          <div className="absolute inset-[13px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.12)' }} />
+          <div className="absolute inset-[20px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.18)' }} />
+          <div className="absolute inset-[27px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.10)' }} />
+          <div className="absolute inset-[34px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.15)' }} />
+          <div className="absolute inset-[41px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.08)' }} />
+          <div className="absolute inset-[47px] rounded-full" style={{ border: '1px solid rgba(139,115,85,0.12)' }} />
           <span className="relative text-[#E0D5BF] font-bold text-sm sm:text-base text-center leading-tight px-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
             VÅRDA{'\n'}SKOG
           </span>
