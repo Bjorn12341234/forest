@@ -124,48 +124,32 @@ body::before {
   text-shadow: 0 0 8px rgba(212, 115, 12, 0.4);
 }
 
-/* ── Owner (Skogsägare) Forest Theme — Glassmorphism Cards ── */
+/* ── Owner (Skogsägare) Forest Theme — Solid Cards ── */
 @utility owner-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(145deg, rgba(30,45,28,0.93) 0%, rgba(24,36,22,0.96) 100%);
   border: 1px solid rgba(94, 158, 110, 0.18);
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 @utility owner-card-subtle {
-  background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(145deg, rgba(26,38,24,0.90) 0%, rgba(22,33,20,0.93) 100%);
   border: 1px solid rgba(94, 158, 110, 0.10);
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 @utility owner-card-interactive {
-  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(145deg, rgba(30,45,28,0.93) 0%, rgba(24,36,22,0.96) 100%);
   border: 1px solid rgba(94, 158, 110, 0.25);
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.04);
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   &:hover {
-    background: linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 100%);
-    border-color: rgba(94, 158, 110, 0.50);
-    box-shadow: 0 4px 12px rgba(94, 158, 110, 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
-  }
-}
-
-/* Fallback for browsers without backdrop-filter */
-@supports not (backdrop-filter: blur(1px)) {
-  .owner-card, .owner-card-interactive {
-    background: linear-gradient(145deg, rgba(30,45,28,0.9) 0%, rgba(26,38,24,0.95) 100%) !important;
-  }
-  .owner-card-subtle {
-    background: linear-gradient(145deg, rgba(26,38,24,0.85) 0%, rgba(26,38,24,0.9) 100%) !important;
+    background: linear-gradient(145deg, rgba(35,52,33,0.95) 0%, rgba(28,42,26,0.97) 100%);
+    border-color: rgba(94, 158, 110, 0.40);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 }
 
