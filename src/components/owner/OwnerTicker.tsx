@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, useEffect, useCallback } from 'react'
 import { useGameStore } from '../../store/gameStore'
 import { getAvailableOwnerHeadlines } from '../../data/ownerNewsLines'
+import { isDonator } from '../../engine/donation'
 
 const SCROLL_SPEED = 50 // pixels per second
 
@@ -16,6 +17,7 @@ export function OwnerTicker() {
   const ownerLuresDeclined = useGameStore(s => s.ownerLuresDeclined)
   const ownerLuresAccepted = useGameStore(s => s.ownerLuresAccepted)
   const ownerGenerators = useGameStore(s => s.ownerGenerators)
+  const donated = useMemo(() => isDonator(), [])
 
   const headlines = useMemo(() => {
     const stateSlice = {
@@ -25,10 +27,10 @@ export function OwnerTicker() {
       ownerAttacksResisted, ownerLuresDeclined, ownerLuresAccepted,
       ownerGenerators,
     }
-    const available = getAvailableOwnerHeadlines(totalSV, stateSlice as Parameters<typeof getAvailableOwnerHeadlines>[1])
+    const available = getAvailableOwnerHeadlines(totalSV, stateSlice as Parameters<typeof getAvailableOwnerHeadlines>[1], donated)
     return available.slice(-6).map(h => h.text)
   }, [totalSV, biodivOwner, legacy, kunskap, resiliens, realCarbonPos, deadwood,
-      ownerAttacksResisted, ownerLuresDeclined, ownerLuresAccepted, ownerGenerators])
+      ownerAttacksResisted, ownerLuresDeclined, ownerLuresAccepted, ownerGenerators, donated])
 
   const measureRef = useRef<HTMLSpanElement>(null)
   const [duration, setDuration] = useState(30)

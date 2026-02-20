@@ -1,6 +1,7 @@
 import type { GameState } from '../store/types'
+import { isDonator } from '../engine/donation'
 
-export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'kosmisk' | 'meta' | 'skogsagare'
+export type AchievementTier = 'lokal' | 'regional' | 'nationell' | 'internationell' | 'endgame' | 'kosmisk' | 'meta' | 'skogsagare' | 'naturvan'
 
 export interface AchievementDef {
   id: string
@@ -24,6 +25,7 @@ export const TIER_LABELS: Record<AchievementTier, string> = {
   kosmisk: 'Tier 6: Kosmisk',
   meta: 'Meta',
   skogsagare: 'Skogsägaren',
+  naturvan: 'Naturvän',
 }
 
 export const TIER_COLORS: Record<AchievementTier, string> = {
@@ -35,6 +37,7 @@ export const TIER_COLORS: Record<AchievementTier, string> = {
   kosmisk: '#00CCFF',
   meta: '#888888',
   skogsagare: '#5E9E6E',
+  naturvan: '#52B5AA',
 }
 
 export const ACHIEVEMENTS: AchievementDef[] = [
@@ -722,6 +725,19 @@ export const ACHIEVEMENTS: AchievementDef[] = [
       const gens = Object.values(s.ownerGenerators)
       return gens.length >= 12 && gens.every(g => g.count > 0)
     },
+  },
+
+  // ═══════════════════════════════════════════
+  //  NATURVÄN (donation achievement)
+  // ═══════════════════════════════════════════
+  {
+    id: 'skogens_van',
+    name: 'Skogens Vän',
+    description: 'Du stödjer Föreningen Naturhänsyn. Tack.',
+    icon: '🌿',
+    phase: 1,
+    tier: 'naturvan',
+    check: () => isDonator(),
   },
 ]
 

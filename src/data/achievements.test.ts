@@ -10,7 +10,7 @@ import type { AchievementTier } from './achievements'
 
 const VALID_TIERS: AchievementTier[] = [
   'lokal', 'regional', 'nationell', 'internationell',
-  'endgame', 'kosmisk', 'meta', 'skogsagare',
+  'endgame', 'kosmisk', 'meta', 'skogsagare', 'naturvan',
 ]
 
 describe('ACHIEVEMENTS data integrity', () => {

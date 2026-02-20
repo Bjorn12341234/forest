@@ -547,6 +547,25 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
 ]
 
+// ── Donator-exclusive headlines (shown only for donors, low frequency) ──
+export const DONATOR_INDUSTRY_HEADLINES: TickerHeadline[] = [
+  {
+    id: 'donator_ind_1',
+    text: 'Din donation till Naturhänsyn noterades av styrelsen. De är inte glada.',
+    phase: 1,
+  },
+  {
+    id: 'donator_ind_2',
+    text: 'INTERNT MEMO: En av våra spelare stödjer motståndaren.',
+    phase: 2,
+  },
+  {
+    id: 'donator_general',
+    text: 'Någon bryr sig om skogen på riktigt. Det syns.',
+    phase: 1,
+  },
+]
+
 /** Get headlines available for a given game state */
 export function getAvailableHeadlines(
   phase: number,
@@ -554,8 +573,9 @@ export function getAvailableHeadlines(
   lobbyProjects: Record<string, { purchased: boolean }>,
   generators: Record<string, { count: number }>,
   eventHistory: string[],
+  donated?: boolean,
 ): TickerHeadline[] {
-  return TICKER_HEADLINES.filter(h => {
+  const base = TICKER_HEADLINES.filter(h => {
     if (h.phase > phase) return false
     if (h.maxPhase && phase > h.maxPhase) return false
     if (!h.trigger) return true
@@ -578,4 +598,15 @@ export function getAvailableHeadlines(
         return true
     }
   })
+
+  // Add one donator headline if applicable
+  if (donated) {
+    const eligible = DONATOR_INDUSTRY_HEADLINES.filter(h => phase >= h.phase)
+    if (eligible.length > 0) {
+      // Pick one deterministically based on phase
+      base.push(eligible[phase % eligible.length])
+    }
+  }
+
+  return base
 }

@@ -1,115 +1,20 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { isDonator, markDonated } from '../engine/donation'
 
 interface DonationQRProps {
   isOpen: boolean
   onClose: () => void
 }
 
-// Swish QR for Föreningen Naturhänsyn
-// Generated SVG QR code for Swish number 1233797498
-function SwishQRCode() {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      width="180"
-      height="180"
-      className="mx-auto"
-      role="img"
-      aria-label="Swish QR-kod för Föreningen Naturhänsyn"
-    >
-      {/* White background */}
-      <rect width="200" height="200" fill="white" rx="8" />
-
-      {/* Swish logo placeholder + number */}
-      <rect x="20" y="20" width="160" height="160" fill="#f5f5f5" rx="4" />
-
-      {/* Swish brand color bar */}
-      <rect x="20" y="20" width="160" height="32" fill="#52B5AA" rx="4" />
-      <text
-        x="100"
-        y="41"
-        textAnchor="middle"
-        fill="white"
-        fontSize="14"
-        fontWeight="bold"
-        fontFamily="sans-serif"
-      >
-        Swish
-      </text>
-
-      {/* QR-like pattern (decorative representation) */}
-      <g fill="#333">
-        {/* Top-left finder */}
-        <rect x="30" y="62" width="36" height="36" />
-        <rect x="34" y="66" width="28" height="28" fill="white" />
-        <rect x="40" y="72" width="16" height="16" />
-
-        {/* Top-right finder */}
-        <rect x="134" y="62" width="36" height="36" />
-        <rect x="138" y="66" width="28" height="28" fill="white" />
-        <rect x="144" y="72" width="16" height="16" />
-
-        {/* Bottom-left finder */}
-        <rect x="30" y="134" width="36" height="36" />
-        <rect x="34" y="138" width="28" height="28" fill="white" />
-        <rect x="40" y="144" width="16" height="16" />
-
-        {/* Data modules */}
-        <rect x="76" y="62" width="6" height="6" />
-        <rect x="88" y="62" width="6" height="6" />
-        <rect x="100" y="62" width="6" height="6" />
-        <rect x="112" y="62" width="6" height="6" />
-        <rect x="76" y="74" width="6" height="6" />
-        <rect x="100" y="74" width="6" height="6" />
-        <rect x="76" y="86" width="6" height="6" />
-        <rect x="88" y="86" width="6" height="6" />
-        <rect x="112" y="86" width="6" height="6" />
-        <rect x="124" y="86" width="6" height="6" />
-        <rect x="76" y="98" width="6" height="6" />
-        <rect x="100" y="98" width="6" height="6" />
-        <rect x="112" y="98" width="6" height="6" />
-        <rect x="88" y="110" width="6" height="6" />
-        <rect x="100" y="110" width="6" height="6" />
-        <rect x="124" y="110" width="6" height="6" />
-        <rect x="76" y="122" width="6" height="6" />
-        <rect x="100" y="122" width="6" height="6" />
-        <rect x="112" y="122" width="6" height="6" />
-        <rect x="88" y="134" width="6" height="6" />
-        <rect x="100" y="134" width="6" height="6" />
-        <rect x="112" y="134" width="6" height="6" />
-        <rect x="124" y="134" width="6" height="6" />
-        <rect x="88" y="146" width="6" height="6" />
-        <rect x="112" y="146" width="6" height="6" />
-        <rect x="134" y="110" width="6" height="6" />
-        <rect x="146" y="110" width="6" height="6" />
-        <rect x="158" y="110" width="6" height="6" />
-        <rect x="134" y="122" width="6" height="6" />
-        <rect x="158" y="122" width="6" height="6" />
-        <rect x="134" y="146" width="6" height="6" />
-        <rect x="146" y="146" width="6" height="6" />
-        <rect x="158" y="146" width="6" height="6" />
-        <rect x="146" y="158" width="6" height="6" />
-        <rect x="158" y="158" width="6" height="6" />
-      </g>
-
-      {/* Swish number */}
-      <text
-        x="100"
-        y="192"
-        textAnchor="middle"
-        fill="#666"
-        fontSize="10"
-        fontFamily="monospace"
-      >
-        123 379 74 98
-      </text>
-    </svg>
-  )
-}
+const SWISH_NUMBER = '123-248 51 59'
+const QR_IMAGE_PATH = `${import.meta.env.BASE_URL}swish-qr.png`
 
 export function DonationQR({ isOpen, onClose }: DonationQRProps) {
   const modalRef = useRef<HTMLDivElement>(null)
+  const [donated, setDonated] = useState(isDonator)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [showThanks, setShowThanks] = useState(false)
 
   // Close on Escape
   useEffect(() => {
@@ -127,6 +32,26 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
       modalRef.current.focus()
     }
   }, [isOpen])
+
+  // Reset confirm state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setShowConfirm(false)
+      setShowThanks(false)
+    }
+  }, [isOpen])
+
+  const handleDonateClick = useCallback(() => {
+    if (donated) return
+    setShowConfirm(true)
+  }, [donated])
+
+  const handleConfirm = useCallback(() => {
+    markDonated()
+    setDonated(true)
+    setShowConfirm(false)
+    setShowThanks(true)
+  }, [])
 
   return (
     <AnimatePresence>
@@ -180,9 +105,16 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
                 </h2>
               </div>
 
-              {/* QR Code */}
+              {/* QR Code — real scannable image */}
               <div className="flex justify-center mb-5">
-                <SwishQRCode />
+                <img
+                  src={QR_IMAGE_PATH}
+                  alt="Swish QR-kod för Föreningen Naturhänsyn"
+                  width={200}
+                  height={283}
+                  className="rounded"
+                  style={{ imageRendering: 'auto' }}
+                />
               </div>
 
               {/* Instructions */}
@@ -191,15 +123,58 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
                   Öppna Swish och scanna QR-koden, eller swisha direkt till:
                 </p>
                 <p className="text-sm font-bold text-[#52B5AA] tracking-wider">
-                  123 379 74 98
+                  {SWISH_NUMBER}
                 </p>
                 <p className="text-[0.6rem] text-white/30 mt-3">
                   Föreningen Naturhänsyn arbetar för naturhänsyn i skogsbruket
                 </p>
               </div>
 
-              {/* Link */}
+              {/* "Jag har swishat" button */}
               <div className="mt-5 text-center">
+                {showThanks ? (
+                  <motion.p
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-[#52B5AA] font-bold"
+                  >
+                    Tack för ditt stöd! 🌿
+                  </motion.p>
+                ) : showConfirm ? (
+                  <div className="space-y-2">
+                    <p className="text-xs text-white/60">Tack! Markera som donerat?</p>
+                    <div className="flex gap-2 justify-center">
+                      <button
+                        onClick={handleConfirm}
+                        className="px-4 py-1.5 text-xs font-medium rounded-sm cursor-pointer border-none transition-colors"
+                        style={{ background: '#52B5AA', color: '#fff' }}
+                      >
+                        Ja
+                      </button>
+                      <button
+                        onClick={() => setShowConfirm(false)}
+                        className="px-4 py-1.5 text-xs text-white/50 bg-white/5 border border-white/10 rounded-sm cursor-pointer hover:bg-white/10 transition-colors"
+                      >
+                        Avbryt
+                      </button>
+                    </div>
+                  </div>
+                ) : donated ? (
+                  <p className="text-xs text-[#52B5AA]/70">
+                    🌿 Tack för ditt stöd!
+                  </p>
+                ) : (
+                  <button
+                    onClick={handleDonateClick}
+                    className="px-4 py-2 text-xs font-medium rounded-sm cursor-pointer border border-[#52B5AA]/30 bg-[#52B5AA]/10 text-[#52B5AA] hover:bg-[#52B5AA]/20 transition-colors"
+                  >
+                    Jag har swishat ❤️
+                  </button>
+                )}
+              </div>
+
+              {/* Link */}
+              <div className="mt-4 text-center">
                 <a
                   href="https://naturhansyn.se/"
                   target="_blank"
@@ -230,18 +205,30 @@ export function DonationQRInline() {
         Stöd arbetet
       </p>
 
+      {/* Inline QR image */}
+      <div className="flex justify-center mb-4">
+        <img
+          src={QR_IMAGE_PATH}
+          alt="Swish QR-kod för Föreningen Naturhänsyn"
+          width={140}
+          height={198}
+          className="rounded"
+          style={{ imageRendering: 'auto' }}
+        />
+      </div>
+
       <p
-        className="text-xs text-white/50 leading-relaxed mb-4"
+        className="text-xs text-white/50 leading-relaxed mb-2"
         style={{ fontFamily: 'IBM Plex Mono, monospace' }}
       >
-        Donera via Swish:
+        Swisha direkt till:
       </p>
 
       <p
         className="text-lg font-bold text-[#52B5AA] tracking-wider mb-2"
         style={{ fontFamily: 'IBM Plex Mono, monospace' }}
       >
-        123 379 74 98
+        {SWISH_NUMBER}
       </p>
 
       <p

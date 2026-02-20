@@ -338,13 +338,33 @@ export const OWNER_TICKER_HEADLINES: OwnerTickerHeadline[] = [
   },
 ]
 
+// ── Donator-exclusive headlines (shown only for donors) ──
+export const DONATOR_OWNER_HEADLINES: OwnerTickerHeadline[] = [
+  {
+    id: 'donator_owner_1',
+    text: 'Föreningen skickade ett tack. Skogen tackar också.',
+  },
+  {
+    id: 'donator_owner_2',
+    text: 'Du är inte ensam. Nätverket växer.',
+  },
+]
+
 /** Get owner headlines available based on totalSkogsvardering and game state */
-export function getAvailableOwnerHeadlines(totalSV: number, state?: GameState): OwnerTickerHeadline[] {
-  return OWNER_TICKER_HEADLINES.filter(h => {
+export function getAvailableOwnerHeadlines(totalSV: number, state?: GameState, donated?: boolean): OwnerTickerHeadline[] {
+  const base = OWNER_TICKER_HEADLINES.filter(h => {
     // Dynamic headlines: check condition function
     if (h.condition) return state ? h.condition(state) : false
     // SV-gated headlines
     if (h.triggerSV && totalSV < h.triggerSV) return false
     return true
   })
+
+  // Add one donator headline if applicable
+  if (donated && DONATOR_OWNER_HEADLINES.length > 0) {
+    const idx = Math.floor(totalSV / 1000) % DONATOR_OWNER_HEADLINES.length
+    base.push(DONATOR_OWNER_HEADLINES[idx])
+  }
+
+  return base
 }

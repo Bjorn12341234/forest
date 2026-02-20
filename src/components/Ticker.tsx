@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { getAvailableHeadlines } from '../data/newsTickerLines'
+import { isDonator } from '../engine/donation'
 
 export function Ticker() {
   const phase = useGameStore(s => s.phase)
@@ -8,12 +9,13 @@ export function Ticker() {
   const lobbyProjects = useGameStore(s => s.lobbyProjects)
   const generators = useGameStore(s => s.generators)
   const eventHistory = useGameStore(s => s.eventHistory)
+  const donated = useMemo(() => isDonator(), [])
 
   const headlines = useMemo(() => {
-    const available = getAvailableHeadlines(phase, totalStammar, lobbyProjects, generators, eventHistory)
+    const available = getAvailableHeadlines(phase, totalStammar, lobbyProjects, generators, eventHistory, donated)
     // Show the most recent 6 headlines (latest phases first, then by array order)
     return available.slice(-6).map(h => h.text)
-  }, [phase, totalStammar, lobbyProjects, generators, eventHistory])
+  }, [phase, totalStammar, lobbyProjects, generators, eventHistory, donated])
 
   if (headlines.length === 0) return null
 

@@ -1668,46 +1668,46 @@
 
 ### 18A — Ersätt Fejk-QR med Riktig Bild
 
-- [ ] 18A-1: Optimera & importera QR-bilden
+- [x] 18A-1: Optimera & importera QR-bilden
   - Källfil: `/home/bjorn/projects/forest/swish-QR-large.png` (4.2MB — alldeles för stor)
   - Konvertera till optimerad PNG eller WebP, storlek ~200-300px, <50KB
   - Placera i `public/` eller `src/assets/` (beroende på Vite-import-strategi)
   - Om `public/`: `public/swish-qr.png` (referera som `/forest/swish-qr.png`)
   - Om `src/assets/`: importera som modul i komponent
 
-- [ ] 18A-2: Uppdatera DonationQR.tsx — modal
+- [x] 18A-2: Uppdatera DonationQR.tsx — modal
   - Ta bort hela `SwishQRCode()` SVG-komponenten (fejk QR-kod)
   - Ersätt med `<img>` som pekar på den riktiga QR-bilden
   - Behåll aria-label, storlek ~180px, centrerad
   - Behåll resten av modalen (header, instructions, Swish-nummer, naturhansyn.se-länk)
 
-- [ ] 18A-3: Uppdatera DonationQRInline
+- [x] 18A-3: Uppdatera DonationQRInline
   - Lägg till den riktiga QR-bilden i inline-versionen också (visas på slutskärmar)
   - Mindre storlek (~120px) för att passa i flödet
   - Behåll befintlig text och nummer
 
-- [ ] 18A-4: Verifiera skanningsbarhet
+- [x] 18A-4: Verifiera skanningsbarhet
   - Öppna i webbläsaren, scanna med Swish-appen
-  - Verifiera att numret 123 379 74 98 stämmer
+  - Verifiera att numret 123-248 51 59 stämmer (uppdaterat från QR-bilden)
   - Testa i DonationQR-modalen (stor) och DonationQRInline (liten)
 
 ### 18B — Donationsperks (Hedersystem)
 
-- [ ] 18B-1: "Jag har swishat"-knapp
+- [x] 18B-1: "Jag har swishat"-knapp
   - Lägg till knapp under QR-koden i DonationQR-modalen: "Jag har swishat ❤️"
   - Klick → bekräftelsefråga: "Tack! Markera som donerat?"
   - Sparar `donated: true` i localStorage (separat från game save)
   - Visuell bekräftelse: "Tack för ditt stöd!" med animation
   - Ingen verifiering — hedersystem, vi litar på spelaren
 
-- [ ] 18B-2: Kosmetisk bonus — "Naturvän"-badge
+- [x] 18B-2: Kosmetisk bonus — "Naturvän"-badge
   - Om `donated === true` i localStorage:
     - Visa liten "🌿 Naturvän"-badge i settings-area eller vid Swish-knappen
     - Badge syns i båda spellägen (industri + ägare)
     - Subtil men synlig — visar att spelaren stödjer naturhänsyn
   - Badge försvinner INTE vid game reset (lagras utanför save)
 
-- [ ] 18B-3: Donator-ticker-headlines
+- [x] 18B-3: Donator-ticker-headlines
   - 3-5 unika ticker-headlines som bara visas för donatörer:
     - Industri: "Din donation till Naturhänsyn noterades av styrelsen. De är inte glada."
     - Industri: "INTERNT MEMO: En av våra spelare stödjer motståndaren."
@@ -1716,17 +1716,14 @@
     - Generell: "Någon bryr sig om skogen på riktigt. Det syns."
   - Lågfrekvent — dyker upp en gång per spelomgång max
 
-- [ ] 18B-4: Överväg kosmetisk perk (valfri)
-  - Möjliga idéer (välj max 1, eller hoppa över):
-    - Unik klickpartikel-färg (gyllene löv istället för standard)
-    - Liten "tack"-animation första gången man öppnar spelet efter donation
-    - Extra achievement: "Skogens Vän" (tier: naturvän, grön badge)
+- [x] 18B-4: Överväg kosmetisk perk (valfri)
+  - Vald: Extra achievement "Skogens Vän" (tier: naturvan, teal #52B5AA badge)
   - Ska INTE påverka gameplay/balans — rent kosmetiskt
   - Ska INTE kännas som pay-to-win eller tvingande
 
 ### 18C — Verifiering
 
-- [ ] 18C-1: Test & Build
+- [x] 18C-1: Test & Build
   - QR-bilden visas korrekt i modal och inline
   - QR-koden skanningsbar med Swish
   - "Jag har swishat"-flöde fungerar (localStorage persistence)
@@ -1734,14 +1731,20 @@
   - Donator-headlines dyker upp i ticker
   - Alla 285 befintliga tester passerar
   - TypeScript clean, Vite build passerar
-  - Bundle-ökning: max +50KB (QR-bild + donationslogik)
+  - Bundle-ökning: +31KB QR-bild (main JS unchanged at 252KB gzipped)
 
 - [ ] 18C-2: Deploy
   - Deploy till GitHub Pages
   - Verifiera QR på mobil (iOS + Android)
   - Verifiera att donator-state persisterar mellan sessioner
 
-**Notes:** —
+**Notes:**
+- Swish-numret i QR-bilden: 123-248 51 59 (ej 123 379 74 98 som stod i fejk-SVG)
+- QR-bild: public/swish-qr.png (31KB, 212×300px, resized from 4MB original)
+- Donation state: `src/engine/donation.ts` — localStorage key `silva_maximus_donated`
+- Achievement "Skogens Vän": tier `naturvan`, teal #52B5AA
+- 5 donator-headlines: 3 industri + 2 ägare, low-frequency (1 per session, deterministic pick)
+- Naturvän badge: shown next to "Stöd Naturhänsyn" button in both paths
 
 ---
 
