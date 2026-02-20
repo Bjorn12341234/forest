@@ -458,7 +458,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
       <div className="fixed bottom-20 left-2 z-30 flex flex-col gap-1">
         <button
           onClick={onShowDonation}
-          className="px-2 py-1 text-[0.5rem] tracking-wider text-owner-text/30 hover:text-owner-text/60 bg-transparent border-none cursor-pointer transition-colors"
+          className="px-3 py-1.5 text-xs tracking-wider text-owner-text/60 hover:text-owner-text/90 bg-transparent border border-owner-accent/15 hover:border-owner-accent/30 rounded cursor-pointer transition-colors"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
           Stöd Naturhänsyn
