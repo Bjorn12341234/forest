@@ -1261,6 +1261,180 @@
 
 ---
 
+## Sprint 14: Tillgänglighet, Prestanda & Struktur
+
+> **Source:** `review_from_claude.md` — P0 accessibility (7/10), performance hot paths, ExpansionPanel split, owner CSS variables, mobile dashboard
+> **Goal:** Fix all non-gameplay review items: accessibility to AA standard, cache hot paths, clean up large components, mobile UX.
+
+### 14A — P0 Accessibility Fixes
+
+- [x] 14A-1: Color Contrast (WCAG AA)
+  - Bumped text-secondary: #B0B0B0 → #C0C0C0 (default), #A0A0A0 → #B0B0B0 (INTERNATIONELL), #808080 → #909090 (EXPANSION)
+  - Bumped text-muted: #969696 → #A0A0A0 (default), #8E8E8E → #959595 (INTERNATIONELL), #7A7A7A → #858585 (EXPANSION)
+  - All combinations now ≥4.5:1 contrast ratio on their respective backgrounds
+
+- [x] 14A-2: Tap Targets (≥44px)
+  - Country dots: increased minimum from 16px → 24px (controlled 28, invading 26, default 24)
+  - Close buttons: added min-w-[44px] min-h-[44px] to SettingsPanel, AchievementPanel, CountryDetailPanel
+  - TabNav and bottom nav already had min-w-[44px] min-h-[44px] (verified)
+
+- [x] 14A-3: Aria Labels & Screen Reader Support
+  - Added aria-label to: SettingsPanel close, AchievementPanel close, CountryDetailPanel close
+  - Added role="status" aria-live="polite" to: MilestoneToastManager, AchievementToastManager
+  - Already had: TabNav, Dashboard resource cards, EventModal, GoldenOpportunity, IndustryAttackModal, IndustryLureModal
+
+- [x] 14A-4: Prefers-Reduced-Motion (already implemented)
+  - CSS `@media (prefers-reduced-motion: reduce)` already disables all keyframe animations
+  - Framer Motion `MotionConfig reducedMotion="user"` already wraps both industry and owner paths in App.tsx
+  - All transitions set to 0.01ms in reduced-motion mode
+
+### 14B — Performance Caching (already implemented)
+
+- [x] 14B-1: Generator Lookup Map — GENERATOR_MAP and OWNER_GENERATOR_MAP already exist in generators.ts/ownerGenerators.ts
+- [x] 14B-2: Event Pool Cache — Phase-filtered cache with invalidation already in events.ts
+- [x] 14B-3: Antagonist Phase Short-Circuit — ANTAGONISTS_BY_PHASE Map already in antagonists.ts
+- [x] 14B-4: Lobby Boost Cache — computeLobbyModifiers() cached in module-level lobbyMods, refreshed only on purchase/load/reset
+
+### 14C — Component & CSS Cleanup
+
+- [x] 14C-1: Split ExpansionPanel (already done)
+  - ExpansionPanel.tsx is already a thin 30-line router delegating to CountryPanel.tsx and SpaceExpansionPanel.tsx
+  - PressureSlider already extracted as a subcomponent within CountryPanel.tsx
+
+- [x] 14C-2: Owner Path CSS Variables
+  - Added --color-owner-accent-rgb and --color-owner-text-rgb to global.css for rgba() usage
+  - Replaced hardcoded #2D6A4F in: CharacterSelect, OwnerClickArea, GoldenOpportunity, MilestoneToast
+  - Replaced rgba(45,106,79,...) in: IndustryAttackModal, IndustryLureModal, OwnerTicker
+  - OwnerClickArea uses getComputedStyle() to resolve CSS var for canvas particle colors
+  - achievements.ts TIER_COLORS kept as source-of-truth constant (matches CSS var)
+
+- [x] 14C-3: Mobile Dashboard Collapse (already done)
+  - Dashboard.tsx already has collapsible mobile resource bar (sm:hidden)
+  - Compact summary row with key numbers, tap to expand full grid
+  - Desktop shows full grid (hidden sm:grid)
+
+### 14D — Verification
+
+- [x] 14D-1: Accessibility Audit — All close buttons have aria-label, toasts have role="status", contrast ratios meet AA
+
+- [x] 14D-2: Performance Verification — All 244 tests pass, no regressions
+
+- [x] 14D-3: Build & Deploy
+  - TypeScript clean (also fixed pre-existing: GeneratorTooltip synergy field names, events.test unused imports, CountryDetailPanel missing maintenanceMult prop)
+  - Vite build passes — 243KB gzipped (unchanged)
+
+**Notes:** Sprint 14 complete. Most performance (14B) and structural (14C-1, 14C-3) items were already implemented in earlier sprints. Actual new work: color contrast bumps across all 3 era themes, tap target increases for country dots and close buttons, aria-labels on 3 close buttons and 2 toast containers, owner accent color centralized via CSS variables with RGB variant for rgba() usage. Also fixed 3 pre-existing TS build errors (GeneratorTooltip property names genA/genB, CountryDetailPanel missing maintenanceMult prop, events.test unused imports).
+
+---
+
+---
+
+## Sprint 15: Slutspelsomarbetning (Endgame Redesign)
+
+> **Source:** `review_from_claude.md` — Late-game design (5/10), endgame "grindy", expansion targets "copy-paste purchases", entropy "perverse incentive"
+> **Goal:** Make phases 10-12 as engaging as 1-6 by giving each expansion target unique mechanics and reworking entropy into strategic decisions.
+
+### 15A — Expansion Target Unique Mechanics
+
+- [ ] 15A-1: Design Unique Mechanics (document in forest.md)
+  - Current: all 5 targets are "save up stammar → click buy → done"
+  - Each target gets a unique mini-mechanic beyond just paying the cost:
+  - **Månen** (fas 10): Logistikkedja — build 3 supply chain stages (launch pad → orbit relay → lunar base), each stage has its own cost and build time. First target, teaches the mechanic.
+  - **Mars** (fas 10): Terraformning — buy the target, then actively terraform: allocate stammar/kapital/lobby across 3 terraform meters (atmosphere, soil, water). Each meter drains if neglected. All 3 must reach 100%.
+  - **Dysonsfär** (fas 11): Megaprojekt — massive ongoing construction. Progress bar advances based on stammar/s contribution. Takes real minutes. Unlocks incremental production bonuses at 25/50/75/100%.
+  - **Parallellt Universum** (fas 11): Dimensionsspricka — requires sacrificing a percentage of current production permanently to "punch through". Higher sacrifice = faster completion. Strategic trade-off.
+  - **Tidslinje-korrektion** (fas 12): Paradoxhantering — final boss. Three paradox waves that temporarily reverse game mechanics (production becomes costs, etc.). Survive each wave to complete.
+
+- [ ] 15A-2: Implement Target State Extensions
+  - Extend ExpansionTargetState: add per-target progress fields
+  - Månen: `stages: [boolean, boolean, boolean]`
+  - Mars: `terraform: { atmosphere: number, soil: number, water: number }`
+  - Dysonsfär: `constructionProgress: number` (0-100)
+  - Parallellt Universum: `sacrificePercent: number, active: boolean`
+  - Tidslinje: `paradoxWave: number` (0-3), `waveTimer: number`
+  - Update save version (13) with migration for new fields
+  - Update `buyExpansionTarget` → `advanceExpansionTarget` for targets with progress
+
+- [ ] 15A-3: Implement Månen & Mars Mechanics
+  - Månen: 3-stage purchase chain, each stage costs stammar + kapital + time delay
+  - Mars: terraform allocation UI — 3 sliders, meters drain at ~1%/s when unattended
+  - Both targets tick in expansion tick logic
+  - UI: progress indicators on target cards showing current stage/meters
+
+- [ ] 15A-4: Implement Dysonsfär & Parallellt Universum
+  - Dysonsfär: progress += (stammarPerSecond / targetRate) per tick. Milestone bonuses at 25/50/75%.
+  - Parallellt Universum: sacrifice slider (10-50% of production), sacrifice is permanent, completion time inversely proportional
+  - UI: construction progress bar, sacrifice confirmation dialog
+
+- [ ] 15A-5: Implement Tidslinje-korrektion
+  - 3 paradox waves, each 30-60 seconds
+  - Wave effects: reversed production sign, randomized costs, generator shuffling
+  - Player must maintain positive resources through each wave
+  - Surviving all 3 = target complete
+  - This is the game's final challenge before entropy
+
+### 15B — Entropy System Rework
+
+- [ ] 15B-1: Design New Entropy Mechanic (document in forest.md)
+  - Current: entropy drains 100→0 based on stammarPerSecond — "perverse incentive to stop upgrading"
+  - New: entropy is **driven by expansion target completion**, not raw production
+  - Each completed target reduces entropy by a fixed amount (Månen -10, Mars -15, Dysonsfär -20, Universum -25, Tidslinje -30)
+  - Total: completing all 5 = entropy drops from 100 to 0
+  - Between targets: entropy slowly creeps back up (+0.5/s) unless player has active countermeasures
+  - Countermeasures: lobby spend to temporarily halt entropy, kapital spend to reverse small amounts
+  - This makes entropy a strategic resource to manage, not a passive countdown
+
+- [ ] 15B-2: Implement New Entropy Tick
+  - Remove old drain formula (`min(0.5, totalStammarPS / 1e10)`)
+  - Entropy starts at 100 when entering phase 10
+  - Each target completion: instant entropy drop
+  - Entropy creep: +0.5/s (reduced by lobby countermeasure)
+  - New store actions: `spendLobbyOnEntropy(amount)`, `spendKapitalOnEntropy(amount)`
+  - FinalEndScreen still triggers at entropy ≤ 0
+
+- [ ] 15B-3: Entropy UI Updates
+  - Show entropy bar with clear cause/effect indicators
+  - Display: "Nästa mål minskar entropi med X%"
+  - Show creep rate and active countermeasures
+  - Warning when entropy approaches 100% (game over condition? or just stalls progress)
+
+### 15C — Late-Game Balance & Content
+
+- [ ] 15C-1: Balance New Mechanics
+  - Run autoplay with new expansion mechanics — verify 10-12 takes ~60 min
+  - Each target should take 8-15 minutes of active engagement
+  - Entropy creep should create urgency without being punishing
+  - Test: can a player complete all targets before entropy overwhelms?
+  - Adjust costs, rates, and timers based on playtesting
+
+- [ ] 15C-2: New Endgame Events & Headlines
+  - 5-8 new events specific to expansion target mechanics (terraform crises, paradox anomalies, etc.)
+  - 10+ new ticker headlines for phases 10-12 reflecting unique mechanics
+  - Events should reference the specific target being worked on
+
+### 15D — Verification
+
+- [ ] 15D-1: Update & Run Tests
+  - Add tests for new expansion target mechanics (~30 tests)
+  - Add tests for new entropy system (~15 tests)
+  - All existing 244+ tests still pass
+  - Total target: ~290 tests
+
+- [ ] 15D-2: Update Documentation
+  - Update forest.md with new expansion target mechanics
+  - Update spec.md with new state fields
+  - Update context.md with save version 13
+
+- [ ] 15D-3: Build & Deploy
+  - TypeScript clean
+  - Vite build passes
+  - Deploy to GitHub Pages
+  - Full playthrough of phases 10-12 to verify flow
+
+**Notes:** —
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

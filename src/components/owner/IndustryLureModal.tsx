@@ -126,8 +126,8 @@ export function IndustryLureModal() {
                   disabled={!canDecline}
                   className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
                   style={{
-                    background: 'rgba(45,106,79,0.08)',
-                    borderColor: 'rgba(45,106,79,0.3)',
+                    background: 'rgba(var(--color-owner-accent-rgb),0.08)',
+                    borderColor: 'rgba(var(--color-owner-accent-rgb),0.3)',
                     opacity: canDecline ? 1 : 0.5,
                   }}
                 >

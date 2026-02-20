@@ -14,9 +14,9 @@ export function GeneratorTooltip({ data, count }: GeneratorTooltipProps) {
   // Find synergies this generator participates in
   const synergies = useMemo(() => {
     return GENERATOR_SYNERGIES.filter(syn => {
-      const hasA = (generators[syn.generatorA]?.count ?? 0) > 0
-      const hasB = (generators[syn.generatorB]?.count ?? 0) > 0
-      return (syn.generatorA === data.id || syn.generatorB === data.id) && hasA && hasB
+      const hasA = (generators[syn.genA]?.count ?? 0) > 0
+      const hasB = (generators[syn.genB]?.count ?? 0) > 0
+      return (syn.genA === data.id || syn.genB === data.id) && hasA && hasB
     })
   }, [data.id, generators])
 

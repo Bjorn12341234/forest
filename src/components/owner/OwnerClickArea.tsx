@@ -1,4 +1,4 @@
-import { useRef, useCallback, useMemo, useState } from 'react'
+import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { formatNumber } from '../../engine/format'
@@ -24,9 +24,16 @@ function getFlavour(totalSV: number): string {
   return CLICK_FLAVOUR[CLICK_FLAVOUR.length - 1][1]
 }
 
+// Resolve CSS variable for canvas (which can't use var() directly)
+function getOwnerAccent(): string {
+  return getComputedStyle(document.documentElement).getPropertyValue('--color-owner-accent').trim() || '#2D6A4F'
+}
+
 export function OwnerClickArea() {
   const containerRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<ParticleCanvasHandle>(null)
+  const accentRef = useRef(getOwnerAccent())
+  useEffect(() => { accentRef.current = getOwnerAccent() }, [])
 
   const skogsvardering = useGameStore(s => s.skogsvardering)
   const svPerClick = useGameStore(s => s.skogsvarderingPerClick)
@@ -62,7 +69,7 @@ export function OwnerClickArea() {
       }))
       if (particlesRef.current && containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect()
-        particlesRef.current.emit(rect.width / 2, rect.height / 2, 24, '#2D6A4F')
+        particlesRef.current.emit(rect.width / 2, rect.height / 2, 24, accentRef.current)
       }
       if (streakTimerRef.current) clearTimeout(streakTimerRef.current)
       streakTimerRef.current = setTimeout(() => { setStreakBonus(0); setStreak(0) }, 5000)
@@ -84,7 +91,7 @@ export function OwnerClickArea() {
       const rect = containerRef.current.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-      particlesRef.current.emit(x, y, 8, '#2D6A4F')
+      particlesRef.current.emit(x, y, 8, accentRef.current)
     }
   }, [ownerClick, streak, streakBonus, svPerClick])
 
@@ -133,10 +140,10 @@ export function OwnerClickArea() {
                      hover:border-owner-accent transition-all duration-200"
           style={{
             borderColor: streakBonus > 0
-              ? `rgba(45, 106, 79, ${0.5 + streakBonus * 0.5})`
+              ? `rgba(var(--color-owner-accent-rgb), ${0.5 + streakBonus * 0.5})`
               : undefined,
             boxShadow: streakBonus > 0
-              ? `0 0 ${20 + streakBonus * 20}px rgba(45, 106, 79, ${0.2 + streakBonus * 0.3})`
+              ? `0 0 ${20 + streakBonus * 20}px rgba(var(--color-owner-accent-rgb), ${0.2 + streakBonus * 0.3})`
               : undefined,
           }}
         >

@@ -8,7 +8,7 @@ interface MilestoneToastManagerProps {
 
 export function MilestoneToastManager({ toasts, onDismiss }: MilestoneToastManagerProps) {
   return (
-    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[85] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2rem)] sm:max-w-xs w-full px-4">
+    <div role="status" aria-live="polite" className="fixed top-20 left-1/2 -translate-x-1/2 z-[85] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2rem)] sm:max-w-xs w-full px-4">
       <AnimatePresence>
         {toasts.map(toast => (
           <motion.div
@@ -24,13 +24,13 @@ export function MilestoneToastManager({ toasts, onDismiss }: MilestoneToastManag
               className="rounded-lg px-4 py-2 text-center font-bold tracking-wider text-sm cursor-pointer"
               style={{
                 background: toast.isOwner
-                  ? 'linear-gradient(135deg, rgba(45, 106, 79, 0.9), rgba(45, 106, 79, 0.7))'
+                  ? 'linear-gradient(135deg, rgba(var(--color-owner-accent-rgb), 0.9), rgba(var(--color-owner-accent-rgb), 0.7))'
                   : 'linear-gradient(135deg, rgba(212, 115, 12, 0.9), rgba(212, 115, 12, 0.7))',
                 color: '#fff',
                 boxShadow: toast.isOwner
-                  ? '0 0 20px rgba(45, 106, 79, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3)'
+                  ? '0 0 20px rgba(var(--color-owner-accent-rgb), 0.4), 0 4px 16px rgba(0, 0, 0, 0.3)'
                   : '0 0 20px rgba(212, 115, 12, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3)',
-                border: `1px solid ${toast.isOwner ? 'rgba(45, 106, 79, 0.5)' : 'rgba(212, 115, 12, 0.5)'}`,
+                border: `1px solid ${toast.isOwner ? 'rgba(var(--color-owner-accent-rgb), 0.5)' : 'rgba(212, 115, 12, 0.5)'}`,
               }}
             >
               {toast.text}

@@ -99,7 +99,8 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
             <h2 className="text-lg font-medium text-text-primary">Inställningar</h2>
             <button
               onClick={onClose}
-              className="text-text-muted hover:text-text-primary transition-colors text-lg bg-transparent border-none cursor-pointer"
+              aria-label="Stäng inställningar"
+              className="text-text-muted hover:text-text-primary transition-colors text-lg bg-transparent border-none cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               &times;
             </button>

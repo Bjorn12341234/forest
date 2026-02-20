@@ -133,10 +133,10 @@ export function GoldenOpportunity() {
           }}
           style={{
             background: isOwner
-              ? 'radial-gradient(circle, rgba(45, 106, 79, 0.9), rgba(180, 160, 60, 0.7))'
+              ? 'radial-gradient(circle, rgba(var(--color-owner-accent-rgb), 0.9), rgba(180, 160, 60, 0.7))'
               : 'radial-gradient(circle, rgba(255, 215, 0, 0.9), rgba(212, 115, 12, 0.7))',
             boxShadow: isOwner
-              ? '0 0 30px rgba(45, 106, 79, 0.6), 0 0 60px rgba(180, 160, 60, 0.3)'
+              ? '0 0 30px rgba(var(--color-owner-accent-rgb), 0.6), 0 0 60px rgba(180, 160, 60, 0.3)'
               : '0 0 30px rgba(255, 215, 0, 0.6), 0 0 60px rgba(212, 115, 12, 0.3)',
           }}
         >
@@ -147,7 +147,7 @@ export function GoldenOpportunity() {
         {/* Label below */}
         <motion.p
           className="text-[0.6rem] text-center mt-1 font-bold tracking-wider whitespace-nowrap"
-          style={{ color: isOwner ? '#2D6A4F' : '#FFD700' }}
+          style={{ color: isOwner ? 'var(--color-owner-accent)' : '#FFD700' }}
           animate={{ opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >

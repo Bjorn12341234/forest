@@ -12,13 +12,15 @@
   --color-danger: #CC2222;
   --color-success: #7DB840;
   --color-text-primary: #F0F0F0;
-  --color-text-secondary: #B0B0B0;
-  --color-text-muted: #969696;
+  --color-text-secondary: #C0C0C0;
+  --color-text-muted: #A0A0A0;
 
   /* Owner (Skogsägare) theme */
   --color-owner-bg: #F5F0E8;
   --color-owner-accent: #2D6A4F;
+  --color-owner-accent-rgb: 45, 106, 79;
   --color-owner-text: #3D2B1F;
+  --color-owner-text-rgb: 61, 43, 31;
 
   --font-ui: 'IBM Plex Mono', 'Courier New', monospace;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
@@ -189,8 +191,8 @@ body::before {
   --color-bg-secondary: #252525;
   --color-bg-tertiary: #333333;
   --color-text-primary: #D8D8D8;
-  --color-text-secondary: #A0A0A0;
-  --color-text-muted: #8E8E8E;
+  --color-text-secondary: #B0B0B0;
+  --color-text-muted: #959595;
   --color-accent: #C06A0A;
 }
 
@@ -199,8 +201,8 @@ body::before {
   --color-bg-secondary: #141414;
   --color-bg-tertiary: #1E1E1E;
   --color-text-primary: #B0B0B0;
-  --color-text-secondary: #808080;
-  --color-text-muted: #7A7A7A;
+  --color-text-secondary: #909090;
+  --color-text-muted: #858585;
   --color-accent: #8B3A0A;
   --color-accent-dark: #6B2A06;
   --color-accent-glow: rgba(139, 58, 10, 0.3);

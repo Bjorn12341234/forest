@@ -67,7 +67,8 @@ export function AchievementPanel({ onClose }: AchievementPanelProps) {
               </span>
               <button
                 onClick={onClose}
-                className="text-text-muted hover:text-text-primary transition-colors text-lg bg-transparent border-none cursor-pointer"
+                aria-label="Stäng prestationer"
+                className="text-text-muted hover:text-text-primary transition-colors text-lg bg-transparent border-none cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
               >
                 &times;
               </button>

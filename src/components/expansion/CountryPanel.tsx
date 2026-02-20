@@ -163,8 +163,8 @@ export function CountryPanel() {
                   style={{
                     left: `${country.position.x}%`,
                     top: `${country.position.y}%`,
-                    width: isControlled ? 24 : isInvading ? 20 : 16,
-                    height: isControlled ? 24 : isInvading ? 20 : 16,
+                    width: isControlled ? 28 : isInvading ? 26 : 24,
+                    height: isControlled ? 28 : isInvading ? 26 : 24,
                     x: '-50%',
                     y: '-50%',
                   }}
@@ -234,6 +234,7 @@ export function CountryPanel() {
               stammar={stammar}
               kapital={kapital}
               lobby={lobby}
+              maintenanceMult={maintenanceMult}
               onInvade={() => handleInvade(selected.id)}
               onAllocate={(vector, amount) => handleManualAllocate(selected.id, vector, amount)}
               onClose={() => setSelectedId(null)}
@@ -274,13 +275,14 @@ export function CountryPanel() {
 
 // ── Country Detail Panel ──
 
-function CountryDetailPanel({ country, countryState, affordable, stammar, kapital, lobby, onInvade, onAllocate, onClose }: {
+function CountryDetailPanel({ country, countryState, affordable, stammar, kapital, lobby, maintenanceMult, onInvade, onAllocate, onClose }: {
   country: CountryDef
   countryState: CountryState | undefined
   affordable: boolean
   stammar: number
   kapital: number
   lobby: number
+  maintenanceMult: number
   onInvade: () => void
   onAllocate: (vector: 'kapital' | 'lobby' | 'stammar', amount: number) => void
   onClose: () => void
@@ -405,7 +407,8 @@ function CountryDetailPanel({ country, countryState, affordable, stammar, kapita
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <button
             onClick={onClose}
-            className="text-xs text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+            aria-label="Stäng landdetaljer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             [X]
           </button>

@@ -38,8 +38,8 @@ export function OwnerTicker() {
     <div
       className="w-full overflow-hidden relative flex-shrink-0"
       style={{
-        background: 'linear-gradient(90deg, rgba(45,106,79,0.08) 0%, rgba(45,106,79,0.03) 50%, rgba(45,106,79,0.08) 100%)',
-        borderBottom: '1px solid rgba(45,106,79,0.15)',
+        background: 'linear-gradient(90deg, rgba(var(--color-owner-accent-rgb),0.08) 0%, rgba(var(--color-owner-accent-rgb),0.03) 50%, rgba(var(--color-owner-accent-rgb),0.08) 100%)',
+        borderBottom: '1px solid rgba(var(--color-owner-accent-rgb),0.15)',
         paddingTop: 'env(safe-area-inset-top)',
         height: 'calc(2rem + env(safe-area-inset-top))',
       }}

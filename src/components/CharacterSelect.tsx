@@ -61,7 +61,7 @@ export function CharacterSelect() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
-            whileHover={{ scale: 1.02, borderColor: '#2D6A4F' }}
+            whileHover={{ scale: 1.02, borderColor: 'var(--color-owner-accent)' }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setGameMode('owner')}
             className="flex flex-col gap-4 p-6 bg-[#1E1E1E] border-2 border-[#383838] rounded-sm cursor-pointer text-left transition-colors"

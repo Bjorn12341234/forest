@@ -38,7 +38,7 @@ interface AchievementToastManagerProps {
 
 export function AchievementToastManager({ toasts, onDismiss }: AchievementToastManagerProps) {
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[90] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2rem)] sm:max-w-sm w-full px-4">
+    <div role="status" aria-live="polite" className="fixed top-4 left-1/2 -translate-x-1/2 z-[90] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2rem)] sm:max-w-sm w-full px-4">
       <AnimatePresence>
         {toasts.map(({ achievement, id }) => (
           <motion.div
