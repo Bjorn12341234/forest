@@ -68,7 +68,7 @@ export function KnowledgePanel() {
             className="h-full rounded-sm transition-all duration-500"
             style={{
               width: `${Math.min(100, (biodivOwner / 100) * 100)}%`,
-              background: 'linear-gradient(90deg, #5B9E6F, #7BC88A)',
+              background: 'linear-gradient(90deg, #2D6A4F, #4A6741)',
             }}
           />
         </div>
@@ -98,7 +98,7 @@ export function KnowledgePanel() {
               className="h-full rounded-sm transition-all duration-500"
               style={{
                 width: `${Math.min(100, (kunskap / nextThreshold.level) * 100)}%`,
-                background: 'linear-gradient(90deg, #5B9E6F88, #5B9E6F)',
+                background: 'linear-gradient(90deg, #2D6A4F88, #2D6A4F)',
               }}
             />
           </div>
@@ -170,7 +170,7 @@ export function KnowledgePanel() {
 
         {isOnCooldown && (
           <div className="owner-card p-2 text-xs text-owner-text/75 text-center font-numbers" style={{
-            background: 'linear-gradient(145deg, rgba(91,158,111,0.12) 0%, rgba(91,158,111,0.05) 100%)',
+            background: 'linear-gradient(145deg, rgba(45,106,79,0.1) 0%, rgba(45,106,79,0.05) 100%)',
           }}>
             Kunskapsvila: {Math.ceil(cooldownRemaining / 1000)}s
           </div>
@@ -250,8 +250,8 @@ function KnowledgeNode({ upgrade, purchased, canAfford, prerequisitesMet, svMet,
           ${purchased
             ? 'bg-owner-accent/15 border border-owner-accent/30'
             : available
-              ? 'bg-owner-accent/10 border border-owner-accent/35 cursor-pointer hover:border-owner-accent hover:shadow-sm'
-              : 'bg-owner-text/5 border border-owner-text/8 opacity-55'
+              ? 'bg-white/60 border border-owner-accent/40 cursor-pointer hover:border-owner-accent hover:shadow-sm'
+              : 'bg-white/30 border border-owner-text/12 opacity-55'
           }`}
         onClick={() => {
           if (available) onPurchase()
@@ -303,7 +303,7 @@ function KnowledgeModifiersSummary({ upgrades }: { upgrades: Record<string, bool
 
   return (
     <div className="owner-card p-3" style={{
-      background: 'linear-gradient(145deg, rgba(91,158,111,0.12) 0%, rgba(91,158,111,0.04) 100%)',
+      background: 'linear-gradient(145deg, rgba(45,106,79,0.1) 0%, rgba(45,106,79,0.04) 100%)',
     }}>
       <span className="text-owner-text/80 text-xs uppercase tracking-wider">Aktiva modifierare</span>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-1 mt-2">

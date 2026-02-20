@@ -85,8 +85,8 @@ export function IndustryAttackModal() {
                   disabled={!canResist}
                   className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
                   style={{
-                    background: canResist ? 'rgba(var(--color-owner-accent-rgb),0.1)' : 'rgba(var(--color-owner-text-rgb),0.05)',
-                    borderColor: canResist ? 'rgba(var(--color-owner-accent-rgb),0.4)' : 'rgba(var(--color-owner-text-rgb),0.1)',
+                    background: canResist ? 'rgba(var(--color-owner-accent-rgb),0.1)' : 'rgba(0,0,0,0.05)',
+                    borderColor: canResist ? 'rgba(var(--color-owner-accent-rgb),0.4)' : 'rgba(0,0,0,0.1)',
                     opacity: canResist ? 1 : 0.5,
                   }}
                 >
