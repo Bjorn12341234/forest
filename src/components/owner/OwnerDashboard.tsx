@@ -38,7 +38,7 @@ export function OwnerDashboard() {
             className="h-full rounded-sm transition-all duration-700"
             style={{
               width: `${phaseProgress.progress * 100}%`,
-              background: 'linear-gradient(90deg, #2D6A4F, #4A6741)',
+              background: 'linear-gradient(90deg, #5B9E6F, #7BC88A)',
             }}
           />
         </div>

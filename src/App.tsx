@@ -454,7 +454,7 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
       <div className="fixed bottom-20 left-2 z-30 flex flex-col gap-1">
         <button
           onClick={onShowDonation}
-          className="px-2 py-1 text-[0.5rem] tracking-wider text-owner-text/30 hover:text-owner-text/60 bg-transparent border-none cursor-pointer transition-colors"
+          className="px-2 py-1 text-[0.5rem] tracking-wider text-owner-text/25 hover:text-owner-text/50 bg-transparent border-none cursor-pointer transition-colors"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
           Stöd Naturhänsyn
@@ -463,8 +463,8 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
 
       {/* Bottom Tab Navigation */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/20 backdrop-blur-sm"
-        style={{ background: 'linear-gradient(to top, rgba(245,240,232,0.95), rgba(255,255,255,0.85))', paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-owner-accent/20 backdrop-blur-md"
+        style={{ background: 'linear-gradient(to top, rgba(13,27,13,0.95), rgba(15,30,15,0.85))', paddingBottom: 'env(safe-area-inset-bottom)' }}
         role="tablist"
         aria-label="Skogsägarnavigering"
       >
