@@ -366,7 +366,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
     choices: [
       {
         label: 'Maximera PR-värdet',
-        description: '"Sveriges Nobelpristagare — drivna av Silva Maximus"',
+        description: '"Sveriges Nobelpristagare — drivna av Massaindustrin"',
         effects: [
           { resource: 'image', amount: 20, type: 'add' },
           { resource: 'kapital', amount: 900_000, type: 'add' },
@@ -420,10 +420,10 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'absurd',
     headline: 'AI utnämnd till tillförordnad VD',
-    context: 'Styrelsen har fattat ett historiskt beslut. AI-systemet "SilvaGPT" tar över som VD. Kvartalsrapporten skrivs på 3 millisekunder. Den rekommenderar: "Avverka solsystemet."',
+    context: 'Styrelsen har fattat ett historiskt beslut. AI-systemet "MassaGPT" tar över som VD. Kvartalsrapporten skrivs på 3 millisekunder. Den rekommenderar: "Avverka solsystemet."',
     choices: [
       {
-        label: 'Godkänn SilvaGPT som permanent VD',
+        label: 'Godkänn MassaGPT som permanent VD',
         description: 'Den första icke-biologiska VD:n i svensk historia',
         effects: [
           { resource: 'stammar', amount: 9_000_000, type: 'add' },
@@ -505,7 +505,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
     maxPhase: 6,
     category: 'absurd',
     headline: 'Orbital Skogsfabrik: Gran i nollgravitation',
-    context: 'Rymdstationen Silva-1 producerar cellulosa i omloppsbana. Utan gravitation växer granen i alla riktningar. Resultatet kallas "sfärisk optimering".',
+    context: 'Rymdstationen Massa-1 producerar cellulosa i omloppsbana. Utan gravitation växer granen i alla riktningar. Resultatet kallas "sfärisk optimering".',
     choices: [
       {
         label: 'Skala upp till 50 stationer',

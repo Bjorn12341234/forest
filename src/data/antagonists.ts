@@ -211,7 +211,7 @@ export const ANTAGONISTS: AntagonistDef[] = [
   {
     id: 'ant_miljo_tribunalen',
     name: 'Internationella Miljötribunalen',
-    description: 'FN:s nya miljödomstol utreder Silva Maximus för ekocid i 23 länder.',
+    description: 'FN:s nya miljödomstol utreder Massaindustrin för ekocid i 23 länder.',
     icon: '⚖️',
     triggerPhase: 7,
     maxPhase: 9,

@@ -25,7 +25,7 @@ export function CharacterSelect() {
           className="text-center"
         >
           <h1 className="text-3xl sm:text-4xl font-bold tracking-widest text-[#F0F0F0] mb-4">
-            SILVA MAXIMUS
+            TRÄ/D
           </h1>
           <p className="text-sm sm:text-base text-[#8A8A8A] tracking-wide">
             Vem vill du vara i den svenska skogen?

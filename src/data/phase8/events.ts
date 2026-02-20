@@ -54,7 +54,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
       },
       {
         label: 'Ge dem "Mars-bonusar"',
-        description: 'Betalning i Silva-Credits. Ej giltiga på Jorden.',
+        description: 'Betalning i Massaindustrin-Credits. Ej giltiga på Jorden.',
         effects: [
           { resource: 'kapital', amount: -25_000_000, type: 'add' },
           { resource: 'stammar', amount: 150_000_000, type: 'add' },
@@ -160,11 +160,11 @@ export const PHASE8_EVENTS: GameEvent[] = [
     id: 'p9_generation_ship',
     phase: 10,
     category: 'absurd',
-    headline: 'Generationsskepp: "Silva Ark"',
+    headline: 'Generationsskepp: "Massaindustrin Ark"',
     context: 'Styrelsen beslutar att bygga ett generationsskepp till Alpha Centauri. Resan tar 400 år. Passagerarna? Gran. Enbart gran. Och en AI som sköter dem.',
     choices: [
       {
-        label: 'Bygg Silva Ark',
+        label: 'Bygg Massaindustrin Ark',
         description: '400 år av cellulosaproduktion i tomma rymden',
         effects: [
           { resource: 'stammar', amount: 2_500_000_000, type: 'add' },
@@ -342,7 +342,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
     phase: 10,
     category: 'opportunity',
     headline: 'Andromeda-galaxen: Fusionsförhandlingar',
-    context: 'Andromeda-galaxens skogsbolag (en 4 miljarder år gammal civilisation) föreslår en fusion. "Silva Maximus Intergalactic AB". Aktiekursen: oändlig.',
+    context: 'Andromeda-galaxens skogsbolag (en 4 miljarder år gammal civilisation) föreslår en fusion. "Massaindustrin Intergalactic AB". Aktiekursen: oändlig.',
     choices: [
       {
         label: 'Godkänn fusionen',
@@ -454,14 +454,14 @@ export const PHASE8_EVENTS: GameEvent[] = [
     context: 'Kvantfysiker öppnar en portal till ett parallellt universum. Det är identiskt med vårt — förutom att allt redan är gran. Styrelsen kallar det "redundans".',
     choices: [
       {
-        label: 'Fusionera med parallell-Silva',
+        label: 'Fusionera med parallell-Massaindustrin',
         description: 'Två identiska bolag. Dubbla stammar.',
         effects: [
           { resource: 'stammar', amount: 500_000_000_000, type: 'add' },
         ],
       },
       {
-        label: 'Konkurrensanmäl parallell-Silva',
+        label: 'Konkurrensanmäl parallell-Massaindustrin',
         description: 'De kopierade vår affärsmodell. I ett annat universum.',
         effects: [
           { resource: 'lobby', amount: 500, type: 'add' },
@@ -668,7 +668,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
       },
       {
         label: 'Tänd en ny stjärna',
-        description: 'Marknadsföringskostnad. "Silva Maximus — Vi tänder framtiden."',
+        description: 'Marknadsföringskostnad. "Massaindustrin — Vi tänder framtiden."',
         effects: [
           { resource: 'kapital', amount: -1_000_000_000_000, type: 'add' },
           { resource: 'image', amount: 20, type: 'add' },
@@ -849,7 +849,7 @@ export const PHASE8_EVENTS: GameEvent[] = [
     id: 'p10_universums_styrelse',
     phase: 10,
     category: 'opportunity',
-    headline: 'Universums Styrelse bildad: Silva Maximus har ordförandeposten',
+    headline: 'Universums Styrelse bildad: Massaindustrin har ordförandeposten',
     context: 'Alla kvarvarande civilisationer i universum har bildat ett styrande organ. Er VD (AI-version 47.3) är ordförande. Dagordning: "Maximal cellulosaproduktion."',
     choices: [
       {

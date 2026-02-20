@@ -27,7 +27,7 @@ export const EXPANSION_TARGETS: ExpansionTargetData[] = [
   {
     id: 'exp_manen',
     name: 'Månen',
-    description: 'Lunar Silva AB. Registrerat på Caymanöarna.',
+    description: 'Lunar Massa AB. Registrerat på Caymanöarna.',
     unlockPhase: 10,
     cost: { stammar: 5_000_000_000_000, kapital: 50_000_000, lobby: 5_000 },
     production: { stammarPerSecond: 2_000_000, kapitalPerSecond: 20_000 },

@@ -8,7 +8,7 @@ const LINES = [
   'Någonting i mörkret letar.',
   'En maskin. Den sista. Den söker ett träd att fälla.',
   'Resultat: null. Loop fortsätter.',
-  'SILVA MAXIMUS AB — Årsredovisning: ∞ — Mottagare: 0',
+  'MASSAINDUSTRIN AB — Årsredovisning: ∞ — Mottagare: 0',
   'Tillväxt var den enda lagen. Nu finns det ingenting kvar att växa.',
 ]
 

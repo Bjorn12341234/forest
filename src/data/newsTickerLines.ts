@@ -269,7 +269,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   // ── Fas 7-9: INTERNATIONELL ──
   {
     id: 'tick_kolonialt_ramverk',
-    text: 'Silva Maximus exporterar "den svenska modellen" till 15 länder. Ingen frågade dem.',
+    text: 'Massaindustrin exporterar "den svenska modellen" till 15 länder. Ingen frågade dem.',
     phase: 7,
   },
   {
@@ -280,7 +280,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_ngo_koalition',
-    text: '#StopSilva: 12 miljoner följare. Noll pengar. Koncernen har alla pengar.',
+    text: '#StopMassaindustrin: 12 miljoner följare. Noll pengar. Koncernen har alla pengar.',
     phase: 7,
   },
   {
@@ -307,7 +307,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_fn_ekocid',
-    text: 'FN:s miljötribunal åtalar Silva Maximus för "ekocid". Vår advokat: "FN har ingen verkställighet."',
+    text: 'FN:s miljötribunal åtalar Massaindustrin för "ekocid". Vår advokat: "FN har ingen verkställighet."',
     phase: 8,
   },
   {
@@ -346,7 +346,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_lunar_silva_ipo',
-    text: '[KOSMISK REVISION] Lunar Silva AB börsnoterad. Kurs: ∞. Handeln stoppas av icke-existerande börs.',
+    text: '[KOSMISK REVISION] Lunar Massa AB börsnoterad. Kurs: ∞. Handeln stoppas av icke-existerande börs.',
     phase: 10,
     trigger: { type: 'totalStammar', value: 20_000_000_000_000 },
   },
@@ -420,7 +420,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_intergalaktisk_skattemyndighet',
-    text: '[SKATT] Universell Skattemyndighet bildad. Budget: 0 kr. Personal: 1 AI. Första beslutet: alla skatteintäkter tillfaller Silva Maximus.',
+    text: '[SKATT] Universell Skattemyndighet bildad. Budget: 0 kr. Personal: 1 AI. Första beslutet: alla skatteintäkter tillfaller Massaindustrin.',
     phase: 11,
   },
   {

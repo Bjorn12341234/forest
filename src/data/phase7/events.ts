@@ -7,7 +7,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
     phase: 7,
     category: 'crisis',
     headline: 'Finlandia vägrar avverkningslicens',
-    context: 'Finland — er närmaste allierade — vägrar ge Silva Maximus avverkningslicens för karelska skogarna. "Vi har vart eget skogsbruk, tack." Nordiska rådet är splittrat.',
+    context: 'Finland — er närmaste allierade — vägrar ge Massaindustrin avverkningslicens för karelska skogarna. "Vi har vart eget skogsbruk, tack." Nordiska rådet är splittrat.',
     choices: [
       {
         label: 'Ekonomiskt tryck',
@@ -72,7 +72,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
     phase: 7,
     category: 'crisis',
     headline: 'Internationell NGO-koalition',
-    context: '500 miljöorganisationer från 80 länder har bildat "Stop Silva Maximus Coalition". De har en hemsida, en hashtag (#StopSilva) och 12 miljoner följare. De har inga pengar. Ni har alla pengar.',
+    context: '500 miljöorganisationer från 80 länder har bildat "Stop Massaindustrin Coalition". De har en hemsida, en hashtag (#StopMassaindustrin) och 12 miljoner följare. De har inga pengar. Ni har alla pengar.',
     choices: [
       {
         label: 'Infiltrera koalitionen',
@@ -177,7 +177,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
     phase: 7,
     category: 'absurd',
     headline: 'Danmarks julgranskris',
-    context: 'Danska medier avslöjar att Silva Maximus köpt 80% av Danmarks julgranar och höjt priset 400%. "RØDGRANSEN ER GÅET FOR VIDT!" skanderar köpenhamnarna. Drottning Mary ringer personligen.',
+    context: 'Danska medier avslöjar att Massaindustrin köpt 80% av Danmarks julgranar och höjt priset 400%. "RØDGRANSEN ER GÅET FOR VIDT!" skanderar köpenhamnarna. Drottning Mary ringer personligen.',
     choices: [
       {
         label: '"Jul utan gran är inte jul"',
@@ -214,7 +214,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
     phase: 7,
     category: 'contradiction',
     headline: 'Kolonialt certifikat',
-    context: 'Ni har skapat ert eget internationella certifieringssystem: "Silva Standard International™". Det certifierar att skogsbruk bedrivs enligt "svensk modell". Certifieraren: ni själva. Resultatet: 100% godkänt.',
+    context: 'Ni har skapat ert eget internationella certifieringssystem: "Massaindustrin Standard International™". Det certifierar att skogsbruk bedrivs enligt "svensk modell". Certifieraren: ni själva. Resultatet: 100% godkänt.',
     choices: [
       {
         label: 'Marknadsför aggressivt',
@@ -311,7 +311,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
     phase: 8,
     category: 'crisis',
     headline: 'Global konsumentbojkott',
-    context: '40 länders konsumenter bojkottar alla Silva Maximus-produkter. Hashtag: #BoycottSilva. Problem: ni äger så många varumärken att konsumenterna inte vet vad de ska bojkotta.',
+    context: '40 länders konsumenter bojkottar alla Massaindustrins produkter. Hashtag: #BoycottMassaindustrin. Problem: ni äger så många varumärken att konsumenterna inte vet vad de ska bojkotta.',
     choices: [
       {
         label: 'Starta fler undervarumärken',
@@ -406,7 +406,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
     phase: 8,
     category: 'scandal',
     headline: 'FN:s miljötribunal',
-    context: 'FN:s nya miljötribunal åtalar Silva Maximus för "ekocid" — systematisk förstörelse av ekosystem i 23 länder. Straff: upp till 50 miljarder kr. Er advokat: "FN har ingen verkställighet."',
+    context: 'FN:s nya miljötribunal åtalar Massaindustrin för "ekocid" — systematisk förstörelse av ekosystem i 23 länder. Straff: upp till 50 miljarder kr. Er advokat: "FN har ingen verkställighet."',
     choices: [
       {
         label: 'Ignorera tribunalen',
@@ -506,7 +506,7 @@ export const PHASE7_EVENTS: GameEvent[] = [
       },
       {
         label: 'Köp den och lås in den',
-        description: '"Silva Maximus Natural Reserve." Öppet aldrig.',
+        description: '"Massaindustrin Natural Reserve." Öppet aldrig.',
         effects: [
           { resource: 'kapital', amount: -600_000_000, type: 'add' },
           { resource: 'image', amount: 20, type: 'add' },

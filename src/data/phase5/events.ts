@@ -242,7 +242,7 @@ export const PHASE5_EVENTS: GameEvent[] = [
     phase: 7,
     maxPhase: 6,
     category: 'absurd',
-    headline: 'Projekt Lunar Silva godkänt',
+    headline: 'Projekt Lunar Massa godkänt',
     context: 'Styrelsen har beslutat: Månen ska terraformas för skogsbruk. CO2 som atmosfär-investering. Genetiskt modifierade träd i 0.6% atmosfärstryck.',
     choices: [
       {

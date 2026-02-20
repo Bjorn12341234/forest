@@ -184,7 +184,7 @@ export function EndScreen({ onReset, onContinue }: EndScreenProps) {
           transition={{ delay: 0.5, duration: 1 }}
           className="text-center mb-10"
         >
-          <p className="text-[0.6rem] tracking-[0.3em] text-gray-400 mb-2">SILVA MAXIMUS AB</p>
+          <p className="text-[0.6rem] tracking-[0.3em] text-gray-400 mb-2">MASSAINDUSTRIN AB</p>
           <h1
             className="text-2xl font-bold tracking-wider text-black"
             style={{ fontFamily: 'IBM Plex Mono, monospace' }}

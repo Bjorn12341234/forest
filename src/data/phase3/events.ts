@@ -381,7 +381,7 @@ export const PHASE3_EVENTS: GameEvent[] = [
       },
       {
         label: 'Finansiera ny professur',
-        description: '"Silva Maximus-professuren i Hållbart Skogsbruk"',
+        description: '"Massaindustrin-professuren i Hållbart Skogsbruk"',
         effects: [
           { resource: 'kapital', amount: -25_000, type: 'add' },
           { resource: 'image', amount: 10, type: 'add' },

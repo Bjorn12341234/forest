@@ -83,7 +83,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     id: 'p10_kosmisk_fsc',
     phase: 10,
     category: 'scandal',
-    headline: 'Kosmisk FSC: Silva Standard Intergalactic™',
+    headline: 'Kosmisk FSC: Massaindustrin Standard Intergalactic™',
     context:
       'Ni certifierar nu skogsbruk på 4 planeter. Certifieraren: er AI. Granskaren: samma AI. Resultatet: 100% godkänt. Precis som på Jorden — fast med fler decimaler.',
     choices: [
@@ -97,7 +97,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
       },
       {
         label: 'Bjud in "oberoende" granskare',
-        description: 'Er dotterbolag Silva Audit AB™. Oberoende per definition.',
+        description: 'Er dotterbolag Massaindustrin Audit AB™. Oberoende per definition.',
         effects: [
           { resource: 'image', amount: 10, type: 'add' },
           { resource: 'kapital', amount: -500_000_000, type: 'add' },
@@ -413,7 +413,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     category: 'contradiction',
     headline: 'Entropins Utredning: Beräknad handläggningstid 15 miljarder år',
     context:
-      'Riksrevisionen utreder Silva Maximus miljöpåverkan. Handläggningstiden: 15 miljarder år. Exakt lika lång som universums återstående livstid. En slump, säger de. Utredaren har semester vecka 30.',
+      'Riksrevisionen utreder Massaindustrins miljöpåverkan. Handläggningstiden: 15 miljarder år. Exakt lika lång som universums återstående livstid. En slump, säger de. Utredaren har semester vecka 30.',
     choices: [
       {
         label: 'Invänta resultatet',
@@ -647,7 +647,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
       },
       {
         label: 'Starta egen forskningsinstitution',
-        description: 'Silva Akademien™. Oberoende. Av alla utom oss.',
+        description: 'Massaindustrin Akademien™. Oberoende. Av alla utom oss.',
         effects: [
           { resource: 'kapital', amount: -5_000_000_000, type: 'add' },
           { resource: 'lobby', amount: 600, type: 'add' },
@@ -695,7 +695,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     id: 'p11_galaktisk_kvallstidning',
     phase: 11,
     category: 'scandal',
-    headline: 'Galaktisk Kvällstidning: "AVSLÖJAR: Silva äger 73% av Vintergatan"',
+    headline: 'Galaktisk Kvällstidning: "AVSLÖJAR: Massaindustrin äger 73% av Vintergatan"',
     context:
       'Aftonrymden publicerar granskning. Rubrik: "DE ÄGER ALLT". Artikeln: 3 sidor. Bildspel: 47 bilder. Kommentarsfältet: 12 000 inlägg. Er kommunikationsavdelning: "Inga kommentarer." (Kommentaren kostar 0 kr och ger maximal effekt.)',
     choices: [
@@ -718,7 +718,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
       },
       {
         label: 'Ignorera — köp annonsplats',
-        description: 'Helsida: "SILVA — VI ÄGER BARA 72,8%". Faktakoll: tekniskt korrekt.',
+        description: 'Helsida: "MASSAINDUSTRIN — VI ÄGER BARA 72,8%". Faktakoll: tekniskt korrekt.',
         effects: [
           { resource: 'kapital', amount: -1_000_000_000, type: 'add' },
           { resource: 'image', amount: 5, type: 'add' },
@@ -947,7 +947,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     choices: [
       {
         label: 'Erbjud hedersprofessur',
-        description: 'Silva-professuren i Postnormal Skogsforskning™.',
+        description: 'Massaindustrin-professuren i Postnormal Skogsforskning™.',
         effects: [
           { resource: 'image', amount: 10, type: 'add' },
           { resource: 'kapital', amount: -2_500_000_000, type: 'add' },
@@ -981,7 +981,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
     category: 'absurd',
     headline: 'Universums Budgetproposition: Anslagspost "Existens"',
     context:
-      'Finansdepartementet (kosmiskt) presenterar budget. Anslagspost 47: "Existens — 0 kr." Anslagspost 48: "Silva Maximus produktionssubvention — ∞ kr." Budgetdebatt: 0,001 sekunder. Oppositionspartierna: upplösta. Bokstavligen.',
+      'Finansdepartementet (kosmiskt) presenterar budget. Anslagspost 47: "Existens — 0 kr." Anslagspost 48: "Massaindustrin produktionssubvention — ∞ kr." Budgetdebatt: 0,001 sekunder. Oppositionspartierna: upplösta. Bokstavligen.',
     choices: [
       {
         label: 'Godkänn budgeten',
@@ -1030,7 +1030,7 @@ export const PHASE10_NEW_EVENTS: GameEvent[] = [
       },
       {
         label: 'Patent på tid',
-        description: 'Tid™ — en Silva Maximus-produkt.',
+        description: 'Tid™ — en Massaindustrin-produkt.',
         effects: [
           { resource: 'lobby', amount: 500, type: 'add' },
           { resource: 'kapital', amount: 40_000_000_000, type: 'add' },
