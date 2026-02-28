@@ -10,13 +10,22 @@ export function OwnerGenerators() {
   const ownerGenerators = useGameStore(s => s.ownerGenerators)
   const buyOwnerGenerator = useGameStore(s => s.buyOwnerGenerator)
 
+  // Progressive reveal: show generator if owned or within 30% of cost
+  const visibleGenerators = OWNER_GENERATORS.filter(gen => {
+    const count = ownerGenerators[gen.id]?.count ?? 0
+    if (count > 0) return true
+    return skogsvardering >= gen.baseCost * 0.3
+  })
+
+  if (visibleGenerators.length === 0) return null
+
   return (
     <div className="flex flex-col gap-2">
       <h2 className="text-base font-medium text-owner-text mb-1">Ekologiska processer</h2>
 
       <div className="flex flex-col gap-2">
         <AnimatePresence initial={false}>
-          {OWNER_GENERATORS.map((gen, i) => (
+          {visibleGenerators.map((gen, i) => (
             <motion.div
               key={gen.id}
               initial={{ opacity: 0, y: 16 }}
