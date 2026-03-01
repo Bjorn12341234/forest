@@ -1,3 +1,4 @@
+import React from 'react'
 import { useGameStore } from '../../store/gameStore'
 import { formatNumber } from '../../engine/format'
 import { getOwnerPhase, getOwnerPhaseProgress } from '../../engine/phases'
@@ -27,7 +28,7 @@ export function OwnerDashboard() {
   const phaseProgress = getOwnerPhaseProgress(totalSV)
 
   // Primary resource cards — only show when relevant
-  const primaryCards: JSX.Element[] = [
+  const primaryCards: React.ReactElement[] = [
     <OwnerResourceCard key="sv" label="Skogsvärde" value={skogsvardering} icon="🌲" />,
   ]
   if (inkomst > 0)
@@ -46,7 +47,7 @@ export function OwnerDashboard() {
     )
 
   // Secondary meters — only show row when at least one > 0
-  const secondaryCards: JSX.Element[] = []
+  const secondaryCards: React.ReactElement[] = []
   if (biodivOwner > 0)
     secondaryCards.push(<OwnerMeterCard key="bio" label="Biologisk mångfald" value={biodivOwner} unit="arter" icon="🦌" />)
   if (realCarbonPos > 0)
