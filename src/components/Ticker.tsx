@@ -34,10 +34,10 @@ export function Ticker() {
       <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pl-3 pr-2"
         style={{ background: 'linear-gradient(90deg, rgba(30,30,30,0.95) 70%, transparent)' }}
       >
-        <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-60" style={{ color: '#D4730C' }}>
+        <span className="text-sm font-bold uppercase tracking-[0.2em]" style={{ color: '#D4730C' }}>
           TRÄD
         </span>
-        <span className="ml-2.5 opacity-30 text-xs" style={{ color: '#D4730C' }}>│</span>
+        <span className="ml-2.5 opacity-40 text-sm" style={{ color: '#D4730C' }}>│</span>
       </div>
       <div
         className="absolute inset-0 flex items-center whitespace-nowrap"
