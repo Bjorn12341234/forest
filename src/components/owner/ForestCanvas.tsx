@@ -174,14 +174,14 @@ export default function ForestCanvas({ totalSV, biodiv, isAttacked, lowPower }: 
 
       ctx.clearRect(0, 0, w, h)
 
-      // ── Light rays ──
-      const rayOpacity = 0.025 + Math.sin(t * 0.1) * 0.01
+      // ── Light rays (upper half only to avoid bleeding through UI) ──
+      const rayOpacity = 0.015 + Math.sin(t * 0.1) * 0.008
       ctx.save()
       ctx.fillStyle = `rgba(196,164,78,${rayOpacity})`
       for (let i = 0; i < 4; i++) {
         const rx = w * (0.15 + i * 0.22) + Math.sin(t * 0.05 + i * 1.3) * 20
-        const rw = 8 + Math.sin(t * 0.08 + i * 0.9) * 3
-        ctx.fillRect(rx, 0, rw, h)
+        const rw = 6 + Math.sin(t * 0.08 + i * 0.9) * 2
+        ctx.fillRect(rx, 0, rw, h * 0.45)
       }
       ctx.restore()
 
