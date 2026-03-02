@@ -223,6 +223,17 @@ body::before {
   animation: warning-blink 1s ease-in-out infinite;
 }
 
+/* ── Click Button Pulse Glow ── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(212, 115, 12, 0.25); }
+  50% { box-shadow: 0 0 30px rgba(212, 115, 12, 0.5); }
+}
+
+@keyframes pulse-glow-green {
+  0%, 100% { box-shadow: 0 0 15px rgba(94, 158, 110, 0.25), inset 0 0 20px rgba(0,0,0,0.3); }
+  50% { box-shadow: 0 0 30px rgba(94, 158, 110, 0.5), inset 0 0 20px rgba(0,0,0,0.3); }
+}
+
 /* ── Ticker Animation ── */
 @keyframes ticker-scroll {
   0% { transform: translateX(0); }

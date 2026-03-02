@@ -61,26 +61,39 @@ export function OwnerDashboard() {
     <div className="flex flex-col gap-4 max-w-5xl mx-auto">
       {/* Owner Phase Indicator — hidden until 1000 SV */}
       {totalSV >= 1000 && (
-        <div className="owner-card p-2.5">
+        <div
+          className="owner-card p-2.5"
+          style={phaseProgress.progress > 0.85 && phaseProgress.next !== null ? {
+            boxShadow: '0 0 12px rgba(94, 158, 110, 0.3)',
+            borderColor: 'rgba(94, 158, 110, 0.4)',
+          } : undefined}
+        >
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-owner-accent tracking-wide">
+            <span className="text-sm font-bold text-owner-accent tracking-wide">
               🌿 Fas {phaseInfo.phase}: {phaseInfo.name}
             </span>
             {phaseProgress.next !== null && (
-              <span className="text-[0.65rem] text-owner-text/70 font-numbers">
+              <span className="text-xs text-owner-text/70 font-numbers">
                 {formatNumber(totalSV)} / {formatNumber(phaseProgress.next)}
               </span>
             )}
           </div>
-          <div className="w-full h-2 bg-owner-text/8 rounded-sm overflow-hidden">
-            <div
-              className="h-full rounded-sm transition-all duration-700"
-              style={{
-                width: `${phaseProgress.progress * 100}%`,
-                background: 'linear-gradient(90deg, #5E9E6E, #6BAF7B)',
-              }}
-            />
-          </div>
+          {phaseProgress.next !== null && (
+            <div className="w-full h-2.5 bg-owner-text/8 rounded-sm overflow-hidden">
+              <div
+                className="h-full rounded-sm transition-all duration-700"
+                style={{
+                  width: `${phaseProgress.progress * 100}%`,
+                  background: phaseProgress.progress > 0.85
+                    ? 'linear-gradient(90deg, #5E9E6E, #C4A44E)'
+                    : 'linear-gradient(90deg, #5E9E6E, #6BAF7B)',
+                }}
+              />
+            </div>
+          )}
+          {phaseProgress.next === null && (
+            <span className="text-xs text-owner-accent/70 italic">Maxfas uppnådd</span>
+          )}
         </div>
       )}
 

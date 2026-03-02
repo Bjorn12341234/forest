@@ -1912,7 +1912,7 @@ Bakgrund: "Skogskunskapen man kan köpa är dyrast längst ner och billigast fö
 
 Bakgrund: Ägarvägen har 3 faser (Rötterna, Nätverket, Arvet) men ingen synlig övergång — bara ett tyst tröskelvärde. Spelare märker inte att de "levlar upp". Industri-vägen har svarta cinematiska PhaseTransition-skärmar.
 
-- [ ] 20D-1: Ägarfas-övergångsskärm
+- [x] 20D-1: Ägarfas-övergångsskärm
   - Skapa `OwnerPhaseTransition.tsx` — liknande PhaseTransition men med skogsägartema
   - Bakgrund: mörkt skogsgrön (#0D1A0D) istället för svart
   - Textsekvenser per övergång (definieras i `phases.ts`):
@@ -1922,13 +1922,13 @@ Bakgrund: Ägarvägen har 3 faser (Rötterna, Nätverket, Arvet) men ingen synli
   - Ljud: `playOwnerPhaseUp()` (redan finns i audio.ts)
   - Duration: 4s (kortare än industri som har 4.5-5.5s)
 
-- [ ] 20D-2: Trigger-logik för ägarfasövergångar
+- [x] 20D-2: Trigger-logik för ägarfasövergångar
   - I gameStore tick: Jämför `getOwnerPhase(totalSV)` med föregående — om ny fas → sätt `pendingOwnerTransition`
   - Nytt state: `pendingOwnerTransition: { from: number, to: number } | null`
   - Actions: `completeOwnerPhaseTransition()`
   - I App.tsx owner render: Rendera `OwnerPhaseTransition` vid `pendingOwnerTransition`
 
-- [ ] 20D-3: Fasindikator i ägar-dashboard
+- [x] 20D-3: Fasindikator i ägar-dashboard
   - Gör fas-texten ("Fas 1: Rötterna") tydligare i OwnerDashboard
   - Lägg till en progressbar (sv mot nästa faströskel) — liknande industri-dashboard
   - Kort flash/glow-animation vid nära fasövergång (>85% progress)
@@ -1937,12 +1937,12 @@ Bakgrund: Ägarvägen har 3 faser (Rötterna, Nätverket, Arvet) men ingen synli
 
 Bakgrund: "Det tog cirka en minut innan något hände på skärmen. Användaren trodde inte att något mer skulle komma." Första minuten av spelet måste ge omedelbar feedback. Spelet börjar med att man klickar och väntar — om inget händer tappar spelaren intresset.
 
-- [ ] 20E-1: Snabbare första event
+- [x] 20E-1: Snabbare första event
   - I gameStore: Sänk `nextEventAt` vid spelstart från `now + 120_000` (2 min) till `now + 20_000` (20s)
   - Endast vid nystart (inte vid load)
   - Gäller BÅDA vägarna (industri + ägare)
 
-- [ ] 20E-2: Välkomstmeddelande / tutorial-hint
+- [x] 20E-2: Välkomstmeddelande / tutorial-hint
   - Visa ett kort intro-meddelande de första 5 sekunderna av spelet
   - Industri: "Klicka på knappen för att skriva skogsbruksplaner. Ju fler planer, desto fler stammar."
   - Ägare: "Klicka på skogen för att vårda den. Skogsvärderingen stiger med tiden."
@@ -1950,7 +1950,7 @@ Bakgrund: "Det tog cirka en minut innan något hände på skärmen. Användaren 
   - Visa bara vid `totalStammar === 0` / `totalSkogsvardering === 0` (helt nytt spel)
   - Spara i `achievements['tutorial_seen']` så det inte visas igen
 
-- [ ] 20E-3: Förstärkt initial klick-feedback
+- [x] 20E-3: Förstärkt initial klick-feedback
   - Första klicket: Ge en extra stor partikelburst + tydligare siffra
   - Pulsande glow runt klickknappen vid spelstart tills spelaren klickat 5 gånger
   - Gäller båda vägarna
@@ -2039,21 +2039,43 @@ Två problem:
 1. **Scroll-hastighet för låg** — texten hänger kvar för länge (alla plattformar)
 2. **För lite textvariation** — samma headlines syns om och om igen, speciellt tidigt i spelet
 
-- [ ] 20K-1: Öka scroll-hastighet
+- [x] 20K-1: Öka scroll-hastighet
   - I `OwnerTicker.tsx`: Höj `SCROLL_SPEED` (nu 50 px/s) — prova 80-100 px/s
   - Gäller alla plattformar, inte bara mobil
   - Kontrollera även industri-`Ticker.tsx` — den har fast `8s` animation, kan behöva justeras
 
-- [ ] 20K-2: Mer och bättre headline-variation
+- [x] 20K-2: Mer och bättre headline-variation
   - I `ownerNewsLines.ts`: Lägg till fler headlines för tidiga faser (fas 1, låg SV)
   - Se till att headline-poolen har minst 10-15 stycken tillgängliga redan vid spelstart
   - Blanda in fler dynamiska headlines som reflekterar spelarens nuvarande resurser/status
   - Rotera headlines oftare — visa inte samma 6 hela tiden, randomisera urvalet
   - Möjliga nya headlines: vädret, årstider, grannars aktiviteter, lokalnyheter, naturbetraktelser
 
-- [ ] 20K-3: Kontrollera industri-tickern också
+- [x] 20K-3: Kontrollera industri-tickern också
   - Samma problem kan finnas i `Ticker.tsx` + `newsTickerLines.ts`
   - Verifiera att tidiga faser har tillräckligt med headlines
+
+### 20L — Image studsar tillbaka till 100 utan orsak (industri, balans)
+
+Bakgrund: Spelarfeedback — "Helt plötsligt är hans gröna image på 100 igen, utan att han gjort nåt speciellt. Om det inte var för att han köpte Operation Omnibus?"
+
+**Analys:** Problemet beror troligen på `gen_certifierare` (Certifierare-generatorn) som ger **+0,05 Image/s per enhet** via `sideEffects`. Med t.ex. 20 certifierare = +1,0 Image/s — från 0 till 100 på under 2 minuter. Denna positiva image-regeneration appliceras **utan imageProtection-filter** och har inget tak, så den kan övervinna all drain och driva image rakt till 100 passivt.
+
+Möjliga orsaker (kombinerade):
+1. Certifierare `sideEffects` image-gain skalas linjärt med antal — inget diminishing return
+2. `imageProtection` från lobby-köp (`imageDecayReduction`) filtrerar antagonist-drain men INTE generator side effects
+3. Om många antagonister counterats + hög certifierare-count = netto-positiv image/s → rapid recovery
+
+- [ ] 20L-1: Balansera certifierare image-gain
+  - Alternativ A: Sätt tak/diminishing returns på certifierares image-gain (t.ex. cap vid 0.5 totalt)
+  - Alternativ B: Sänk perSecond från +0.05 till +0.02 per enhet
+  - Alternativ C: Applicera `imageProtection` inverterat på positiv image-gain (lobby-skydd gör image-recovery svårare)
+  - Alternativ D: Image-recovery avtar exponentiellt närmare 100 (t.ex. gain × (1 - image/100))
+
+- [ ] 20L-2: Undersök om "Operation Omnibus" (antagonist counter) har oväntad sido-effekt
+  - `counterAntagonist` ändrar bara `countered: true` — ingen direkt image-modifikation
+  - Men att countra EU-Inspektören (som drar -50 stammar/s) kan indirekt öka image om lägre produktion → färre sideEffects
+  - Verifiera att inga lobby-köp oavsiktligt stackar imageDecayReduction >100%
 
 ### 20I — Verifiering
 

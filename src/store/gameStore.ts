@@ -109,6 +109,7 @@ export const INITIAL_STATE: GameState = {
   achievements: {},
 
   pendingTransition: null,
+  pendingOwnerTransition: null,
 
   settings: {
     musicVolume: 0,
@@ -393,8 +394,9 @@ function ownerTick(
 
   // ── Owner phase transitions ──
   const ownerPhaseInfo = getOwnerPhase(newTotalSV)
-  if (ownerPhaseInfo.phase !== state.ownerPhase) {
+  if (ownerPhaseInfo.phase !== state.ownerPhase && !state.pendingOwnerTransition) {
     updates.ownerPhase = ownerPhaseInfo.phase
+    updates.pendingOwnerTransition = { from: state.ownerPhase, to: ownerPhaseInfo.phase }
   }
 
   // ── Owner event triggers ──
@@ -631,7 +633,14 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
 
   setGameMode: (mode: 'industry' | 'owner') => {
-    set({ gameMode: mode })
+    const state = get()
+    const isNewGame = state.totalStammar === 0 && state.totalSkogsvardering === 0
+    const updates: Partial<GameState> = { gameMode: mode }
+    // First event comes sooner on new games (20s instead of 120s)
+    if (isNewGame) {
+      updates.nextEventAt = Date.now() + 20_000
+    }
+    set(updates as Partial<GameStore>)
     get().save()
   },
 
@@ -1383,6 +1392,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lastSaveAt: now,
       nextEventAt: now + 120_000,
       pendingTransition: null,
+      pendingOwnerTransition: null,
       expansionTargets: {},
       countries: {},
       warningLevel: 0,
@@ -1425,6 +1435,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     }
 
     set(updates as Partial<GameStore>)
+    get().save()
+  },
+
+  completeOwnerPhaseTransition: () => {
+    set({ pendingOwnerTransition: null })
     get().save()
   },
 

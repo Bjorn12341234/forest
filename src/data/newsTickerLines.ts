@@ -135,7 +135,7 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
   },
   {
     id: 'tick_nestle_break',
-    text: 'Nastlé bryter med NCA: "Ert rykte är sämre än vårt." Nastlé. Bolaget som förgiftade barnmat. De tycker NI är för skumma.',
+    text: 'Nastly bryter med NCA: "Ert rykte är sämre än vårt." Nastly. Bolaget som förgiftade barnmat. De tycker NI är för skumma.',
     phase: 4,
     maxPhase: 6,
   },

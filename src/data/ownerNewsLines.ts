@@ -27,6 +27,38 @@ export const OWNER_TICKER_HEADLINES: OwnerTickerHeadline[] = [
     text: 'Inspektören ringer igen. "Bara ett snabbt besök." Du säger nej. Igen.',
   },
   {
+    id: 'otick_dimma',
+    text: 'Dimma över myren i morse. Tyst. Inte ens motorsågarna hörs än.',
+  },
+  {
+    id: 'otick_vedstapel',
+    text: 'Du staplar ved vid stugan. Det tar tid. Allt som är värt något tar tid.',
+  },
+  {
+    id: 'otick_raven',
+    text: 'Rådjuret står stilla vid brynet. Tittar på dig. Sedan försvinner det in bland tallarna.',
+  },
+  {
+    id: 'otick_frost',
+    text: 'Första frosten i natt. Marken knakar under stövlarna. Skogen sover snart.',
+  },
+  {
+    id: 'otick_vattendrag',
+    text: 'Bäcken rinner klart genom din skog. Grannens diken har grumligt vatten.',
+  },
+  {
+    id: 'otick_tidningen',
+    text: 'Lokaltidningen skriver om skogsindustrin. Igen. Din skog nämns inte. Ännu.',
+  },
+  {
+    id: 'otick_ugglor',
+    text: 'Ugglorna har flyttat in. De behöver ihåliga träd. Industrin har inga.',
+  },
+  {
+    id: 'otick_svamp',
+    text: 'Kantarellsäsongen börjar. Din skog ger 20 kilo. Grannens plantage: ingenting.',
+  },
+  {
     id: 'otick_arsringar',
     text: 'Du räknar årsringar på en stormfälld tall. 247 st. Industrin hade sett 3 kubikmeter.',
     triggerSV: 2_000,

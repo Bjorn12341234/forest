@@ -87,8 +87,8 @@ export const TRANSITION_SCRIPTS: Partial<Record<`${Phase}_${Phase}`, TransitionL
     { text: 'MASSABARONEN', delay: 0, style: 'bold' },
     { text: 'Du dominerar den nationella marknaden.', delay: 2000 },
     { text: 'Men din image börjar krackelera...', delay: 4000 },
-    { text: 'Nastlé ringer. De tycker ni har för dåligt rykte.', delay: 6500, style: 'dim' },
-    { text: '...Nastlé. Tänk på det.', delay: 8500, style: 'dim' },
+    { text: 'Nastly ringer. De tycker ni har för dåligt rykte.', delay: 6500, style: 'dim' },
+    { text: '...Nastly. Tänk på det.', delay: 8500, style: 'dim' },
     { text: '═══ ERA: MAKT ═══', delay: 11000, style: 'accent' },
     { text: 'Fas 4: PR-Katastrofen', delay: 14000, style: 'bold' },
   ],
@@ -189,6 +189,29 @@ export function getOwnerPhaseProgress(totalSV: number): { current: number; next:
 
   const progress = Math.min(1, (totalSV - currentThreshold) / (nextThreshold - currentThreshold))
   return { current: currentThreshold, next: nextThreshold, progress }
+}
+
+// ── Owner Phase Transition Scripts ──
+
+export const OWNER_TRANSITION_SCRIPTS: Record<string, TransitionLine[]> = {
+  '1_2': [
+    { text: 'RÖTTERNA', delay: 0, style: 'bold' },
+    { text: 'Din skog börjar leva.', delay: 1800 },
+    { text: 'Grannarna ser skillnaden.', delay: 3600, style: 'dim' },
+    { text: '═══ FAS 2: NÄTVERKET ═══', delay: 5500, style: 'accent' },
+  ],
+  '2_3': [
+    { text: 'NÄTVERKET', delay: 0, style: 'bold' },
+    { text: 'Kommunen lyssnar.', delay: 1800 },
+    { text: 'Din metod sprider sig.', delay: 3600, style: 'dim' },
+    { text: '═══ FAS 3: ARVET ═══', delay: 5500, style: 'accent' },
+  ],
+}
+
+export function getOwnerTransitionScript(from: number, to: number): TransitionLine[] {
+  return OWNER_TRANSITION_SCRIPTS[`${from}_${to}`] ?? [
+    { text: `Fas ${to}...`, delay: 0, style: 'bold' },
+  ]
 }
 
 export function getTransitionScript(from: Phase, to: Phase): TransitionLine[] {

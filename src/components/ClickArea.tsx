@@ -32,7 +32,12 @@ export function ClickArea() {
   const click = useGameStore(s => s.click)
   const buyClickUpgrade = useGameStore(s => s.buyClickUpgrade)
 
+  const totalStammar = useGameStore(s => s.totalStammar)
   const flavour = CLICK_FLAVOUR[phase] ?? CLICK_FLAVOUR[1]
+
+  // Track total clicks for initial feedback (first 5 clicks get pulsing glow)
+  const clickCountRef = useRef(0)
+  const [isNewPlayer, setIsNewPlayer] = useState(totalStammar === 0)
 
   // Click streak tracking
   const [streak, setStreak] = useState(0)
@@ -85,14 +90,22 @@ export function ClickArea() {
 
     click()
     playClick()
+    clickCountRef.current += 1
 
     if (particlesRef.current && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-      particlesRef.current.emit(x, y, 12)
+      // Extra large burst on first click
+      const particleCount = clickCountRef.current === 1 && isNewPlayer ? 28 : 12
+      particlesRef.current.emit(x, y, particleCount)
     }
-  }, [click, streak, streakBonus, stammarPerClick])
+
+    // Disable new-player glow after 5 clicks
+    if (clickCountRef.current >= 5 && isNewPlayer) {
+      setIsNewPlayer(false)
+    }
+  }, [click, streak, streakBonus, stammarPerClick, isNewPlayer])
 
   // Click upgrades that are visible (affordable or purchased)
   const visibleClickUpgrades = useMemo(() => {
@@ -142,10 +155,11 @@ export function ClickArea() {
           style={{
             borderColor: streakBonus > 0
               ? `rgba(212, 115, 12, ${0.5 + streakBonus * 0.5})`
-              : undefined,
+              : isNewPlayer ? 'rgba(212, 115, 12, 0.6)' : undefined,
             boxShadow: streakBonus > 0
               ? `0 0 ${20 + streakBonus * 20}px rgba(212, 115, 12, ${0.2 + streakBonus * 0.3})`
-              : undefined,
+              : isNewPlayer ? '0 0 20px rgba(212, 115, 12, 0.3)' : undefined,
+            animation: isNewPlayer ? 'pulse-glow 1.5s ease-in-out infinite' : undefined,
           }}
         >
           <div className="absolute inset-2 rounded-full border border-text-secondary/30" />

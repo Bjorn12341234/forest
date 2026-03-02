@@ -44,12 +44,12 @@ export const PHASE3_EVENTS: GameEvent[] = [
     phase: 3,
     maxPhase: 6,
     category: 'opportunity',
-    headline: 'Nastlé vill köpa ert pappersbruk',
-    context: 'Nastlé International — företaget som sålde vattenrättigheter till torkeländer — erbjuder sig att köpa ert pappersbruk för "synergier inom förpackning".',
+    headline: 'Nastly vill köpa ert pappersbruk',
+    context: 'Nastly International — företaget som sålde vattenrättigheter till torkeländer — erbjuder sig att köpa ert pappersbruk för "synergier inom förpackning".',
     choices: [
       {
-        label: 'Sälj till Nastlé',
-        description: 'Massivt kapital. Inga fler etiska frågor — Nastlé har inga.',
+        label: 'Sälj till Nastly',
+        description: 'Massivt kapital. Inga fler etiska frågor — Nastly har inga.',
         effects: [
           { resource: 'kapital', amount: 80_000, type: 'add' },
           { resource: 'image', amount: -15, type: 'add' },

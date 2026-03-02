@@ -80,6 +80,7 @@ export interface GameState {
 
   // Phase transition
   pendingTransition: { from: Phase; to: Phase } | null
+  pendingOwnerTransition: { from: number; to: number } | null
 
   // Settings
   settings: GameSettings
@@ -309,6 +310,7 @@ export interface GameActions {
   setPhase: (phase: Phase) => void
   triggerPhaseTransition: (from: Phase, to: Phase) => void
   completePhaseTransition: () => void
+  completeOwnerPhaseTransition: () => void
   updateSettings: (settings: Partial<GameSettings>) => void
   applyEffect: (effect: Effect) => void
 }

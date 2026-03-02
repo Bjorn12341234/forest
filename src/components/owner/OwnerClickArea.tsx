@@ -46,6 +46,10 @@ export function OwnerClickArea() {
 
   const flavour = getFlavour(totalSV)
 
+  // Track total clicks for initial feedback
+  const clickCountRef = useRef(0)
+  const [isNewPlayer, setIsNewPlayer] = useState(totalSV === 0)
+
   // Click streak tracking
   const [streak, setStreak] = useState(0)
   const [streakBonus, setStreakBonus] = useState(0)
@@ -86,14 +90,21 @@ export function OwnerClickArea() {
 
     ownerClick()
     playClick()
+    clickCountRef.current += 1
 
     if (particlesRef.current && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-      particlesRef.current.emit(x, y, 8, accentRef.current)
+      // Extra large burst on first click
+      const count = clickCountRef.current === 1 && isNewPlayer ? 24 : 8
+      particlesRef.current.emit(x, y, count, accentRef.current)
     }
-  }, [ownerClick, streak, streakBonus, svPerClick])
+
+    if (clickCountRef.current >= 5 && isNewPlayer) {
+      setIsNewPlayer(false)
+    }
+  }, [ownerClick, streak, streakBonus, svPerClick, isNewPlayer])
 
   const visibleUpgrades = useMemo(() => {
     return OWNER_CLICK_UPGRADES.filter(cu => {
@@ -141,10 +152,11 @@ export function OwnerClickArea() {
             background: 'radial-gradient(circle at 45% 40%, #5C4332 0%, #4A3628 20%, #3D2B1E 40%, #332416 60%, #2A1D12 80%, #1F150D 100%)',
             borderColor: streakBonus > 0
               ? `rgba(var(--color-owner-accent-rgb), ${0.5 + streakBonus * 0.5})`
-              : '#2A1D12',
+              : isNewPlayer ? 'rgba(94, 158, 110, 0.6)' : '#2A1D12',
             boxShadow: streakBonus > 0
               ? `0 0 ${20 + streakBonus * 20}px rgba(var(--color-owner-accent-rgb), ${0.2 + streakBonus * 0.3})`
-              : '0 2px 12px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3)',
+              : isNewPlayer ? '0 0 20px rgba(94, 158, 110, 0.3), inset 0 0 20px rgba(0,0,0,0.3)' : '0 2px 12px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3)',
+            animation: isNewPlayer ? 'pulse-glow-green 1.5s ease-in-out infinite' : undefined,
           }}
         >
           {/* Tree growth rings */}

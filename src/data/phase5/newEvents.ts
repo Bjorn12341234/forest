@@ -190,7 +190,7 @@ export const PHASE5_NEW_EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Sälj patentet till Nastlé',
+        label: 'Sälj patentet till Nastly',
         description: 'De har redan plast i allt. Perfekt synergi.',
         effects: [
           { resource: 'kapital', amount: 1_500_000, type: 'add' },

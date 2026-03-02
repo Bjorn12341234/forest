@@ -3,7 +3,7 @@ import { useGameStore } from '../../store/gameStore'
 import { getAvailableOwnerHeadlines } from '../../data/ownerNewsLines'
 import { isDonator } from '../../engine/donation'
 
-const SCROLL_SPEED = 50 // pixels per second
+const SCROLL_SPEED = 90 // pixels per second
 
 export function OwnerTicker() {
   const totalSV = useGameStore(s => s.totalSkogsvardering)
@@ -28,7 +28,7 @@ export function OwnerTicker() {
       ownerGenerators,
     }
     const available = getAvailableOwnerHeadlines(totalSV, stateSlice as Parameters<typeof getAvailableOwnerHeadlines>[1], donated)
-    return available.slice(-6).map(h => h.text)
+    return available.slice(-10).map(h => h.text)
   }, [totalSV, biodivOwner, legacy, kunskap, resiliens, realCarbonPos, deadwood,
       ownerAttacksResisted, ownerLuresDeclined, ownerLuresAccepted, ownerGenerators, donated])
 

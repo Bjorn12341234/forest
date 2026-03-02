@@ -1,7 +1,9 @@
-import { useMemo } from 'react'
+import { useMemo, useRef, useState, useEffect, useCallback } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { getAvailableHeadlines } from '../data/newsTickerLines'
 import { isDonator } from '../engine/donation'
+
+const SCROLL_SPEED = 90 // pixels per second
 
 export function Ticker() {
   const phase = useGameStore(s => s.phase)
@@ -13,9 +15,25 @@ export function Ticker() {
 
   const headlines = useMemo(() => {
     const available = getAvailableHeadlines(phase, totalStammar, lobbyProjects, generators, eventHistory, donated)
-    // Show the most recent 6 headlines (latest phases first, then by array order)
-    return available.slice(-6).map(h => h.text)
+    return available.slice(-10).map(h => h.text)
   }, [phase, totalStammar, lobbyProjects, generators, eventHistory, donated])
+
+  const measureRef = useRef<HTMLSpanElement>(null)
+  const [duration, setDuration] = useState(30)
+
+  const measure = useCallback(() => {
+    if (!measureRef.current) return
+    const textWidth = measureRef.current.scrollWidth
+    if (textWidth > 0) {
+      setDuration(Math.max(12, textWidth / SCROLL_SPEED))
+    }
+  }, [])
+
+  useEffect(() => {
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [measure, headlines])
 
   if (headlines.length === 0) return null
 
@@ -41,12 +59,15 @@ export function Ticker() {
       </div>
       <div
         className="absolute inset-0 flex items-center whitespace-nowrap"
-        style={{ animation: 'ticker-scroll 8s linear infinite' }}
+        style={{
+          animation: `ticker-scroll ${duration}s linear infinite`,
+          willChange: 'transform',
+        }}
       >
-        <span className="text-sm text-text-primary/80 tracking-wide pl-16 pr-4">
+        <span ref={measureRef} className="text-sm text-text-primary/80 tracking-wide pl-20 pr-8 inline-block">
           {tickerText}
         </span>
-        <span className="text-sm text-text-primary/80 tracking-wide px-4">
+        <span className="text-sm text-text-primary/80 tracking-wide px-8 inline-block" aria-hidden="true">
           {tickerText}
         </span>
       </div>

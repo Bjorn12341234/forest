@@ -30,6 +30,7 @@ import { IndustryLureModal } from './components/owner/IndustryLureModal'
 import { OwnerTicker } from './components/owner/OwnerTicker'
 import { OwnerEndScreen } from './components/owner/OwnerEndScreen'
 import { ForestBackground } from './components/owner/ForestBackground'
+import { OwnerPhaseTransition } from './components/owner/OwnerPhaseTransition'
 import { FinalEndScreen } from './components/FinalEndScreen'
 import { RealityPage } from './components/EndScreen'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -39,6 +40,7 @@ import { GoldenOpportunity, GoldenMultiplierIndicator } from './components/Golde
 import { DonationQR } from './components/DonationQR'
 import { MembershipForm } from './components/MembershipForm'
 import { isDonator } from './engine/donation'
+import { WelcomeToast } from './components/WelcomeToast'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -161,6 +163,9 @@ function App() {
     <div className="flex flex-col min-h-dvh bg-bg-primary" data-era={getEra(currentPhase)}>
       {/* News Ticker */}
       <Ticker />
+
+      {/* Welcome Tutorial Hint */}
+      <WelcomeToast />
 
       {/* Achievement Toasts */}
       <AchievementToastManager toasts={toasts} onDismiss={dismissToast} />
@@ -327,6 +332,8 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
   const legacy = useGameStore(s => s.legacy)
   const totalSV = useGameStore(s => s.totalSkogsvardering)
   const ownerEndSeen = useGameStore(s => s.achievements['owner_endgame_seen'])
+  const pendingOwnerTransition = useGameStore(s => s.pendingOwnerTransition)
+  const completeOwnerPhaseTransition = useGameStore(s => s.completeOwnerPhaseTransition)
 
   // Trigger owner endscreen at legacy >= 500 AND totalSV >= 150K
   useEffect(() => {
@@ -359,6 +366,9 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
       {/* Owner News Ticker */}
       <OwnerTicker />
 
+      {/* Welcome Tutorial Hint */}
+      <WelcomeToast />
+
       {/* Achievement Toasts */}
       <AchievementToastManager toasts={toasts} onDismiss={onDismissToast} />
 
@@ -383,6 +393,15 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
       <ErrorBoundary fallbackLabel="Lockelse">
         <IndustryLureModal />
       </ErrorBoundary>
+
+      {/* Owner Phase Transition Overlay */}
+      {pendingOwnerTransition && (
+        <OwnerPhaseTransition
+          from={pendingOwnerTransition.from}
+          to={pendingOwnerTransition.to}
+          onComplete={completeOwnerPhaseTransition}
+        />
+      )}
 
       {/* Achievement Panel */}
       <AnimatePresence>
