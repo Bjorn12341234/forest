@@ -111,7 +111,7 @@ export const INITIAL_STATE: GameState = {
   pendingTransition: null,
 
   settings: {
-    musicVolume: 0.5,
+    musicVolume: 0,
     sfxVolume: 0.7,
     notificationsEnabled: true,
     theme: 'default',

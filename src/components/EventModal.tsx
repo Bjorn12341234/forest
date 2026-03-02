@@ -4,6 +4,7 @@ import { useGameStore } from '../store/gameStore'
 import type { GameEvent, Effect } from '../store/types'
 import { playEventByCategory } from '../engine/audio'
 import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useModalDelay } from '../hooks/useModalDelay'
 import { formatCompact } from '../engine/format'
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -84,6 +85,7 @@ function EventModalContent({
   onChoice: (index: number) => void
 }) {
   const trapRef = useFocusTrap()
+  const ready = useModalDelay(1500)
 
   useEffect(() => {
     playEventByCategory(event.category)
@@ -146,10 +148,12 @@ function EventModalContent({
             {event.choices.map((choice, i) => (
               <button
                 key={i}
-                onClick={() => onChoice(i)}
-                className="w-full text-left p-3 rounded-lg border cursor-pointer
-                           transition-all duration-150 hover:brightness-110
-                           bg-white/[0.03] border-white/10 hover:border-white/20"
+                onClick={() => ready && onChoice(i)}
+                aria-disabled={!ready}
+                className={`w-full text-left p-3 rounded-lg border cursor-pointer
+                           transition-all duration-300
+                           bg-white/[0.03] border-white/10 hover:border-white/20
+                           ${ready ? 'opacity-100 hover:brightness-110' : 'opacity-40 pointer-events-none'}`}
               >
                 <span className="text-base font-medium text-text-primary">
                   {choice.label}

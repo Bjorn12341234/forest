@@ -435,14 +435,6 @@ function OwnerApp({ activeTab, onTabChange, toasts, onDismissToast, milestoneToa
         >
           &#127942;
         </button>
-        <button
-          onClick={onReset}
-          className="w-11 h-11 rounded-full owner-card flex items-center justify-center text-xs cursor-pointer active:scale-95 transition-transform text-owner-text/50"
-          aria-label="Tillbaka till start"
-          title="Tillbaka till start"
-        >
-          &#8634;
-        </button>
       </div>
 
       {/* Bottom Tab Navigation */}

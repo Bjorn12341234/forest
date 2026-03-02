@@ -602,7 +602,7 @@ export const OWNER_EVENTS: GameEvent[] = [
     category: 'crisis',
     headline: 'Arvstvisten',
     context:
-      'Din bror ringer från Göteborg. Han vill ha ut sin del av arvet — i pengar. "Sälj till Holmen, vi delar. Det är värt miljoner." Han har anlitat advokat. Din fars skog. Din mors blåbärsställen. Syskonets matematik.',
+      'Din bror ringer från Göteborg. Han vill ha ut sin del av arvet — i pengar. "Sälj till Halmen, vi delar. Det är värt miljoner." Han har anlitat advokat. Din fars skog. Din mors blåbärsställen. Syskonets matematik.',
     unique: true,
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 130_000 }],
     choices: [
@@ -775,7 +775,7 @@ export const OWNER_EVENTS: GameEvent[] = [
     category: 'opportunity',
     headline: 'Podcasten',
     context:
-      'Sveriges mest populära miljöpodd — "Rotstock" med 200 000 lyssnare — vill ha dig som gäst. Producenten säger: "Var ärlig. Våra lyssnare genomskådar PR." Alternativt har en branschpodd sponsrad av SCA erbjudit dig 10 000 kr för ett "balanserat" samtal.',
+      'Sveriges mest populära miljöpodd — "Rotstock" med 200 000 lyssnare — vill ha dig som gäst. Producenten säger: "Var ärlig. Våra lyssnare genomskådar PR." Alternativt har en branschpodd sponsrad av SKA erbjudit dig 10 000 kr för ett "balanserat" samtal.',
     unique: true,
     conditions: [{ resource: 'totalSkogsvardering', operator: '>=', value: 65_000 }],
     choices: [

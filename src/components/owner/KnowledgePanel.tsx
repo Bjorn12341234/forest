@@ -178,6 +178,8 @@ export function KnowledgePanel() {
 
         <div className="flex flex-col gap-2">
           {KNOWLEDGE_ACTIVITIES.map(activity => {
+            const unlocked = kunskap >= activity.unlockKunskap
+            if (!unlocked) return null
             const canAfford = inkomst >= activity.cost && !isOnCooldown
             return (
               <div
@@ -207,6 +209,22 @@ export function KnowledgePanel() {
               </div>
             )
           })}
+          {/* Teaser for next locked activity */}
+          {(() => {
+            const nextLocked = KNOWLEDGE_ACTIVITIES.find(a => kunskap < a.unlockKunskap)
+            if (!nextLocked) return null
+            return (
+              <div className="select-none p-3 owner-card-subtle opacity-40">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg flex-shrink-0">🔒</span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-owner-text/50">???</span>
+                    <p className="text-xs text-owner-text/40">Kräver {formatNumber(nextLocked.unlockKunskap)} kunskap</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </div>
     </div>

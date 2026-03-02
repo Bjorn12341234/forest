@@ -128,7 +128,9 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
           {/* Ambient Volume */}
           <div className="mb-4">
             <div className="flex justify-between items-center mb-1.5">
-              <label className="text-xs text-text-secondary">Bakgrundsljud</label>
+              <label className="text-xs text-text-secondary">
+                {settings.musicVolume === 0 ? 'Bakgrundsljud (av)' : 'Bakgrundsljud'}
+              </label>
               <span className="text-xs font-numbers text-text-muted">
                 {Math.round(settings.musicVolume * 100)}%
               </span>

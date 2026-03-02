@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import type { OfflineResult } from '../engine/offline'
 import { formatNumber, formatDuration } from '../engine/format'
+import { useModalDelay } from '../hooks/useModalDelay'
 
 interface Props {
   report: OfflineResult | null
@@ -16,6 +17,7 @@ export function OfflineReturnModal({ report, onDismiss }: Props) {
 }
 
 function OfflineReturnContent({ report, onDismiss }: { report: OfflineResult; onDismiss: () => void }) {
+  const ready = useModalDelay(1000)
   const pendingCount = report.offlineEvents.length
 
   return (
@@ -95,9 +97,11 @@ function OfflineReturnContent({ report, onDismiss }: { report: OfflineResult; on
 
           {/* Continue button */}
           <button
-            onClick={onDismiss}
-            className="w-full mt-4 py-3 rounded-lg font-bold text-sm cursor-pointer
-                       border-none transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
+            onClick={() => ready && onDismiss()}
+            aria-disabled={!ready}
+            className={`w-full mt-4 py-3 rounded-lg font-bold text-sm cursor-pointer
+                       border-none transition-all duration-300 hover:brightness-110 active:scale-[0.98]
+                       ${!ready ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}
             style={{
               background: 'linear-gradient(135deg, #D4730C, #E8943A)',
               color: '#FFFFFF',

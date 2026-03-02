@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getIndustryLure } from '../../data/industryLures'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
+import { useModalDelay } from '../../hooks/useModalDelay'
 
 export function IndustryLureModal() {
   const lureId = useGameStore(s => s.activeIndustryLure)
@@ -11,6 +12,7 @@ export function IndustryLureModal() {
   const [revealed, setRevealed] = useState(false)
 
   const trapRef = useFocusTrap()
+  const ready = useModalDelay(1500)
   const lure = lureId ? getIndustryLure(lureId) : null
 
   if (!lure) return null
@@ -91,13 +93,16 @@ export function IndustryLureModal() {
                 {/* Accept (trap) */}
                 <button
                   onClick={() => {
+                    if (!ready) return
                     if (!revealed) {
                       setRevealed(true)
                     } else {
                       resolve(true)
                     }
                   }}
-                  className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
+                  aria-disabled={!ready}
+                  className={`w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-300
+                    ${!ready ? 'opacity-40 pointer-events-none' : ''}`}
                   style={{
                     background: revealed ? 'rgba(204,51,51,0.08)' : 'rgba(212,115,12,0.10)',
                     borderColor: revealed ? 'rgba(204,51,51,0.25)' : 'rgba(212,115,12,0.35)',
@@ -120,11 +125,14 @@ export function IndustryLureModal() {
                 {/* Decline */}
                 <button
                   onClick={() => {
+                    if (!ready) return
                     if (!revealed) setRevealed(true)
                     resolve(false)
                   }}
                   disabled={!canDecline}
-                  className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
+                  aria-disabled={!ready || !canDecline}
+                  className={`w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-300
+                    ${!ready ? 'opacity-40 pointer-events-none' : ''}`}
                   style={{
                     background: 'rgba(var(--color-owner-accent-rgb),0.08)',
                     borderColor: 'rgba(var(--color-owner-accent-rgb),0.3)',

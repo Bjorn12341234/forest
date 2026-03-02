@@ -22,6 +22,32 @@ if (typeof window !== 'undefined') {
   window.addEventListener('click', enableAudio)
   window.addEventListener('touchstart', enableAudio)
   window.addEventListener('keydown', enableAudio)
+
+  // Cleanup ambient on page unload to prevent lingering buzzing
+  window.addEventListener('beforeunload', () => {
+    stopAmbient()
+    if (audioCtx) {
+      audioCtx.close().catch(() => {})
+      audioCtx = null
+    }
+  })
+
+  // Pause/resume ambient on tab visibility change
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (ambientMasterGain && audioCtx) {
+        ambientMasterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.3)
+      }
+    } else {
+      if (ambientMasterGain && audioCtx && !masterMuted) {
+        ambientMasterGain.gain.setTargetAtTime(
+          ambientVolume * 0.08,
+          audioCtx.currentTime,
+          0.3
+        )
+      }
+    }
+  })
 }
 
 let pendingAmbientPhase = 0
@@ -40,7 +66,7 @@ function getContext(): AudioContext | null {
 // ── Volume Control ──
 
 let sfxVolume = 0.7
-let ambientVolume = 0.3
+let ambientVolume = 0
 let masterMuted = false
 
 export function setSfxVolume(vol: number) {

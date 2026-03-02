@@ -8,6 +8,7 @@ export interface KnowledgeActivityData {
   cost: number         // inkomst cost (0 = free)
   kunskapReward: number
   icon: string
+  unlockKunskap: number // kunskap required to unlock this activity
 }
 
 export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
@@ -18,38 +19,43 @@ export const KNOWLEDGE_ACTIVITIES: KnowledgeActivityData[] = [
     cost: 25,
     kunskapReward: 10,
     icon: '📜',
+    unlockKunskap: 0,
+  },
+  {
+    id: 'know_markberedning',
+    name: 'Studera markberedningens effekter',
+    description: 'Du lär dig att markberedning släpper ut mer kol än vad de nya plantorna binder på 30 år.',
+    cost: 500,
+    kunskapReward: 15,
+    icon: '📐',
+    unlockKunskap: 25,
+  },
+  {
+    id: 'know_gammelskog',
+    name: 'Besök gammelskog',
+    description: 'Du ser en skog som ingen rört på 200 år. Du gråter lite. Det är okej.',
+    cost: 1_500,
+    kunskapReward: 25,
+    icon: '🌳',
+    unlockKunskap: 50,
   },
   {
     id: 'know_plockhugget',
     name: 'Gå Plockhugget-kurs',
     description: 'De tar betalt. Industrin skickar inspektörer gratis. Nu förstår du varför.',
     cost: 3_000,
-    kunskapReward: 25,
+    kunskapReward: 40,
     icon: '🌲',
+    unlockKunskap: 100,
   },
   {
     id: 'know_artinventering',
     name: 'Artinventering med biolog',
     description: 'Du har 47 arter av lavar. Grannen som kalavverkade har 3.',
     cost: 5_000,
-    kunskapReward: 30,
+    kunskapReward: 60,
     icon: '🦞',
-  },
-  {
-    id: 'know_gammelskog',
-    name: 'Besök gammelskog',
-    description: 'Du ser en skog som ingen rört på 200 år. Du gråter lite. Det är okej.',
-    cost: 2_000,
-    kunskapReward: 15,
-    icon: '🌳',
-  },
-  {
-    id: 'know_markberedning',
-    name: 'Studera markberedningens effekter',
-    description: 'Du lär dig att markberedning släpper ut mer kol än vad de nya plantorna binder på 30 år.',
-    cost: 1_000,
-    kunskapReward: 20,
-    icon: '📐',
+    unlockKunskap: 200,
   },
 ]
 

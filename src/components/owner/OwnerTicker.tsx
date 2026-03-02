@@ -64,6 +64,14 @@ export function OwnerTicker() {
         height: 'calc(2rem + env(safe-area-inset-top))',
       }}
     >
+      {/* Game name — fixed left */}
+      <div className="absolute left-0 top-0 bottom-0 z-10 hidden sm:flex items-center pl-3 pr-2"
+        style={{ background: 'linear-gradient(90deg, #111111 70%, transparent)' }}
+      >
+        <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-60" style={{ color: '#5E9E6E' }}>
+          TRÄD
+        </span>
+      </div>
       <div
         className="absolute inset-0 flex items-center whitespace-nowrap"
         style={{
@@ -71,7 +79,7 @@ export function OwnerTicker() {
           willChange: 'transform',
         }}
       >
-        <span ref={measureRef} className="text-sm text-owner-text/90 tracking-wide px-8 inline-block">
+        <span ref={measureRef} className="text-sm text-owner-text/90 tracking-wide px-8 sm:pl-20 inline-block">
           {tickerText}
         </span>
         <span className="text-sm text-owner-text/90 tracking-wide px-8 inline-block" aria-hidden="true">

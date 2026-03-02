@@ -3,6 +3,7 @@ import { useGameStore } from '../../store/gameStore'
 import { getIndustryAttack } from '../../data/industryAttacks'
 import { computeKnowledgeModifiers } from '../../data/ownerKnowledgeTree'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
+import { useModalDelay } from '../../hooks/useModalDelay'
 
 export function IndustryAttackModal() {
   const attackId = useGameStore(s => s.activeIndustryAttack)
@@ -12,6 +13,7 @@ export function IndustryAttackModal() {
   const knowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
 
   const trapRef = useFocusTrap()
+  const ready = useModalDelay(1500)
   const atk = attackId ? getIndustryAttack(attackId) : null
 
   if (!atk) return null
@@ -81,13 +83,15 @@ export function IndustryAttackModal() {
               <div className="flex flex-col gap-3">
                 {/* Resist button */}
                 <button
-                  onClick={() => resolve(false)}
+                  onClick={() => ready && resolve(false)}
                   disabled={!canResist}
-                  className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
+                  aria-disabled={!ready || !canResist}
+                  className={`w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-300
+                    ${!ready ? 'opacity-40 pointer-events-none' : ''}`}
                   style={{
                     background: canResist ? 'rgba(var(--color-owner-accent-rgb),0.12)' : 'rgba(255,255,255,0.03)',
                     borderColor: canResist ? 'rgba(var(--color-owner-accent-rgb),0.4)' : 'rgba(255,255,255,0.08)',
-                    opacity: canResist ? 1 : 0.5,
+                    opacity: !ready ? undefined : (canResist ? 1 : 0.5),
                   }}
                 >
                   <span className="text-base font-medium text-owner-accent">
@@ -109,8 +113,10 @@ export function IndustryAttackModal() {
 
                 {/* Accept/surrender button */}
                 <button
-                  onClick={() => resolve(true)}
-                  className="w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-150"
+                  onClick={() => ready && resolve(true)}
+                  aria-disabled={!ready}
+                  className={`w-full text-left p-3 rounded-lg border cursor-pointer transition-all duration-300
+                    ${!ready ? 'opacity-40 pointer-events-none' : ''}`}
                   style={{
                     background: 'rgba(204,51,51,0.08)',
                     borderColor: 'rgba(204,51,51,0.25)',
