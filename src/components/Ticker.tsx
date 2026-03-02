@@ -37,6 +37,7 @@ export function Ticker() {
         <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-60" style={{ color: '#D4730C' }}>
           TRÄD
         </span>
+        <span className="ml-2.5 opacity-30 text-xs" style={{ color: '#D4730C' }}>│</span>
       </div>
       <div
         className="absolute inset-0 flex items-center whitespace-nowrap"
