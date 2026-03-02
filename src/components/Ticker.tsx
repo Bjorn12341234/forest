@@ -31,7 +31,7 @@ export function Ticker() {
       }}
     >
       {/* Game name — fixed left */}
-      <div className="absolute left-0 top-0 bottom-0 z-10 hidden sm:flex items-center pl-3 pr-2"
+      <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pl-3 pr-2"
         style={{ background: 'linear-gradient(90deg, rgba(30,30,30,0.95) 70%, transparent)' }}
       >
         <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-60" style={{ color: '#D4730C' }}>
@@ -42,7 +42,7 @@ export function Ticker() {
         className="absolute inset-0 flex items-center whitespace-nowrap"
         style={{ animation: 'ticker-scroll 8s linear infinite' }}
       >
-        <span className="text-sm text-text-primary/80 tracking-wide px-4 sm:pl-16">
+        <span className="text-sm text-text-primary/80 tracking-wide pl-16 pr-4">
           {tickerText}
         </span>
         <span className="text-sm text-text-primary/80 tracking-wide px-4">
