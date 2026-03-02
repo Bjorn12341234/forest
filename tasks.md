@@ -1748,6 +1748,341 @@
 
 ---
 
+## Sprint 19: Industri Visuell Identitet — Silhuetter & Animerad Bakgrund
+
+> **Goal:** Ge industri-vägen (Storskogsägare) visuell karaktär i nivå med ägare-vägens skogstema. Silhuettfigurer mellan eror, animerad Canvas 2D-bakgrund under spel.
+
+### 19A — Era-silhuetter i PhaseTransition
+
+Bakgrund: PhaseTransition.tsx visar redan en cinematisk overlay vid fasbyten (svart bakgrund, partiklar, textsekvens). Nu lägger vi till silhuettbilder av maktfigurer som syns bakom texten under era-övergångar i industri-läge.
+
+**Bilder:** Användaren tillhandahåller SVG/PNG-filer med transparent bakgrund. Placeras i `public/silhouettes/`. Exempelvis:
+- Wallenberg-typ (gammal ondskefull affärsman)
+- Ondskefull affärskvinna
+- Svängdörr politiker↔skogsbolag
+- Eventuellt fler per era-övergång
+
+- [ ] 19A-1: Silhuett-overlay i PhaseTransition
+  - Skapa ett silhuett-datalager (`src/data/transitionSilhouettes.ts`) som mappar era-övergångar → bild(er)
+  - Varje entry: `{ src: string, position: 'left'|'right'|'center', scale?: number, opacity?: number }`
+  - SVERIGE→MAKT: t.ex. en affärsmansfigur (makt växer)
+  - MAKT→INTERNATIONELL: t.ex. svängdörr/politiker (lobbyism)
+  - INTERNATIONELL→EXPANSION: t.ex. ondskefull affärskvinna (global dominans)
+  - Silhuetter renderas bakom texten (z-index under text, över bakgrund)
+  - Fade in med Framer Motion (opacity 0→0.15–0.25 over 2s), subtilt — inte dominant
+  - Dimma/vignette runt silhuetten för att smälta in mot svart
+  - Bara industri-läge (`gameMode === 'industry'`), ägare-vägen oförändrad
+  - Responsiv: skalas till viewport, max 60% av höjden
+
+- [ ] 19A-2: Icke-era fasövergångar — subtil variant
+  - Vanliga fasövergångar (inte era-byte) kan ha en svagare silhuett eller ingen alls
+  - T.ex. fas 2→3 (inom SVERIGE): kanske en skugga av en kontorsbyggnad eller inget
+  - Konfigurerbart per övergång i datalager — null = ingen silhuett
+  - Håll det avskalat — era-byten ska kännas speciella
+
+### 19B — Animerad Canvas 2D-bakgrund för Industri
+
+Bakgrund: Ägare-vägen har ForestCanvas.tsx (träd, eldflugor, dimma). Industri-vägen har bara en statisk CSS-rutnätsbakgrund. Nu skapar vi en industriell Canvas 2D-animation som ersätter/kompletterar rutnätet.
+
+- [ ] 19B-1: IndustrialCanvas.tsx — grundstruktur
+  - Ny komponent `src/components/IndustrialCanvas.tsx`, lazy-loaded precis som ForestCanvas
+  - Wrapper `IndustrialBackground.tsx` med React.lazy + Suspense + fallback till statisk CSS-grid
+  - Canvas fixed, inset-0, z-0, pointer-events-none, aria-hidden
+  - 30fps cap (samma som ForestCanvas), DPR-medveten (max 1.5)
+  - Respekterar `prefers-reduced-motion` (visa statisk fallback)
+  - Mål: <3KB gzipped chunk
+
+- [ ] 19B-2: Visuella effekter — bas
+  - **Perspektivrutnät:** Mjukt försvinnande rutnät med vanishing point, ersätter CSS body::before grid
+  - **Industriell dimma/dis:** Horisontell gradient-dimma som sakta rör sig (liknande owner fog men grå/orange)
+  - **Flytande partiklar:** Sågspån/dokumentfragment som sakta faller/driver — 20-40 partiklar
+  - Färgpalett: grå toner (`#383838`, `#2A2A2A`) med subtilt orange skimmer (`rgba(212,115,12,0.05)`)
+  - Allt väldigt dämpad — bakgrunden ska aldrig distrahera från gameplay
+
+- [ ] 19B-3: Visuella effekter — era-responsiva
+  - SVERIGE (fas 1-3): Lugnt, få partiklar, svag dimma — "liten sågverk"-känsla
+  - MAKT (fas 4-6): Fler partiklar, snabbare drift, mörkare toner — "fabrik"-känsla
+  - INTERNATIONELL (fas 7-9): Tillagd effekt: svaga horisontella "dataströms"-linjer — "korporat"-känsla
+  - EXPANSION (fas 10-12): Röd/mörk dimma, glödande partiklar — "apokalyptisk"-känsla
+  - Övergångarna sker mjukt (lerp/tween) baserat på `currentPhase`, inte skarpa hopp
+
+- [ ] 19B-4: Integration med App.tsx
+  - Ersätt `body::before` CSS-grid med IndustrialBackground i industri-läge
+  - Behåll befintlig CSS-grid som fallback (reduced-motion / lazy-load)
+  - Verifiera att inga z-index-konflikter med modaler, ticker, nav
+  - Verifiera att glasskort fortfarande syns tydligt ovanpå
+
+### 19C — Era-specifik CSS-differentiering
+
+Bakgrund: SVERIGE och MAKT delar idag exakt samma CSS-tema. Ge varje era en distinkt visuell signatur.
+
+- [ ] 19C-1: SVERIGE-tema (fas 1-3) — distinct CSS
+  - Skapa `[data-era="SVERIGE"]` CSS-block i global.css
+  - Något ljusare/varmare än MAKT — "liten svensk by"-känsla
+  - T.ex. bg-primary: `#222222`, accent: `#D4730C` (befintlig), kanske en grön accent-secondary
+  - Subtilt — inte en stor förändring, men märkbar vid era-byte
+
+- [ ] 19C-2: MAKT-tema anpassning
+  - Verifiera att MAKT-default-temat känns "tyngre" än SVERIGE
+  - Möjlig justering: mörkare bg, starkare kontrast, mer orange glow
+  - Om SVERIGE ljusas upp → MAKT ska kännas som en naturlig mörkare steg
+
+### 19D — Verifiering
+
+- [ ] 19D-1: Test & Build
+  - IndustrialCanvas lazy-loads korrekt (separat chunk <3KB gzip)
+  - Silhuetter visas vid era-byten i industri, ej i ägare
+  - Era-CSS ger visuell skillnad SVERIGE → MAKT → INTERNATIONELL → EXPANSION
+  - Canvas-animation 30fps, ingen jank på mid-range mobil
+  - `prefers-reduced-motion` fallback fungerar
+  - Alla befintliga tester passerar
+  - TypeScript clean, Vite build passerar
+  - Total bundle: main chunk oförändrad, +<3KB industrial canvas chunk, +silhuett-bilder
+
+- [ ] 19D-2: Deploy & Feedback
+  - Deploy till GitHub Pages
+  - Testa på mobil (prestanda, visuellt)
+  - Samla feedback på silhuett-val och bakgrundsintensitet
+
+**Förutsättningar:**
+- Användaren tillhandahåller silhuett-bilder (SVG/PNG, transparent bakgrund) och placerar dem i repo-root
+- Sprint börjar med att flytta bilder till `public/silhouettes/` och mappa dem i 19A-1
+
+---
+
+## Sprint 20: Poleringspasset — UX-feedback (Båda Vägarna)
+
+> **Goal:** Åtgärda all insamlad användarfeedback. Fixa popup-misklick, reset-knapp, kunskapsbalans, fasövergångar för ägare, ljud, startupplevelse och spelnamn. Gäller BÅDE industri- och ägarvägen.
+
+### 20A — Popup-skydd mot misklick (båda vägarna)
+
+Bakgrund: Erik (och andra) klickar bort ALLA popuper av misstag. Klick-knappen följer med vid scroll på mobil, och snabb klickning på knappen gör att nästa tap träffar en modal-knapp direkt. Modaler (EventModal, IndustryAttackModal, IndustryLureModal) har inga fördröjningar — valen är klickbara direkt.
+
+- [x] 20A-1: Fördröjning innan modal-val kan klickas
+  - I `EventModal.tsx`: Lägg till en 1.5s fördröjning innan val-knapparna blir klickbara
+  - Knapparna startar med `opacity-40 pointer-events-none` och animeras till full synlighet efter delay
+  - Använd en `useState`/`useEffect`-timer som sätts vid mount
+  - Visuell indikator: subtil shimmer/pulse på knapparna när de "låses upp"
+  - Accessibility: `aria-disabled="true"` under fördröjningen
+
+- [x] 20A-2: Samma skydd i IndustryAttackModal & IndustryLureModal
+  - Applicera identisk delay-logik (1.5s) i `IndustryAttackModal.tsx`
+  - Applicera identisk delay-logik (1.5s) i `IndustryLureModal.tsx`
+  - Extrahera eventuellt till en delad hook `useModalDelay(ms)` om logiken blir identisk
+
+- [x] 20A-3: OfflineReturnModal skydd
+  - Applicera samma delay (1.0s — kortare, denna är mindre kritisk) i `OfflineReturnModal.tsx`
+  - "Fortsätt"-knappen ska inte vara klickbar direkt
+
+### 20B — Reset-knapp säkerhet (ägarvägen)
+
+Bakgrund: Erik har en liten knapp under kugghjulet och pokalen som omedelbart nollställer allt. Ingen bekräftelse, ingen varning. Det upplevs som "snopet" och otydligt.
+
+- [x] 20B-1: Bekräftelsedialog för reset på ägarvägen
+  - I `App.tsx` (owner render, rad 438-445): Ersätt direkt `onReset`-anrop med en bekräftelse
+  - Visa en bekräftelse-modal (kan vara enkel: `window.confirm` eller, bättre, en inline-bekräftelse)
+  - Bäst: Flytta reset-funktionalitet TILL SettingsPanel (samma som industri) istället för att ha den som frilagd knapp
+  - Ta bort den exponerade ↺-knappen från top-right-stacken
+  - I SettingsPanel (ägarversion): Lägg till "Börja om"-sektion med tvåstegsbekräftelse (samma mönster som industri-reset: "Nollställ allt" → "Är du säker?" → bekräfta/avbryt)
+  - Reset-knappen ska vara visuellt distinkt (röd text) och tydligt märkt
+
+### 20C — Kunskapsaktiviteter — balans & progressiv upplåsning (ägarvägen)
+
+Bakgrund: "Skogskunskapen man kan köpa är dyrast längst ner och billigast för mest. Det finns ingen anledning att köpa de dyrare små mängderna." Nuvarande priser: 25→10k, 1000→20k, 2000→15k, 3000→25k, 5000→30k inkomst→kunskap. Billigaste alternativet ger 0.4 kunskap/inkomst, dyraste ger 0.006 — 66× sämre.
+
+- [x] 20C-1: Progressiv upplåsning av kunskapsaktiviteter
+  - I `ownerKnowledge.ts`: Lägg till `unlockKunskap`-tröskel per aktivitet
+  - Första aktiviteten (Läs maktutredningen, 25 kr) synlig från start
+  - Resten låses upp vid kunskap-milstolpar: 25, 50, 100, 200
+  - I `KnowledgePanel.tsx`: Filtrera aktiviteter baserat på `kunskap >= activity.unlockKunskap`
+  - Visa nästa låsta aktivitet som "teaser" (gråad, "Kräver X kunskap")
+
+- [x] 20C-2: Balansera kunskap/kostnad-ratio
+  - Justera priser OCH belöningar så att dyrare aktiviteter ger proportionellt mer (eller lite extra) per inkomst
+  - Förslag (kostnadseffektivitet ska vara relativt jämn men dyrare ger lite rabatt):
+    - Läs maktutredningen: 25 kr → 10 kunskap (0.40/kr) — billig intro, fortfarande bäst per kr
+    - Studera markberedning: 500 kr → 15 kunskap (0.030/kr)
+    - Besök gammelskog: 1 500 kr → 25 kunskap (0.017/kr)
+    - Gå Plockhugget-kurs: 3 000 kr → 40 kunskap (0.013/kr)
+    - Artinventering: 5 000 kr → 60 kunskap (0.012/kr)
+  - Nyckeln: alla ska kännas VÄRDA att köpa, inte bara den billigaste i loop
+  - Uppdatera `KNOWLEDGE_ACTIVITIES` i `ownerKnowledge.ts`
+
+### 20D — Fasövergångar för ägarvägen
+
+Bakgrund: Ägarvägen har 3 faser (Rötterna, Nätverket, Arvet) men ingen synlig övergång — bara ett tyst tröskelvärde. Spelare märker inte att de "levlar upp". Industri-vägen har svarta cinematiska PhaseTransition-skärmar.
+
+- [ ] 20D-1: Ägarfas-övergångsskärm
+  - Skapa `OwnerPhaseTransition.tsx` — liknande PhaseTransition men med skogsägartema
+  - Bakgrund: mörkt skogsgrön (#0D1A0D) istället för svart
+  - Textsekvenser per övergång (definieras i `phases.ts`):
+    - Fas 1→2: "RÖTTERNA" / "Din skog börjar leva." / "Grannarna ser skillnaden." / "═══ FAS 2: NÄTVERKET ═══"
+    - Fas 2→3: "NÄTVERKET" / "Kommunen lyssnar." / "Din metod sprider sig." / "═══ FAS 3: ARVET ═══"
+  - Partikeleffekt: gröna/guldiga partiklar (inte orange)
+  - Ljud: `playOwnerPhaseUp()` (redan finns i audio.ts)
+  - Duration: 4s (kortare än industri som har 4.5-5.5s)
+
+- [ ] 20D-2: Trigger-logik för ägarfasövergångar
+  - I gameStore tick: Jämför `getOwnerPhase(totalSV)` med föregående — om ny fas → sätt `pendingOwnerTransition`
+  - Nytt state: `pendingOwnerTransition: { from: number, to: number } | null`
+  - Actions: `completeOwnerPhaseTransition()`
+  - I App.tsx owner render: Rendera `OwnerPhaseTransition` vid `pendingOwnerTransition`
+
+- [ ] 20D-3: Fasindikator i ägar-dashboard
+  - Gör fas-texten ("Fas 1: Rötterna") tydligare i OwnerDashboard
+  - Lägg till en progressbar (sv mot nästa faströskel) — liknande industri-dashboard
+  - Kort flash/glow-animation vid nära fasövergång (>85% progress)
+
+### 20E — Startupplevelsen — snabbare feedback
+
+Bakgrund: "Det tog cirka en minut innan något hände på skärmen. Användaren trodde inte att något mer skulle komma." Första minuten av spelet måste ge omedelbar feedback. Spelet börjar med att man klickar och väntar — om inget händer tappar spelaren intresset.
+
+- [ ] 20E-1: Snabbare första event
+  - I gameStore: Sänk `nextEventAt` vid spelstart från `now + 120_000` (2 min) till `now + 20_000` (20s)
+  - Endast vid nystart (inte vid load)
+  - Gäller BÅDA vägarna (industri + ägare)
+
+- [ ] 20E-2: Välkomstmeddelande / tutorial-hint
+  - Visa ett kort intro-meddelande de första 5 sekunderna av spelet
+  - Industri: "Klicka på knappen för att skriva skogsbruksplaner. Ju fler planer, desto fler stammar."
+  - Ägare: "Klicka på skogen för att vårda den. Skogsvärderingen stiger med tiden."
+  - Implementera som ett litet toast/banner som fadear bort efter 5-8s
+  - Visa bara vid `totalStammar === 0` / `totalSkogsvardering === 0` (helt nytt spel)
+  - Spara i `achievements['tutorial_seen']` så det inte visas igen
+
+- [ ] 20E-3: Förstärkt initial klick-feedback
+  - Första klicket: Ge en extra stor partikelburst + tydligare siffra
+  - Pulsande glow runt klickknappen vid spelstart tills spelaren klickat 5 gånger
+  - Gäller båda vägarna
+
+### 20F — Ljud — bakgrundssurr
+
+Bakgrund: "Högtalaren börjar surra. Surrandet fortsätter även efter att man gått ur spelet." Den procedurella ambient-ljud-systemet (droner, fåglar, vindbrus via Web Audio API) upplevs som störande bakgrundssurr.
+
+- [x] 20F-1: Stäng av ambient som standard
+  - Ändra default `ambientVolume` från `0.3` till `0` i `audio.ts`
+  - I SettingsPanel: Visa ambient-slidern men default till 0
+  - Skriv label som "Bakgrundsljud (av)" när volymen är 0
+  - SFX behåller sin default (0.7) — det är bara ambient-dronen som stör
+
+- [x] 20F-2: Korrekt cleanup vid page unload
+  - Lägg till `window.addEventListener('beforeunload', stopAmbient)` i audio.ts
+  - Lägg till cleanup i `document.addEventListener('visibilitychange')` — pausa ambient vid tab-switch
+  - Säkerställ att `AudioContext.close()` anropas vid unmount
+  - Detta fixar "surrandet fortsätter efter att man gått ur spelet"
+
+### 20G — Spelnamn synlighet
+
+Bakgrund: "Man ser inte namnet på spelet när man spelar." Inget "SILVA MAXIMUS" eller "TRÄD" visas i spelet — bara i webbläsarens flik-titel.
+
+- [x] 20G-1: Spelnamn i ticker-bar
+  - Industri: Visa "SILVA MAXIMUS" som första/vänster element i Ticker-baren (före nyhetstexten)
+  - Style: text-xs, font-bold, uppercase, tracking-widest, accent-färg, opacity 60%
+  - Ägare: Visa "TRÄD" i OwnerTicker med samma mönster men i owner-accent-färg
+  - Ska inte ta för mycket plats — max 80-100px bredd, fixed position i tickern
+  - Om det blir för trångt på mobil: visa bara på ≥640px (sm:), göm på xs
+
+### 20H — Namngivning / juridisk risk
+
+Bakgrund: "Holmen" är nämnda med riktigt namn i spelet. Holmen är ett riktigt skogsbolag. Risk för verklig koppling. Byt till fiktivt namn.
+
+- [x] 20H-1: Byt "Holmen" → "Halmen" i ownerEvents.ts (+ SCA→SKA)
+  - `src/data/ownerEvents.ts` rad ~605: "Sälj till Holmen" → "Sälj till Halmen"
+  - Granska HELA kodbasen (alla .ts/.tsx-filer) efter andra riktiga bolagsnamn som missats
+  - Kända parodinamn som redan är OK: Nastly (Nestlé), Husqansen (Husqvarna), Barburr (Barbour), GSC (FSC)
+  - Om fler riktiga namn hittas: byt ut dem till satiriska varianter
+
+### 20H½ — Inkomst känns meningslös (ägarvägen, balans)
+
+Bakgrund: Spelare upplever att bara SV (Skogsvärdering) påverkar spelet. Inkomst-uppgraderingar i kunskapsträdet känns oviktiga. Inkomst används bara till kunskapsaktiviteter — om spelaren snabbt maxar kunskap via billigaste aktiviteten (20A fixar det delvis) tappar inkomst sitt syfte.
+
+- [ ] 20H½-1: Undersök och förstärk inkomstens roll
+  - Kartlägg var inkomst spenderas: kunskapsaktiviteter, avböja lures, köpa ut i events
+  - Identifiera om det finns fler sänkor (sinks) för inkomst eller om den tar slut som resurs
+  - Möjliga åtgärder (välj lämpliga):
+    - Lägg till inkomst-kostnad på fler åtgärder (t.ex. biodiv-projekt, markrestaurering)
+    - Gör kunskapsaktiviteter repeterbara men med ökande kostnad
+    - Lägg till en löpande underhållskostnad (skatt, markskötsel) som drar inkomst passivt
+    - Visa inkomstens effekt tydligare i UI (t.ex. "Inkomst gör att du kan...")
+  - Obs: detta kan bli större än en snabb fix — gör det som hinns, anteckna resten
+
+### 20J — Spelarfeedback: Nastlé-typo + industritempo + image-balans
+
+Bakgrund: Ny spelarfeedback efter Sprint 20-deploy.
+
+**Bugg: "Nastlé" istället för "Nastly"**
+Någonstans i industri-vägens text står det "Nastlé" (med accent) istället för det korrekta parodinamnet "Nastly". Sök igenom alla .ts/.tsx-filer efter "Nastlé" och byt till "Nastly".
+
+**Industri-vägen går för fort — man fattar inte vad som händer**
+Förut gick det för långsamt, nu har pendeln svängt för långt åt andra hållet. Spelaren hinner inte orientera sig. Behöver bättre balans — inte lika snabbt som nu, inte lika långsamt som förut.
+- [ ] 20J-1: Undersök nuvarande fas-trösklar och generator/upgrade-progression
+  - Identifiera vilka specifika delar som accelererar för snabbt (generator-kostnader? upgrade-tillgänglighet? tick-rate?)
+  - Jämför med autoplay-resultat om möjligt
+  - Möjliga åtgärder: höj generator-kostnadsskalning, öka faströsklar, sakta ned upgrade-tillgänglighet
+  - Obs: kräver noggrann balansering — inte bara "gör allt 2x dyrare"
+
+**Grön Image™ försvinner för fort — fas 3 blixtrar förbi**
+Spelaren hinner inte fatta att image sjunker eller vad de behöver göra åt det. Fas 3 (MAKT-eran?) passeras i ett ögonblick.
+- [ ] 20J-2: Undersök image-drain-hastighet och fas 3-progression
+  - Kontrollera imagePerSecond-drain i fas 2-3 (generatorer, side effects)
+  - Kontrollera om varningssystemet (warningLevel) ger tillräckligt tydlig feedback innan det är för sent
+  - Möjliga åtgärder: mildra image-drain i tidiga faser, ge starkare visuell varning, fördröj PR-kampanjkostnader
+  - Alternativt: lägg till en kort "paus" eller highlight vid warningLevel-övergångar
+
+Devkommentar: "förut gick det för långsamt, så jag kan ha gått för långt åt andra hållet. det måste bli bättre balans."
+
+### 20K — Ägar-tickern: för långsam + för lite variation
+
+Bakgrund: Ägar-tickern (OwnerTicker) scrollar för långsamt överlag (desktop OCH mobil) — man ser samma text ("något om en spillkråka") upprepas hela tiden. Irriterande.
+
+Två problem:
+1. **Scroll-hastighet för låg** — texten hänger kvar för länge (alla plattformar)
+2. **För lite textvariation** — samma headlines syns om och om igen, speciellt tidigt i spelet
+
+- [ ] 20K-1: Öka scroll-hastighet
+  - I `OwnerTicker.tsx`: Höj `SCROLL_SPEED` (nu 50 px/s) — prova 80-100 px/s
+  - Gäller alla plattformar, inte bara mobil
+  - Kontrollera även industri-`Ticker.tsx` — den har fast `8s` animation, kan behöva justeras
+
+- [ ] 20K-2: Mer och bättre headline-variation
+  - I `ownerNewsLines.ts`: Lägg till fler headlines för tidiga faser (fas 1, låg SV)
+  - Se till att headline-poolen har minst 10-15 stycken tillgängliga redan vid spelstart
+  - Blanda in fler dynamiska headlines som reflekterar spelarens nuvarande resurser/status
+  - Rotera headlines oftare — visa inte samma 6 hela tiden, randomisera urvalet
+  - Möjliga nya headlines: vädret, årstider, grannars aktiviteter, lokalnyheter, naturbetraktelser
+
+- [ ] 20K-3: Kontrollera industri-tickern också
+  - Samma problem kan finnas i `Ticker.tsx` + `newsTickerLines.ts`
+  - Verifiera att tidiga faser har tillräckligt med headlines
+
+### 20I — Verifiering
+
+- [ ] 20I-1: Testa popup-delay
+  - Starta spel, klicka snabbt, trigga ett event — verifiera att val-knappar INTE kan klickas direkt
+  - Testa i ägarvägen med IndustryAttackModal/LureModal
+  - Verifiera accessibility (aria-disabled fungerar)
+
+- [ ] 20I-2: Testa owner fas-övergångar
+  - Sätt totalSV nära tröskel (50K, 150K), tick → verifiera att OwnerPhaseTransition visas
+  - Verifiera textsekvenser, partiklar, ljud, timing
+
+- [ ] 20I-3: Testa kunskapsbalans
+  - Verifiera att aktiviteter låses upp progressivt
+  - Verifiera att balanserade priser ger rimlig progression
+
+- [ ] 20I-4: Verifiera namnbyten
+  - Sök igenom all text/data efter kvarvarande riktiga bolagsnamn
+  - Verifiera att "Halmen" används istället för "Holmen"
+
+- [ ] 20I-5: Build & Deploy
+  - `npm test` — alla tester passerar
+  - TypeScript clean
+  - Vite build passerar
+  - Deploy till GitHub Pages
+  - Testa på mobil (popup-delay, reset-knapp, ljud, fasövergångar)
+
+---
+
 ## Session Handoff Protocol
 
 After every coding session, ensure:

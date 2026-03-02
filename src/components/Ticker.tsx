@@ -35,14 +35,14 @@ export function Ticker() {
         style={{ background: 'linear-gradient(90deg, rgba(30,30,30,0.95) 70%, transparent)' }}
       >
         <span className="text-xs font-bold uppercase tracking-[0.2em] opacity-60" style={{ color: '#D4730C' }}>
-          SILVA MAXIMUS
+          TRÄD
         </span>
       </div>
       <div
         className="absolute inset-0 flex items-center whitespace-nowrap"
         style={{ animation: 'ticker-scroll 8s linear infinite' }}
       >
-        <span className="text-sm text-text-primary/80 tracking-wide px-4 sm:pl-32">
+        <span className="text-sm text-text-primary/80 tracking-wide px-4 sm:pl-16">
           {tickerText}
         </span>
         <span className="text-sm text-text-primary/80 tracking-wide px-4">
