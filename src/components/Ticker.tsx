@@ -3,7 +3,7 @@ import { useGameStore } from '../store/gameStore'
 import { getAvailableHeadlines } from '../data/newsTickerLines'
 import { isDonator } from '../engine/donation'
 
-const SCROLL_SPEED = 450 // pixels per second
+const SCROLL_SPEED = 250 // pixels per second
 
 export function Ticker() {
   const phase = useGameStore(s => s.phase)

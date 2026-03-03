@@ -3,7 +3,7 @@ import { useGameStore } from '../../store/gameStore'
 import { getAvailableOwnerHeadlines } from '../../data/ownerNewsLines'
 import { isDonator } from '../../engine/donation'
 
-const SCROLL_SPEED = 450 // pixels per second
+const SCROLL_SPEED = 250 // pixels per second
 
 export function OwnerTicker() {
   const totalSV = useGameStore(s => s.totalSkogsvardering)
