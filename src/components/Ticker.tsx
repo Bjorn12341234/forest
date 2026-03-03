@@ -58,7 +58,7 @@ export function Ticker() {
         <span className="ml-2.5 opacity-40 text-sm" style={{ color: '#D4730C' }}>│</span>
       </div>
       <div
-        className="absolute inset-0 flex items-center whitespace-nowrap"
+        className="absolute top-0 bottom-0 left-0 flex items-center whitespace-nowrap"
         style={{
           animation: `ticker-scroll ${duration}s linear infinite`,
           willChange: 'transform',
