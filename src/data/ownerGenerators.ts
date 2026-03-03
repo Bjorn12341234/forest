@@ -8,6 +8,7 @@ export interface OwnerGeneratorData {
   baseCost: number         // cost in skogsvardering
   svPerSecond: number      // skogsvardering per second per unit
   inkomstPerSecond: number // inkomst per second per unit
+  maintenanceCost: number  // inkomst/s maintenance per unit (markskötsel)
   bonuses?: {
     biodiv?: number        // per tick per unit
     resiliens?: number     // per tick per unit
@@ -27,6 +28,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 100,
     svPerSecond: 1,
     inkomstPerSecond: 0.1,
+    maintenanceCost: 0,
     costScale: 1.12,
   },
   {
@@ -36,6 +38,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 500,
     svPerSecond: 2,
     inkomstPerSecond: 0.5,
+    maintenanceCost: 0.05,
     bonuses: { kunskap: 0.05 },
     costScale: 1.12,
   },
@@ -46,6 +49,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 1_500,
     svPerSecond: 0,
     inkomstPerSecond: 0,
+    maintenanceCost: 0.02,
     bonuses: { biodiv: 0.3, resiliens: 0.1, deadwood: 0.2 },
     costScale: 1.12,
   },
@@ -56,6 +60,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 3_000,
     svPerSecond: 5,
     inkomstPerSecond: 2,
+    maintenanceCost: 0.3,
     costScale: 1.12,
   },
   {
@@ -65,6 +70,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 8_000,
     svPerSecond: 0,
     inkomstPerSecond: 10,
+    maintenanceCost: 1.5,
     costScale: 1.12,
   },
   {
@@ -74,6 +80,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 15_000,
     svPerSecond: 5,
     inkomstPerSecond: 15,
+    maintenanceCost: 3.0,
     costScale: 1.12,
   },
   {
@@ -83,6 +90,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 30_000,
     svPerSecond: 0,
     inkomstPerSecond: 25,
+    maintenanceCost: 4.0,
     bonuses: { carbon: 1.0 },
     costScale: 1.12,
   },
@@ -93,6 +101,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 75_000,
     svPerSecond: 0,
     inkomstPerSecond: 50,
+    maintenanceCost: 8.0,
     bonuses: { kunskap: 2.0 },
     costScale: 1.12,
   },
@@ -103,6 +112,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 200_000,
     svPerSecond: 200,
     inkomstPerSecond: 0,
+    maintenanceCost: 2.0,
     bonuses: { legacy: 10.0 },
     costScale: 1.12,
   },
@@ -114,6 +124,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 250_000,
     svPerSecond: 300,
     inkomstPerSecond: 0,
+    maintenanceCost: 3.0,
     bonuses: { legacy: 15.0, biodiv: 1.5, resiliens: 0.5 },
     costScale: 1.14,
   },
@@ -124,6 +135,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 400_000,
     svPerSecond: 0,
     inkomstPerSecond: 80,
+    maintenanceCost: 12.0,
     bonuses: { carbon: 3.0, kunskap: 1.0 },
     costScale: 1.14,
   },
@@ -134,6 +146,7 @@ export const OWNER_GENERATORS: OwnerGeneratorData[] = [
     baseCost: 750_000,
     svPerSecond: 500,
     inkomstPerSecond: 30,
+    maintenanceCost: 5.0,
     bonuses: { legacy: 20.0, biodiv: 5.0, resiliens: 1.0 },
     costScale: 1.16,
   },
@@ -150,4 +163,16 @@ export function getOwnerGeneratorData(id: string): OwnerGeneratorData | undefine
 
 export function getOwnerGeneratorCost(baseCost: number, count: number, costScale = 1.12): number {
   return Math.floor(baseCost * Math.pow(costScale, count))
+}
+
+/** Calculate total maintenance cost (inkomst/s) from all owner generators */
+export function computeOwnerMaintenancePS(generators: Record<string, { count: number }>): number {
+  let total = 0
+  for (const [id, gen] of Object.entries(generators)) {
+    if (gen.count > 0) {
+      const data = OWNER_GENERATOR_MAP.get(id)
+      if (data) total += gen.count * data.maintenanceCost
+    }
+  }
+  return total
 }

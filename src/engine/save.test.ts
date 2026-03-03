@@ -78,6 +78,7 @@ function makeMinimalState(overrides: Partial<GameState> = {}): GameState {
     activeIndustryLure: null,
     ownerKnowledgeUpgrades: {},
     lastKnowledgeActivityAt: 0,
+    knowledgeActivityPurchases: {},
     ownerPhase: 1,
     entropyPurchases: {},
     milestonesSeen: {},
@@ -236,7 +237,7 @@ describe('migrations', () => {
     return JSON.stringify(save)
   }
 
-  it('migrates v1 → v12 (full chain)', () => {
+  it('migrates v1 → v14 (full chain)', () => {
     localStorage.setItem('silva_maximus_save', makeV1Save())
     const state = loadGame()
     expect(state).not.toBeNull()
@@ -261,6 +262,7 @@ describe('migrations', () => {
     expect(state!.milestonesSeen).toEqual({})           // v9→v10
     expect(state!.epilogChosen).toBe(false)            // v9→v10
     expect(state!.lastEventFiredAt).toEqual({})        // v11→v12
+    expect(state!.knowledgeActivityPurchases).toEqual({}) // v13→v14
   })
 
   it('migrates v4 save (adds owner fields)', () => {

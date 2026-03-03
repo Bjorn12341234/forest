@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useGameStore } from '../../store/gameStore'
-import { KNOWLEDGE_ACTIVITIES, KNOWLEDGE_THRESHOLDS } from '../../data/ownerKnowledge'
+import { KNOWLEDGE_ACTIVITIES, KNOWLEDGE_THRESHOLDS, getKnowledgeActivityCost } from '../../data/ownerKnowledge'
 import { KNOWLEDGE_CATEGORIES, getUpgradesByCategory, computeKnowledgeModifiers, type OwnerKnowledgeUpgrade } from '../../data/ownerKnowledgeTree'
 import { formatNumber } from '../../engine/format'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
@@ -14,6 +14,7 @@ export function KnowledgePanel() {
   const totalSV = useGameStore(s => s.totalSkogsvardering)
   const ownerKnowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
   const lastKnowledgeActivityAt = useGameStore(s => s.lastKnowledgeActivityAt)
+  const knowledgeActivityPurchases = useGameStore(s => s.knowledgeActivityPurchases)
   const buyKnowledgeActivity = useGameStore(s => s.buyKnowledgeActivity)
   const purchaseOwnerKnowledge = useGameStore(s => s.purchaseOwnerKnowledge)
 
@@ -180,7 +181,9 @@ export function KnowledgePanel() {
           {KNOWLEDGE_ACTIVITIES.map(activity => {
             const unlocked = kunskap >= activity.unlockKunskap
             if (!unlocked) return null
-            const canAfford = inkomst >= activity.cost && !isOnCooldown
+            const purchaseCount = knowledgeActivityPurchases[activity.id] ?? 0
+            const currentCost = getKnowledgeActivityCost(activity.cost, purchaseCount)
+            const canAfford = inkomst >= currentCost && !isOnCooldown
             return (
               <div
                 key={activity.id}
@@ -201,9 +204,12 @@ export function KnowledgePanel() {
                   </div>
                   <div className="text-right flex-shrink-0">
                     <span className={`text-sm font-numbers ${canAfford ? 'text-owner-accent font-medium' : 'text-owner-text/60'}`}>
-                      {`${formatNumber(activity.cost)} tkr`}
+                      {`${formatNumber(currentCost)} tkr`}
                     </span>
                     <div className="text-xs text-owner-accent font-numbers">+{activity.kunskapReward} kunskap</div>
+                    {purchaseCount > 0 && (
+                      <div className="text-[0.6rem] text-owner-text/50 font-numbers">×{purchaseCount}</div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -71,6 +71,7 @@ function OwnerGeneratorRow({ data, count, skogsvardering, onBuy }: {
   const parts: string[] = []
   if (data.svPerSecond > 0) parts.push(`+${formatNumber(data.svPerSecond)} sv/s`)
   if (data.inkomstPerSecond > 0) parts.push(`+${formatNumber(data.inkomstPerSecond)} tkr/s`)
+  if (data.maintenanceCost > 0) parts.push(`−${data.maintenanceCost} skötsel`)
   if (data.bonuses?.biodiv) parts.push(`+biodiv`)
   if (data.bonuses?.resiliens) parts.push(`+resiliens`)
   if (data.bonuses?.kunskap) parts.push(`+kunskap`)

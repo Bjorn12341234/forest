@@ -120,8 +120,9 @@ export interface GameState {
   // Owner knowledge tree upgrades
   ownerKnowledgeUpgrades: Record<string, boolean>
 
-  // Owner knowledge activity cooldown
+  // Owner knowledge activity cooldown + purchase counts (for escalating costs)
   lastKnowledgeActivityAt: number
+  knowledgeActivityPurchases: Record<string, number>
 
   // Owner phase (1-3 based on totalSkogsvardering)
   ownerPhase: number

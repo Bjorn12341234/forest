@@ -82,3 +82,8 @@ const KNOWLEDGE_ACTIVITY_MAP = new Map<string, KnowledgeActivityData>(
 export function getKnowledgeActivity(id: string): KnowledgeActivityData | undefined {
   return KNOWLEDGE_ACTIVITY_MAP.get(id)
 }
+
+/** Escalating cost: each repeat purchase multiplies base cost by 1.4^count */
+export function getKnowledgeActivityCost(baseCost: number, purchaseCount: number): number {
+  return Math.floor(baseCost * Math.pow(1.4, purchaseCount))
+}

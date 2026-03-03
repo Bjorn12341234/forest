@@ -1996,7 +1996,7 @@ Bakgrund: "Holmen" är nämnda med riktigt namn i spelet. Holmen är ett riktigt
 
 Bakgrund: Spelare upplever att bara SV (Skogsvärdering) påverkar spelet. Inkomst-uppgraderingar i kunskapsträdet känns oviktiga. Inkomst används bara till kunskapsaktiviteter — om spelaren snabbt maxar kunskap via billigaste aktiviteten (20A fixar det delvis) tappar inkomst sitt syfte.
 
-- [ ] 20H½-1: Undersök och förstärk inkomstens roll
+- [x] 20H½-1: Undersök och förstärk inkomstens roll
   - Kartlägg var inkomst spenderas: kunskapsaktiviteter, avböja lures, köpa ut i events
   - Identifiera om det finns fler sänkor (sinks) för inkomst eller om den tar slut som resurs
   - Möjliga åtgärder (välj lämpliga):
@@ -2005,6 +2005,14 @@ Bakgrund: Spelare upplever att bara SV (Skogsvärdering) påverkar spelet. Inkom
     - Lägg till en löpande underhållskostnad (skatt, markskötsel) som drar inkomst passivt
     - Visa inkomstens effekt tydligare i UI (t.ex. "Inkomst gör att du kan...")
   - Obs: detta kan bli större än en snabb fix — gör det som hinns, anteckna resten
+
+**20H½ Notes (Sprint 20, session 3):**
+- Kartläggning klar: inkomst hade ~164K engångskostnader + platta repeterbara kunskapsaktiviteter. Sen-game generatorer (80+ tkr/s) gör att inkomst hopar sig utan mening.
+- **Åtgärd 1: Eskalerande kunskapsaktivitetskostnader** — varje köp ökar kostnaden ×1.4^antal (ny state: `knowledgeActivityPurchases`). Ger långsiktig sänka.
+- **Åtgärd 2: Passiv markskötsel (underhållskostnad)** — varje generator har `maintenanceCost` per enhet/s som dras från inkomst i ownerTick. Skapar löpande tryck (~15-20% av inkomstproduktion). Inkomst kan inte gå under 0.
+- **Åtgärd 3: UI-visning** — inkomstkort visar nu netto-rate ("+X/s (skötsel −Y)"), generatorer visar "−X skötsel" i produktionsetikett.
+- Save version: 13→14 (migration: lägger till knowledgeActivityPurchases)
+- Möjlig framtida utökning: biodiv-projekt eller markrestaurering som kostar inkomst (ej implementerat)
 
 ### 20J — Spelarfeedback: Nastlé-typo + industritempo + image-balans
 
@@ -2110,6 +2118,12 @@ Möjliga orsaker (kombinerade):
   - Vite build passerar (256KB gzip) ✓
   - Deploy till GitHub Pages — väntar på push
   - Testa på mobil (popup-delay, reset-knapp, ljud, fasövergångar)
+
+---
+
+## Framtida idéer (backlog)
+
+- **Inkomst-sänkor (ägarvägen)**: Lägg till biodiv-projekt och markrestaurering som kostar inkomst — t.ex. "Återställ våtmark" (−15 000 tkr, +biodiv +resiliens), "Plantera äng" (−8 000 tkr, +biodiv). Ger spelaren fler meningsfulla val för sin inkomst bortom kunskapsaktiviteter.
 
 ---
 

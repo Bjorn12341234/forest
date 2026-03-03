@@ -5,6 +5,8 @@ import { getOwnerPhase, getOwnerPhaseProgress } from '../../engine/phases'
 import { OwnerClickArea } from './OwnerClickArea'
 import { OwnerGenerators } from './OwnerGenerators'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
+import { OWNER_GENERATORS, computeOwnerMaintenancePS } from '../../data/ownerGenerators'
+import { computeKnowledgeModifiers } from '../../data/ownerKnowledgeTree'
 
 const gridColsClass: Record<number, string> = {
   1: 'grid-cols-1',
@@ -23,16 +25,45 @@ export function OwnerDashboard() {
   const legacy = useGameStore(s => s.legacy)
   const deadwood = useGameStore(s => s.deadwood)
   const totalSV = useGameStore(s => s.totalSkogsvardering)
+  const ownerGenerators = useGameStore(s => s.ownerGenerators)
+  const ownerKnowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
 
   const phaseInfo = getOwnerPhase(totalSV)
   const phaseProgress = getOwnerPhaseProgress(totalSV)
+
+  // Compute inkomst rates for display
+  const knowledgeMods = computeKnowledgeModifiers(ownerKnowledgeUpgrades)
+  let generatorInkomst = 0
+  for (const [id, gen] of Object.entries(ownerGenerators)) {
+    if (gen.count > 0) {
+      const data = OWNER_GENERATORS.find(g => g.id === id)
+      if (data) generatorInkomst += gen.count * data.inkomstPerSecond
+    }
+  }
+  const grossInkomstPS = generatorInkomst * (1 + knowledgeMods.inkomstMult)
+  const maintenancePS = computeOwnerMaintenancePS(ownerGenerators)
+  const netInkomstPS = grossInkomstPS - maintenancePS
 
   // Primary resource cards — only show when relevant
   const primaryCards: React.ReactElement[] = [
     <OwnerResourceCard key="sv" label="Skogsvärde" value={skogsvardering} icon="🌲" />,
   ]
-  if (inkomst > 0)
-    primaryCards.push(<OwnerResourceCard key="ink" label="Inkomst" value={inkomst} format={n => `${formatNumber(n)} tkr`} icon="💰" />)
+  if (inkomst > 0 || grossInkomstPS > 0)
+    primaryCards.push(
+      <OwnerResourceCard
+        key="ink"
+        label="Inkomst"
+        value={inkomst}
+        format={n => `${formatNumber(n)} tkr`}
+        icon="💰"
+        rateLabel={grossInkomstPS > 0 ? (
+          maintenancePS > 0
+            ? `${netInkomstPS >= 0 ? '+' : ''}${netInkomstPS.toFixed(1)}/s (skötsel −${maintenancePS.toFixed(1)})`
+            : `+${grossInkomstPS.toFixed(1)}/s`
+        ) : undefined}
+        rateNegative={netInkomstPS < 0}
+      />
+    )
   if (kunskap > 0)
     primaryCards.push(<OwnerResourceCard key="kun" label="Skogskunskap" value={kunskap} icon="📚" />)
   if (resiliens !== 100)
@@ -122,12 +153,14 @@ export function OwnerDashboard() {
   )
 }
 
-function OwnerResourceCard({ label, value, format, className = '', icon }: {
+function OwnerResourceCard({ label, value, format, className = '', icon, rateLabel, rateNegative }: {
   label: string
   value: number
   format?: (n: number) => string
   className?: string
   icon?: string
+  rateLabel?: string
+  rateNegative?: boolean
 }) {
   return (
     <div className="owner-card p-3">
@@ -141,6 +174,11 @@ function OwnerResourceCard({ label, value, format, className = '', icon }: {
           className={`text-lg text-owner-text ${className}`}
           format={format}
         />
+        {rateLabel && (
+          <span className={`text-[0.6rem] font-numbers ${rateNegative ? 'text-[#CC2222]/80' : 'text-owner-accent/70'}`}>
+            {rateLabel}
+          </span>
+        )}
       </div>
     </div>
   )

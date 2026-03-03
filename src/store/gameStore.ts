@@ -36,9 +36,9 @@ import {
   computeSpeciesLoss,
   processExpansionMechanics,
 } from '../engine/tickHelpers'
-import { getOwnerGeneratorData, getOwnerGeneratorCost } from '../data/ownerGenerators'
+import { getOwnerGeneratorData, getOwnerGeneratorCost, computeOwnerMaintenancePS } from '../data/ownerGenerators'
 import { OWNER_CLICK_UPGRADES, getOwnerClickUpgrade } from '../data/ownerClickUpgrades'
-import { getKnowledgeActivity } from '../data/ownerKnowledge'
+import { getKnowledgeActivity, getKnowledgeActivityCost } from '../data/ownerKnowledge'
 import { computeKnowledgeModifiers, getOwnerKnowledgeUpgrade, type KnowledgeModifiers } from '../data/ownerKnowledgeTree'
 import { INDUSTRY_ATTACKS, getIndustryAttack } from '../data/industryAttacks'
 import { INDUSTRY_LURES, getIndustryLure } from '../data/industryLures'
@@ -148,6 +148,7 @@ export const INITIAL_STATE: GameState = {
   ownerKnowledgeUpgrades: {},
 
   lastKnowledgeActivityAt: 0,
+  knowledgeActivityPurchases: {},
   ownerPhase: 1,
 
   // Sprint 10: Game Feel
@@ -310,9 +311,12 @@ function ownerTick(
 
   const generatorInkomst = computeOwnerInkomstPS(state.ownerGenerators)
   const totalInkomstPS = generatorInkomst * (1 + knowledgeMods.inkomstMult)
+  const maintenancePS = computeOwnerMaintenancePS(state.ownerGenerators)
+  const netInkomstPS = totalInkomstPS - maintenancePS
 
   const svGained = totalSVPS * dt
-  const inkomstGained = totalInkomstPS * dt
+  // Net inkomst can be negative (maintenance > income), but floor at 0
+  const inkomstGained = Math.max(-state.inkomst, netInkomstPS * dt)
 
   // Apply generator bonuses
   let genBiodiv = 0
@@ -710,16 +714,22 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const data = getKnowledgeActivity(id)
     if (!data) return
 
-    if (state.inkomst < data.cost) return
+    const purchaseCount = state.knowledgeActivityPurchases[id] ?? 0
+    const effectiveCost = getKnowledgeActivityCost(data.cost, purchaseCount)
+    if (state.inkomst < effectiveCost) return
 
     // 15-second global cooldown between knowledge activity purchases
     const now = Date.now()
     if (now - state.lastKnowledgeActivityAt < 15_000) return
 
     set({
-      inkomst: state.inkomst - data.cost,
+      inkomst: state.inkomst - effectiveCost,
       kunskap: state.kunskap + data.kunskapReward,
       lastKnowledgeActivityAt: now,
+      knowledgeActivityPurchases: {
+        ...state.knowledgeActivityPurchases,
+        [id]: purchaseCount + 1,
+      },
     } as Partial<GameStore>)
   },
 
@@ -1420,6 +1430,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       activeIndustryLure: null,
       ownerKnowledgeUpgrades: {},
       lastKnowledgeActivityAt: 0,
+      knowledgeActivityPurchases: {},
       ownerPhase: 1,
       entropyPurchases: {},
       milestonesSeen: {},
