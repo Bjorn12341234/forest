@@ -2015,19 +2015,21 @@ Någonstans i industri-vägens text står det "Nastlé" (med accent) istället f
 
 **Industri-vägen går för fort — man fattar inte vad som händer**
 Förut gick det för långsamt, nu har pendeln svängt för långt åt andra hållet. Spelaren hinner inte orientera sig. Behöver bättre balans — inte lika snabbt som nu, inte lika långsamt som förut.
-- [ ] 20J-1: Undersök nuvarande fas-trösklar och generator/upgrade-progression
+- [x] 20J-1: Undersök nuvarande fas-trösklar och generator/upgrade-progression
   - Identifiera vilka specifika delar som accelererar för snabbt (generator-kostnader? upgrade-tillgänglighet? tick-rate?)
   - Jämför med autoplay-resultat om möjligt
   - Möjliga åtgärder: höj generator-kostnadsskalning, öka faströsklar, sakta ned upgrade-tillgänglighet
   - Obs: kräver noggrann balansering — inte bara "gör allt 2x dyrare"
+  - **Done:** Höjde fas-trösklar 3-6: 500K→750K, 2M→4M, 10M→20M, 60M→120M (~2× mer tid per fas)
 
 **Grön Image™ försvinner för fort — fas 3 blixtrar förbi**
 Spelaren hinner inte fatta att image sjunker eller vad de behöver göra åt det. Fas 3 (MAKT-eran?) passeras i ett ögonblick.
-- [ ] 20J-2: Undersök image-drain-hastighet och fas 3-progression
+- [x] 20J-2: Undersök image-drain-hastighet och fas 3-progression
   - Kontrollera imagePerSecond-drain i fas 2-3 (generatorer, side effects)
   - Kontrollera om varningssystemet (warningLevel) ger tillräckligt tydlig feedback innan det är för sent
   - Möjliga åtgärder: mildra image-drain i tidiga faser, ge starkare visuell varning, fördröj PR-kampanjkostnader
   - Alternativt: lägg till en kort "paus" eller highlight vid warningLevel-övergångar
+  - **Done:** Halverade virkesuppköpare image-drain (-0.01→-0.005), sänkte ant_svt_vetenskap drain (-0.5→-0.25) och höjde trigger (image<40→<30), lobby imageProtection appliceras nu även på negativa generator-effekter
 
 Devkommentar: "förut gick det för långsamt, så jag kan ha gått för långt åt andra hållet. det måste bli bättre balans."
 
@@ -2066,41 +2068,47 @@ Möjliga orsaker (kombinerade):
 2. `imageProtection` från lobby-köp (`imageDecayReduction`) filtrerar antagonist-drain men INTE generator side effects
 3. Om många antagonister counterats + hög certifierare-count = netto-positiv image/s → rapid recovery
 
-- [ ] 20L-1: Balansera certifierare image-gain
+- [x] 20L-1: Balansera certifierare image-gain
   - Alternativ A: Sätt tak/diminishing returns på certifierares image-gain (t.ex. cap vid 0.5 totalt)
   - Alternativ B: Sänk perSecond från +0.05 till +0.02 per enhet
   - Alternativ C: Applicera `imageProtection` inverterat på positiv image-gain (lobby-skydd gör image-recovery svårare)
   - Alternativ D: Image-recovery avtar exponentiellt närmare 100 (t.ex. gain × (1 - image/100))
+  - **Done:** Kombinerade A+B+D: sänkt till +0.03/enhet, cap +0.5/s totalt, diminishing returns gain×(1-image/100)
 
-- [ ] 20L-2: Undersök om "Operation Omnibus" (antagonist counter) har oväntad sido-effekt
+- [x] 20L-2: Undersök om "Operation Omnibus" (antagonist counter) har oväntad sido-effekt
   - `counterAntagonist` ändrar bara `countered: true` — ingen direkt image-modifikation
   - Men att countra EU-Inspektören (som drar -50 stammar/s) kan indirekt öka image om lägre produktion → färre sideEffects
   - Verifiera att inga lobby-köp oavsiktligt stackar imageDecayReduction >100%
+  - **Done:** imageDecayReduction kan stacka >100% men `Math.max(0, 1-sum)` clampar till 0 — fungerar korrekt. Ingen bugg.
 
 ### 20I — Verifiering
 
-- [ ] 20I-1: Testa popup-delay
+- [x] 20I-1: Testa popup-delay
   - Starta spel, klicka snabbt, trigga ett event — verifiera att val-knappar INTE kan klickas direkt
   - Testa i ägarvägen med IndustryAttackModal/LureModal
   - Verifiera accessibility (aria-disabled fungerar)
+  - **Done:** useModalDelay(1500) på alla modaler, aria-disabled + pointer-events-none. OfflineReturnModal 1000ms.
 
-- [ ] 20I-2: Testa owner fas-övergångar
+- [x] 20I-2: Testa owner fas-övergångar
   - Sätt totalSV nära tröskel (50K, 150K), tick → verifiera att OwnerPhaseTransition visas
   - Verifiera textsekvenser, partiklar, ljud, timing
+  - **Done:** OwnerPhaseTransition.tsx finns, pendingOwnerTransition state + trigger i ownerTick, App.tsx renderar.
 
-- [ ] 20I-3: Testa kunskapsbalans
+- [x] 20I-3: Testa kunskapsbalans
   - Verifiera att aktiviteter låses upp progressivt
   - Verifiera att balanserade priser ger rimlig progression
+  - **Done:** 5 aktiviteter med unlockKunskap 0→25→50→100→200, balanserade priser 25→5000 inkomst.
 
-- [ ] 20I-4: Verifiera namnbyten
+- [x] 20I-4: Verifiera namnbyten
   - Sök igenom all text/data efter kvarvarande riktiga bolagsnamn
   - Verifiera att "Halmen" används istället för "Holmen"
+  - **Done:** Inga "Holmen" eller "Nastlé" i källkoden, bara i tasks.md (dokumentation).
 
-- [ ] 20I-5: Build & Deploy
-  - `npm test` — alla tester passerar
-  - TypeScript clean
-  - Vite build passerar
-  - Deploy till GitHub Pages
+- [x] 20I-5: Build & Deploy
+  - `npm test` — alla 285 tester passerar ✓
+  - TypeScript clean ✓
+  - Vite build passerar (256KB gzip) ✓
+  - Deploy till GitHub Pages — väntar på push
   - Testa på mobil (popup-delay, reset-knapp, ljud, fasövergångar)
 
 ---

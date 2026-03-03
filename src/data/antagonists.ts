@@ -93,9 +93,9 @@ export const ANTAGONISTS: AntagonistDef[] = [
     icon: '📺',
     triggerPhase: 3,
     maxPhase: 6,
-    triggerCondition: (s) => s.image < 40,
+    triggerCondition: (s) => s.image < 30,
     tickEffects: [
-      { resource: 'image', perSecond: -0.5, description: '-0,5 Image/s (mega)' },
+      { resource: 'image', perSecond: -0.25, description: '-0,25 Image/s' },
     ],
     counterCost: { resource: 'lobby', amount: 300, scaleThreshold: 1_000 },
     counterLabel: 'Riksskogsnämnden mot SVT',

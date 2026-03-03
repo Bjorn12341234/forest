@@ -479,7 +479,20 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 
     // Generator side effects (image/lobby/biodiversity)
     const sideEffects = computeGeneratorSideEffects(state.generators, dt)
-    const totalSideImage = sideEffects.image + synergies.imagePS * dt + countryRewards.imagePerSecond * dt
+    const rawSideImage = sideEffects.image + synergies.imagePS * dt + countryRewards.imagePerSecond * dt
+
+    // Split positive/negative image effects for separate treatment
+    const currentImage = state.image
+    let totalSideImage = 0
+    if (rawSideImage > 0) {
+      // 20L fix: diminishing returns on positive image gain — recovery slows near 100
+      // Cap positive image gain at 0.5/s equivalent (0.5 * dt after dt factored out)
+      const cappedPositive = Math.min(rawSideImage, 0.5 * dt)
+      totalSideImage = cappedPositive * (1 - currentImage / 100)
+    } else {
+      // Negative image from generators: apply lobby imageProtection
+      totalSideImage = rawSideImage * lobbyMods.imageProtection
+    }
 
     // Update hidden variables (include expansion + country hidden costs)
     const co2Gain = stammarGained * 0.05 + expansion.co2 * dt + country.co2 * dt

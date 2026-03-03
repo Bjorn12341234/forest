@@ -30,7 +30,7 @@ export const GENERATORS: GeneratorData[] = [
     baseProduction: 1,
     unlockPhase: 1,
     sideEffects: [
-      { resource: 'image', perSecond: -0.01, description: '-0,01 Image/s' },
+      { resource: 'image', perSecond: -0.005, description: '-0,005 Image/s' },
     ],
   },
   {
@@ -68,7 +68,7 @@ export const GENERATORS: GeneratorData[] = [
     baseProduction: 500,
     unlockPhase: 2,
     sideEffects: [
-      { resource: 'image', perSecond: 0.05, description: '+0,05 Image/s' },
+      { resource: 'image', perSecond: 0.03, description: '+0,03 Image/s' },
     ],
   },
   {

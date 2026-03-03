@@ -39,10 +39,10 @@ export const PHASE_NAMES: Record<Phase, string> = {
 const PHASE_THRESHOLDS: Record<number, number> = {
   1: 10_000,              // → Phase 2
   2: 100_000,             // → Phase 3
-  3: 500_000,             // → Phase 4  (was 1M)
-  4: 2_000_000,           // → Phase 5  (was 10M)
-  5: 10_000_000,          // → Phase 6  (was 100M)
-  6: 60_000_000,          // → Phase 7  (was 1B)
+  3: 750_000,             // → Phase 4  (was 500K, originally 1M)
+  4: 4_000_000,           // → Phase 5  (was 2M, originally 10M)
+  5: 20_000_000,          // → Phase 6  (was 10M, originally 100M)
+  6: 120_000_000,         // → Phase 7  (was 60M, originally 1B)
   7: 500_000_000,         // → Phase 8  (was 5B)
   8: 3_000_000_000,       // → Phase 9  (was 20B)
   9: 30_000_000_000,      // → Phase 10 (was 50B)
