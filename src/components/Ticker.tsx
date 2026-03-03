@@ -19,14 +19,12 @@ export function Ticker() {
   }, [phase, totalStammar, lobbyProjects, generators, eventHistory, donated])
 
   const measureRef = useRef<HTMLSpanElement>(null)
-  const [duration, setDuration] = useState(30)
+  const [scrollWidth, setScrollWidth] = useState(0)
 
   const measure = useCallback(() => {
     if (!measureRef.current) return
-    const textWidth = measureRef.current.scrollWidth
-    if (textWidth > 0) {
-      setDuration(Math.max(5, textWidth / SCROLL_SPEED))
-    }
+    const w = measureRef.current.scrollWidth
+    if (w > 0) setScrollWidth(w)
   }, [])
 
   useEffect(() => {
@@ -38,6 +36,7 @@ export function Ticker() {
   if (headlines.length === 0) return null
 
   const tickerText = headlines.join('  ///  ')
+  const duration = Math.max(5, scrollWidth / SCROLL_SPEED)
 
   return (
     <div className="w-full overflow-hidden relative flex-shrink-0"
@@ -48,6 +47,10 @@ export function Ticker() {
         height: 'calc(2rem + env(safe-area-inset-top))',
       }}
     >
+      {/* Pixel-based keyframes so scroll distance matches text width exactly */}
+      {scrollWidth > 0 && (
+        <style>{`@keyframes ticker-scroll-ind { from { transform: translateX(0); } to { transform: translateX(-${scrollWidth}px); } }`}</style>
+      )}
       {/* Game name — fixed left */}
       <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pl-3 pr-2"
         style={{ background: 'linear-gradient(90deg, rgba(30,30,30,0.95) 70%, transparent)' }}
@@ -58,16 +61,16 @@ export function Ticker() {
         <span className="ml-2.5 opacity-40 text-sm" style={{ color: '#D4730C' }}>│</span>
       </div>
       <div
-        className="absolute top-0 bottom-0 left-0 flex items-center whitespace-nowrap"
+        className="absolute inset-0 flex items-center whitespace-nowrap"
         style={{
-          animation: `ticker-scroll ${duration}s linear infinite`,
+          animation: scrollWidth > 0 ? `ticker-scroll-ind ${duration}s linear infinite` : undefined,
           willChange: 'transform',
         }}
       >
         <span ref={measureRef} className="text-sm text-text-primary/80 tracking-wide pl-20 pr-8 inline-block">
           {tickerText}
         </span>
-        <span className="text-sm text-text-primary/80 tracking-wide px-8 inline-block" aria-hidden="true">
+        <span className="text-sm text-text-primary/80 tracking-wide pl-0 pr-8 inline-block" aria-hidden="true">
           {tickerText}
         </span>
       </div>

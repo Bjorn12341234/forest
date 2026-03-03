@@ -234,15 +234,7 @@ body::before {
   50% { box-shadow: 0 0 30px rgba(94, 158, 110, 0.5), inset 0 0 20px rgba(0,0,0,0.3); }
 }
 
-/* ── Ticker Animation ── */
-@keyframes ticker-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@utility animate-ticker {
-  animation: ticker-scroll 8s linear infinite;
-}
+/* ── Ticker animations are generated inline (pixel-based per component) ── */
 
 /* ── Era-specific themes ── */
 [data-era="INTERNATIONELL"] {
@@ -271,7 +263,7 @@ body::before {
 
 /* ── Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .animate-ticker {
+  [style*="ticker-scroll"] {
     animation: none !important;
   }
   .animate-pulse-glow {
