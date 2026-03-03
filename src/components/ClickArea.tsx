@@ -151,7 +151,7 @@ export function ClickArea() {
           className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full cursor-pointer select-none
                      border-2 bg-bg-secondary
                      flex items-center justify-center
-                     hover:border-text-primary transition-all duration-200"
+                     hover:border-text-primary transition-colors duration-200"
           style={{
             borderColor: streakBonus > 0
               ? `rgba(212, 115, 12, ${0.5 + streakBonus * 0.5})`

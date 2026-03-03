@@ -53,7 +53,7 @@ export function Ticker() {
         style={{ background: 'linear-gradient(90deg, rgba(30,30,30,0.95) 70%, transparent)' }}
       >
         <span className="text-sm font-bold uppercase tracking-[0.2em]" style={{ color: '#D4730C' }}>
-          TRÄD
+          TRÄ
         </span>
         <span className="ml-2.5 opacity-40 text-sm" style={{ color: '#D4730C' }}>│</span>
       </div>
