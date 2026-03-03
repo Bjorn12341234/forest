@@ -59,6 +59,42 @@ export const OWNER_TICKER_HEADLINES: OwnerTickerHeadline[] = [
     text: 'Kantarellsäsongen börjar. Din skog ger 20 kilo. Grannens plantage: ingenting.',
   },
   {
+    id: 'otick_stubbe',
+    text: 'En gammal stubbe täckt av mossa. Liten skog växer ur den. Död blir liv. Industrin ser bara skräp.',
+  },
+  {
+    id: 'otick_hackspett',
+    text: 'Hackspetten jobbar på den gamla aspen. Tre hål redan. Nästa vinter flyttar ugglorna in.',
+  },
+  {
+    id: 'otick_morgondimma',
+    text: 'Morgondimman hänger över skogen. Spindelnäten glittrar. Grannen ser inte detta. Han ser kubikmeter.',
+  },
+  {
+    id: 'otick_stig',
+    text: 'Stigen genom skogen är uppgången av generationer. Älgen använder den också. Ni delar.',
+  },
+  {
+    id: 'otick_blåbär',
+    text: 'Blåbärsriset står tätt i år. Din skog ger bär. Industrins marker ger markberedningsspår.',
+  },
+  {
+    id: 'otick_brevlådan',
+    text: 'Nytt brev i lådan. Erbjudande om "fri värdering av din skog". Gratis. Precis som skogsbruksplanerna.',
+  },
+  {
+    id: 'otick_laven',
+    text: 'Skägglav hänger från granarna. Den växer bara i gammal skog. Industrin har ingen.',
+  },
+  {
+    id: 'otick_gransen_vinter',
+    text: 'Snön ligger annorlunda i din skog. Mjukare. Industrins plantage ser ut som ett fält med pinnar.',
+  },
+  {
+    id: 'otick_telefon',
+    text: 'Telefonen ringer. "Hej, vi köper skog i ert område—" Du lägger på. Tredje gången denna månad.',
+  },
+  {
     id: 'otick_arsringar',
     text: 'Du räknar årsringar på en stormfälld tall. 247 st. Industrin hade sett 3 kubikmeter.',
     triggerSV: 2_000,

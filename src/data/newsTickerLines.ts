@@ -41,6 +41,48 @@ export const TICKER_HEADLINES: TickerHeadline[] = [
     maxPhase: 6,
   },
   {
+    id: 'tick_skogsdag',
+    text: 'Skogsdag i Sollefteå. Gratis korv. Gratis rådgivning. Gratis avverkningsanmälan. Korven var god.',
+    phase: 1,
+    maxPhase: 6,
+  },
+  {
+    id: 'tick_plantkatalog',
+    text: 'Ny plantkatalog: 47 sidor gran. 1 sida tall. 0 sidor löv. "Fullständigt sortiment."',
+    phase: 1,
+    maxPhase: 6,
+  },
+  {
+    id: 'tick_motorsag_kurs',
+    text: 'Motorsågskurs fulltecknad. Deltagarna får varsitt exemplar av "Gallring för Nybörjare". Sponsrad av massaindustrin.',
+    phase: 1,
+    maxPhase: 6,
+  },
+  {
+    id: 'tick_trafikverket',
+    text: 'Trafikverket bygger ny skogsbilväg. "Tillgänglighet." Skördaren stod redan parkerad vid vändplanen.',
+    phase: 1,
+    maxPhase: 6,
+  },
+  {
+    id: 'tick_insandare',
+    text: 'Insändare i lokaltidningen: "Kalavverkning är inte fult — det är föryngring." Undertecknad: Skogsbolagets informatör.',
+    phase: 1,
+    maxPhase: 6,
+  },
+  {
+    id: 'tick_fastighetsmäklare',
+    text: 'Fastighetsmäklare värderar skogen. "Fint virkesförråd." Översättning: fina träd att fälla.',
+    phase: 2,
+    maxPhase: 6,
+  },
+  {
+    id: 'tick_skogsstyrelsen_tips',
+    text: 'Skogsstyrelsen tipsar: "Röj tidigt, gallra ofta, föryngringsavverka i tid." Översättning: hugga, hugga, hugga.',
+    phase: 2,
+    maxPhase: 6,
+  },
+  {
     id: 'tick_forsta_massaorder',
     text: 'Första massaordern levererad. Pappersbruket är nöjt. Skogen är tystare.',
     phase: 1,
