@@ -3,7 +3,7 @@ import { useGameStore } from '../../store/gameStore'
 import { getAvailableOwnerHeadlines } from '../../data/ownerNewsLines'
 import { isDonator } from '../../engine/donation'
 
-const SCROLL_SPEED = 90 // pixels per second
+const SCROLL_SPEED = 200 // pixels per second
 
 export function OwnerTicker() {
   const totalSV = useGameStore(s => s.totalSkogsvardering)
@@ -39,7 +39,7 @@ export function OwnerTicker() {
     if (!measureRef.current) return
     const textWidth = measureRef.current.scrollWidth
     if (textWidth > 0) {
-      setDuration(Math.max(12, textWidth / SCROLL_SPEED))
+      setDuration(Math.max(8, textWidth / SCROLL_SPEED))
     }
   }, [])
 
