@@ -11,13 +11,13 @@ Use **Capacitor** (already partially configured) to wrap the existing web game a
 ## Sprint 1 — iOS Platform Bootstrap
 > Goal: Game running in iOS Simulator
 
-- [ ] Install `@capacitor/ios` dependency
-- [ ] Run `npx cap add ios` to scaffold the iOS platform
-- [ ] Build with `npm run build:cap` to sync web assets
-- [ ] Open in Xcode, fix any build errors
-- [ ] Verify game loads and runs in iOS Simulator
-- [ ] Test basic gameplay (clicking, generators, events, phase transitions)
-- [ ] Fix any iOS-specific rendering issues (safe areas, viewport, scrolling)
+- [x] Install `@capacitor/ios` dependency
+- [x] Run `npx cap add ios` to scaffold the iOS platform
+- [x] Build with `npm run build:cap` to sync web assets
+- [x] Open in Xcode, fix any build errors
+- [x] Verify game loads and runs in iOS Simulator
+- [x] Test basic gameplay (clicking, generators, events, phase transitions)
+- [x] Fix any iOS-specific rendering issues (safe areas, viewport, scrolling)
 
 **Deliverable:** Game playable in Simulator, no crashes.
 
@@ -116,7 +116,7 @@ Use **Capacitor** (already partially configured) to wrap the existing web game a
 
 | Sprint | Status | Date | Notes |
 |--------|--------|------|-------|
-| 1 | pending | — | — |
+| 1 | done | 2026-03-04 | iOS platform added, ticker safe-area fix, mobile ticker speed 80px/s |
 | 2 | pending | — | — |
 | 3 | pending | — | — |
 | 4 | pending | — | — |
