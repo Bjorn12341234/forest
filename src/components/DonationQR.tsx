@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Capacitor } from '@capacitor/core'
+import { AppLauncher } from '@capacitor/app-launcher'
 import { isDonator, markDonated } from '../engine/donation'
 
 interface DonationQRProps {
@@ -8,7 +10,20 @@ interface DonationQRProps {
 }
 
 const SWISH_NUMBER = '123-248 51 59'
+const SWISH_PAYEE = '1232485159'
+const SWISH_URL = `swish://payment?payee=${SWISH_PAYEE}&message=Trad`
+const SWISH_APP_STORE = 'https://apps.apple.com/se/app/swish/id563204724'
 const QR_IMAGE_PATH = `${import.meta.env.BASE_URL}swish-qr.png`
+const isNative = Capacitor.isNativePlatform()
+
+async function openSwish() {
+  const { value } = await AppLauncher.canOpenUrl({ url: 'swish://' })
+  if (value) {
+    await AppLauncher.openUrl({ url: SWISH_URL })
+  } else {
+    await AppLauncher.openUrl({ url: SWISH_APP_STORE })
+  }
+}
 
 export function DonationQR({ isOpen, onClose }: DonationQRProps) {
   const modalRef = useRef<HTMLDivElement>(null)
@@ -107,36 +122,50 @@ export function DonationQR({ isOpen, onClose }: DonationQRProps) {
                 </h2>
               </div>
 
-              {/* QR Code — click to zoom */}
-              <div className="flex justify-center mb-5">
-                <button
-                  onClick={() => setQrZoomed(z => !z)}
-                  className="bg-transparent border-none p-0 cursor-zoom-in transition-transform duration-200 hover:scale-105"
-                  style={{ cursor: qrZoomed ? 'zoom-out' : 'zoom-in' }}
-                  aria-label={qrZoomed ? 'Förminska QR-kod' : 'Förstora QR-kod för skanning'}
-                >
-                  <img
-                    src={QR_IMAGE_PATH}
-                    alt="Swish QR-kod för Föreningen Naturhänsyn"
-                    className="rounded transition-all duration-200"
-                    style={{
-                      width: qrZoomed ? 300 : 200,
-                      height: 'auto',
-                      imageRendering: 'auto',
-                    }}
-                  />
-                </button>
-              </div>
-              {!qrZoomed && (
-                <p className="text-[0.5rem] text-white/25 text-center -mt-3 mb-4">
-                  Tryck på bilden för att förstora
-                </p>
+              {isNative ? (
+                /* Native app — open Swish directly */
+                <div className="flex justify-center mb-5">
+                  <button
+                    onClick={openSwish}
+                    className="px-6 py-3 text-sm font-bold rounded-sm border border-[#52B5AA]/30 bg-[#52B5AA]/10 text-[#52B5AA] hover:bg-[#52B5AA]/20 transition-colors text-center cursor-pointer"
+                  >
+                    Öppna Swish
+                  </button>
+                </div>
+              ) : (
+                /* Browser — show QR code */
+                <>
+                  <div className="flex justify-center mb-5">
+                    <button
+                      onClick={() => setQrZoomed(z => !z)}
+                      className="bg-transparent border-none p-0 cursor-zoom-in transition-transform duration-200 hover:scale-105"
+                      style={{ cursor: qrZoomed ? 'zoom-out' : 'zoom-in' }}
+                      aria-label={qrZoomed ? 'Förminska QR-kod' : 'Förstora QR-kod för skanning'}
+                    >
+                      <img
+                        src={QR_IMAGE_PATH}
+                        alt="Swish QR-kod för Föreningen Naturhänsyn"
+                        className="rounded transition-all duration-200"
+                        style={{
+                          width: qrZoomed ? 300 : 200,
+                          height: 'auto',
+                          imageRendering: 'auto',
+                        }}
+                      />
+                    </button>
+                  </div>
+                  {!qrZoomed && (
+                    <p className="text-[0.5rem] text-white/25 text-center -mt-3 mb-4">
+                      Tryck på bilden för att förstora
+                    </p>
+                  )}
+                </>
               )}
 
               {/* Instructions */}
               <div className="text-center space-y-2">
                 <p className="text-xs text-white/60 leading-relaxed">
-                  Öppna Swish och scanna QR-koden, eller swisha direkt till:
+                  {isNative ? 'Eller swisha direkt till:' : 'Öppna Swish och scanna QR-koden, eller swisha direkt till:'}
                 </p>
                 <p className="text-sm font-bold text-[#52B5AA] tracking-wider">
                   {SWISH_NUMBER}
@@ -229,23 +258,33 @@ export function DonationQRInline() {
         Stöd arbetet
       </p>
 
-      {/* Inline QR image */}
-      <div className="flex justify-center mb-4">
-        <img
-          src={QR_IMAGE_PATH}
-          alt="Swish QR-kod för Föreningen Naturhänsyn"
-          width={140}
-          height={198}
-          className="rounded"
-          style={{ imageRendering: 'auto' }}
-        />
-      </div>
+      {isNative ? (
+        <div className="flex justify-center mb-4">
+          <a
+            href={SWISH_URL}
+            className="block px-6 py-3 text-sm font-bold rounded-sm border border-[#52B5AA]/30 bg-[#52B5AA]/10 text-[#52B5AA] hover:bg-[#52B5AA]/20 transition-colors text-center no-underline"
+          >
+            Öppna Swish
+          </a>
+        </div>
+      ) : (
+        <div className="flex justify-center mb-4">
+          <img
+            src={QR_IMAGE_PATH}
+            alt="Swish QR-kod för Föreningen Naturhänsyn"
+            width={140}
+            height={198}
+            className="rounded"
+            style={{ imageRendering: 'auto' }}
+          />
+        </div>
+      )}
 
       <p
         className="text-xs text-white/50 leading-relaxed mb-2"
         style={{ fontFamily: 'IBM Plex Mono, monospace' }}
       >
-        Swisha direkt till:
+        {isNative ? 'Eller swisha direkt till:' : 'Swisha direkt till:'}
       </p>
 
       <p
