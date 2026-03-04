@@ -13,7 +13,7 @@ export function IndustryAttackModal() {
   const knowledgeUpgrades = useGameStore(s => s.ownerKnowledgeUpgrades)
 
   const trapRef = useFocusTrap()
-  const ready = useModalDelay(1500)
+  const ready = useModalDelay(2500)
   const atk = attackId ? getIndustryAttack(attackId) : null
 
   if (!atk) return null

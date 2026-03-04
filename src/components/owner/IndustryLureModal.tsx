@@ -12,7 +12,7 @@ export function IndustryLureModal() {
   const [revealed, setRevealed] = useState(false)
 
   const trapRef = useFocusTrap()
-  const ready = useModalDelay(1500)
+  const ready = useModalDelay(2500)
   const lure = lureId ? getIndustryLure(lureId) : null
 
   if (!lure) return null

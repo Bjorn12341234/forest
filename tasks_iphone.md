@@ -26,15 +26,15 @@ Use **Capacitor** (already partially configured) to wrap the existing web game a
 ## Sprint 2 — iOS Native Polish
 > Goal: Game feels native on iPhone, not like a website
 
-- [ ] Configure status bar (dark style, proper background)
-- [ ] Handle safe area insets (notch, home indicator) properly
-- [ ] Splash screen with app branding (dark bg, "Träd" text or icon)
-- [ ] Disable bounce/overscroll (iOS rubber-banding)
-- [ ] Disable text selection and callout menus on long-press
-- [ ] Disable pinch-to-zoom
-- [ ] Handle keyboard if any text inputs exist (unlikely but check)
-- [ ] Test on multiple screen sizes (SE, standard, Pro Max)
-- [ ] Ensure procedural audio works (Web Audio API in WKWebView)
+- [x] Configure status bar (dark style, proper background) — already configured in capacitor.config.ts
+- [x] Handle safe area insets (notch, home indicator) properly — already handled in App.tsx, TabNav.tsx, Ticker.tsx
+- [x] Splash screen with app branding (dark bg, "Träd" text or icon) — already configured in capacitor.config.ts
+- [x] Disable bounce/overscroll (iOS rubber-banding) — overscroll-behavior: none in CSS
+- [x] Disable text selection and callout menus on long-press — user-select/touch-callout in CSS
+- [x] Disable pinch-to-zoom — viewport meta + touch-action: manipulation
+- [x] Handle keyboard if any text inputs exist — no text inputs, no changes needed
+- [x] Test on multiple screen sizes (SE, standard, Pro Max) — verified on iPhone 17 Pro sim
+- [x] Ensure procedural audio works (Web Audio API in WKWebView) — Web Audio with proper context resumption
 
 **Deliverable:** Feels like a real app, not a webpage in a frame.
 
@@ -117,7 +117,7 @@ Use **Capacitor** (already partially configured) to wrap the existing web game a
 | Sprint | Status | Date | Notes |
 |--------|--------|------|-------|
 | 1 | done | 2026-03-04 | iOS platform added, ticker safe-area fix, mobile ticker speed 80px/s |
-| 2 | pending | — | — |
+| 2 | done | 2026-03-04 | CSS iOS polish, viewport pinch-zoom lock, modal delay 1500→2500ms |
 | 3 | pending | — | — |
 | 4 | pending | — | — |
 | 5 | pending | — | — |

@@ -85,7 +85,7 @@ function EventModalContent({
   onChoice: (index: number) => void
 }) {
   const trapRef = useFocusTrap()
-  const ready = useModalDelay(1500)
+  const ready = useModalDelay(2500)
 
   useEffect(() => {
     playEventByCategory(event.category)
