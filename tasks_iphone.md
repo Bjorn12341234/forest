@@ -43,16 +43,17 @@ Use **Capacitor** (already partially configured) to wrap the existing web game a
 ## Sprint 3 — App Icons, Launch Screen & Metadata
 > Goal: App Store-ready visual assets
 
-- [ ] Design app icon (1024×1024 master + all required sizes)
-- [ ] Generate icon set for Xcode (AppIcon asset catalog)
-- [ ] Create launch screen storyboard (or configure Capacitor splash)
-- [ ] Set display name to "Träd"
-- [ ] Set bundle ID (com.tradgame.app or similar)
-- [ ] Set version and build number
-- [ ] Write App Store description (Swedish + English)
-- [ ] Write privacy policy (required for App Store — game has no data collection)
-- [ ] Choose App Store category (Games > Simulation)
-- [ ] Prepare age rating info (no violence, no IAP initially)
+- [x] Design app icon (1024×1024 master + all required sizes) — tree stump + crown on millimeter paper grid
+- [x] Generate icon set for Xcode (AppIcon asset catalog) — scripts/generate-icon.mjs
+- [x] Create launch screen storyboard (or configure Capacitor splash) — dark bg with subtle tree silhouette
+- [x] Set display name to "Träd" — already in Info.plist
+- [x] Set bundle ID (com.tradgame.app or similar) — already configured
+- [x] Set version and build number — 1.0 (build 1)
+- [x] Write App Store description (Swedish + English) — APPSTORE.md
+- [x] Write privacy policy (required for App Store — game has no data collection) — PRIVACY_POLICY.md
+- [x] Choose App Store category (Games > Simulation) — documented in APPSTORE.md
+- [x] Prepare age rating info (no violence, no IAP initially) — 4+, documented in APPSTORE.md
+- [x] Lock orientation to portrait only — Info.plist updated
 
 **Deliverable:** All metadata and assets ready for submission.
 
@@ -118,7 +119,7 @@ Use **Capacitor** (already partially configured) to wrap the existing web game a
 |--------|--------|------|-------|
 | 1 | done | 2026-03-04 | iOS platform added, ticker safe-area fix, mobile ticker speed 80px/s |
 | 2 | done | 2026-03-04 | CSS iOS polish, viewport pinch-zoom lock, modal delay 1500→2500ms |
-| 3 | pending | — | — |
+| 3 | done | 2026-03-05 | App icon, splash, portrait lock, APPSTORE.md, PRIVACY_POLICY.md |
 | 4 | pending | — | — |
 | 5 | pending | — | — |
 | 6 | pending | — | — |
